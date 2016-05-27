@@ -758,6 +758,8 @@ ORYX.I18N.View.sim.chartsTotalResourceUtilization = '<i18n:message key="ORYX.I18
 ORYX.I18N.View.sim.chartsTotalResourceUtilizationPercentages = '<i18n:message key="ORYX.I18N.View.sim.chartsTotalResourceUtilizationPercentages">Percentages</i18n:message>';
 ORYX.I18N.View.sim.chartsResourceUtilization = '<i18n:message key="ORYX.I18N.View.sim.chartsResourceUtilization">Resource Utilization</i18n:message>';
 ORYX.I18N.View.sim.chartsResourceCost = '<i18n:message key="ORYX.I18N.View.sim.chartsResourceCost">Resource Cost</i18n:message>';
+ORYX.I18N.View.sim.chartsWaitTimes = '<i18n:message key="ORYX.I18N.View.sim.chartsWaitTimes">Wait Times</i18n:message>';
+ORYX.I18N.View.sim.chartsResourceAllocations = '<i18n:message key="ORYX.I18N.View.sim.chartsResourceAllocations">Resource Allocations</i18n:message>';
 ORYX.I18N.View.sim.chartsPathImage = '<i18n:message key="ORYX.I18N.View.sim.chartsPathImage">Path Image</i18n:message>';
 ORYX.I18N.View.sim.chartsPathInstanceExecution = '<i18n:message key="ORYX.I18N.View.sim.chartsPathInstanceExecution">Path Instance Execution</i18n:message>';
 ORYX.I18N.View.sim.chartsMax = '<i18n:message key="ORYX.I18N.View.sim.chartsMax">Max</i18n:message>';
