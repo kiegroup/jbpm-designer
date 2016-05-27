@@ -21,9 +21,9 @@ import javax.inject.Inject;
 
 import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.kie.workbench.common.screens.projecteditor.client.menu.ProjectMenu;
-import org.guvnor.common.services.shared.security.KieWorkbenchACL;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcesMenu;
+import org.kie.workbench.common.workbench.client.PerspectiveIds;
 import org.uberfire.client.annotations.Perspective;
 import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPerspective;
@@ -42,7 +42,7 @@ import org.uberfire.workbench.model.menu.MenuFactory;
 import org.uberfire.workbench.model.menu.Menus;
 
 @ApplicationScoped
-@WorkbenchPerspective(identifier = "home", isDefault = true)
+@WorkbenchPerspective(identifier = PerspectiveIds.HOME, isDefault = true)
 public class HomePerspective {
 
     @Inject
@@ -59,9 +59,6 @@ public class HomePerspective {
 
     @Inject
     private ProjectMenu projectMenu;
-
-    @Inject
-    private KieWorkbenchACL kieACL;
 
     private PerspectiveDefinition perspective;
     private Menus menus;
@@ -99,22 +96,14 @@ public class HomePerspective {
     private void buildMenuBar() {
         this.menus = MenuFactory
                 .newTopLevelMenu( "Projects" )
-                .withRoles(kieACL.getGrantedRoles("wb_administration"))
-                .respondsWith(new Command() {
-                    @Override
-                    public void execute() {
-                        placeManager.goTo("org.kie.guvnor.explorer");
-                    }
-                })
+                .respondsWith( () -> placeManager.goTo("org.kie.guvnor.explorer") )
                 .endMenu()
 
                 .newTopLevelMenu("New")
-                .withRoles(kieACL.getGrantedRoles("wb_administration"))
                 .withItems(newResourcesMenu.getMenuItems())
                 .endMenu()
 
                 .newTopLevelMenu("Tools")
-                .withRoles(kieACL.getGrantedRoles("wb_administration"))
                 .withItems(projectMenu.getMenuItems())
                 .endMenu()
 
