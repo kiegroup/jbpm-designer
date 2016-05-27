@@ -106,6 +106,13 @@ public class SimulationServlet extends HttpServlet {
 	private static final String AVG_EXECUTION_TIME = "Avg Execution Time";
 	private static final String ACTIVITY_INSTANCES = "Activity Instances";
 	private static final String PROCESS_AVERAGES = "Process Averages";
+	private static final String EXECUTION_TIMES = "Execution Times";
+	private static final String WAIT_TIMES = "Wait Times";
+	private static final String RESOURCE_ALLOCATIONS = "Resource Allocations";
+	private static final String RESOURCE_COST = "Resource Cost";
+	private static final String HUMAN_TASK_AVERAGES = "Human Task Averages";
+	private static final String TASK_AVERAGES = "Task Averages";
+	private static final String SIMULATION_EVENTS = "Simulation Events";
 
     @Inject
     private IDiagramProfileService _profileService = null;
@@ -307,7 +314,7 @@ public class SimulationServlet extends HttpServlet {
 						JSONObject resourceValues = new JSONObject();
 						JSONObject costValues = new JSONObject();
 
-						allValues.put("key", "Human Task Averages");
+						allValues.put("key", HUMAN_TASK_AVERAGES);
 						allValues.put("id", event.getActivityId());
 						allValues.put("name", event.getActivityName());
 
@@ -325,7 +332,7 @@ public class SimulationServlet extends HttpServlet {
 						innerExecutionValues.put(obj2);
 						innerExecutionValues.put(obj3);
 						JSONObject valuesObj = new JSONObject();
-						valuesObj.put("key", "Execution Times");
+						valuesObj.put("key", EXECUTION_TIMES);
 						valuesObj.put("color", "#1f77b4");
 						valuesObj.put("values", innerExecutionValues);
 
@@ -343,7 +350,7 @@ public class SimulationServlet extends HttpServlet {
 						innerExecutionValues2.put(obj5);
 						innerExecutionValues2.put(obj6);
 						JSONObject valuesObj2 = new JSONObject();
-						valuesObj2.put("key", "Wait Times");
+						valuesObj2.put("key", WAIT_TIMES);
 						valuesObj2.put("color", "#d62728");
 						valuesObj2.put("values", innerExecutionValues2);
 
@@ -353,7 +360,7 @@ public class SimulationServlet extends HttpServlet {
 						timeValuesInner.put(valuesObj2);
 						allValues.put("timevalues", timeValuesInner);
 
-						resourceValues.put("key", "Resource Allocations");
+						resourceValues.put("key",  RESOURCE_ALLOCATIONS);
 						resourceValues.put("id", event.getActivityId());
 						resourceValues.put("name", event.getActivityName());
 						JSONArray htSimValues2 = new JSONArray();
@@ -373,7 +380,7 @@ public class SimulationServlet extends HttpServlet {
 						allValues.put("resourcevalues", resourceValues);
 
 
-						costValues.put("key", "Resource Cost");
+						costValues.put("key", RESOURCE_COST);
 						costValues.put("id", event.getActivityId());
 						costValues.put("name", event.getActivityName());
 						JSONArray htSimValues3 = new JSONArray();
@@ -405,7 +412,7 @@ public class SimulationServlet extends HttpServlet {
 						numInstanceData.put(event.getActivityName(), new Long(event.getNumberOfInstances()).doubleValue());
 
 						JSONObject taskSimKeys = new JSONObject();
-						taskSimKeys.put("key", "Task Averages");
+						taskSimKeys.put("key", TASK_AVERAGES);
 						taskSimKeys.put("id", event.getActivityId());
 						taskSimKeys.put("name", event.getActivityName());
 						JSONArray taskSimValues = new JSONArray();
@@ -625,9 +632,9 @@ public class SimulationServlet extends HttpServlet {
 
 	private JSONObject getTaskEventsFromAllEvents(AggregatedSimulationEvent event, List<SimulationEvent> allEvents, String intervalUnit, String contextPath) throws Exception {
 		JSONObject allEventsObject = new JSONObject();
-		allEventsObject.put("headline", "Simulation Events");
+		allEventsObject.put("headline", SIMULATION_EVENTS);
 		allEventsObject.put("type","default");
-		allEventsObject.put("text","Simulation Events");
+		allEventsObject.put("text", SIMULATION_EVENTS);
 		JSONArray allEventsDataArray = new JSONArray();
 		for(SimulationEvent se : allEvents) {
 			// for now only include end and activity events

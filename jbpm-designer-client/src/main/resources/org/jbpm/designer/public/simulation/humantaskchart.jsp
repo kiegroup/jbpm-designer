@@ -114,6 +114,34 @@ function clearChart() {
 		}
 		function showBarCharts() {
 			var chartData = parent.ORYX.EDITOR.simulationChartData;
+			if(chartData) {
+				if (chartData.costvalues) {
+					var costvalues = chartData.costvalues;
+					costvalues.key = parent.ORYX.I18N.View.sim.chartsResourceCost;
+					if (costvalues.values) {
+						setValuesMinMaxAvgLabels(costvalues.values);
+					}
+				}
+				if (chartData.resourcevalues) {
+					var resourcevalues = chartData.resourcevalues;
+					resourcevalues.key = parent.ORYX.I18N.View.sim.chartsResourceAllocations;
+					if (resourcevalues.values) {
+						setValuesMinMaxAvgLabels(resourcevalues.values);
+					}
+				}
+				if (chartData.timevalues && chartData.timevalues.length == 2) {
+					var timevalues = chartData.timevalues;
+					timevalues[0].key = parent.ORYX.I18N.View.sim.chartsExecutionTimes;
+					if (timevalues[0].values) {
+						setValuesMinMaxAvgLabels(timevalues[0].values);
+					}
+					timevalues[1].key = parent.ORYX.I18N.View.sim.chartsWaitTimes;
+					if (timevalues[1].values) {
+						setValuesMinMaxAvgLabels(timevalues[1].values);
+					}
+				}
+			}
+
 			nv.addGraph(function() {
 				 var chart = nv.models.multiBarHorizontalChart()
 				 	.x(function(d) { return d.label })
@@ -144,7 +172,7 @@ function clearChart() {
 				chart.yAxis
 					.tickFormat(d3.format(',.2f'));
 				
-				chart.yAxis.axisLabel('Percentage (%)')
+				chart.yAxis.axisLabel(parent.ORYX.I18N.View.sim.chartsTotalResourceUtilizationPercentages + ' (%)');
 				var dw = [];
 				dw.push(chartData.resourcevalues);
 				d3.select('#chart2')
@@ -168,7 +196,7 @@ function clearChart() {
 				chart.yAxis
 					.tickFormat(d3.format(',.2f'));
 				
-				chart.yAxis.axisLabel('Cost ($)')
+				chart.yAxis.axisLabel(parent.ORYX.I18N.View.sim.chartsTotalCostCost + ' ($)');
 				var dw = [];
 				dw.push(chartData.costvalues);
 				d3.select('#chart3')
@@ -201,7 +229,15 @@ function clearChart() {
 	    	var costTableTemplate = Handlebars.compile(costTableSource);
 	    	$("#chartcontent3").html(costTableTemplate(chartData.costvalues));
 		}
-		
+
+		function setValuesMinMaxAvgLabels(values) {
+			if (values && values.length == 3) {
+				values[0].label = parent.ORYX.I18N.View.sim.chartsMax;
+				values[1].label = parent.ORYX.I18N.View.sim.chartsMin;
+				values[2].label = parent.ORYX.I18N.View.sim.chartsAverage;
+			}
+		}
+
 		function showTimeline() {
 			//alert("showing timeline!");
 		}
