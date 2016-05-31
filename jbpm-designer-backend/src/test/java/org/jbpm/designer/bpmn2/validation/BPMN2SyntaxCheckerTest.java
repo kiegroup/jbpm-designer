@@ -266,6 +266,33 @@ public class BPMN2SyntaxCheckerTest {
     }
 
     @Test
+    public void testErrorBoundaryEvent() throws Exception {
+        loader.loadProcessFromXml("errorBoundaryEvent.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertFalse(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(0, errors.size());
+    }
+
+    @Test
+    public void testErrorBoundaryEventMissingDefinition() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("errorBoundaryEventMissingDefinition.bpmn2");
+        JSONObject lane = loader.getChildByName(process, "myLane");
+        JSONObject error = loader.getChildByName(lane, "MyError");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+        String gatewayId = error.getString("resourceId");
+        assertEquals(1, errors.get(gatewayId).size());
+        assertEquals("Catch" + SyntaxCheckerErrors.EVENT_HAS_NO_ERROR_REF, errors.get(gatewayId).get(0).getError());
+    }
+
+    @Test
     public void testIsCompensatingFlowNodeInSubprocessForTextAnnotation() throws Exception {
         BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker("", "", null);
 

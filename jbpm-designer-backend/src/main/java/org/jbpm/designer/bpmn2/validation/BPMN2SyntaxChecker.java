@@ -456,7 +456,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			}
 		} else if( eventDefinition instanceof ErrorEventDefinition) {
 			if(((ErrorEventDefinition) eventDefinition).getErrorRef() == null || ((ErrorEventDefinition) eventDefinition).getErrorRef().getErrorCode() == null) {
-				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + " Event has no errorref."));
+				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, errorPrefix + SyntaxCheckerErrors.EVENT_HAS_NO_ERROR_REF));
 			}
 		} else if( eventDefinition instanceof ConditionalEventDefinition ) {
 			FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) eventDefinition).getCondition();
