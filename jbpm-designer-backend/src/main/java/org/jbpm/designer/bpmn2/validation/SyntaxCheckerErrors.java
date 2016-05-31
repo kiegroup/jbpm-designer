@@ -18,5 +18,6 @@ public class SyntaxCheckerErrors {
     public static final String THE_SUM_OF_PROBABILITIES_MUST_BE_EQUAL_100 = "The sum of probability values of all outgoing Sequence Flows must be equal 100.";
     public static final String USER_TASK_HAS_NO_TASK_NAME = "User Task has no task name.";
     public static final String WORKING_HOURS_MUST_BE_POSITIVE = "Working Hours value must be positive.";
-
+    public static final String SCRIPT_TASK_NO_SCRIPT = "Script Task has no script.";
+    public static final String SCRIPT_TASK_NO_SCRIPT_FORMAT = "Script Task has no script format.";
 }
