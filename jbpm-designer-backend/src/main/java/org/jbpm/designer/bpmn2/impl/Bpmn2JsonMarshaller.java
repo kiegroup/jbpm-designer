@@ -2157,8 +2157,8 @@ public class Bpmn2JsonMarshaller {
                             if(infoPartsToUseParts != null && infoPartsToUseParts.length > 0) {
                                 generator.writeArrayFieldStart("dockers");
                                 generator.writeStartObject();
-                                generator.writeObjectField("x", infoPartsToUseParts[0]);
-                                generator.writeObjectField("y", infoPartsToUseParts[1]);
+                                generator.writeObjectField("x", Double.valueOf(infoPartsToUseParts[0]));
+                                generator.writeObjectField("y", Double.valueOf(infoPartsToUseParts[1]));
                                 generator.writeEndObject();
                                 generator.writeEndArray();
                             }

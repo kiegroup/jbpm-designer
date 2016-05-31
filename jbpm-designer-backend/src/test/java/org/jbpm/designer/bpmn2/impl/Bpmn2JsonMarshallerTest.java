@@ -232,4 +232,21 @@ public class Bpmn2JsonMarshallerTest {
         assertFalse(properties.has("calledelement"));
     }
 
+    @Test
+    public void testErrorBoundaryEvent() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("errorBoundaryEvent.bpmn2", BPMN2SyntaxCheckerTest.class);
+        JSONObject lane = loader.getChildByName(process, "myLane");
+        JSONObject error = loader.getChildByName(lane, "MyError");
+        JSONObject properties = error.getJSONObject("properties");
+        assertEquals("errorReference", properties.getString("errorref"));
+    }
+
+    @Test
+    public void testErrorBoundaryEventMissingDefinition() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("errorBoundaryEventMissingDefinition.bpmn2", BPMN2SyntaxCheckerTest.class);
+        JSONObject lane = loader.getChildByName(process, "myLane");
+        JSONObject error = loader.getChildByName(lane, "MyError");
+        JSONObject properties = error.getJSONObject("properties");
+        assertEquals("", properties.getString("errorref"));
+    }
 }
