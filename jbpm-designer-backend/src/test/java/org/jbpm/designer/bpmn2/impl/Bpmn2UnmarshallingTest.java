@@ -953,32 +953,22 @@ public class Bpmn2UnmarshallingTest {
         Process process = getRootProcess(definitions);
         assertTrue(process.getFlowElements().get(0) instanceof ServiceTask);
         ServiceTask serviceTask = (ServiceTask) process.getFlowElements().get(0);
-        String serviceImplementation = null;
-        String serviceInterface = null;
-        String serviceOperation = null;
+        verifyServiceTask(serviceTask, "Java", null, null);
+    }
 
-        Iterator<FeatureMap.Entry> iter = serviceTask.getAnyAttribute().iterator();
-        while (iter.hasNext()) {
-            FeatureMap.Entry entry = iter.next();
-            if (entry.getEStructuralFeature().getName().equals("serviceimplementation")) {
-                serviceImplementation = (String) entry.getValue();
-            }
-            if (entry.getEStructuralFeature().getName().equals("serviceoperation")) {
-                serviceOperation = (String) entry.getValue();
-            }
-            if (entry.getEStructuralFeature().getName().equals("serviceinterface")) {
-                serviceInterface = (String) entry.getValue();
-            }
-        }
-
-        assertEquals(serviceImplementation, "Java");
-        assertNull(serviceInterface);
-        assertNull(serviceOperation);
+    @Test
+    public void testServiceTaskInterfaceAndOperation() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("serviceTaskInterfaceAndOperation.json");
+        Process process = getRootProcess(definitions);
+        FlowElement element = getFlowElement(process.getFlowElements(), "Send PO");
+        assertTrue(element instanceof ServiceTask);
+        ServiceTask serviceTask = (ServiceTask) element;
+        verifyServiceTask(serviceTask, "Java", "sendInterface", "sendOperation");
     }
 
     private FlowElement getFlowElement(List<FlowElement> elements, String name) {
         for(FlowElement element : elements) {
-            if (name.compareTo(element.getName()) == 0) {
+            if (element.getName() != null && name.compareTo(element.getName()) == 0) {
                 return  element;
             }
         }
@@ -1017,6 +1007,33 @@ public class Bpmn2UnmarshallingTest {
             }
         }
         return result;
+    }
+
+    private void verifyServiceTask(ServiceTask serviceTask,
+                                   String serviceImplementation,
+                                   String serviceInterface,
+                                   String serviceOperation) {
+        String foundServiceImplementation = null;
+        String foundServiceInterface = null;
+        String foundServiceOperation = null;
+
+        Iterator<FeatureMap.Entry> iter = serviceTask.getAnyAttribute().iterator();
+        while (iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if (entry.getEStructuralFeature().getName().equals("serviceimplementation")) {
+                foundServiceImplementation = (String) entry.getValue();
+            }
+            if (entry.getEStructuralFeature().getName().equals("serviceoperation")) {
+                foundServiceOperation = (String) entry.getValue();
+            }
+            if (entry.getEStructuralFeature().getName().equals("serviceinterface")) {
+                foundServiceInterface = (String) entry.getValue();
+            }
+        }
+
+        assertEquals(serviceImplementation, foundServiceImplementation);
+        assertEquals(serviceInterface, foundServiceInterface);
+        assertEquals(serviceOperation, foundServiceOperation);
     }
 }
 

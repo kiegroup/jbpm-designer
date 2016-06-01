@@ -12,6 +12,7 @@ public class SyntaxCheckerErrors {
     public static final String NOT_VALID_DEFAULT_GATE = "Default gate must be one of outgoing flows.";
     public static final String PROBABILITY_MUST_BE_POSITIVE = "Probability value must be positive.";
     public static final String PROCESS_HAS_NO_PACKAGE_NAME = "Process has no package name.";
+    public static final String SERVICE_TASK_NO_OPERATION = "Service Task has no operation.";
     public static final String SEQUENCE_FLOW_NO_CONDITION_EXPRESSION_DEFINED = "Sequence flow has no condition expression defined.";
     public static final String SEQUENCE_FLOW_NO_PROBABILITY_DEFINED = "Sequence Flow has no probability defined.";
     public static final String SCRIPT_TASK_NO_SCRIPT = "Script Task has no script.";

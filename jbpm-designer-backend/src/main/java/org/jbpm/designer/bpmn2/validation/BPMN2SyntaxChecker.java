@@ -347,7 +347,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	private void checkServiceTask(ServiceTask serviceTask) {
 
 		if(serviceTask.getOperationRef() == null) {
-			addError(serviceTask, new ValidationSyntaxError(serviceTask, BPMN2_TYPE, "Service Task has no operation."));
+			addError(serviceTask, new ValidationSyntaxError(serviceTask, BPMN2_TYPE, SyntaxCheckerErrors.SERVICE_TASK_NO_OPERATION));
 		}
 	}
 
