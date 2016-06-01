@@ -249,4 +249,24 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject properties = error.getJSONObject("properties");
         assertEquals("", properties.getString("errorref"));
     }
+
+    @Test
+    public void testServiceTaskInterfaceAndOperation() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("serviceTaskInterfaceAndOperation.bpmn2");
+        JSONObject serviceTask = loader.getChildByName(process, "Send PO");
+        JSONObject properties = serviceTask.getJSONObject("properties");
+        assertEquals("Java", properties.getString("serviceimplementation"));
+        assertEquals("sendInterface", properties.getString("serviceinterface"));
+        assertEquals("sendOperation", properties.getString("serviceoperation"));
+    }
+
+    @Test
+    public void testServiceTaskNoInterfaceNoOperation() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("serviceTaskNoInterfaceNoOperation.bpmn2");
+        JSONObject serviceTask = loader.getChildByName(process, "Send PO");
+        JSONObject properties = serviceTask.getJSONObject("properties");
+        assertEquals("Java", properties.getString("serviceimplementation"));
+        assertEquals("", properties.getString("serviceinterface"));
+        assertEquals("", properties.getString("serviceoperation"));
+    }
 }
