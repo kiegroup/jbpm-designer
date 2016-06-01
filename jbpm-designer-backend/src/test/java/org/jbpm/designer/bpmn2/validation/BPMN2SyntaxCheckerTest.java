@@ -18,6 +18,7 @@ package org.jbpm.designer.bpmn2.validation;
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.SubProcess;
 import org.eclipse.bpmn2.TextAnnotation;
+import org.jbpm.designer.bpmn2.impl.Bpmn2JsonMarshallerTest;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.json.JSONObject;
 import org.junit.Test;
@@ -290,6 +291,33 @@ public class BPMN2SyntaxCheckerTest {
         String gatewayId = error.getString("resourceId");
         assertEquals(1, errors.get(gatewayId).size());
         assertEquals(SyntaxCheckerErrors.CATCH_EVENT + SyntaxCheckerErrors.HAS_NO_ERRORREF, errors.get(gatewayId).get(0).getError());
+    }
+
+    @Test
+    public void testServiceTaskInterfaceAndOperation() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("serviceTaskInterfaceAndOperation.bpmn2", Bpmn2JsonMarshallerTest.class);
+        JSONObject serviceTask = loader.getChildByName(process, "Send PO");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        String serviceTaskId = serviceTask.getString("resourceId");
+        assertFalse(errors.containsKey(serviceTaskId));
+    }
+
+    @Test
+    public void testServiceTaskNoInterfaceNoOperation() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("serviceTaskNoInterfaceNoOperation.bpmn2", Bpmn2JsonMarshallerTest.class);
+        JSONObject serviceTask = loader.getChildByName(process, "Send PO");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        String serviceTaskId = serviceTask.getString("resourceId");
+        assertEquals(1, errors.get(serviceTaskId).size());
+        assertEquals(SyntaxCheckerErrors.SERVICE_TASK_HAS_NO_OPERATION, errors.get(serviceTaskId).get(0).getError());
     }
 
     @Test
