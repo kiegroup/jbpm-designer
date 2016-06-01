@@ -966,6 +966,22 @@ public class Bpmn2UnmarshallingTest {
         verifyServiceTask(serviceTask, "Java", "sendInterface", "sendOperation");
     }
 
+    @Test
+    public void testSubprocessTaskAssignemtns() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("subprocessTaskAssignments.json");
+        Process process = getRootProcess(definitions);
+        FlowElement subprocess = getFlowElement(process.getFlowElements(), "Embedded subprocess");
+        assertTrue(subprocess instanceof SubProcess);
+        FlowElement element = getFlowElement(((SubProcess)subprocess).getFlowElements(), "UserTask");
+        assertTrue(element instanceof UserTask);
+        UserTask userTask = (UserTask) element;
+        InputOutputSpecification specification = userTask.getIoSpecification();
+        DataInput sInput = getDataInput(specification.getDataInputs(), "sInput");
+        DataOutput iOutput = getDataOutput(specification.getDataOutputs(), "iOutput");
+        verifyAttribute(sInput, "dtype", "String");
+        verifyAttribute(iOutput, "dtype", "Integer");
+    }
+
     private FlowElement getFlowElement(List<FlowElement> elements, String name) {
         for(FlowElement element : elements) {
             if (element.getName() != null && name.compareTo(element.getName()) == 0) {
@@ -1034,6 +1050,40 @@ public class Bpmn2UnmarshallingTest {
         assertEquals(serviceImplementation, foundServiceImplementation);
         assertEquals(serviceInterface, foundServiceInterface);
         assertEquals(serviceOperation, foundServiceOperation);
+    }
+
+    private DataInput getDataInput(List<DataInput> inputs, String name) {
+        if(inputs != null) {
+            for(DataInput input : inputs) {
+                if(input.getName() != null && input.getName().equals(name)) {
+                    return input;
+                }
+            }
+        }
+        return null;
+    }
+
+    private DataOutput getDataOutput(List<DataOutput> outputs, String name) {
+        if(outputs != null) {
+            for(DataOutput output : outputs) {
+                if(output.getName() != null && output.getName().equals(name)) {
+                    return output;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void verifyAttribute(BaseElement element, String attributeName, Object attributeValue) {
+        Iterator<FeatureMap.Entry> iter = element.getAnyAttribute().iterator();
+        while (iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if (entry.getEStructuralFeature().getName().equals(attributeName) && entry.getValue().equals(attributeValue)) {
+                return;
+            }
+        }
+
+        fail(attributeName + " with value: " + attributeValue + " was not found");
     }
 }
 
