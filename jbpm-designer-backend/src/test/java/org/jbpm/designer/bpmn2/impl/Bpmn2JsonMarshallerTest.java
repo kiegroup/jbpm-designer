@@ -270,6 +270,7 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("", properties.getString("serviceoperation"));
     }
 
+    @Test
     public void testSubprocessTaskAssignments() throws Exception {
         JSONObject process = loader.loadProcessFromXml("subprocessTaskAssignments.bpmn2");
         JSONObject subprocess = loader.getChildByName(process, "Embedded subprocess");
@@ -277,5 +278,13 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject properties = userTask.getJSONObject("properties");
         assertTrue(properties.getString("datainputset").contains("sInput:String"));
         assertTrue(properties.getString("dataoutputset").contains("iOutput:Integer"));
+    }
+
+    @Test
+    public void testBusinessRuleTask() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("businessRule.bpmn2", BPMN2SyntaxCheckerTest.class);
+        JSONObject ruleTask = loader.getChildByName(process, "businessRuleTask");
+        JSONObject properties = ruleTask.getJSONObject("properties");
+        assertEquals("simpleGroup", properties.getString("ruleflowgroup"));
     }
 }
