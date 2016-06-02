@@ -2949,13 +2949,13 @@
                             "id": "c1",
                             "title":"vardefs",
                             "value":"\$.properties.vardefs",
-			    "needsprop": "multipleinstancedatainput"
+                            "needsprop": "multipleinstancedatainput"
                         },
                         {
                             "id": "c2",
                             "title": "globals",
                             "value": "\$.properties.globals",
-			    "needsprop": "multipleinstancedatainput"
+                            "needsprop": "multipleinstancedatainput"
                         }
                     ]
                 },
@@ -2987,7 +2987,7 @@
                 },
                 {
                     "id":"multipleinstancedatainput",
-                    "type":"Dynamicdatainput",
+                    "type":"String",
                     "title":"MI data input",
                     "value":"",
                     "description":"Sets a data input for MI.",
@@ -2999,7 +2999,7 @@
                 },
                 {
                     "id":"multipleinstancedataoutput",
-                    "type":"Dynamicdatoutput",
+                    "type":"String",
                     "title":"MI data output",
                     "value":"",
                     "description":"Sets a data output for MI.",
@@ -3416,13 +3416,13 @@
                             "id": "c1",
                             "title":"vardefs",
                             "value":"\$.properties.vardefs",
-			    "needsprop": "multipleinstancedatainput"
+                            "needsprop": "multipleinstancedatainput"
                         $bclose$,
                         $bopen$
                             "id": "c2",
                             "title": "globals",
                             "value": "\$.properties.globals",
-			    "needsprop": "multipleinstancedatainput"
+                            "needsprop": "multipleinstancedatainput"
                         $bclose$
                     ]
                 $bclose$,
@@ -3454,7 +3454,7 @@
                 $bclose$,
                 $bopen$
                     "id":"multipleinstancedatainput",
-                    "type":"Dynamicdatainput",
+                    "type":"String",
                     "title":"MI data input",
                     "value":"",
                     "description":"Sets a data input for MI.",
@@ -3466,7 +3466,7 @@
                 $bclose$,
                 $bopen$
                     "id":"multipleinstancedataoutput",
-                    "type":"Dynamicdatoutput",
+                    "type":"String",
                     "title":"MI data output",
                     "value":"",
                     "description":"Sets a data output for MI.",
@@ -4422,7 +4422,7 @@
                             "id": "c1",
                             "title":"vardefs",
                             "value":"\$.properties.vardefs",
-			    "needsprop": "multipleinstancedatainput"
+                            "needsprop": "multipleinstancedatainput"
                         }
                     ]
                 },
@@ -4446,7 +4446,7 @@
                 },
                 {
                     "id":"multipleinstancedatainput",
-                    "type":"Dynamicdatainput",
+                    "type":"String",
                     "title":"MI data input",
                     "value":"",
                     "description":"Sets a data input for MI.",
@@ -4456,7 +4456,7 @@
                 },
                 {
                     "id":"multipleinstancedataoutput",
-                    "type":"Dynamicdatoutput",
+                    "type":"String",
                     "title":"MI data output",
                     "value":"",
                     "description":"Sets a data output for MI.",
