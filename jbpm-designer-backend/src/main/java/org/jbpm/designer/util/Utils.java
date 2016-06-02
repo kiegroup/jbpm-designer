@@ -16,9 +16,19 @@
 package org.jbpm.designer.util;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
+import org.eclipse.bpmn2.BaseElement;
+import org.eclipse.bpmn2.Bpmn2Factory;
+import org.eclipse.bpmn2.ExtensionAttributeValue;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
+import org.eclipse.emf.ecore.util.FeatureMap;
+import org.jboss.drools.DroolsFactory;
+import org.jboss.drools.DroolsPackage;
+import org.jboss.drools.MetaDataType;
 
 public class Utils {
 
@@ -100,5 +110,40 @@ public class Utils {
             sb.append(String.format("%x", bytes[i]));
         }
         return sb.toString().toUpperCase();
+    }
+
+    public static String getMetaDataValue (List<ExtensionAttributeValue> extensionValues, String metaDataName) {
+        if(extensionValues != null && extensionValues.size() > 0) {
+            for(ExtensionAttributeValue extattrval : extensionValues) {
+                FeatureMap extensionElements = extattrval.getValue();
+
+                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+
+                for(MetaDataType metaType : metadataExtensions) {
+                    if(metaType.getName() != null && metaType.getName().equals(metaDataName) && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                        return metaType.getMetaValue();
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static void setMetaDataExtensionValue(BaseElement element, String metaDataName, String metaDataValue) {
+        if(element != null) {
+            MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
+            eleMetadata.setName(metaDataName);
+            eleMetadata.setMetaValue(metaDataValue);
+
+            if (element.getExtensionValues() == null || element.getExtensionValues().isEmpty()) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                element.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry eleExtensionElementEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(
+                    (EStructuralFeature.Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+            element.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
+        }
     }
 }
