@@ -26,7 +26,6 @@ import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import org.jbpm.designer.type.Bpmn2TypeDefinition;
-import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +51,11 @@ public class BusinessProcessCopyHelper implements CopyHelper {
     private IOService ioService;
     private CommentedOptionFactory commentedOptionFactory;
     private Bpmn2TypeDefinition bpmn2ResourceType;
-    private IDiagramProfileService profileService;
 
     private static Logger logger = LoggerFactory.getLogger(BusinessProcessCopyHelper.class);
+
+    public BusinessProcessCopyHelper() {
+    }
 
     @Inject
     public BusinessProcessCopyHelper( final @Named("ioStrategy") IOService ioService,
