@@ -17,7 +17,6 @@ package org.jbpm.designer.uberfire.backend.server.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -27,20 +26,21 @@ import javax.inject.Named;
 import org.guvnor.structure.organizationalunit.OrganizationalUnit;
 import org.guvnor.structure.organizationalunit.OrganizationalUnitService;
 import org.guvnor.structure.repositories.Repository;
-import org.guvnor.structure.repositories.RepositoryEnvironmentConfiguration;
 import org.guvnor.structure.repositories.RepositoryEnvironmentConfigurations;
 import org.guvnor.structure.repositories.RepositoryService;
 import org.guvnor.structure.server.config.ConfigGroup;
 import org.guvnor.structure.server.config.ConfigType;
 import org.guvnor.structure.server.config.ConfigurationFactory;
 import org.guvnor.structure.server.config.ConfigurationService;
+import org.kie.workbench.common.services.shared.project.KieProjectService;
+import org.kie.workbench.screens.workbench.backend.BaseAppSetup;
 import org.uberfire.commons.services.cdi.Startup;
 import org.uberfire.commons.services.cdi.StartupType;
 import org.uberfire.io.IOService;
 
 @ApplicationScoped
 @Startup(StartupType.BOOTSTRAP)
-public class AppSetup {
+public class AppSetup extends BaseAppSetup {
 
     private static final String JBPM_REPO_PLAYGROUND = "jbpm-playground";
     //    private static final String GUVNOR_REPO_PLAYGROUND = "uf-playground";
@@ -51,23 +51,18 @@ public class AppSetup {
     private final static String userName = "guvnorngtestuser1";
     private final static String password = "test1234";
 
-    private static final String GLOBAL_SETTINGS = "settings";
+    protected AppSetup() {
+    }
 
     @Inject
-    @Named("ioStrategy")
-    private IOService ioService;
-
-    @Inject
-    private RepositoryService repositoryService;
-
-    @Inject
-    private OrganizationalUnitService organizationalUnitService;
-
-    @Inject
-    private ConfigurationService configurationService;
-
-    @Inject
-    private ConfigurationFactory configurationFactory;
+    public AppSetup( @Named("ioStrategy") final IOService ioService,
+                     final RepositoryService repositoryService,
+                     final OrganizationalUnitService organizationalUnitService,
+                     final KieProjectService projectService,
+                     final ConfigurationService configurationService,
+                     final ConfigurationFactory configurationFactory ) {
+        super( ioService, repositoryService, organizationalUnitService, projectService, configurationService, configurationFactory );
+    }
 
     @PostConstruct
     public void onStartup() {
@@ -111,17 +106,9 @@ public class AppSetup {
             }
 
             //Define mandatory properties
-            List<ConfigGroup> globalConfigGroups = configurationService.getConfiguration( ConfigType.GLOBAL );
-            boolean globalSettingsDefined = false;
-            for ( ConfigGroup globalConfigGroup : globalConfigGroups ) {
-                if ( GLOBAL_SETTINGS.equals( globalConfigGroup.getName() ) ) {
-                    globalSettingsDefined = true;
-                    break;
-                }
-            }
-            if ( !globalSettingsDefined ) {
-                configurationService.addConfiguration( getGlobalConfiguration() );
-            }
+            setupConfigurationGroup( ConfigType.GLOBAL,
+                                     GLOBAL_SETTINGS,
+                                     getGlobalConfiguration() );
         } catch ( Exception e ) {
             throw new RuntimeException( "Error when starting designer " + e.getMessage(), e );
         }
