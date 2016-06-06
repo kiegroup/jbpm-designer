@@ -242,6 +242,16 @@ public class BPMN2SyntaxCheckerTest {
     }
 
     @Test
+    public void testGenericTask() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("genericTask.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        verifyErrorsOfElement(syntaxChecker,
+                                process.getJSONObject("properties").getString("id"),
+                                Arrays.asList("Task node 'generic task' [2] has no task type."));
+    }
+
+    @Test
     public void testIsCompensatingFlowNodeInSubprocessForTextAnnotation() throws Exception {
         BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker("", "", null);
 
@@ -260,10 +270,13 @@ public class BPMN2SyntaxCheckerTest {
     }
 
     private void verifyErrorsOfElement(SyntaxChecker syntaxChecker, JSONObject element, List<String> elementErrors) throws Exception {
+        verifyErrorsOfElement(syntaxChecker, element.getString("resourceId"), elementErrors);
+    }
+
+    private void verifyErrorsOfElement(SyntaxChecker syntaxChecker, String elementId, List<String> elementErrors) throws Exception {
         syntaxChecker.checkSyntax();
         assertTrue(syntaxChecker.errorsFound());
         errors  = syntaxChecker.getErrors();
-        String elementId = element.getString("resourceId");
         assertEquals(elementErrors.size(), errors.get(elementId).size());
         int i = 0;
         for(String error : elementErrors) {
