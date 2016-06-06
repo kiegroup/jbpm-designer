@@ -68,6 +68,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		DroolsFactoryImpl.init();
         BpsimFactoryImpl.init();
 
+		Process process =  null;
         try {
             Definitions def = profile.createMarshaller().getDefinitions(json, preprocessingData);
             List<RootElement> rootElements =  def.getRootElements();
@@ -75,18 +76,15 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 
             for(RootElement root : rootElements) {
                 if(root instanceof Process) {
-                    Process process = (Process) root;
-                    if(process.getFlowElements() != null && process.getFlowElements().size() > 0) {
-                        defaultResourceId = process.getFlowElements().get(0).getId();
-                    }
+                    process = (Process) root;
 
                     if(isEmpty(process.getId())) {
                         addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, SyntaxCheckerErrors.PROCESS_HAS_NO_ID));
+                    } else if(!SyntaxCheckerUtils.isNCName(process.getId())) {
+						addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, SyntaxCheckerErrors.INVALID_PROCESS_ID));
                     } else {
-                        if(!SyntaxCheckerUtils.isNCName(process.getId())) {
-                            addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, SyntaxCheckerErrors.INVALID_PROCESS_ID));
-                        }
-                    }
+						defaultResourceId = process.getId();
+					}
 
                     String pname;
                     Iterator<FeatureMap.Entry> iter = process.getAnyAttribute().iterator();
@@ -146,7 +144,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                 }
             }
         } catch(Exception e) {
-            addError(defaultResourceId, new ValidationSyntaxError(null, PROCESS_TYPE, SyntaxCheckerErrors.COULD_NOT_PARSE_BPMN2_PROCESS));
+            addError(defaultResourceId, new ValidationSyntaxError(process, PROCESS_TYPE, SyntaxCheckerErrors.COULD_NOT_PARSE_BPMN2_PROCESS));
         }
 
         // if there are no suggestions add RuleFlowProcessValidator process errors
@@ -160,12 +158,12 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                 if(processes != null) {
                     ProcessValidationError[] errors = RuleFlowProcessValidator.getInstance().validateProcess((org.jbpm.ruleflow.core.RuleFlowProcess) processes.get(0));
                     for(ProcessValidationError er : errors) {
-                        addError(defaultResourceId, new ValidationSyntaxError(null, PROCESS_TYPE, er.getMessage()));
+                        addError(defaultResourceId, new ValidationSyntaxError(process, PROCESS_TYPE, er.getMessage()));
                     }
                 }
             } catch(Exception e) {
                 _logger.warn("Could not parse to RuleFlowProcess.");
-                addError(defaultResourceId, new ValidationSyntaxError(null, PROCESS_TYPE, SyntaxCheckerErrors.COULD_NOT_PARSE_BPMN2_TO_RULE_FLOW_PROCESS));
+                addError(defaultResourceId, new ValidationSyntaxError(process, PROCESS_TYPE, SyntaxCheckerErrors.COULD_NOT_PARSE_BPMN2_TO_RULE_FLOW_PROCESS));
             }
         }
 
