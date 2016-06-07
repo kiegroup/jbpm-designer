@@ -21,9 +21,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.jbpm.designer.type.Bpmn2TypeDefinition;
-import org.kie.workbench.common.services.backend.validation.ValidationUtils;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.ext.editor.commons.backend.validation.FileNameValidator;
+import org.uberfire.ext.editor.commons.backend.validation.ValidationUtils;
 
 /**
  * Validator of BPMN2 process file names
