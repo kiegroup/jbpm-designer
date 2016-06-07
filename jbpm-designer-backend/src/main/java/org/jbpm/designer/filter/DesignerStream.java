@@ -16,16 +16,29 @@
 package org.jbpm.designer.filter;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import java.io.*;
 
 public class DesignerStream extends ServletOutputStream {
     private StringWriter stringWriter;
+    private WriteListener writeListener;
 
     public DesignerStream(StringWriter stringWriter) {
         this.stringWriter = stringWriter;
     }
 
+    @Override
     public void write(int c) {
         stringWriter.write(c);
+    }
+
+    @Override
+    public boolean isReady() {
+        return true;
+    }
+
+    @Override
+    public void setWriteListener(WriteListener writeListener) {
+        this.writeListener = writeListener;
     }
 }
