@@ -26,4 +26,6 @@ public interface ExpressionEditorErrors {
 
     static final String SCRIPT_GENERATION_ERROR = "SCRIPT_GENERATION_ERROR";
 
+    public static final String PARAMETER_NULL_EMPTY = "Parameter can not be null nor empty";
+
 }
