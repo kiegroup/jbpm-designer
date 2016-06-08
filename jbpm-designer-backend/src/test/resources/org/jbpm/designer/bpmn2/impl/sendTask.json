@@ -1,5 +1,5 @@
 {
-  "resourceId":"_PJx-8SgHEeaMftedahcbSA",
+  "resourceId":"_puocgCu-Eea2KPs97VVjRQ",
   "properties":{
     "namespaces":"",
     "name":"",
@@ -11,13 +11,13 @@
     "adhocprocess":"false",
     "imports":"",
     "globals":"",
-    "id":"examples.businessRule",
+    "id":"aaa.sendTask",
     "version":"1.0",
     "timeunit":"min",
     "currency":"",
     "targetnamespace":"http://www.omg.org/bpmn20",
     "typelanguage":"http://www.java.com/javaTypes",
-    "processn":"businessRule",
+    "processn":"sendTask",
     "documentation":""
   },
   "stencil":{
@@ -25,7 +25,7 @@
   },
   "childShapes":[
     {
-      "resourceId":"_1F684D45-EE3E-4E29-9DE0-C01045AA2D37",
+      "resourceId":"processStartEvent",
       "properties":{
         "name":"",
         "documentation":"",
@@ -56,16 +56,16 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_4599437A-887F-48A8-AE95-CCF8BA5C3587"
+          "resourceId":"_79948354-3AC2-4259-A8C6-D6BF1B66D773"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":150,
+          "x":135,
           "y":195
         },
         "upperLeft":{
-          "x":120,
+          "x":105,
           "y":165
         }
       },
@@ -74,17 +74,17 @@
       ]
     },
     {
-      "resourceId":"_3D920F74-367D-46A0-8081-49A0545A58BD",
+      "resourceId":"_ED09D210-BF98-497B-93C9-132CA62FFF27",
       "properties":{
-        "name":"businessRuleTask",
+        "name":"sendTask",
         "documentation":"",
         "isselectable":"true",
         "invisid":"",
         "isforcompensation":"",
         "assignments":"",
         "assignmentsview":"0 data inputs, 0 data outputs",
-        "tasktype":"Business Rule",
-        "messageref":"",
+        "tasktype":"Send",
+        "messageref":"parcel",
         "script":"",
         "script_language":"java",
         "bgcolor":"#fafad2",
@@ -96,7 +96,7 @@
         "origbgcolor":"#fafad2",
         "nomorph":"true",
         "origbordercolor":"#000000",
-        "ruleflowgroup":"simpleGroup",
+        "ruleflowgroup":"",
         "onentryactions":"",
         "onexitactions":"",
         "isasync":"true",
@@ -121,8 +121,8 @@
         "multipleinstancedatainput":"",
         "multipleinstancedataoutput":"",
         "multipleinstancecompletioncondition":"",
-        "min":"5",
-        "max":"10",
+        "min":"5.0",
+        "max":"10.0",
         "standarddeviation":"1",
         "mean":"0",
         "distributiontype":"uniform",
@@ -138,16 +138,16 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_4ECBBDB6-D2A5-48E2-BA4A-5BB5DE3E0D9E"
+          "resourceId":"_8A2F0AB1-A1BA-48AD-A972-28F14A856239"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":295,
+          "x":280,
           "y":220
         },
         "upperLeft":{
-          "x":195,
+          "x":180,
           "y":140
         }
       },
@@ -156,7 +156,7 @@
       ]
     },
     {
-      "resourceId":"_4599437A-887F-48A8-AE95-CCF8BA5C3587",
+      "resourceId":"_79948354-3AC2-4259-A8C6-D6BF1B66D773",
       "properties":{
         "name":"",
         "documentation":"",
@@ -184,16 +184,16 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_3D920F74-367D-46A0-8081-49A0545A58BD"
+          "resourceId":"_ED09D210-BF98-497B-93C9-132CA62FFF27"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":194.15625,
+          "x":179.15625,
           "y":181
         },
         "upperLeft":{
-          "x":150.609375,
+          "x":135.609375,
           "y":179
         }
       },
@@ -208,11 +208,11 @@
         }
       ],
       "target":{
-        "resourceId":"_3D920F74-367D-46A0-8081-49A0545A58BD"
+        "resourceId":"_ED09D210-BF98-497B-93C9-132CA62FFF27"
       }
     },
     {
-      "resourceId":"_740D075F-5B77-402C-8B7F-681984309F49",
+      "resourceId":"_8AA0C363-C3DA-4029-80CD-2B5E105BB9EE",
       "properties":{
         "name":"",
         "documentation":"",
@@ -245,11 +245,11 @@
       ],
       "bounds":{
         "lowerRight":{
-          "x":368,
+          "x":353,
           "y":194
         },
         "upperLeft":{
-          "x":340,
+          "x":325,
           "y":166
         }
       },
@@ -258,7 +258,7 @@
       ]
     },
     {
-      "resourceId":"_4ECBBDB6-D2A5-48E2-BA4A-5BB5DE3E0D9E",
+      "resourceId":"_8A2F0AB1-A1BA-48AD-A972-28F14A856239",
       "properties":{
         "name":"",
         "documentation":"",
@@ -286,16 +286,16 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_740D075F-5B77-402C-8B7F-681984309F49"
+          "resourceId":"_8AA0C363-C3DA-4029-80CD-2B5E105BB9EE"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":339.375,
+          "x":324.375,
           "y":181
         },
         "upperLeft":{
-          "x":295.390625,
+          "x":280.390625,
           "y":179
         }
       },
@@ -310,7 +310,7 @@
         }
       ],
       "target":{
-        "resourceId":"_740D075F-5B77-402C-8B7F-681984309F49"
+        "resourceId":"_8AA0C363-C3DA-4029-80CD-2B5E105BB9EE"
       }
     }
   ],

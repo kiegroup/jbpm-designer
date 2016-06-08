@@ -1,5 +1,5 @@
 {
-  "resourceId":"Definition",
+  "resourceId":"_PJx-8SgHEeaMftedahcbSA",
   "properties":{
     "namespaces":"",
     "name":"",
@@ -25,7 +25,7 @@
   },
   "childShapes":[
     {
-      "resourceId":"processStartEvent",
+      "resourceId":"_ED04477C-F080-4BB0-BA76-5E580698A12A",
       "properties":{
         "name":"",
         "documentation":"",
@@ -56,7 +56,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_26751897-1744-446D-9115-CDD435079AD4"
+          "resourceId":"_3DFE9806-7214-48A0-8260-9C22692A870E"
         }
       ],
       "bounds":{
@@ -74,7 +74,7 @@
       ]
     },
     {
-      "resourceId":"_4EE60588-A876-4163-AB58-A00F1DC9A95B",
+      "resourceId":"_E57BCFF4-0787-40FA-83AC-627F06BF8F36",
       "properties":{
         "name":"User Task One",
         "documentation":"",
@@ -99,7 +99,7 @@
         "ruleflowgroup":"",
         "onentryactions":"",
         "onexitactions":"",
-        "isasync":"false",
+        "isasync":"true",
         "taskname":"taskForAssignedActor",
         "serviceoperation":"",
         "serviceinterface":"",
@@ -138,7 +138,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_59A2CA47-FFF8-4A1B-90B3-64B53EBCE9A6"
+          "resourceId":"_FA98508C-7909-4D6B-AF44-DE0542A55DCC"
         }
       ],
       "bounds":{
@@ -156,7 +156,7 @@
       ]
     },
     {
-      "resourceId":"_26751897-1744-446D-9115-CDD435079AD4",
+      "resourceId":"_3DFE9806-7214-48A0-8260-9C22692A870E",
       "properties":{
         "name":"",
         "documentation":"",
@@ -184,7 +184,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_4EE60588-A876-4163-AB58-A00F1DC9A95B"
+          "resourceId":"_E57BCFF4-0787-40FA-83AC-627F06BF8F36"
         }
       ],
       "bounds":{
@@ -208,11 +208,11 @@
         }
       ],
       "target":{
-        "resourceId":"_4EE60588-A876-4163-AB58-A00F1DC9A95B"
+        "resourceId":"_E57BCFF4-0787-40FA-83AC-627F06BF8F36"
       }
     },
     {
-      "resourceId":"_64DC92AA-B3EF-488F-982E-A21AB824EE4C",
+      "resourceId":"_EC3D1E81-B505-4722-A5E3-041BF2404E6F",
       "properties":{
         "name":"",
         "documentation":"",
@@ -258,7 +258,7 @@
       ]
     },
     {
-      "resourceId":"_59A2CA47-FFF8-4A1B-90B3-64B53EBCE9A6",
+      "resourceId":"_FA98508C-7909-4D6B-AF44-DE0542A55DCC",
       "properties":{
         "name":"",
         "documentation":"",
@@ -286,7 +286,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_64DC92AA-B3EF-488F-982E-A21AB824EE4C"
+          "resourceId":"_EC3D1E81-B505-4722-A5E3-041BF2404E6F"
         }
       ],
       "bounds":{
@@ -310,7 +310,7 @@
         }
       ],
       "target":{
-        "resourceId":"_64DC92AA-B3EF-488F-982E-A21AB824EE4C"
+        "resourceId":"_EC3D1E81-B505-4722-A5E3-041BF2404E6F"
       }
     }
   ],

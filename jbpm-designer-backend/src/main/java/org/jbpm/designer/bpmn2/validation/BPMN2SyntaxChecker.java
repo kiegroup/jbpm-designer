@@ -189,7 +189,11 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			if(fe instanceof ScriptTask) {
 				checkScriptTask((ScriptTask) fe);
 			}
-			
+
+			if(fe instanceof ReceiveTask) {
+				checkReceiveTask((ReceiveTask) fe);
+			}
+
 			if(fe instanceof SendTask) {
 				checkSendTask((SendTask) fe);
 			}
@@ -336,9 +340,17 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		}
 	}
 
+	private void checkReceiveTask(ReceiveTask receiveTask) {
+		checkMessageRefOfTask(receiveTask, receiveTask.getMessageRef());
+	}
+
 	private void checkSendTask(SendTask sendTask) {
-		if(sendTask.getMessageRef() == null) {
-			addError(sendTask, new ValidationSyntaxError(sendTask, BPMN2_TYPE, "Send Task has no message."));
+		checkMessageRefOfTask(sendTask, sendTask.getMessageRef());
+	}
+
+	private void checkMessageRefOfTask(Task task, Message message) {
+		if(message == null) {
+			addError(task, new ValidationSyntaxError(task, BPMN2_TYPE, SyntaxCheckerErrors.TASK_NO_MESSAGE));
 		}
 	}
 
