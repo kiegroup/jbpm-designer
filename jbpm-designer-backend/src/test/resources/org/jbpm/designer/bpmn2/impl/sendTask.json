@@ -1,5 +1,5 @@
 {
-  "resourceId":"_PJx-8SgHEeaMftedahcbSA",
+  "resourceId":"_puocgCu-Eea2KPs97VVjRQ",
   "properties":{
     "namespaces":"",
     "name":"",
@@ -11,13 +11,13 @@
     "adhocprocess":"false",
     "imports":"",
     "globals":"",
-    "id":"project1.userTask",
+    "id":"aaa.sendTask",
     "version":"1.0",
     "timeunit":"min",
     "currency":"",
     "targetnamespace":"http://www.omg.org/bpmn20",
     "typelanguage":"http://www.java.com/javaTypes",
-    "processn":"userTask",
+    "processn":"sendTask",
     "documentation":""
   },
   "stencil":{
@@ -25,14 +25,14 @@
   },
   "childShapes":[
     {
-      "resourceId":"_ED04477C-F080-4BB0-BA76-5E580698A12A",
+      "resourceId":"processStartEvent",
       "properties":{
         "name":"",
         "documentation":"",
         "isselectable":"true",
         "invisid":"",
         "dataoutputassociations":"",
-        "dataoutputassociationsview":"no data output",
+        "dataoutputassociationsview":"",
         "dataoutput":"",
         "min":"5",
         "max":"10",
@@ -56,16 +56,16 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_3DFE9806-7214-48A0-8260-9C22692A870E"
+          "resourceId":"_79948354-3AC2-4259-A8C6-D6BF1B66D773"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":150,
+          "x":135,
           "y":195
         },
         "upperLeft":{
-          "x":120,
+          "x":105,
           "y":165
         }
       },
@@ -74,17 +74,17 @@
       ]
     },
     {
-      "resourceId":"_E57BCFF4-0787-40FA-83AC-627F06BF8F36",
+      "resourceId":"_ED09D210-BF98-497B-93C9-132CA62FFF27",
       "properties":{
-        "name":"User Task One",
+        "name":"sendTask",
         "documentation":"",
         "isselectable":"true",
-        "invisid":0.8274585078310073,
+        "invisid":"",
         "isforcompensation":"",
         "assignments":"",
         "assignmentsview":"0 data inputs, 0 data outputs",
-        "tasktype":"User",
-        "messageref":"",
+        "tasktype":"Send",
+        "messageref":"parcel",
         "script":"",
         "script_language":"java",
         "bgcolor":"#fafad2",
@@ -100,12 +100,12 @@
         "onentryactions":"",
         "onexitactions":"",
         "isasync":"true",
-        "taskname":"taskForAssignedActor",
+        "taskname":"",
         "serviceoperation":"",
         "serviceinterface":"",
         "serviceimplementation":"Java",
-        "actors":"assignedActor",
-        "groupid":"assignedGroup",
+        "actors":"",
+        "groupid":"",
         "subject":"",
         "description":"",
         "content":"",
@@ -115,20 +115,20 @@
         "createdby":"",
         "skippable":"true",
         "priority":"",
-        "multipleinstance":false,
+        "multipleinstance":"false",
         "multipleinstancecollectioninput":"",
         "multipleinstancecollectionoutput":"",
         "multipleinstancedatainput":"",
         "multipleinstancedataoutput":"",
         "multipleinstancecompletioncondition":"",
-        "min":"5",
-        "max":"10",
+        "min":"5.0",
+        "max":"10.0",
         "standarddeviation":"1",
         "mean":"0",
         "distributiontype":"uniform",
         "quantity":"1",
         "workinghours":"8",
-        "unitcost":"0"
+        "unitcost":"0.0"
       },
       "stencil":{
         "id":"Task"
@@ -138,16 +138,16 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_FA98508C-7909-4D6B-AF44-DE0542A55DCC"
+          "resourceId":"_8A2F0AB1-A1BA-48AD-A972-28F14A856239"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":295,
+          "x":280,
           "y":220
         },
         "upperLeft":{
-          "x":195,
+          "x":180,
           "y":140
         }
       },
@@ -156,7 +156,7 @@
       ]
     },
     {
-      "resourceId":"_3DFE9806-7214-48A0-8260-9C22692A870E",
+      "resourceId":"_79948354-3AC2-4259-A8C6-D6BF1B66D773",
       "properties":{
         "name":"",
         "documentation":"",
@@ -166,7 +166,7 @@
         "conditionexpression":"",
         "conditionexpressionlanguage":"java",
         "priority":"",
-        "probability":"100",
+        "probability":"100.0",
         "isimmediate":"false",
         "showdiamondmarker":"",
         "bgcolor":"#000000",
@@ -184,16 +184,16 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_E57BCFF4-0787-40FA-83AC-627F06BF8F36"
+          "resourceId":"_ED09D210-BF98-497B-93C9-132CA62FFF27"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":194.15625,
+          "x":179.15625,
           "y":181
         },
         "upperLeft":{
-          "x":150.609375,
+          "x":135.609375,
           "y":179
         }
       },
@@ -208,19 +208,19 @@
         }
       ],
       "target":{
-        "resourceId":"_E57BCFF4-0787-40FA-83AC-627F06BF8F36"
+        "resourceId":"_ED09D210-BF98-497B-93C9-132CA62FFF27"
       }
     },
     {
-      "resourceId":"_EC3D1E81-B505-4722-A5E3-041BF2404E6F",
+      "resourceId":"_8AA0C363-C3DA-4029-80CD-2B5E105BB9EE",
       "properties":{
         "name":"",
         "documentation":"",
         "isselectable":"true",
-        "invisid":0.09410406630984469,
+        "invisid":"",
         "eventdefinitions":"",
         "datainputassociations":"",
-        "datainputassociationsview":"no data input",
+        "datainputassociationsview":"",
         "datainput":"",
         "min":"5",
         "max":"10",
@@ -245,11 +245,11 @@
       ],
       "bounds":{
         "lowerRight":{
-          "x":368,
+          "x":353,
           "y":194
         },
         "upperLeft":{
-          "x":340,
+          "x":325,
           "y":166
         }
       },
@@ -258,7 +258,7 @@
       ]
     },
     {
-      "resourceId":"_FA98508C-7909-4D6B-AF44-DE0542A55DCC",
+      "resourceId":"_8A2F0AB1-A1BA-48AD-A972-28F14A856239",
       "properties":{
         "name":"",
         "documentation":"",
@@ -268,7 +268,7 @@
         "conditionexpression":"",
         "conditionexpressionlanguage":"java",
         "priority":"",
-        "probability":"100",
+        "probability":"100.0",
         "isimmediate":"false",
         "showdiamondmarker":"",
         "bgcolor":"#000000",
@@ -286,16 +286,16 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_EC3D1E81-B505-4722-A5E3-041BF2404E6F"
+          "resourceId":"_8AA0C363-C3DA-4029-80CD-2B5E105BB9EE"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":339.375,
+          "x":324.375,
           "y":181
         },
         "upperLeft":{
-          "x":295.390625,
+          "x":280.390625,
           "y":179
         }
       },
@@ -310,7 +310,7 @@
         }
       ],
       "target":{
-        "resourceId":"_EC3D1E81-B505-4722-A5E3-041BF2404E6F"
+        "resourceId":"_8AA0C363-C3DA-4029-80CD-2B5E105BB9EE"
       }
     }
   ],

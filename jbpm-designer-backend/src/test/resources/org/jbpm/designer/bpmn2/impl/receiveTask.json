@@ -1,5 +1,5 @@
 {
-  "resourceId":"_PJx-8SgHEeaMftedahcbSA",
+  "resourceId":"_gAJewCouEeadHalMG_AuIA",
   "properties":{
     "namespaces":"",
     "name":"",
@@ -11,13 +11,13 @@
     "adhocprocess":"false",
     "imports":"",
     "globals":"",
-    "id":"project1.userTask",
+    "id":"aaa.receiveTask",
     "version":"1.0",
     "timeunit":"min",
     "currency":"",
     "targetnamespace":"http://www.omg.org/bpmn20",
     "typelanguage":"http://www.java.com/javaTypes",
-    "processn":"userTask",
+    "processn":"receiveTask",
     "documentation":""
   },
   "stencil":{
@@ -25,14 +25,14 @@
   },
   "childShapes":[
     {
-      "resourceId":"_ED04477C-F080-4BB0-BA76-5E580698A12A",
+      "resourceId":"processStartEvent",
       "properties":{
         "name":"",
         "documentation":"",
         "isselectable":"true",
         "invisid":"",
         "dataoutputassociations":"",
-        "dataoutputassociationsview":"no data output",
+        "dataoutputassociationsview":"",
         "dataoutput":"",
         "min":"5",
         "max":"10",
@@ -56,7 +56,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_3DFE9806-7214-48A0-8260-9C22692A870E"
+          "resourceId":"_64A84AA3-F127-487B-82B1-2E91D5C95BD2"
         }
       ],
       "bounds":{
@@ -74,17 +74,17 @@
       ]
     },
     {
-      "resourceId":"_E57BCFF4-0787-40FA-83AC-627F06BF8F36",
+      "resourceId":"_E51470EC-D7F7-48C4-8844-C8E0D3AA9664",
       "properties":{
-        "name":"User Task One",
+        "name":"receiveTask",
         "documentation":"",
         "isselectable":"true",
-        "invisid":0.8274585078310073,
+        "invisid":"",
         "isforcompensation":"",
         "assignments":"",
         "assignmentsview":"0 data inputs, 0 data outputs",
-        "tasktype":"User",
-        "messageref":"",
+        "tasktype":"Receive",
+        "messageref":"parcel",
         "script":"",
         "script_language":"java",
         "bgcolor":"#fafad2",
@@ -100,12 +100,12 @@
         "onentryactions":"",
         "onexitactions":"",
         "isasync":"true",
-        "taskname":"taskForAssignedActor",
+        "taskname":"",
         "serviceoperation":"",
         "serviceinterface":"",
         "serviceimplementation":"Java",
-        "actors":"assignedActor",
-        "groupid":"assignedGroup",
+        "actors":"",
+        "groupid":"",
         "subject":"",
         "description":"",
         "content":"",
@@ -115,20 +115,20 @@
         "createdby":"",
         "skippable":"true",
         "priority":"",
-        "multipleinstance":false,
+        "multipleinstance":"false",
         "multipleinstancecollectioninput":"",
         "multipleinstancecollectionoutput":"",
         "multipleinstancedatainput":"",
         "multipleinstancedataoutput":"",
         "multipleinstancecompletioncondition":"",
-        "min":"5",
-        "max":"10",
+        "min":"5.0",
+        "max":"10.0",
         "standarddeviation":"1",
         "mean":"0",
         "distributiontype":"uniform",
         "quantity":"1",
         "workinghours":"8",
-        "unitcost":"0"
+        "unitcost":"0.0"
       },
       "stencil":{
         "id":"Task"
@@ -138,7 +138,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_FA98508C-7909-4D6B-AF44-DE0542A55DCC"
+          "resourceId":"_C99BA5C1-CA1B-4467-B285-BBD1242049A4"
         }
       ],
       "bounds":{
@@ -156,7 +156,7 @@
       ]
     },
     {
-      "resourceId":"_3DFE9806-7214-48A0-8260-9C22692A870E",
+      "resourceId":"_64A84AA3-F127-487B-82B1-2E91D5C95BD2",
       "properties":{
         "name":"",
         "documentation":"",
@@ -166,7 +166,7 @@
         "conditionexpression":"",
         "conditionexpressionlanguage":"java",
         "priority":"",
-        "probability":"100",
+        "probability":"100.0",
         "isimmediate":"false",
         "showdiamondmarker":"",
         "bgcolor":"#000000",
@@ -184,7 +184,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_E57BCFF4-0787-40FA-83AC-627F06BF8F36"
+          "resourceId":"_E51470EC-D7F7-48C4-8844-C8E0D3AA9664"
         }
       ],
       "bounds":{
@@ -208,19 +208,19 @@
         }
       ],
       "target":{
-        "resourceId":"_E57BCFF4-0787-40FA-83AC-627F06BF8F36"
+        "resourceId":"_E51470EC-D7F7-48C4-8844-C8E0D3AA9664"
       }
     },
     {
-      "resourceId":"_EC3D1E81-B505-4722-A5E3-041BF2404E6F",
+      "resourceId":"_5D6B959E-394A-4488-9ED2-D248003E2174",
       "properties":{
         "name":"",
         "documentation":"",
         "isselectable":"true",
-        "invisid":0.09410406630984469,
+        "invisid":"",
         "eventdefinitions":"",
         "datainputassociations":"",
-        "datainputassociationsview":"no data input",
+        "datainputassociationsview":"",
         "datainput":"",
         "min":"5",
         "max":"10",
@@ -258,7 +258,7 @@
       ]
     },
     {
-      "resourceId":"_FA98508C-7909-4D6B-AF44-DE0542A55DCC",
+      "resourceId":"_C99BA5C1-CA1B-4467-B285-BBD1242049A4",
       "properties":{
         "name":"",
         "documentation":"",
@@ -268,7 +268,7 @@
         "conditionexpression":"",
         "conditionexpressionlanguage":"java",
         "priority":"",
-        "probability":"100",
+        "probability":"100.0",
         "isimmediate":"false",
         "showdiamondmarker":"",
         "bgcolor":"#000000",
@@ -286,7 +286,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_EC3D1E81-B505-4722-A5E3-041BF2404E6F"
+          "resourceId":"_5D6B959E-394A-4488-9ED2-D248003E2174"
         }
       ],
       "bounds":{
@@ -310,7 +310,7 @@
         }
       ],
       "target":{
-        "resourceId":"_EC3D1E81-B505-4722-A5E3-041BF2404E6F"
+        "resourceId":"_5D6B959E-394A-4488-9ED2-D248003E2174"
       }
     }
   ],
