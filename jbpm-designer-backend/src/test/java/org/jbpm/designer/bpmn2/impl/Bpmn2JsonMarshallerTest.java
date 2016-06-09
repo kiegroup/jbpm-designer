@@ -214,6 +214,7 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject userTask = loader.getChildByName(process, "User Task");
         JSONObject properties = userTask.getJSONObject("properties");
         assertEquals("taskForSomebody", properties.getString("taskname"));
+        assertEquals(true, properties.getBoolean("isasync"));
     }
 
     @Test
@@ -258,6 +259,7 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("Java", properties.getString("serviceimplementation"));
         assertEquals("sendInterface", properties.getString("serviceinterface"));
         assertEquals("sendOperation", properties.getString("serviceoperation"));
+        assertEquals(true, properties.getBoolean("isasync"));
     }
 
     @Test
@@ -278,6 +280,8 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject properties = userTask.getJSONObject("properties");
         assertTrue(properties.getString("datainputset").contains("sInput:String"));
         assertTrue(properties.getString("dataoutputset").contains("iOutput:Integer"));
+        JSONObject subprocessProperties = subprocess.getJSONObject("properties");
+        assertEquals(true, subprocessProperties.getBoolean("isasync"));
     }
 
     @Test
@@ -286,5 +290,24 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject ruleTask = loader.getChildByName(process, "businessRuleTask");
         JSONObject properties = ruleTask.getJSONObject("properties");
         assertEquals("simpleGroup", properties.getString("ruleflowgroup"));
+        assertEquals(true, properties.getBoolean("isasync"));
+    }
+
+    @Test
+    public void testReceiveTask() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("receiveTask.bpmn2");
+        JSONObject receiveTask = loader.getChildByName(process, "receiveTask");
+        JSONObject properties = receiveTask.getJSONObject("properties");
+        assertEquals("parcel", properties.getString("messageref"));
+        assertEquals(true, properties.getBoolean("isasync"));
+    }
+
+    @Test
+    public void testSendTask() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("sendTask.bpmn2");
+        JSONObject sendTask = loader.getChildByName(process, "sendTask");
+        JSONObject properties = sendTask.getJSONObject("properties");
+        assertEquals("parcel", properties.getString("messageref"));
+        assertEquals(true, properties.getBoolean("isasync"));
     }
 }

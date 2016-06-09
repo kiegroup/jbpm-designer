@@ -1,5 +1,5 @@
 {
-  "resourceId":"_nGEr8Cc2Eea33pFtYUF1XA",
+  "resourceId":"_PJx-8SgHEeaMftedahcbSA",
   "properties":{
     "namespaces":"",
     "name":"",
@@ -25,7 +25,7 @@
   },
   "childShapes":[
     {
-      "resourceId":"_3EA1146F-B04E-463D-B365-602E4B0F2B55",
+      "resourceId":"_665F87BD-4E51-4405-9653-DDB224834A6A",
       "properties":{
         "name":"PO Request",
         "documentation":"",
@@ -56,7 +56,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_53E0D15A-FE3E-4618-A9C3-0FC8A35815EC"
+          "resourceId":"_397083CB-0C65-486F-9154-704676E0C026"
         }
       ],
       "bounds":{
@@ -74,7 +74,7 @@
       ]
     },
     {
-      "resourceId":"_28F07F18-7703-4D03-A327-73A38F530301",
+      "resourceId":"_70758E51-1E80-4BC7-895D-9312457C4627",
       "properties":{
         "name":"Auto Approve Request",
         "documentation":"",
@@ -138,7 +138,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_CC0C09C2-0528-435E-94AB-8E1E2215FE61"
+          "resourceId":"_15E270FA-CB2F-4B4B-AE3C-56F5DF078391"
         }
       ],
       "bounds":{
@@ -156,7 +156,7 @@
       ]
     },
     {
-      "resourceId":"_53E0D15A-FE3E-4618-A9C3-0FC8A35815EC",
+      "resourceId":"_397083CB-0C65-486F-9154-704676E0C026",
       "properties":{
         "name":"",
         "documentation":"",
@@ -184,7 +184,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_28F07F18-7703-4D03-A327-73A38F530301"
+          "resourceId":"_70758E51-1E80-4BC7-895D-9312457C4627"
         }
       ],
       "bounds":{
@@ -208,11 +208,11 @@
         }
       ],
       "target":{
-        "resourceId":"_28F07F18-7703-4D03-A327-73A38F530301"
+        "resourceId":"_70758E51-1E80-4BC7-895D-9312457C4627"
       }
     },
     {
-      "resourceId":"_6A674374-0687-409C-A19D-0B9C5FC8EA4C",
+      "resourceId":"_C8954AAD-D07A-43C9-9D99-8717C310A154",
       "properties":{
         "name":"",
         "documentation":"",
@@ -237,10 +237,10 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_F5F95397-9D28-41C9-B74B-F3C249C76A15"
+          "resourceId":"_97D2792B-A6F0-47C3-8FE0-EABDE20E7148"
         },
         {
-          "resourceId":"_72D474BA-E757-4DFA-9232-B2CDA7EFF35F"
+          "resourceId":"_D9684A5F-1595-41FF-9A50-0B40B6BD59A7"
         }
       ],
       "bounds":{
@@ -258,7 +258,7 @@
       ]
     },
     {
-      "resourceId":"_CC0C09C2-0528-435E-94AB-8E1E2215FE61",
+      "resourceId":"_15E270FA-CB2F-4B4B-AE3C-56F5DF078391",
       "properties":{
         "name":"",
         "documentation":"",
@@ -286,7 +286,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_6A674374-0687-409C-A19D-0B9C5FC8EA4C"
+          "resourceId":"_C8954AAD-D07A-43C9-9D99-8717C310A154"
         }
       ],
       "bounds":{
@@ -310,11 +310,11 @@
         }
       ],
       "target":{
-        "resourceId":"_6A674374-0687-409C-A19D-0B9C5FC8EA4C"
+        "resourceId":"_C8954AAD-D07A-43C9-9D99-8717C310A154"
       }
     },
     {
-      "resourceId":"_BA7F3ACA-FDC5-4CFC-AA35-FDC3BFF88F81",
+      "resourceId":"_786D42B5-FC5B-43E0-93F9-3C4734E7498B",
       "properties":{
         "name":"Purchasing Review",
         "documentation":"",
@@ -378,7 +378,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_D977D0CE-565D-413E-9269-936B971BDA4A"
+          "resourceId":"_EA11BD49-5D3C-401C-BAAA-5C85B45E3229"
         }
       ],
       "bounds":{
@@ -396,7 +396,7 @@
       ]
     },
     {
-      "resourceId":"_F5F95397-9D28-41C9-B74B-F3C249C76A15",
+      "resourceId":"_97D2792B-A6F0-47C3-8FE0-EABDE20E7148",
       "properties":{
         "name":"not approved",
         "documentation":"",
@@ -424,7 +424,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_BA7F3ACA-FDC5-4CFC-AA35-FDC3BFF88F81"
+          "resourceId":"_786D42B5-FC5B-43E0-93F9-3C4734E7498B"
         }
       ],
       "bounds":{
@@ -452,11 +452,11 @@
         }
       ],
       "target":{
-        "resourceId":"_BA7F3ACA-FDC5-4CFC-AA35-FDC3BFF88F81"
+        "resourceId":"_786D42B5-FC5B-43E0-93F9-3C4734E7498B"
       }
     },
     {
-      "resourceId":"_5061CFD3-1126-4069-A3D1-D91A4CA0FBD5",
+      "resourceId":"_7DDC222E-9E1A-47D0-A5C5-1E01B63DB0F9",
       "properties":{
         "name":"",
         "documentation":"",
@@ -481,10 +481,10 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_CA7901D6-A1D3-42F9-925B-2A7C55B25606"
+          "resourceId":"_3B3B0D5F-804F-4280-B1CD-991689ADDEAF"
         },
         {
-          "resourceId":"_387ACC30-222F-4EFB-BD97-D2DB2BFA615A"
+          "resourceId":"_D92C4389-F83B-4315-A59A-528E80B378C1"
         }
       ],
       "bounds":{
@@ -502,7 +502,7 @@
       ]
     },
     {
-      "resourceId":"_D977D0CE-565D-413E-9269-936B971BDA4A",
+      "resourceId":"_EA11BD49-5D3C-401C-BAAA-5C85B45E3229",
       "properties":{
         "name":"",
         "documentation":"",
@@ -530,7 +530,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_5061CFD3-1126-4069-A3D1-D91A4CA0FBD5"
+          "resourceId":"_7DDC222E-9E1A-47D0-A5C5-1E01B63DB0F9"
         }
       ],
       "bounds":{
@@ -554,11 +554,11 @@
         }
       ],
       "target":{
-        "resourceId":"_5061CFD3-1126-4069-A3D1-D91A4CA0FBD5"
+        "resourceId":"_7DDC222E-9E1A-47D0-A5C5-1E01B63DB0F9"
       }
     },
     {
-      "resourceId":"_702DC0D5-4E22-4BA4-A19B-8657FBE5EF75",
+      "resourceId":"_960BFAE3-6990-4442-8AFB-348BFCD984B3",
       "properties":{
         "name":"",
         "documentation":"",
@@ -583,7 +583,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_4936A630-0E41-4789-8CC0-73CBC5A73183"
+          "resourceId":"_2D23398B-364B-44A3-832A-E2FBCB961B32"
         }
       ],
       "bounds":{
@@ -601,7 +601,7 @@
       ]
     },
     {
-      "resourceId":"_CA7901D6-A1D3-42F9-925B-2A7C55B25606",
+      "resourceId":"_3B3B0D5F-804F-4280-B1CD-991689ADDEAF",
       "properties":{
         "name":"approved",
         "documentation":"",
@@ -629,7 +629,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_702DC0D5-4E22-4BA4-A19B-8657FBE5EF75"
+          "resourceId":"_960BFAE3-6990-4442-8AFB-348BFCD984B3"
         }
       ],
       "bounds":{
@@ -653,11 +653,11 @@
         }
       ],
       "target":{
-        "resourceId":"_702DC0D5-4E22-4BA4-A19B-8657FBE5EF75"
+        "resourceId":"_960BFAE3-6990-4442-8AFB-348BFCD984B3"
       }
     },
     {
-      "resourceId":"_D90F1F1B-54BD-4B9A-8C76-A18A9A92BD09",
+      "resourceId":"_00EA1807-6B10-4982-ADE5-560B392A7653",
       "properties":{
         "name":"Select Supplier",
         "documentation":"",
@@ -721,7 +721,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_096DB81D-AE9C-42A2-9D83-D3FADA054E52"
+          "resourceId":"_D1BE066F-7D73-4752-B693-11265D47A32B"
         }
       ],
       "bounds":{
@@ -739,7 +739,7 @@
       ]
     },
     {
-      "resourceId":"_4936A630-0E41-4789-8CC0-73CBC5A73183",
+      "resourceId":"_2D23398B-364B-44A3-832A-E2FBCB961B32",
       "properties":{
         "name":"",
         "documentation":"",
@@ -767,7 +767,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_D90F1F1B-54BD-4B9A-8C76-A18A9A92BD09"
+          "resourceId":"_00EA1807-6B10-4982-ADE5-560B392A7653"
         }
       ],
       "bounds":{
@@ -791,11 +791,11 @@
         }
       ],
       "target":{
-        "resourceId":"_D90F1F1B-54BD-4B9A-8C76-A18A9A92BD09"
+        "resourceId":"_00EA1807-6B10-4982-ADE5-560B392A7653"
       }
     },
     {
-      "resourceId":"_E88486C3-AE3C-4454-889F-7D0A654982CC",
+      "resourceId":"_C33EF828-B1DF-4745-8246-BCB9D1D1E140",
       "properties":{
         "name":"Send PO",
         "documentation":"",
@@ -820,7 +820,7 @@
         "ruleflowgroup":"",
         "onentryactions":"",
         "onexitactions":"",
-        "isasync":"false",
+        "isasync":"true",
         "taskname":"",
         "serviceoperation":"sendOperation",
         "serviceinterface":"sendInterface",
@@ -859,7 +859,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_B7DC897D-97C9-476B-A56A-06DBBF259F51"
+          "resourceId":"_B7EA912D-D186-4493-8814-8DC68DE6C2BC"
         }
       ],
       "bounds":{
@@ -877,7 +877,7 @@
       ]
     },
     {
-      "resourceId":"_096DB81D-AE9C-42A2-9D83-D3FADA054E52",
+      "resourceId":"_D1BE066F-7D73-4752-B693-11265D47A32B",
       "properties":{
         "name":"",
         "documentation":"",
@@ -905,7 +905,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_E88486C3-AE3C-4454-889F-7D0A654982CC"
+          "resourceId":"_C33EF828-B1DF-4745-8246-BCB9D1D1E140"
         }
       ],
       "bounds":{
@@ -929,11 +929,11 @@
         }
       ],
       "target":{
-        "resourceId":"_E88486C3-AE3C-4454-889F-7D0A654982CC"
+        "resourceId":"_C33EF828-B1DF-4745-8246-BCB9D1D1E140"
       }
     },
     {
-      "resourceId":"_6C2D13AE-E0A6-4BF2-8657-1DF61E12ED97",
+      "resourceId":"_48BDBFE6-9F17-4C64-B37D-EC66EA056F3A",
       "properties":{
         "name":"Send Confirmation to Requestor",
         "documentation":"",
@@ -997,7 +997,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_45437E41-26D3-4CCB-BB12-DEA13BD2212F"
+          "resourceId":"_19533363-27F3-4E45-8D06-E5375F87935B"
         }
       ],
       "bounds":{
@@ -1015,7 +1015,7 @@
       ]
     },
     {
-      "resourceId":"_B7DC897D-97C9-476B-A56A-06DBBF259F51",
+      "resourceId":"_B7EA912D-D186-4493-8814-8DC68DE6C2BC",
       "properties":{
         "name":"",
         "documentation":"",
@@ -1043,7 +1043,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_6C2D13AE-E0A6-4BF2-8657-1DF61E12ED97"
+          "resourceId":"_48BDBFE6-9F17-4C64-B37D-EC66EA056F3A"
         }
       ],
       "bounds":{
@@ -1067,11 +1067,11 @@
         }
       ],
       "target":{
-        "resourceId":"_6C2D13AE-E0A6-4BF2-8657-1DF61E12ED97"
+        "resourceId":"_48BDBFE6-9F17-4C64-B37D-EC66EA056F3A"
       }
     },
     {
-      "resourceId":"_D2E53D4E-22E2-41B5-96FE-A538EB45EA1C",
+      "resourceId":"_FE4D902D-A398-4CEC-A82E-39D510E0C4A6",
       "properties":{
         "name":"Send Denial to Requestor",
         "documentation":"",
@@ -1135,7 +1135,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_EBB75FD8-D0E8-4209-BF4E-CA6A78853AB1"
+          "resourceId":"_A40A7730-D49B-4EA7-896A-D4482051F287"
         }
       ],
       "bounds":{
@@ -1153,7 +1153,7 @@
       ]
     },
     {
-      "resourceId":"_387ACC30-222F-4EFB-BD97-D2DB2BFA615A",
+      "resourceId":"_D92C4389-F83B-4315-A59A-528E80B378C1",
       "properties":{
         "name":"not approved",
         "documentation":"",
@@ -1181,7 +1181,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_D2E53D4E-22E2-41B5-96FE-A538EB45EA1C"
+          "resourceId":"_FE4D902D-A398-4CEC-A82E-39D510E0C4A6"
         }
       ],
       "bounds":{
@@ -1205,11 +1205,11 @@
         }
       ],
       "target":{
-        "resourceId":"_D2E53D4E-22E2-41B5-96FE-A538EB45EA1C"
+        "resourceId":"_FE4D902D-A398-4CEC-A82E-39D510E0C4A6"
       }
     },
     {
-      "resourceId":"_19F5C458-4118-4C74-95B3-868AAC92F381",
+      "resourceId":"_4DB5101B-51A9-4015-A201-1B78573415B7",
       "properties":{
         "name":"",
         "documentation":"",
@@ -1234,7 +1234,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_C8A85108-6099-468E-8D1B-40DC809F448E"
+          "resourceId":"_A19C1225-FA26-4209-B7D0-E6DC9B7F8D53"
         }
       ],
       "bounds":{
@@ -1252,7 +1252,7 @@
       ]
     },
     {
-      "resourceId":"_45437E41-26D3-4CCB-BB12-DEA13BD2212F",
+      "resourceId":"_19533363-27F3-4E45-8D06-E5375F87935B",
       "properties":{
         "name":"",
         "documentation":"",
@@ -1280,7 +1280,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_19F5C458-4118-4C74-95B3-868AAC92F381"
+          "resourceId":"_4DB5101B-51A9-4015-A201-1B78573415B7"
         }
       ],
       "bounds":{
@@ -1304,11 +1304,11 @@
         }
       ],
       "target":{
-        "resourceId":"_19F5C458-4118-4C74-95B3-868AAC92F381"
+        "resourceId":"_4DB5101B-51A9-4015-A201-1B78573415B7"
       }
     },
     {
-      "resourceId":"_EBB75FD8-D0E8-4209-BF4E-CA6A78853AB1",
+      "resourceId":"_A40A7730-D49B-4EA7-896A-D4482051F287",
       "properties":{
         "name":"",
         "documentation":"",
@@ -1336,7 +1336,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_19F5C458-4118-4C74-95B3-868AAC92F381"
+          "resourceId":"_4DB5101B-51A9-4015-A201-1B78573415B7"
         }
       ],
       "bounds":{
@@ -1364,11 +1364,11 @@
         }
       ],
       "target":{
-        "resourceId":"_19F5C458-4118-4C74-95B3-868AAC92F381"
+        "resourceId":"_4DB5101B-51A9-4015-A201-1B78573415B7"
       }
     },
     {
-      "resourceId":"_72D474BA-E757-4DFA-9232-B2CDA7EFF35F",
+      "resourceId":"_D9684A5F-1595-41FF-9A50-0B40B6BD59A7",
       "properties":{
         "name":"approved",
         "documentation":"",
@@ -1396,7 +1396,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_702DC0D5-4E22-4BA4-A19B-8657FBE5EF75"
+          "resourceId":"_960BFAE3-6990-4442-8AFB-348BFCD984B3"
         }
       ],
       "bounds":{
@@ -1420,11 +1420,11 @@
         }
       ],
       "target":{
-        "resourceId":"_702DC0D5-4E22-4BA4-A19B-8657FBE5EF75"
+        "resourceId":"_960BFAE3-6990-4442-8AFB-348BFCD984B3"
       }
     },
     {
-      "resourceId":"_32C51EBD-2C53-402C-98F8-4C5FB1D58032",
+      "resourceId":"_B8CDBE76-BD39-4643-B1D3-CB72CC0FFDC5",
       "properties":{
         "name":"",
         "documentation":"",
@@ -1470,7 +1470,7 @@
       ]
     },
     {
-      "resourceId":"_C8A85108-6099-468E-8D1B-40DC809F448E",
+      "resourceId":"_A19C1225-FA26-4209-B7D0-E6DC9B7F8D53",
       "properties":{
         "name":"",
         "documentation":"",
@@ -1498,7 +1498,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_32C51EBD-2C53-402C-98F8-4C5FB1D58032"
+          "resourceId":"_B8CDBE76-BD39-4643-B1D3-CB72CC0FFDC5"
         }
       ],
       "bounds":{
@@ -1522,7 +1522,7 @@
         }
       ],
       "target":{
-        "resourceId":"_32C51EBD-2C53-402C-98F8-4C5FB1D58032"
+        "resourceId":"_B8CDBE76-BD39-4643-B1D3-CB72CC0FFDC5"
       }
     }
   ],
