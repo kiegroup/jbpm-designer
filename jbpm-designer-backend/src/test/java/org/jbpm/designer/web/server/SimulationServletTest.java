@@ -16,14 +16,13 @@
 
 package org.jbpm.designer.web.server;
 
-import java.io.UnsupportedEncodingException;
+import java.io.File;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
 import org.jbpm.designer.repository.UriUtils;
@@ -132,13 +131,13 @@ public class SimulationServletTest {
         assertNotNull(encodedResponseText);
         String responseText = UriUtils.decode(new String(Base64.decodeBase64(encodedResponseText), "UTF-8"));
         assertNotNull(responseText);
-        assertTrue(responseText.contains("май"));
+        assertTrue(responseText.contains("май") || responseText.contains("мая"));
         assertTrue(responseText.contains("июн"));
     }
 
     private String readFile(String fileName) throws Exception {
         URL fileURL = SimulationServletTest.class.getResource(fileName);
-        return new String(Files.readAllBytes(Paths.get(fileURL.toURI())));
+        return FileUtils.readFileToString(new File(fileURL.toURI()));
     }
 
 }
