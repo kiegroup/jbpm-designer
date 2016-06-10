@@ -1008,6 +1008,31 @@ public class Bpmn2UnmarshallingTest {
         verifyAttribute(iOutput, "dtype", "Integer");
     }
 
+    @Test
+    public void testEndEventsAssignments() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("subprocessTaskAssignments.json");
+        Process process = getRootProcess(definitions);
+        FlowElement subprocess = getFlowElement(process.getFlowElements(), "Embedded subprocess");
+        assertTrue(subprocess instanceof SubProcess);
+        FlowElement element = getFlowElement(((SubProcess)subprocess).getFlowElements(), "SubEnd");
+        assertTrue(element instanceof EndEvent);
+        EndEvent subEnd = (EndEvent) element;
+        List<DataInputAssociation> associations = subEnd.getDataInputAssociation();
+        assertEquals(1, associations.size());
+        assertEquals("intVar", associations.get(0).getSourceRef().get(0).getId());
+        assertTrue(associations.get(0).getTargetRef().getId().contains("intSubInput"));
+        verifyAttribute(associations.get(0).getTargetRef(), "dtype", "Integer");
+
+        element = getFlowElement((process).getFlowElements(), "End Event");
+        assertTrue(element instanceof EndEvent);
+        EndEvent endEvent = (EndEvent) element;
+        associations = endEvent.getDataInputAssociation();
+        assertEquals(1, associations.size());
+        assertEquals("intVar", associations.get(0).getSourceRef().get(0).getId());
+        assertTrue(associations.get(0).getTargetRef().getId().contains("intInput"));
+        verifyAttribute(associations.get(0).getTargetRef(), "dtype", "Integer");
+    }
+
     private FlowElement getFlowElement(List<FlowElement> elements, String name) {
         for(FlowElement element : elements) {
             if (element.getName() != null && name.compareTo(element.getName()) == 0) {

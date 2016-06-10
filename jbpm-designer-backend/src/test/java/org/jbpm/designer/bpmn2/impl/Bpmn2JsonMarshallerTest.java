@@ -285,6 +285,22 @@ public class Bpmn2JsonMarshallerTest {
     }
 
     @Test
+    public void testEndEventsAssignments() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("subprocessTaskAssignments.bpmn2");
+
+        JSONObject subprocess = loader.getChildByName(process, "Embedded subprocess");
+        JSONObject subEnd = loader.getChildByName(subprocess, "SubEnd");
+        JSONObject subProperties = subEnd.getJSONObject("properties");
+        assertEquals("intSubInput:Integer", subProperties.getString("datainput"));
+        assertEquals("[din]intVar->intSubInput", subProperties.getString("datainputassociations"));
+
+        JSONObject endEvent = loader.getChildByName(process, "End Event");
+        JSONObject properties = endEvent.getJSONObject("properties");
+        assertEquals("intInput:Integer", properties.getString("datainput"));
+        assertEquals("[din]intVar->intInput", properties.getString("datainputassociations"));
+    }
+
+    @Test
     public void testBusinessRuleTask() throws Exception {
         JSONObject process = loader.loadProcessFromXml("businessRule.bpmn2", BPMN2SyntaxCheckerTest.class);
         JSONObject ruleTask = loader.getChildByName(process, "businessRuleTask");
