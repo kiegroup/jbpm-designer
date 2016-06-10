@@ -16,7 +16,6 @@
 
 package org.jbpm.designer.web.server;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -132,7 +131,7 @@ public class SimulationServletTest {
         assertNotNull(encodedResponseText);
         String responseText = UriUtils.decode(new String(Base64.decodeBase64(encodedResponseText), "UTF-8"));
         assertNotNull(responseText);
-        assertTrue(responseText.contains("мая"));
+        assertTrue(responseText.contains("май") || responseText.contains("мая"));
         assertTrue(responseText.contains("июн"));
     }
 
