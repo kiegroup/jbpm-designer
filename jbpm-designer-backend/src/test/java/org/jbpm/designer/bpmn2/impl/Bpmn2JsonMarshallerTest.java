@@ -49,6 +49,17 @@ public class Bpmn2JsonMarshallerTest {
     }
 
     @Test
+    public void testConstraint() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("constraint.bpmn2");
+        JSONObject condition1 = loader.getChildByName(process, "Condition1");
+        JSONObject condition2 = loader.getChildByName(process, "Condition2");
+        JSONObject condition1Properties = condition1.getJSONObject("properties");
+        JSONObject condition2Properties = condition2.getJSONObject("properties");
+        assertEquals("return  KieFunctions.endsWith(customVar, \"sample\");", condition1Properties.getString("conditionexpression"));
+        assertEquals("return  !KieFunctions.isNull(intVar);", condition2Properties.getString("conditionexpression"));
+    }
+
+    @Test
     public void testSendTaskDataInputs() throws Exception {
         String[] variableNames = {"Comment", "Content", "CreatedBy", "GroupId", "Locale",
                 "NotCompletedNotify", "NotCompletedReassign", "NotStartedNotify", "NotStartedReassign",
