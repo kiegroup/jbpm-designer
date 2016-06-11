@@ -1014,7 +1014,7 @@ public class Bpmn2UnmarshallingTest {
         Process process = getRootProcess(definitions);
         FlowElement subprocess = getFlowElement(process.getFlowElements(), "Embedded subprocess");
         assertTrue(subprocess instanceof SubProcess);
-        FlowElement element = getFlowElement(((SubProcess)subprocess).getFlowElements(), "SubEnd");
+        FlowElement element = getFlowElement(((SubProcess) subprocess).getFlowElements(), "SubEnd");
         assertTrue(element instanceof EndEvent);
         EndEvent subEnd = (EndEvent) element;
         List<DataInputAssociation> associations = subEnd.getDataInputAssociation();
@@ -1031,6 +1031,24 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("intVar", associations.get(0).getSourceRef().get(0).getId());
         assertTrue(associations.get(0).getTargetRef().getId().contains("intInput"));
         verifyAttribute(associations.get(0).getTargetRef(), "dtype", "Integer");
+    }
+
+    @Test
+    public void testRestTaskAssignments() throws Exception {
+        String[] taskInputs = {"Content", "ContentType", "ResultClass", "Method", "Username", "Password",
+                "ReadTimeout", "ConnectTimeout", "Url"};
+        Definitions definitions = loader.loadProcessFromJson("restTask.json");
+        Process process = getRootProcess(definitions);
+        FlowElement element = getFlowElement(process.getFlowElements(), "REST");
+        assertTrue(element instanceof Task);
+        Task restTask = (Task) element;
+        InputOutputSpecification specification = restTask.getIoSpecification();
+        for(String input : taskInputs) {
+            DataInput dataInput = getDataInput(specification.getDataInputs(), input);
+            verifyAttribute(dataInput, "dtype", "String");
+        }
+        DataOutput dataOutput = getDataOutput(specification.getDataOutputs(), "Result");
+        verifyAttribute(dataOutput, "dtype", "java.lang.Object");
     }
 
     private FlowElement getFlowElement(List<FlowElement> elements, String name) {

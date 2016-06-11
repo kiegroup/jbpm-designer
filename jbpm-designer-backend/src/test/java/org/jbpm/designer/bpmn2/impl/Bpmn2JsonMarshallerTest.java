@@ -337,4 +337,30 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("parcel", properties.getString("messageref"));
         assertEquals(true, properties.getBoolean("isasync"));
     }
+
+    @Test
+    public void testRestTaskAssignments() throws Exception {
+        String[] existingVariableNames = {"Content", "ContentType", "ResultClass", "Method", "Username", "Password",
+                                            "ReadTimeout", "ConnectTimeout", "Url"};
+
+        JSONObject process = loader.loadProcessFromXml("restTask.bpmn2");
+        JSONObject restTask = loader.getChildByName(process, "REST");
+        JSONObject properties = restTask.getJSONObject("properties");
+        String datainputset = properties.getString("datainputset");
+        String dataoutputset = properties.getString("dataoutputset");
+        String assignments = properties.getString("assignments");
+
+        for (String variableName : existingVariableNames) {
+            String dataInput = variableName + ":String";
+            assertTrue("Variable \"" + variableName + "\" not found in datainputset", datainputset.contains(dataInput));
+        }
+        for (String variableName : existingVariableNames) {
+            String assignment = "[din]" + variableName + "=";
+            assertTrue("Assignment \"" + assignment + "\" not found in assignments", assignments.contains(assignment));
+        }
+
+        assertTrue(assignments.contains("[dout]Result->processVariable"));
+        assertTrue(dataoutputset.contains("Result:java.lang.Object"));
+    }
+
 }
