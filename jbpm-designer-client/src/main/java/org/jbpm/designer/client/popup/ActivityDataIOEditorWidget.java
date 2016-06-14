@@ -207,14 +207,14 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
      * @return
      */
     public boolean isDuplicateName(String name) {
-        if (name == null || name.isEmpty()) {
+        if (name == null || name.trim().isEmpty()) {
             return false;
         }
         List<AssignmentRow> as = view.getAssignmentRows();
         if (as != null && !as.isEmpty()) {
             int nameCount = 0;
             for (AssignmentRow row : as) {
-                if (name.compareTo(row.getName()) == 0) {
+                if (name.trim().compareTo(row.getName()) == 0) {
                     nameCount++;
                     if (nameCount > 1) {
                         return true;
