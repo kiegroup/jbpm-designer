@@ -359,8 +359,9 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 		var pathobj = jsonPath(jsonstr.evalJSON(), "$.pathsim.*");
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var simTimeUnit = jsonPath(processJSON.evalJSON(), "$.properties.timeunit");
+		var i18nPathid = pathid.replace('Path', ORYX.I18N.View.sim.resultsPath)
         ORYX.EDITOR.simulationChartTimeUnit = this.getSimTimeUnit(simTimeUnit);
-		ORYX.EDITOR.simulationChartTitle = ORYX.I18N.View.sim.resultsTitlesPathExecutionInfo + " (" + pathid + ")";
+		ORYX.EDITOR.simulationChartTitle = ORYX.I18N.View.sim.resultsTitlesPathExecutionInfo + " (" + i18nPathid + ")";
 		ORYX.EDITOR.simulationPathData = pathobj;
 		ORYX.EDITOR.simulationPathId = pathid;
 		
@@ -442,21 +443,21 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
                         "style": "stroke-width:1;fill:red;font-family:arial;font-weight:bold",
                         "font-size": 10}]
                 );
-                dataMax.textContent = "Max: " + data.values[0].value;
+                dataMax.textContent = ORYX.I18N.View.sim.chartsMax + ": " + data.values[0].value;
 
                 var dataMin = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
                     ['text', {"id" : "modelmin",
                         "style": "stroke-width:1;fill:blue;font-family:arial;font-weight:bold",
                         "font-size": 10}]
                 );
-                dataMin.textContent = "Min: " + data.values[1].value;
+                dataMin.textContent = ORYX.I18N.View.sim.chartsMin + ": " + data.values[1].value;
 
                 var dataAvg = ORYX.Editor.graft("http://www.w3.org/2000/svg", null,
                     ['text', {"id" : "modelavg",
                         "style": "stroke-width:1;fill:green;font-family:arial;font-weight:bold",
                         "font-size": 10}]
                 );
-                dataAvg.textContent = "Avg: " + data.values[2].value;
+                dataAvg.textContent = ORYX.I18N.View.sim.chartsAverage + ": " + data.values[2].value;
 
                 // overlays
                 this.facade.raiseEvent({

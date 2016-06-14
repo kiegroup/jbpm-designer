@@ -779,6 +779,8 @@ ORYX.I18N.View.sim.Table = '<i18n:message key="ORYX.I18N.View.sim.Table">Table</
 ORYX.I18N.View.sim.Timeline = '<i18n:message key="ORYX.I18N.View.sim.Timeline">Timeline</i18n:message>';
 ORYX.I18N.View.sim.LineChart = '<i18n:message key="ORYX.I18N.View.sim.LineChart">Line Chart</i18n:message>';
 ORYX.I18N.View.sim.NoDataAvailable = '<i18n:message key="ORYX.I18N.View.sim.NoDataAvailable">No Data Available.</i18n:message>';
+ORYX.I18N.View.sim.Chart = '<i18n:message key="ORYX.I18N.View.sim.Chart">Chart</i18n:message>';
+ORYX.I18N.View.sim.Model = '<i18n:message key="ORYX.I18N.View.sim.Model">Model</i18n:message>';
 
 if(!ORYX.I18N.View.sim.chartsTimeUnits) ORYX.I18N.View.sim.chartsTimeUnits = {};
 ORYX.I18N.View.sim.chartsTimeUnits['ms'] = '<i18n:message key="ORYX.I18N.View.sim.chartsTimeUnits_ms">ms</i18n:message>';
