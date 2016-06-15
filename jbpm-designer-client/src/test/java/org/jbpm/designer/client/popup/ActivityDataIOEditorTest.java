@@ -27,6 +27,7 @@ import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -41,10 +42,7 @@ public class ActivityDataIOEditorTest {
     private ArgumentCaptor<Set<String>> setCaptor;
 
     @Captor
-    private ArgumentCaptor<List<String>> listCaptorOne;
-
-    @Captor
-    private ArgumentCaptor<List<String>> listCaptorTwo;
+    private ArgumentCaptor<List<String>> listCaptor;
 
     @Captor ArgumentCaptor<List<AssignmentRow>> listAssignmentCaptor;
 
@@ -124,17 +122,13 @@ public class ActivityDataIOEditorTest {
 
         ioEditor.setDataTypes(dataTypes, dataTypesDisplayNames);
 
-        verify(ioEditorView).setPossibleInputAssignmentsDataTypes(listCaptorOne.capture(), listCaptorTwo.capture());
-        assertEquals(1, listCaptorOne.getValue().size());
-        assertEquals(1, listCaptorTwo.getValue().size());
-        assertEquals(dataTypes.get(0), listCaptorOne.getValue().get(0));
-        assertEquals(dataTypesDisplayNames.get(0), listCaptorTwo.getValue().get(0));
+        verify(ioEditorView).setPossibleInputAssignmentsDataTypes(listCaptor.capture());
+        assertEquals(1, listCaptor.getValue().size());
+        assertEquals(dataTypesDisplayNames.get(0), listCaptor.getValue().get(0));
 
-        verify(ioEditorView).setPossibleOutputAssignmentsDataTypes(listCaptorOne.capture(), listCaptorTwo.capture());
-        assertEquals(1, listCaptorOne.getValue().size());
-        assertEquals(1, listCaptorTwo.getValue().size());
-        assertEquals(dataTypes.get(0), listCaptorOne.getValue().get(0));
-        assertEquals(dataTypesDisplayNames.get(0), listCaptorTwo.getValue().get(0));
+        verify(ioEditorView).setPossibleOutputAssignmentsDataTypes(listCaptor.capture());
+        assertEquals(1, listCaptor.getValue().size());
+        assertEquals(dataTypesDisplayNames.get(0), listCaptor.getValue().get(0));
     }
 
     @Test
@@ -188,19 +182,27 @@ public class ActivityDataIOEditorTest {
     }
 
     @Test
+    public void testNullDisallowedPropertyNames() {
+        Set<String> disallowedNames = new HashSet<String>();
+        ioEditor.setDisallowedPropertyNames(null);
+
+        verify(ioEditorView).setInputAssignmentsDisallowedNames(disallowedNames);
+    }
+
+    @Test
     public void testProcessVariables() {
         List<String> variables = new ArrayList<String>();
         variables.add("variable");
 
         ioEditor.setProcessVariables(variables);
 
-        verify(ioEditorView).setInputAssignmentsProcessVariables(listCaptorOne.capture());
-        assertEquals(1, listCaptorOne.getValue().size());
-        assertEquals(variables.get(0), listCaptorOne.getValue().get(0));
+        verify(ioEditorView).setInputAssignmentsProcessVariables(listCaptor.capture());
+        assertEquals(1, listCaptor.getValue().size());
+        assertEquals(variables.get(0), listCaptor.getValue().get(0));
 
         verify(ioEditorView).setOutputAssignmentsProcessVariables(variables);
-        assertEquals(1, listCaptorOne.getValue().size());
-        assertEquals(variables.get(0), listCaptorOne.getValue().get(0));
+        assertEquals(1, listCaptor.getValue().size());
+        assertEquals(variables.get(0), listCaptor.getValue().get(0));
     }
 
     @Test

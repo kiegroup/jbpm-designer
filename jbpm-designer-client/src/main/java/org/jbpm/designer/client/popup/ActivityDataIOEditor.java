@@ -91,8 +91,8 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
         this.dataTypes = dataTypes;
         this.dataTypeDisplayNames = dataTypeDisplayNames;
 
-        view.setPossibleInputAssignmentsDataTypes(dataTypes, dataTypeDisplayNames);
-        view.setPossibleOutputAssignmentsDataTypes(dataTypes, dataTypeDisplayNames);
+        view.setPossibleInputAssignmentsDataTypes(dataTypeDisplayNames);
+        view.setPossibleOutputAssignmentsDataTypes(dataTypeDisplayNames);
     }
 
     public void setAssignmentData(AssignmentData assignmentData) {

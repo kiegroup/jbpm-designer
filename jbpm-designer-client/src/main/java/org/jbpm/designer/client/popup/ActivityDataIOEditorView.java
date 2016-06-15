@@ -56,9 +56,9 @@ public interface ActivityDataIOEditorView {
 
     void setIsOutputAssignmentSingleVar(boolean single);
 
-    void setPossibleInputAssignmentsDataTypes(List<String> dataTypes, List<String> dataTypeDisplayNames);
+    void setPossibleInputAssignmentsDataTypes(List<String> dataTypeDisplayNames);
 
-    void setPossibleOutputAssignmentsDataTypes(List<String> dataTypes, List<String> dataTypeDisplayNames);
+    void setPossibleOutputAssignmentsDataTypes(List<String> dataTypeDisplayNames);
 
     void setInputAssignmentsProcessVariables(List<String> processVariables);
 

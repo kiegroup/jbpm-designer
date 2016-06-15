@@ -16,16 +16,13 @@
 
 package org.jbpm.designer.client.popup;
 
-import com.google.gwt.event.dom.client.BlurEvent;
-import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.user.client.ui.ValueListBox;
-import com.google.gwtmockito.GwtMockitoTestRunner;
-import com.google.gwtmockito.WithClassesToStub;
+import com.google.gwt.event.dom.client.*;
+import com.google.gwtmockito.GwtMock;
+import com.google.gwtmockito.GwtMockito;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.TextBox;
 
+import org.gwtbootstrap3.client.ui.ValueListBox;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.jboss.errai.databinding.client.api.DataBinder;
 import org.jbpm.designer.client.shared.AssignmentRow;
@@ -38,18 +35,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.mocks.EventSourceMock;
 
 import javax.enterprise.event.Event;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
-@WithClassesToStub(ValueListBox.class)
-@RunWith(GwtMockitoTestRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AssignmentListItemWidgetViewImplTest {
 
     private static final String VARIABLE_NAME = "variableName";
@@ -57,34 +56,28 @@ public class AssignmentListItemWidgetViewImplTest {
     private static final String CUST_DATA_TYPE_NAME = "custDataTypeName";
     private static final String DATA_TYPE_NAME = "dataTypeName";
 
-    @Mock
+    @GwtMock
     private DataBinder<AssignmentRow> assignment;
 
-    @Mock
+    @GwtMock
     private DataIOEditorNameTextBox name;
 
-    @Mock
+    @GwtMock
     private Button deleteButton;
 
-    @Mock
     private TextBox customDataType;
 
-    @Mock
-    private org.gwtbootstrap3.client.ui.ValueListBox<String> dataType;
-
-    @Mock
     private TextBox constant;
 
-    @Mock
-    private org.gwtbootstrap3.client.ui.ValueListBox<String> processVar;
+    private ValueListBox<String> dataType;
 
-    @Mock
+    private ValueListBox<String> processVar;
+
     private ComboBox dataTypeComboBox;
 
-    @Mock
     private ComboBox processVarComboBox;
 
-    @Mock
+    @GwtMock
     private KeyDownEvent keyDownEvent;
 
     private Event<NotificationEvent> notification = mock(EventSourceMock.class);
@@ -99,7 +92,14 @@ public class AssignmentListItemWidgetViewImplTest {
 
     @Before
     public void setUp() throws Exception {
-        view = new AssignmentListItemWidgetViewImpl();
+        GwtMockito.initMocks(this);
+        customDataType = mock(TextBox.class);
+        constant = mock(TextBox.class);
+        dataType = mock(ValueListBox.class);
+        processVar = mock(ValueListBox.class);
+        dataTypeComboBox = mock(ComboBox.class);
+        processVarComboBox = mock(ComboBox.class);
+        view = mock(AssignmentListItemWidgetViewImpl.class);
         view.assignment = assignment;
         view.name = name;
         view.deleteButton = deleteButton;
@@ -110,6 +110,28 @@ public class AssignmentListItemWidgetViewImplTest {
         view.dataTypeComboBox = dataTypeComboBox;
         view.processVarComboBox = processVarComboBox;
         view.notification = notification;
+
+        doCallRealMethod().when(view).init();
+        doCallRealMethod().when(view).getConstant();
+        doCallRealMethod().when(view).setConstant(anyString());
+        doCallRealMethod().when(view).getCustomDataType();
+        doCallRealMethod().when(view).setCustomDataType(anyString());
+        doCallRealMethod().when(view).getModel();
+        doCallRealMethod().when(view).setModel(any(AssignmentRow.class));
+        doCallRealMethod().when(view).getModelValue(any(ValueListBox.class));
+        doCallRealMethod().when(view).setTextBoxModelValue(any(TextBox.class), anyString());
+        doCallRealMethod().when(view).setListBoxModelValue(any(ValueListBox.class), anyString());
+        doCallRealMethod().when(view).getDataType();
+        doCallRealMethod().when(view).setDataType(anyString());
+        doCallRealMethod().when(view).getProcessVar();
+        doCallRealMethod().when(view).setProcessVar(anyString());
+        doCallRealMethod().when(view).getVariableType();
+        doCallRealMethod().when(view).setAllowDuplicateNames(anyBoolean(), anyString());
+        doCallRealMethod().when(view).setParentWidget(any(ActivityDataIOEditorWidget.class));
+        doCallRealMethod().when(view).isDuplicateName(anyString());
+        doCallRealMethod().when(view).setShowConstants(anyBoolean());
+        doCallRealMethod().when(view).setDisallowedNames(anySet(), anyString());
+        doCallRealMethod().when(view).handleDeleteButton(any(ClickEvent.class));
 
         AssignmentRow row = new AssignmentRow();
         doReturn(row).when(assignment).getModel();
@@ -241,6 +263,36 @@ public class AssignmentListItemWidgetViewImplTest {
         verify(parent, times(1)).isDuplicateName("anyName");
         verify(notification, times(1)).fire(new NotificationEvent("ErrorMessage", NotificationEvent.NotificationType.ERROR));
         verify(name, times(1)).setValue("");
+    }
+
+    @Test
+    public void testSetShowConstantsTrue() {
+        view.setShowConstants(true);
+        verify(processVarComboBox).setShowCustomValues(true);
+    }
+
+    @Test
+    public void testSetShowConstantsFalse() {
+        view.setShowConstants(false);
+        verify(processVarComboBox).setShowCustomValues(false);
+    }
+
+    @Test
+    public void testSetDisallowedNames() {
+        Set<String> disallowedNames = new HashSet<String>();
+        String disallowedNameErrorMessage = "error value";
+        view.setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
+        verify(name).setInvalidValues(disallowedNames, false, disallowedNameErrorMessage);
+    }
+
+    @Test
+    public void testHandleDeleteButton() {
+        ActivityDataIOEditorWidget widget = mock(ActivityDataIOEditorWidget.class);
+        AssignmentRow model = mock(AssignmentRow.class);
+        when(view.getModel()).thenReturn(model);
+        view.setParentWidget(widget);
+        view.handleDeleteButton(null);
+        verify(widget).removeAssignment(model);
     }
 
 }
