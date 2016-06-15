@@ -43,7 +43,7 @@ import java.util.Set;
 @Dependent
 public class ActivityDataIOEditorViewImpl extends BaseModal implements ActivityDataIOEditorView {
 
-    private Presenter presenter;
+    protected Presenter presenter;
 
     @Inject
     protected ActivityDataIOEditorWidget inputAssignmentsWidget;
@@ -178,46 +178,30 @@ public class ActivityDataIOEditorViewImpl extends BaseModal implements ActivityD
     }
 
     @Override
-    public void setPossibleInputAssignmentsDataTypes(List<String> dataTypes, List<String> dataTypeDisplayNames) {
-        List<String> displayDataTypes =  new ArrayList<String>();
-        displayDataTypes.addAll(dataTypeDisplayNames);
-
+    public void setPossibleInputAssignmentsDataTypes(List<String> dataTypeDisplayNames) {
         ListBoxValues dataTypeListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CUSTOM_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.dataTypesTester());
-
-        dataTypeListBoxValues.addValues(displayDataTypes);
+        dataTypeListBoxValues.addValues(dataTypeDisplayNames);
         inputAssignmentsWidget.setDataTypes(dataTypeListBoxValues);
     }
 
     @Override
-    public void setPossibleOutputAssignmentsDataTypes(List<String> dataTypes, List<String> dataTypeDisplayNames) {
-        List<String> displayDataTypes =  new ArrayList<String>();
-        displayDataTypes.addAll(dataTypeDisplayNames);
-
+    public void setPossibleOutputAssignmentsDataTypes(List<String> dataTypeDisplayNames) {
         ListBoxValues dataTypeListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CUSTOM_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.dataTypesTester());
-
-        dataTypeListBoxValues.addValues(displayDataTypes);
+        dataTypeListBoxValues.addValues(dataTypeDisplayNames);
         outputAssignmentsWidget.setDataTypes(dataTypeListBoxValues);
     }
 
     @Override
     public void setInputAssignmentsProcessVariables(List<String> processVariables) {
-        List<String> displayProcessVariables = new ArrayList<String>();
-        displayProcessVariables.addAll(processVariables);
-
         ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CONSTANT_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.processVarTester());
-
-        processVarListBoxValues.addValues(displayProcessVariables);
+        processVarListBoxValues.addValues(processVariables);
         inputAssignmentsWidget.setProcessVariables(processVarListBoxValues);
     }
 
     @Override
     public void setOutputAssignmentsProcessVariables(List<String> processVariables) {
-        List<String> displayProcessVariables = new ArrayList<String>();
-        displayProcessVariables.addAll(processVariables);
-
         ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CONSTANT_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.processVarTester());
-
-        processVarListBoxValues.addValues(displayProcessVariables);
+        processVarListBoxValues.addValues(processVariables);
         outputAssignmentsWidget.setProcessVariables(processVarListBoxValues);
     }
 

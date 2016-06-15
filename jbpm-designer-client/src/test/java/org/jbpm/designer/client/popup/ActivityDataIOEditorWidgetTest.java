@@ -21,7 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.google.gwtmockito.GwtMockitoTestRunner;
+import com.google.gwtmockito.GwtMock;
+import com.google.gwtmockito.GwtMockito;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable;
 import org.jbpm.designer.client.util.ListBoxValues;
@@ -29,11 +30,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(GwtMockitoTestRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ActivityDataIOEditorWidgetTest {
 
     private AssignmentRow assignmentRowOne = new AssignmentRow("aBc", null, null, null, "aBc", "AbC");
@@ -42,16 +44,13 @@ public class ActivityDataIOEditorWidgetTest {
 
     private AssignmentRow assignmentRowThree = new AssignmentRow("def", null, null, null, "def", null);
 
-    @Mock
     private AssignmentListItemWidgetViewImpl assignWidgetOne;
 
-    @Mock
     private AssignmentListItemWidgetViewImpl assignWidgetTwo;
 
-    @Mock
     private AssignmentListItemWidgetViewImpl assignWidgetThree;
 
-    @Mock
+    @GwtMock
     private ActivityDataIOEditorWidgetView view;
 
     @Captor
@@ -65,6 +64,11 @@ public class ActivityDataIOEditorWidgetTest {
 
     @Before
     public void initTestCase() {
+        GwtMockito.initMocks(this);
+        assignWidgetOne = mock(AssignmentListItemWidgetViewImpl.class);
+        assignWidgetTwo = mock(AssignmentListItemWidgetViewImpl.class);
+        assignWidgetThree = mock(AssignmentListItemWidgetViewImpl.class);
+
         rows = new ArrayList<AssignmentRow>();
         rows.add(assignmentRowOne);
         rows.add(assignmentRowTwo);
@@ -334,6 +338,13 @@ public class ActivityDataIOEditorWidgetTest {
 
     @Test
     public void testIsDuplicateName() {
+        assertFalse(widget.isDuplicateName(null));
+        assertFalse(widget.isDuplicateName(""));
+        assertTrue(widget.isDuplicateName(" aBc"));
+        assertTrue(widget.isDuplicateName("aBc "));
+        assertTrue(widget.isDuplicateName(" aBc "));
+        assertTrue(widget.isDuplicateName(" aBc"));
+        assertFalse(widget.isDuplicateName(" "));
         assertTrue(widget.isDuplicateName("aBc"));
         assertFalse(widget.isDuplicateName("def"));
         assertFalse(widget.isDuplicateName("q"));
