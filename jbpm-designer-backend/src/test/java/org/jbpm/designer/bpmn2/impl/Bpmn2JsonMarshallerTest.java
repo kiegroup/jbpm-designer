@@ -363,4 +363,20 @@ public class Bpmn2JsonMarshallerTest {
         assertTrue(dataoutputset.contains("Result:java.lang.Object"));
     }
 
+    @Test
+    public void testCallActivityAssignments() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("callActivityInSubprocess.bpmn2");
+        JSONObject subProcess = loader.getChildByName(process, "SubProcess");
+        JSONObject callActivity = loader.getChildByName(subProcess, "callActivity");
+        JSONObject properties = callActivity.getJSONObject("properties");
+        String datainputset = properties.getString("datainputset");
+        String dataoutputset = properties.getString("dataoutputset");
+        String assignments = properties.getString("assignments");
+
+        assertTrue(assignments.contains("[dout]innerOutput->intVariable"));
+        assertTrue(assignments.contains("[din]intVariable->innerInput"));
+        assertTrue(datainputset.contains("innerInput:Integer"));
+        assertTrue(dataoutputset.contains("innerOutput:Integer"));
+    }
+
 }
