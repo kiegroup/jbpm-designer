@@ -7,6 +7,7 @@
 	<link href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/simulation/nv-core.css" rel="stylesheet" type="text/css">
 	<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/d3.v2.min.js"></script>
 	<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/nv.min.js"></script>
+	<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/chartutils-min.js"></script>
 	<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/timeline-min.js" type="text/javascript"></script>
 </head>
@@ -44,6 +45,9 @@
 			currentEventNum = eventNum;
 			currentEventId = eventId;
 			var datawrapper = [aggregatedData[eventNum-1]];
+			if(datawrapper && datawrapper.length > 0) {
+				simChartSetProcessAveragesLabels(datawrapper[0], parent.parent.ORYX.I18N);
+			}
 			nv.addGraph(function() {
 				var chart = nv.models.discreteBarChart().x(function(d) {
 					return d.label
@@ -51,7 +55,7 @@
 					return d.value
 				}).staggerLabels(true)
 				.tooltips(true).showValues(true);
-				chart.yAxis.axisLabel('Time (' + parent.parent.ORYX.EDITOR.simulationChartTimeUnit + ')')
+				chart.yAxis.axisLabel(parent.parent.ORYX.I18N.View.sim.chartsExecutionTimesTime + ' (' + parent.parent.ORYX.EDITOR.simulationChartTimeUnit + ')')
 	
 				d3.select('#chart').datum(datawrapper).transition().duration(500)
 						.call(chart);

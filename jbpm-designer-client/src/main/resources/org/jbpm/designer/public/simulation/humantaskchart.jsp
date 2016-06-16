@@ -6,6 +6,7 @@
 <link href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/simulation/simulationcharts.css" rel="stylesheet" type="text/css">
 <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/d3.v2.min.js"></script>
 <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/nv.min.js"></script>
+<script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/chartutils-min.js"></script>
 <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
 <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/handlebars-1.0.0.beta.6.js" type="text/javascript"></script>
 <script>
@@ -119,25 +120,25 @@ function clearChart() {
 					var costvalues = chartData.costvalues;
 					costvalues.key = parent.ORYX.I18N.View.sim.chartsResourceCost;
 					if (costvalues.values) {
-						setValuesMinMaxAvgLabels(costvalues.values);
+						simChartSetMinMaxAvgLabels(costvalues.values, parent.ORYX.I18N);
 					}
 				}
 				if (chartData.resourcevalues) {
 					var resourcevalues = chartData.resourcevalues;
 					resourcevalues.key = parent.ORYX.I18N.View.sim.chartsResourceAllocations;
 					if (resourcevalues.values) {
-						setValuesMinMaxAvgLabels(resourcevalues.values);
+						simChartSetMinMaxAvgLabels(resourcevalues.values, parent.ORYX.I18N);
 					}
 				}
 				if (chartData.timevalues && chartData.timevalues.length == 2) {
 					var timevalues = chartData.timevalues;
 					timevalues[0].key = parent.ORYX.I18N.View.sim.chartsExecutionTimes;
 					if (timevalues[0].values) {
-						setValuesMinMaxAvgLabels(timevalues[0].values);
+						simChartSetMinMaxAvgLabels(timevalues[0].values, parent.ORYX.I18N);
 					}
 					timevalues[1].key = parent.ORYX.I18N.View.sim.chartsWaitTimes;
 					if (timevalues[1].values) {
-						setValuesMinMaxAvgLabels(timevalues[1].values);
+						simChartSetMinMaxAvgLabels(timevalues[1].values, parent.ORYX.I18N);
 					}
 				}
 			}
@@ -228,14 +229,6 @@ function clearChart() {
 	    	var costTableSource = $("#tabletemplatecost").html();
 	    	var costTableTemplate = Handlebars.compile(costTableSource);
 	    	$("#chartcontent3").html(costTableTemplate(chartData.costvalues));
-		}
-
-		function setValuesMinMaxAvgLabels(values) {
-			if (values && values.length == 3) {
-				values[0].label = parent.ORYX.I18N.View.sim.chartsMax;
-				values[1].label = parent.ORYX.I18N.View.sim.chartsMin;
-				values[2].label = parent.ORYX.I18N.View.sim.chartsAverage;
-			}
 		}
 
 		function showTimeline() {

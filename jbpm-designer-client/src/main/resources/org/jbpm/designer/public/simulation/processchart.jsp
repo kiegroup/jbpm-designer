@@ -6,6 +6,7 @@
     <link href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/simulation/simulationcharts.css" rel="stylesheet" type="text/css">
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/d3.v2.min.js"></script>
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/nv.min.js"></script>
+    <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/simulation/chartutils-min.js"></script>
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/jquery-1.7.2.min.js" type="text/javascript"></script>
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/handlebars-1.0.0.beta.6.js" type="text/javascript"></script>
     <script>
@@ -167,13 +168,7 @@ function getEventAggregationData() {
 function showBarChart() {
     var chartData = parent.ORYX.EDITOR.simulationChartData;
     if(chartData && chartData.length > 0) {
-        var cData = chartData[0];
-        cData.key = parent.ORYX.I18N.View.sim.chartsProcessAverages;
-        if (cData.values && cData.values.length == 3) {
-            cData.values[0].label = parent.ORYX.I18N.View.sim.chartsMaxExecutionTime;
-            cData.values[1].label = parent.ORYX.I18N.View.sim.chartsMinExecutionTime;
-            cData.values[2].label = parent.ORYX.I18N.View.sim.chartsAvgExecutionTime;
-        }
+        simChartSetProcessAveragesLabels(chartData[0], parent.ORYX.I18N);
     }
     var instanceData = parent.ORYX.EDITOR.simulationInstancesData;
     if(instanceData && instanceData.length > 0) {
@@ -839,7 +834,7 @@ function showLineChart() {
 
 function showTimeline() {
     var cont = "<div style='margin:0;padding:0;'> \
-				<div class='tlineswitch'><a href='#' onclick='document.getElementById(\"processevents\").contentWindow.switchDisplay(\"chart\"); return false;'>Chart</a> | <a href='#' onclick='document.getElementById(\"processevents\").contentWindow.switchDisplay(\"model\"); return false;'>Model</a></div> \
+				<div class='tlineswitch'><a href='#' onclick='document.getElementById(\"processevents\").contentWindow.switchDisplay(\"chart\"); return false;'>" + parent.ORYX.I18N.View.sim.Chart + "</a> | <a href='#' onclick='document.getElementById(\"processevents\").contentWindow.switchDisplay(\"model\"); return false;'>" + parent.ORYX.I18N.View.sim.Model + "</a></div> \
 				</div> \
 				<iframe id='processevents' name='' src='<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/simulation/processevents.jsp' width='100%' height='500' scrolling='no' frameBorder='0'></iframe> \
 				";
