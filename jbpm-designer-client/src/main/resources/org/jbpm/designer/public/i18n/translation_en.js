@@ -583,6 +583,8 @@ ORYX.I18N.View.sim.Table = "Table";
 ORYX.I18N.View.sim.Timeline = "Timeline";
 ORYX.I18N.View.sim.LineChart = "Line Chart";
 ORYX.I18N.View.sim.NoDataAvailable = "No Data Available.";
+ORYX.I18N.View.sim.Chart = "Chart";
+ORYX.I18N.View.sim.Model = "Model";
 
 
 if(!ORYX.I18N.XFormsSerialization) ORYX.I18N.XFormsSerialization = {};
