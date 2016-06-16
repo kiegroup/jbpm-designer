@@ -1051,6 +1051,23 @@ public class Bpmn2UnmarshallingTest {
         verifyAttribute(dataOutput, "dtype", "java.lang.Object");
     }
 
+    @Test
+    public void testCallActivityAssignments() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("callActivityInSubprocess.json");
+        Process process = getRootProcess(definitions);
+        FlowElement subProcess = getFlowElement(process.getFlowElements(), "SubProcess");
+        assertTrue(subProcess instanceof SubProcess);
+        FlowElement activity = getFlowElement(((SubProcess)subProcess).getFlowElements(), "callActivity");
+        assertTrue(activity instanceof CallActivity);
+        CallActivity callActivity = (CallActivity) activity;
+        InputOutputSpecification specification = callActivity.getIoSpecification();
+
+        DataInput dataInput = getDataInput(specification.getDataInputs(), "innerInput");
+        verifyAttribute(dataInput, "dtype", "Integer");
+        DataOutput dataOutput = getDataOutput(specification.getDataOutputs(), "innerOutput");
+        verifyAttribute(dataOutput, "dtype", "Integer");
+    }
+
     private FlowElement getFlowElement(List<FlowElement> elements, String name) {
         for(FlowElement element : elements) {
             if (element.getName() != null && name.compareTo(element.getName()) == 0) {
