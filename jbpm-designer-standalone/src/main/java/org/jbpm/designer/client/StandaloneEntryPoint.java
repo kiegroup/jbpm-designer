@@ -18,11 +18,9 @@ package org.jbpm.designer.client;
 import javax.inject.Inject;
 
 import org.guvnor.common.services.shared.config.AppConfigService;
-import org.guvnor.common.services.shared.security.KieWorkbenchACL;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.jbpm.designer.client.resources.StandaloneResources;
-import org.kie.workbench.common.services.shared.security.KieWorkbenchSecurityService;
 import org.kie.workbench.common.services.shared.service.PlaceManagerActivityService;
 import org.kie.workbench.common.workbench.client.entrypoint.DefaultWorkbenchEntryPoint;
 import org.kie.workbench.common.workbench.client.menu.DefaultWorkbenchFeaturesMenusHelper;
@@ -35,15 +33,13 @@ public class StandaloneEntryPoint extends DefaultWorkbenchEntryPoint {
 
     @Inject
     public StandaloneEntryPoint( final Caller<AppConfigService> appConfigService,
-                                 final Caller<KieWorkbenchSecurityService> kieSecurityService,
                                  final Caller<PlaceManagerActivityService> pmas,
-                                 final KieWorkbenchACL kieACL,
                                  final ActivityBeansCache activityBeansCache,
                                  final DefaultWorkbenchFeaturesMenusHelper menusHelper ) {
-        super( appConfigService, kieSecurityService, pmas, kieACL, activityBeansCache );
+        super( appConfigService, pmas, activityBeansCache );
         this.menusHelper = menusHelper;
 
-        addCustomSecurityLoadedCallback( policy -> StandaloneResources.INSTANCE.CSS().ensureInjected() );
+        StandaloneResources.INSTANCE.CSS().ensureInjected();
     }
 
     @Override
