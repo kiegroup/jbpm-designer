@@ -524,9 +524,11 @@ ORYX.Plugins.Simulation = Clazz.extend({
 				            success: function(response) {
 				    	   		try {
 				    	   			if(response.responseText && response.responseText.length > 0 && response.status == 200) {
+				    	   				// RHBPMS-4011 - white space must be removed for atob in IE11
+				    	   				var responseText = response.responseText.replace(/\s/g, '');
 				    	   				this.facade.raiseEvent({
 				    	   		            type: ORYX.CONFIG.EVENT_SIMULATION_SHOW_RESULTS,
-				    	   		            results: decodeURIComponent(window.atob(response.responseText))
+				    	   		            results: decodeURIComponent(window.atob(responseText))
 				    	   		        });
 				    	   			} else {
                                            this.facade.raiseEvent({
