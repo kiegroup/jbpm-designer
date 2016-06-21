@@ -16,6 +16,8 @@
 
 package org.jbpm.designer.web.server;
 
+import java.io.ByteArrayOutputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,6 +27,13 @@ import java.util.Map;
 
 import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
+import com.lowagie.text.Document;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.ImageTranscoder;
+import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.codec.binary.Base64;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
@@ -273,6 +282,29 @@ public class TransformerServletTest  extends RepositoryBaseTest {
         asset = repository.loadAsset(assets.iterator().next().getUniqueId());
         assertNotNull(asset);
         assertNotNull(asset.getAssetContent());
+    }
+
+    @Test
+    public void testScalePDFImage() throws Exception {
+        TransformerServlet transformerServlet = new TransformerServlet();
+        ByteArrayOutputStream bout = new ByteArrayOutputStream();
+        Document pdfDoc = new Document(PageSize.A4);
+        pdfDoc.open();
+
+        PNGTranscoder t = new PNGTranscoder();
+        t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
+        TranscoderInput input = new TranscoderInput(new StringReader(FORMATTED_SVG));
+        TranscoderOutput output = new TranscoderOutput(bout);
+        t.transcode(input, output);
+
+        Image processImage1 = Image.getInstance(bout.toByteArray());
+        transformerServlet.scalePDFImage(pdfDoc, processImage1);
+        pdfDoc.add(processImage1);
+        pdfDoc.close();
+
+        assertEquals(197.0, processImage1.getWidth(), 0);
+        assertEquals(236.0, processImage1.getHeight(), 0);
+
     }
 
 }
