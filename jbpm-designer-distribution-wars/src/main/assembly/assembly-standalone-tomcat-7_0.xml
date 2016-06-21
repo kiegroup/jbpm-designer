@@ -24,11 +24,10 @@
         <include>com.sun.xml.bind:jaxb-impl:jar</include>
         <include>com.sun.xml.bind:jaxb-xjc:jar</include>
         <include>javax.inject:javax.inject:jar</include>
-        <include>org.jboss.spec.javax.ejb:jboss-ejb-api_3.1_spec:jar</include>
-        <include>org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_1.1_spec:jar</include>
+        <include>org.jboss.spec.javax.ejb:jboss-ejb-api_3.2_spec:jar</include>
+        <include>org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.0_spec:jar</include>
         <include>org.jboss.resteasy:resteasy-cdi:jar</include>
         <include>org.jboss.resteasy:resteasy-jaxrs:jar</include>
-        <include>org.jboss.resteasy:jaxrs-api:jar</include>
         <include>org.scannotation:scannotation:jar</include>
         <include>javax.activation:activation:jar</include>
 
