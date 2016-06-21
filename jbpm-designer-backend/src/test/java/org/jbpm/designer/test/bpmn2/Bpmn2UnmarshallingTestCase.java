@@ -110,7 +110,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(definitions.getRootElements().size() == 1);
         Process process = getRootProcess(definitions);
         EventBasedGateway g = (EventBasedGateway) process.getFlowElements().get(0);
-        assertEquals("event based gateway", g.getName());
+        assertEquals("event-based gateway", g.getName());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 
@@ -275,7 +275,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testEndMessageEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("endMessageEvent.json"), "").getContents().get(0));
-        assertTrue(definitions.getRootElements().size() == 3);
+        assertEquals(definitions.getRootElements().size(), 1);
         Process process = getRootProcess(definitions);
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end message event", g.getName());
@@ -354,11 +354,11 @@ public class Bpmn2UnmarshallingTestCase {
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 
-    @Test
+    @Test 
     public void testSimpleChainUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("startEvent task endEvent.json"), "").getContents().get(0));
-        assertTrue(definitions.getRootElements().size() == 1);
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("startEvent-task-endEvent.json"), "").getContents().get(0));
+        assertEquals(definitions.getRootElements().size(), 1);
         Process process = getRootProcess(definitions);
         assertTrue(process.getFlowElements().size() == 5);
         assertTrue(process.getLaneSets().size() == 1);
@@ -498,7 +498,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testIntermediateThrowMessageEventUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("intermediateThrowMessageEvent.json"), "").getContents().get(0));
-        assertTrue(definitions.getRootElements().size() == 3);
+        assertEquals(definitions.getRootElements().size(), 1);
         Process process = getRootProcess(definitions);
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw message event", g.getName());
@@ -923,6 +923,51 @@ public class Bpmn2UnmarshallingTestCase {
         assertNull(serviceInterface);
         assertNull(serviceOperation);
     }
+
+    @Test
+    public void testDefaultMessageRefsCombined() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("defaultMessagesCombined.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+
+        assertTrue(process.getFlowElements().get(0) instanceof SendTask);
+        SendTask sendTask = (SendTask) process.getFlowElements().get(0);
+        assertNull(sendTask.getMessageRef());
+
+        assertTrue(process.getFlowElements().get(1) instanceof ReceiveTask);
+        ReceiveTask receiveTask = (ReceiveTask) process.getFlowElements().get(1);
+        assertNull(receiveTask.getMessageRef());
+
+        assertTrue(process.getFlowElements().get(2) instanceof StartEvent);
+        StartEvent startEvent = (StartEvent) process.getFlowElements().get(2);
+        assertTrue(startEvent.getEventDefinitions().size() == 1);
+        assertTrue(startEvent.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+        MessageEventDefinition messageEventDefStart = (MessageEventDefinition) startEvent.getEventDefinitions().iterator().next();
+        assertNull(messageEventDefStart.getMessageRef());
+
+
+        assertTrue(process.getFlowElements().get(3) instanceof EndEvent);
+        EndEvent endEvent = (EndEvent) process.getFlowElements().get(3);
+        assertTrue(endEvent.getEventDefinitions().size() == 1);
+        assertTrue(endEvent.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+        MessageEventDefinition messageEventDefEnd = (MessageEventDefinition) endEvent.getEventDefinitions().iterator().next();
+        assertNull(messageEventDefEnd.getMessageRef());
+
+        assertTrue(process.getFlowElements().get(4) instanceof IntermediateCatchEvent);
+        IntermediateCatchEvent catchEvent = (IntermediateCatchEvent) process.getFlowElements().get(4);
+        assertTrue(catchEvent.getEventDefinitions().size() == 1);
+        assertTrue(catchEvent.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+        MessageEventDefinition messageEventDefCatch = (MessageEventDefinition) catchEvent.getEventDefinitions().iterator().next();
+        assertNull(messageEventDefCatch.getMessageRef());
+
+        assertTrue(process.getFlowElements().get(5) instanceof IntermediateThrowEvent);
+        IntermediateThrowEvent throwEvent = (IntermediateThrowEvent) process.getFlowElements().get(5);
+        assertTrue(throwEvent.getEventDefinitions().size() == 1);
+        assertTrue(throwEvent.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+        MessageEventDefinition messageEventDefThrow = (MessageEventDefinition) throwEvent.getEventDefinitions().iterator().next();
+        assertNull(messageEventDefThrow.getMessageRef());
+    }
+
     @Test
     public void testSimpleDefinitionsUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
@@ -933,7 +978,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("http://www.omg.org/bpmn20", definitions.getTargetNamespace());
         assertEquals("http://www.java.com/javaTypes", definitions.getTypeLanguage());
         assertTrue(definitions.getRootElements().size() == 1);
-     }
+    }
 
     @Test
     public void testNoDefaultMessageCreated() throws Exception {
