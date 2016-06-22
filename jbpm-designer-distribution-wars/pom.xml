@@ -16,10 +16,6 @@
     This module builds the download wars for different application servers.
   </description>
 
-  <properties>
-    <version.org.jboss.spec.javax.annotation.jboss-annotations-api_1.2_spec>1.0.0.Alpha1</version.org.jboss.spec.javax.annotation.jboss-annotations-api_1.2_spec>
-  </properties>
-
   <build>
     <plugins>
       <plugin>
@@ -43,16 +39,6 @@
             <addMavenDescriptor>false</addMavenDescriptor>
           </archive>
         </configuration>
-      </plugin>
-      <!-- disable enforcer -->
-      <plugin>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>no-managed-deps</id>
-            <phase>none</phase>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
@@ -92,13 +78,24 @@
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-cdi</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-
+    <!-- Replacement for the above excluded 'commons-logging:commons-logging' -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <scope>runtime</scope>
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-ext</artifactId>
@@ -127,11 +124,28 @@
     <dependency>
       <groupId>org.scannotation</groupId>
       <artifactId>scannotation</artifactId>
+      <exclusions>
+        <!-- Replaced by 'org.javassist:javassist' -->
+        <exclusion>
+          <groupId>javassist</groupId>
+          <artifactId>javassist</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- Replacement for the above excluded 'javassist:javassist' -->
+    <dependency>
+      <groupId>org.javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>org.jboss.weld</groupId>
       <artifactId>weld-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.weld</groupId>
+      <artifactId>weld-spi</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jboss.weld</groupId>
@@ -146,17 +160,12 @@
       <artifactId>weld-servlet-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jboss.weld</groupId>
-      <artifactId>weld-spi</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.jboss.classfilewriter</groupId>
       <artifactId>jboss-classfilewriter</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jboss.spec.javax.annotation</groupId>
       <artifactId>jboss-annotations-api_1.2_spec</artifactId>
-      <version>${version.org.jboss.spec.javax.annotation.jboss-annotations-api_1.2_spec}</version>
     </dependency>
 
   </dependencies>
