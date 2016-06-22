@@ -1246,10 +1246,12 @@ public class Bpmn2JsonUnmarshaller {
                         idef.setId((String) entry.getValue() + "Type");
                     }
                 }
-                msg.setItemRef(idef);
-                rt.setMessageRef(msg);
-                toAddMessages.add(msg);
-                toAddItemDefinitions.add(idef);
+                if(msg.getId() != null && idef.getId() != null) {
+                    msg.setItemRef(idef);
+                    rt.setMessageRef(msg);
+                    toAddMessages.add(msg);
+                    toAddItemDefinitions.add(idef);
+                }
             } else if(fe instanceof SendTask) {
                 SendTask st = (SendTask) fe;
                 ItemDefinition idef = Bpmn2Factory.eINSTANCE.createItemDefinition();
@@ -1262,10 +1264,12 @@ public class Bpmn2JsonUnmarshaller {
                         idef.setId((String) entry.getValue() + "Type");
                     }
                 }
-                msg.setItemRef(idef);
-                st.setMessageRef(msg);
-                toAddMessages.add(msg);
-                toAddItemDefinitions.add(idef);
+                if(msg.getId() != null && idef.getId() != null) {
+                    msg.setItemRef(idef);
+                    st.setMessageRef(msg);
+                    toAddMessages.add(msg);
+                    toAddItemDefinitions.add(idef);
+                }
             } else if(fe instanceof FlowElementsContainer) {
                 setSendReceiveTasksInfo((FlowElementsContainer) fe, def, toAddMessages, toAddItemDefinitions);
             }
@@ -1431,13 +1435,13 @@ public class Bpmn2JsonUnmarshaller {
 							}
 						}
 
-                                                Error err = this._errors.get(errorCode);
-                                                if (err == null){
-                                                    err = Bpmn2Factory.eINSTANCE.createError();
-                                                    err.setId(errorId);
-                                                    err.setErrorCode(errorCode);
-                                                    this._errors.put(errorCode, err);
-                                                }
+                        Error err = this._errors.get(errorCode);
+                        if (err == null){
+                            err = Bpmn2Factory.eINSTANCE.createError();
+                            err.setId(errorId);
+                            err.setErrorCode(errorCode);
+                            this._errors.put(errorCode, err);
+                        }
 
 						toAddErrors.add(err);
 						((ErrorEventDefinition) ed).setErrorRef(err);
@@ -1471,31 +1475,31 @@ public class Bpmn2JsonUnmarshaller {
 							FeatureMap.Entry entry = iter.next();
 							if (entry.getEStructuralFeature().getName()
 									.equals("msgref")) {
-                                                            msgId = (String) entry.getValue();
-                                                            idefId = (String) entry.getValue() + "Type";
-							}
-						}
+                                msgId = (String) entry.getValue();
+                                idefId = (String) entry.getValue() + "Type";
+                            }
+                        }
+                        if(msgId != null && idefId != null) {
+                            ItemDefinition idef = _itemDefinitions.get(idefId);
+                            if (idef == null){
+                                idef = Bpmn2Factory.eINSTANCE
+                                        .createItemDefinition();
+                                idef.setId(idefId);
+                                _itemDefinitions.put(idefId, idef);
+                            }
 
-                                                ItemDefinition idef = _itemDefinitions.get(idefId);
-                                                if (idef == null){
-                                                    idef = Bpmn2Factory.eINSTANCE
-								.createItemDefinition();
-                                                    idef.setId(idefId);
-                                                    _itemDefinitions.put(idefId, idef);
-                                                }
+                            Message msg = _messages.get(msgId);
+                            if (msg == null){
+                                msg = Bpmn2Factory.eINSTANCE.createMessage();
+                                msg.setId(msgId);
+                                msg.setItemRef(idef);
+                                _messages.put(msgId, msg);
+                            }
 
-                                                Message msg = _messages.get(msgId);
-                                                if (msg == null){
-                                                    msg = Bpmn2Factory.eINSTANCE.createMessage();
-                                                    msg.setId(msgId);
-                                                    msg.setItemRef(idef);
-                                                    _messages.put(msgId, msg);
-                                                }
-
-
-						toAddMessages.add(msg);
-						toAddItemDefinitions.add(idef);
-						((MessageEventDefinition) ed).setMessageRef(msg);
+                            toAddMessages.add(msg);
+                            toAddItemDefinitions.add(idef);
+                            ((MessageEventDefinition) ed).setMessageRef(msg);
+                        }
 					} else if (ed instanceof CompensateEventDefinition) {
 						Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
 								.iterator();
@@ -1637,27 +1641,28 @@ public class Bpmn2JsonUnmarshaller {
                                 idefId = (String) entry.getValue() + "Type";
                             }
                         }
+                        if(msgId != null && idefId != null) {
+                            ItemDefinition idef = _itemDefinitions.get(idefId);
+                            if (idef == null){
+                                idef = Bpmn2Factory.eINSTANCE
+                                        .createItemDefinition();
+                                idef.setId(idefId);
+                                _itemDefinitions.put(idefId, idef);
+                            }
 
-                        ItemDefinition idef = _itemDefinitions.get(idefId);
-                        if (idef == null){
-                            idef = Bpmn2Factory.eINSTANCE
-                                    .createItemDefinition();
-                            idef.setId(idefId);
-                            _itemDefinitions.put(idefId, idef);
+                            Message msg = _messages.get(msgId);
+                            if (msg == null){
+                                msg = Bpmn2Factory.eINSTANCE.createMessage();
+                                msg.setId(msgId);
+                                msg.setItemRef(idef);
+                                _messages.put(msgId, msg);
+                            }
+
+
+                            toAddMessages.add(msg);
+                            toAddItemDefinitions.add(idef);
+                            ((MessageEventDefinition) ed).setMessageRef(msg);
                         }
-
-                        Message msg = _messages.get(msgId);
-                        if (msg == null){
-                            msg = Bpmn2Factory.eINSTANCE.createMessage();
-                            msg.setId(msgId);
-                            msg.setItemRef(idef);
-                            _messages.put(msgId, msg);
-                        }
-
-
-                        toAddMessages.add(msg);
-                        toAddItemDefinitions.add(idef);
-                        ((MessageEventDefinition) ed).setMessageRef(msg);
                     } else if (ed instanceof CompensateEventDefinition) {
                         Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
                                 .iterator();
@@ -2404,27 +2409,28 @@ public class Bpmn2JsonUnmarshaller {
                                 idefId = (String) entry.getValue() + "Type";
                             }
                         }
+                        if(msgId != null && idefId != null) {
+                            ItemDefinition idef = _itemDefinitions.get(idefId);
+                            if (idef == null){
+                                idef = Bpmn2Factory.eINSTANCE
+                                        .createItemDefinition();
+                                idef.setId(idefId);
+                                _itemDefinitions.put(idefId, idef);
+                            }
 
-                        ItemDefinition idef = _itemDefinitions.get(idefId);
-                        if (idef == null){
-                            idef = Bpmn2Factory.eINSTANCE
-                                    .createItemDefinition();
-                            idef.setId(idefId);
-                            _itemDefinitions.put(idefId, idef);
+                            Message msg = _messages.get(msgId);
+                            if (msg == null){
+                                msg = Bpmn2Factory.eINSTANCE.createMessage();
+                                msg.setId(msgId);
+                                msg.setItemRef(idef);
+                                _messages.put(msgId, msg);
+                            }
+
+
+                            toAddMessages.add(msg);
+                            toAddItemDefinitions.add(idef);
+                            ((MessageEventDefinition) ed).setMessageRef(msg);
                         }
-
-                        Message msg = _messages.get(msgId);
-                        if (msg == null){
-                            msg = Bpmn2Factory.eINSTANCE.createMessage();
-                            msg.setId(msgId);
-                            msg.setItemRef(idef);
-                            _messages.put(msgId, msg);
-                        }
-
-
-                        toAddMessages.add(msg);
-                        toAddItemDefinitions.add(idef);
-                        ((MessageEventDefinition) ed).setMessageRef(msg);
                     } else if(ed instanceof CompensateEventDefinition) {
                         Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
                         while(iter.hasNext()) {
