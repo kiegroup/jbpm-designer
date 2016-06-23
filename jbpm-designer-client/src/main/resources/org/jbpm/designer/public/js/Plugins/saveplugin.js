@@ -177,7 +177,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
             if (this.editorLocked && !parent.isLockedByCurrentUser()) {
                 this.editorLocked = false;
             } else if (!this.editorLocked && !parent.isLocked()) {
-                ORYX.EDITOR.updateViewLockState(true);
+                ORYX.EDITOR.updateViewLockState(false);
             }
         }
     },
