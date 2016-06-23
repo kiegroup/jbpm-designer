@@ -76,6 +76,10 @@ public class DesignerWidgetPresenter {
         view.raiseEventSave(editorID);
     }
 
+    public void setViewLocked( boolean viewLocked ) {
+        view.setViewLocked( viewLocked );
+    }
+
     public void raiseEventCheckSave( final String editorID , String pathURI) {
         view.raiseEventCheckSave(editorID, pathURI);
     }

@@ -42,6 +42,8 @@ public interface DesignerView
 
     void setProcessUnSaved();
 
+    void setViewLocked(boolean viewLocked);
+
     void askOpenInXMLEditor();
 
     void raiseEventUpdateLock();
