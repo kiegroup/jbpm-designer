@@ -124,6 +124,12 @@ public class DesignerWidgetView
         }
     }-*/;
 
+    public native void setViewLocked( boolean viewLocked ) /*-{
+        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
+            $wnd.document.getElementById(editorID).contentWindow.ORYX.VIEWLOCKED = viewLocked;
+        }
+    }-*/;
+
     public native void setProcessUnSaved( String editorID ) /*-{
         if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
             $wnd.document.getElementById(editorID).contentWindow.ORYX.PROCESS_SAVED = false;

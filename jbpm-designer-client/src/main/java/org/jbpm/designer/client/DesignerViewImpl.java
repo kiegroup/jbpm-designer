@@ -62,6 +62,11 @@ public class DesignerViewImpl
     }
 
     @Override
+    public void setViewLocked(boolean viewLocked) {
+        designerWidget.setViewLocked( viewLocked );
+    }
+
+    @Override
     public void raiseEventCheckSave(String pathURI) {
         designerWidget.raiseEventCheckSave(designerWidget.getEditorID(), pathURI);
     }

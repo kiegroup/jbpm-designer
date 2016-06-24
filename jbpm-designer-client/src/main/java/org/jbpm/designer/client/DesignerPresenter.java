@@ -179,6 +179,11 @@ public class DesignerPresenter
     }
 
     public void onLockChange( @Observes UpdatedLockStatusEvent updateLockEvent ) {
+        if(updateLockEvent.isLocked()) {
+            view.setViewLocked(true);
+        } else {
+            view.setViewLocked(false);
+        }
         view.raiseEventUpdateLock();
     }
 
