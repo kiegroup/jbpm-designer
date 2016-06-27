@@ -179,7 +179,10 @@ public class DesignerPresenter
     }
 
     public void onLockChange( @Observes UpdatedLockStatusEvent updateLockEvent ) {
-        view.raiseEventUpdateLock();
+        if(updateLockEvent.getFile() != null &&
+                updateLockEvent.getFile().equals(versionRecordManager.getCurrentPath())) {
+            view.raiseEventUpdateLock();
+        }
     }
 
     private native void publishOpenInXMLEditorTab( DesignerPresenter dp )/*-{
