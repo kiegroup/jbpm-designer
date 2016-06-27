@@ -2273,7 +2273,11 @@ ORYX.Editor.checkIfSaved = function() {
     if(ORYX.READONLY == true || ORYX.VIEWLOCKED == true) {
         return true;
     } else {
-        return ORYX.PROCESS_SAVED;
+		if(ORYX.PROCESS_SAVED === undefined) {
+			return true;
+		} else {
+			return ORYX.PROCESS_SAVED;
+		}
     }
 };
 
