@@ -57,6 +57,7 @@ import org.uberfire.ext.editor.commons.client.file.CopyPopupView;
 import org.uberfire.ext.editor.commons.client.file.FileNameAndCommitMessage;
 import org.uberfire.ext.editor.commons.client.file.RenamePopup;
 import org.uberfire.ext.editor.commons.client.file.RenamePopupView;
+import org.uberfire.ext.editor.commons.client.history.VersionRecordManager;
 import org.uberfire.ext.editor.commons.service.CopyService;
 import org.uberfire.ext.editor.commons.service.DeleteService;
 import org.uberfire.ext.editor.commons.service.RenameService;
@@ -450,7 +451,7 @@ public class DesignerPresenter
                                                                                                    "" );
 
             }
-        } ).get( URIUtil.encode( uri ) );
+        } ).get(URIUtil.encode(uri));
     }
 
     public boolean assetUpdatedEvent() {
@@ -501,7 +502,7 @@ public class DesignerPresenter
             public void callback( final Path path ) {
                 copyPopupView.hide();
                 baseView.hideBusyIndicator();
-                notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemCopiedSuccessfully() ) );
+                notification.fire(new NotificationEvent(CommonConstants.INSTANCE.ItemCopiedSuccessfully()));
             }
         };
     }
@@ -513,9 +514,9 @@ public class DesignerPresenter
             public void callback( final Path path ) {
                 renamePopupView.hide();
                 baseView.hideBusyIndicator();
-                notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemRenamedSuccessfully() ) );
-                placeManager.forceClosePlace( place );
-                placeManager.goTo( path );
+                notification.fire(new NotificationEvent(CommonConstants.INSTANCE.ItemRenamedSuccessfully()));
+                placeManager.forceClosePlace(place);
+                placeManager.goTo(path);
             }
         };
     }
@@ -541,7 +542,7 @@ public class DesignerPresenter
                 placeManager.forceClosePlace( place );
                 placeManager.goTo( placeRequestImpl );
             }
-        } ).get( URIUtil.encode( uri ) );
+        } ).get(URIUtil.encode(uri));
     }
 
     private void disableMenus() {
@@ -615,7 +616,7 @@ public class DesignerPresenter
 
             designerEditorParametersPublisher.publish( editorParameters );
 
-            view.setup( editorID, editorParameters );
+            view.setup(editorID, editorParameters);
         }
     }
 
@@ -633,5 +634,9 @@ public class DesignerPresenter
     public void reload() {
         concurrentUpdateSessionInfo = null;
         view.raiseEventReload();
+    }
+
+    public void setVersionRecordManager(VersionRecordManager versionRecordManager) {
+        this.versionRecordManager = versionRecordManager;
     }
 }
