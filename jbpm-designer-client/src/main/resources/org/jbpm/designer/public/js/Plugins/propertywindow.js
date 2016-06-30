@@ -996,7 +996,6 @@ ORYX.Plugins.PropertyWindow = {
 
                             break;
 
-
                             case ORYX.CONFIG.TYPE_DYNAMICGATEWAYCONNECTIONS:
                                 var currentShapes = ORYX.Config.FACADE.getSelection();
                                 var options = [];
@@ -1015,8 +1014,15 @@ ORYX.Plugins.PropertyWindow = {
                                         var gatewayconnectionsJson = ajaxObj.responseText.evalJSON();
 
                                         for(var i=0;i<gatewayconnectionsJson.length;i++){
+											this.presInfo = "";
                                             var csobj = gatewayconnectionsJson[i];
-                                            options.push(["", csobj.sequenceflowinfo, csobj.sequenceflowinfo]);
+											this.getSequenceFlowNameForID(csobj.sequenceflowinfo);
+											if(this.presInfo && this.presInfo.length > 0) {
+												this.presInfo = this.presInfo + ":" + csobj.sequenceflowinfo;
+											} else {
+												this.presInfo = csobj.sequenceflowinfo;
+											}
+                                            options.push(["", this.presInfo, csobj.sequenceflowinfo]);
                                         }
                                     } else {
                                         ORYX.EDITOR._pluginFacade.raiseEvent({
@@ -1489,8 +1495,33 @@ ORYX.Plugins.PropertyWindow = {
         var partPropThird = partPropsOther.concat(this.customAssignmentsProperties);
         var props = partPropThird.concat(this.displayProperties);
 		this.dataSource.loadData(props);
+	},
+
+	getSequenceFlowNameForID : function(nodeid) {
+		ORYX.EDITOR._canvas.getChildren().each((function(child) {
+			this.getSequenceFlowName(child, nodeid);
+		}).bind(this));
+	},
+
+	getSequenceFlowName : function(shape, nodeid) {
+		if(shape instanceof ORYX.Core.Edge) {
+			if(shape.resourceId == nodeid) {
+				if(shape.properties['oryx-name'] && shape.properties['oryx-name'].length > 0) {
+					this.presInfo = shape.properties['oryx-name'];
+				}
+			}
+		}
+		if(shape.getChildren().size() > 0) {
+			for (var i = 0; i < shape.getChildren().size(); i++) {
+				if(shape.getChildren()[i] instanceof ORYX.Core.Edge) {
+					this.getSequenceFlowName(shape.getChildren()[i], nodeid);
+				}
+			}
+		}
 	}
+
 }
+
 ORYX.Plugins.PropertyWindow = Clazz.extend(ORYX.Plugins.PropertyWindow);
 
 /**
