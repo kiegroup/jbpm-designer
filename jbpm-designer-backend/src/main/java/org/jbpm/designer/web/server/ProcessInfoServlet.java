@@ -53,6 +53,12 @@ public class ProcessInfoServlet extends HttpServlet {
     @Inject
     private IDiagramProfileService _profileService = null;
 
+    private IDiagramProfile profile;
+
+    public void setProfile(IDiagramProfile profile) {
+        this.profile = profile;
+    }
+
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -65,7 +71,9 @@ public class ProcessInfoServlet extends HttpServlet {
         String profileName = req.getParameter("profile");
         String gatewayId = req.getParameter("gatewayid");
 
-        IDiagramProfile profile = _profileService.findProfile(req, profileName);
+        if (profile == null) {
+            profile = _profileService.findProfile(req, profileName);
+        }
 
 
         if(gatewayId != null && gatewayId.length() > 0) {
@@ -131,11 +139,7 @@ public class ProcessInfoServlet extends HttpServlet {
                     List<SequenceFlow> outgoingFlows = gw.getOutgoing();
                     if(outgoingFlows != null) {
                         for(SequenceFlow sf : outgoingFlows) {
-                            if(sf.getName() != null && sf.getName().length() > 0) {
-                                outgoingInfo.add(sf.getName() + " : " + sf.getId());
-                            } else {
-                                outgoingInfo.add(sf.getId());
-                            }
+                            outgoingInfo.add(sf.getId());
                         }
                     }
                 }
