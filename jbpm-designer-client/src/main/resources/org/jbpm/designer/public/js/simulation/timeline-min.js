@@ -5080,11 +5080,11 @@ if(typeof VMM != 'undefined' && typeof VMM.Language == 'undefined') {
 			month: "mmmm yyyy",
 			full_short: "mmm d",
 			full: "mmmm d',' yyyy",
-			time_no_seconds_short: "h:MM TT",
-			time_no_seconds_small_date: "h:MM TT'<br/><small>'mmmm d',' yyyy'</small>'",
-			full_long: "mmm d',' yyyy 'at' hh:MM TT",
-			full_long_small_date: "hh:MM TT'<br/><small>mmm d',' yyyy'</small>'",
-			time_only : "hh:MM:ss:L TT"
+			time_no_seconds_short: "hh:MM",
+			time_no_seconds_small_date: "hh:MM'<br/><small>'mmmm d',' yyyy'</small>'",
+			full_long: "mmm d',' yyyy 'at' hh:MM",
+			full_long_small_date: "hh:MM'<br/><small>mmm d',' yyyy'</small>'",
+			time_only : "hh:MM:ss:L"
 		},
 		messages: {
 			loading_timeline: "Loading Timeline... ",
