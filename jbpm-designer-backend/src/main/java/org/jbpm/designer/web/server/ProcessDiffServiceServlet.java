@@ -48,7 +48,9 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 	private static final Logger _logger = LoggerFactory
 			.getLogger(ProcessDiffServiceServlet.class);
 
-    @Inject
+	protected IDiagramProfile profile;
+
+	@Inject
     private IDiagramProfileService _profileService = null;
 
     @Override
@@ -60,11 +62,13 @@ public class ProcessDiffServiceServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
         String uuid = Utils.getUUID(req);
-		String profileName = req.getParameter("profile");
+		String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
 		String action = req.getParameter("action");
 		String versionNum = req.getParameter("version");
 
-		IDiagramProfile profile = _profileService.findProfile(req, profileName);
+		if(profile == null) {
+			profile = _profileService.findProfile(req, profileName);
+		}
 		String[] packageAssetInfo = ServletUtil.findPackageAndAssetInfo(uuid, profile);
         String packageName = packageAssetInfo[0];
         String assetName = packageAssetInfo[1];

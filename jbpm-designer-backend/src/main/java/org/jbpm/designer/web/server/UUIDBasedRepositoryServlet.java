@@ -54,6 +54,8 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     
     private static final Logger _logger = LoggerFactory.getLogger(UUIDBasedRepositoryServlet.class);
 
+    private IDiagramProfile profile;
+
     @Inject
     private IDiagramProfileService _profileService = null;
     
@@ -108,10 +110,13 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
         String uuid = Utils.getUUID(req);
+        String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         if (uuid == null) {
             throw new ServletException("uuid parameter required");
         }
-        IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
+        if(profile == null) {
+            profile = _profileService.findProfile(req, profileName);
+        }
 		try {
 			String response =  new String(_repository.load(req, uuid, profile, getServletContext()), Charset.forName("UTF-8"));
 			resp.getWriter().write(response);
@@ -124,13 +129,16 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
+        String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String actionParam = req.getParameter("action");
         String preProcessingParam = req.getParameter("pp");
         if(preProcessingParam == null) {
             preProcessingParam = "ReadOnlyService";
         }
         if(actionParam != null && actionParam.equals("toXML")) {
-            IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
+            if(profile == null) {
+                profile = _profileService.findProfile(req, profileName);
+            }
             String json = req.getParameter("data");
             String xml = "";
             try {
@@ -146,7 +154,9 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
             resp.getWriter().print(output.toString());
         } else if(actionParam != null && actionParam.equals("checkErrors")) { 
         	String retValue = "false";
-        	IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
+        	if(profile == null) {
+                profile = _profileService.findProfile(req, profileName);
+            }
             String json = req.getParameter("data");
             try {
 				String xmlOut = profile.createMarshaller().parseModel(json, preProcessingParam);
@@ -180,7 +190,9 @@ public class UUIDBasedRepositoryServlet extends HttpServlet {
                 String uuid = (String) jsonObject.get("uuid");
                 boolean autosave = jsonObject.getBoolean("savetype");
             
-                IDiagramProfile profile = _profileService.findProfile(req, req.getParameter("profile"));
+                if(profile == null) {
+                    profile = _profileService.findProfile(req, profileName);
+                }
             
                 _repository.save(req, uuid, json, svg, profile, autosave);
 

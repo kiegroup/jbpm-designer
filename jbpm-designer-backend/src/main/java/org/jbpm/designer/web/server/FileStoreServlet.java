@@ -47,6 +47,8 @@ public class FileStoreServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static final Logger _logger = LoggerFactory.getLogger(FileStoreServlet.class);
 
+    protected IDiagramProfile profile;
+
     @Inject
     private IDiagramProfileService _profileService = null;
 
@@ -65,11 +67,13 @@ public class FileStoreServlet extends HttpServlet {
         String dataEncoded = req.getParameter("data_encoded");
 
         String storeInRepo = req.getParameter("storeinrepo");
-        String profileName = req.getParameter("profile") != null ? req.getParameter("profile") : "jbpm";
+        String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String uuid = Utils.getUUID(req);
         String processid = req.getParameter("processid");
 
-        IDiagramProfile profile = _profileService.findProfile(req, profileName);
+        if(profile == null) {
+            profile = _profileService.findProfile(req, profileName);
+        }
         Repository repository = profile.getRepository();
 
         String retData;

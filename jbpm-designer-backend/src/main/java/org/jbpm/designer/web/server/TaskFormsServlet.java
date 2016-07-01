@@ -90,7 +90,7 @@ public class TaskFormsServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         String json = req.getParameter("json");
         String uuid = Utils.getUUID(req);
-        String profileName = req.getParameter("profile");
+        String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String preprocessingData = req.getParameter("ppdata");
         String taskId = req.getParameter("taskid");
 

@@ -22,19 +22,15 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jbpm.designer.util.ConfigurationProvider;
 
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Scanner;
 
 /**
  *
@@ -48,7 +44,7 @@ public class StencilPatternsServlet extends HttpServlet {
     public static final String PATTERNS_NAME = "patterns";
 
 
-    private IDiagramProfile profile;
+    protected IDiagramProfile profile;
     // this is here just for unit testing purpose
     public void setProfile(IDiagramProfile profile) {
         this.profile = profile;
@@ -66,7 +62,7 @@ public class StencilPatternsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         // for now just return the patterns data json
-        String profileName = req.getParameter("profile");
+        String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String uuid = Utils.getUUID(req);
 
         if (profile == null) {

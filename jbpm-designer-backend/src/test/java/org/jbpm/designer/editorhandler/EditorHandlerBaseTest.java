@@ -21,54 +21,50 @@ import org.jbpm.designer.helper.TestServletConfig;
 import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.server.EditorHandler;
-import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
+import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.servlet.ServletConfig;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import static junit.framework.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 
-import static junit.framework.Assert.assertEquals;
-
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-
+@RunWith(MockitoJUnitRunner.class)
 public class EditorHandlerBaseTest extends RepositoryBaseTest {
 
-    private static Boolean showPDFAnswer;
+    @Mock
+    IDiagramProfileService profileService;
+
+    @Spy
+    @InjectMocks
+    private EditorHandler editorHandler = new EditorHandler();
 
     @Before
     public void setup() {
-        new File(REPOSITORY_ROOT).mkdir();
-        profile = new JbpmProfileImpl();
-        producer = new VFSFileSystemProducer();
-        HashMap<String, String> env = new HashMap<String, String>();
-        env.put("repository.root", VFS_REPOSITORY_ROOT);
-        env.put("repository.globaldir", "/global");
-        descriptor = producer.produceFileSystem(env);
+        super.setup();
+        when(profileService.findProfile(any(HttpServletRequest.class), anyString())).thenReturn(profile);
     }
 
     @After
     public void teardown() {
-        File repo = new File(REPOSITORY_ROOT);
-        if(repo.exists()) {
-            deleteFiles(repo);
-        }
-        repo.delete();
+        super.teardown();
     }
 
     @Test
@@ -80,7 +76,6 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
         Map<String, String> params = new HashMap<String, String>();
         params.put("instanceviewmode", "false");
 
-        EditorHandler editorHandler = new EditorHandler();
         assertEquals(editorHandler.getInstanceViewMode(new TestHttpServletRequest(params)), "false");
 
         params.put("instanceviewmode", "true");
@@ -96,8 +91,6 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
             Repository repository = new VFSRepository(producer.getIoService());
             ((VFSRepository)repository).setDescriptor(descriptor);
             profile.setRepository(repository);
-
-            final EditorHandler editorHandler = new EditorHandler();
 
             TestServletConfig config = new TestServletConfig(new TestServletContext(repository));
 
@@ -123,5 +116,28 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
             // clear system property for other tests
             System.clearProperty(EditorHandler.SHOW_PDF_DOC);
         }
+    }
+
+    @Test
+    public void testDoGetFindProfile() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        try {
+            editorHandler.doGet(request, mock(HttpServletResponse.class));
+        } catch (Exception e) {
+            // exception thrown due to mocked request and response
+        }
+        verify(profileService, times(1)).findProfile(request, "jbpm");
+    }
+
+    @Test
+    public void testDoGetProfileAlreadySet() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        editorHandler.setProfile(profile);
+        try {
+            editorHandler.doGet(request, mock(HttpServletResponse.class));
+        } catch (Exception e) {
+            // exception thrown due to mocked request and response
+        }
+        verify(profileService, never()).findProfile(any(HttpServletRequest.class), anyString());
     }
 }
