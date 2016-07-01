@@ -25,14 +25,11 @@ import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
-import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,22 +41,12 @@ public class CustomEditorsServletTest  extends RepositoryBaseTest {
 
     @Before
     public void setup() {
-        new File(REPOSITORY_ROOT).mkdir();
-        profile = new JbpmProfileImpl();
-        producer = new VFSFileSystemProducer();
-        HashMap<String, String> env = new HashMap<String, String>();
-        env.put("repository.root", VFS_REPOSITORY_ROOT);
-        env.put("repository.globaldir", "/global");
-        descriptor = producer.produceFileSystem(env);
+        super.setup();
     }
 
     @After
     public void teardown() {
-        File repo = new File(REPOSITORY_ROOT);
-        if(repo.exists()) {
-            deleteFiles(repo);
-        }
-        repo.delete();
+        super.teardown();
     }
 
     @Test

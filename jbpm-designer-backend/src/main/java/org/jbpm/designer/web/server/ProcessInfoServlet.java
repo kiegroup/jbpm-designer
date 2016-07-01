@@ -68,7 +68,7 @@ public class ProcessInfoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String uuid = Utils.getUUID(req);
-        String profileName = req.getParameter("profile");
+        String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String gatewayId = req.getParameter("gatewayid");
 
         if (profile == null) {

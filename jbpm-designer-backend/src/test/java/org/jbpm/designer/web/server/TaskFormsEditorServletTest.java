@@ -15,18 +15,12 @@
 
 package org.jbpm.designer.web.server;
 
-import java.io.File;
-import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.FileUtils;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.RootElement;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
 import org.jbpm.designer.helper.TestServletConfig;
@@ -36,37 +30,26 @@ import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
 import org.jbpm.designer.repository.UriUtils;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.VFSRepository;
-import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
 
     @Before
     public void setup() {
-        new File(REPOSITORY_ROOT).mkdir();
-        profile = new JbpmProfileImpl();
-        producer = new VFSFileSystemProducer();
-        HashMap<String, String> env = new HashMap<String, String>();
-        env.put("repository.root", VFS_REPOSITORY_ROOT);
-        env.put("repository.globaldir", "/global");
-        descriptor = producer.produceFileSystem(env);
+        super.setup();
     }
 
     @After
     public void teardown() {
-        File repo = new File(REPOSITORY_ROOT);
-        if(repo.exists()) {
-            deleteFiles(repo);
-        }
-        repo.delete();
+        super.teardown();
     }
 
     @Test

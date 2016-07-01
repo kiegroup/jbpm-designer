@@ -68,7 +68,7 @@ public class DictionaryServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = req.getParameter("action");
         String uuid = Utils.getUUID(req);
-        String profileName = req.getParameter("profile");
+        String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String dvalue = req.getParameter("dvalue");
 
         if (profile == null) {

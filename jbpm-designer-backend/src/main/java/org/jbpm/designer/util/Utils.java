@@ -146,4 +146,12 @@ public class Utils {
             element.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
         }
     }
+
+    public static String getDefaultProfileName(String profileName) {
+        if(profileName == null || profileName.trim().isEmpty()) {
+            return "jbpm";
+        } else {
+            return profileName;
+        }
+    }
 }

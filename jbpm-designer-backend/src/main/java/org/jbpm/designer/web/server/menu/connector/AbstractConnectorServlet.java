@@ -65,6 +65,8 @@ public abstract class AbstractConnectorServlet extends HttpServlet {
     private List<ByteArrayOutputStream> listFileStreams;
     private boolean initialized = false;
 
+    protected IDiagramProfile profile;
+
     @Inject
     private IDiagramProfileService _profileService = null;
 
@@ -94,7 +96,9 @@ public abstract class AbstractConnectorServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         parseRequest(request, response);
-        IDiagramProfile profile = _profileService.findProfile(request, "jbpm");
+        if(profile == null) {
+            profile = _profileService.findProfile(request, "jbpm");
+        }
         Repository repository = profile.getRepository();
         if(!initialized) {
             try {
