@@ -1018,11 +1018,11 @@ ORYX.Plugins.PropertyWindow = {
                                             var csobj = gatewayconnectionsJson[i];
 											this.getSequenceFlowNameForID(csobj.sequenceflowinfo);
 											if(this.presInfo && this.presInfo.length > 0) {
-												this.presInfo = this.presInfo + ":" + csobj.sequenceflowinfo;
+												this.presInfo = this.presInfo + " : " + csobj.sequenceflowinfo;
 											} else {
 												this.presInfo = csobj.sequenceflowinfo;
 											}
-                                            options.push(["", this.presInfo, csobj.sequenceflowinfo]);
+                                            options.push(["", this.presInfo, this.presInfo]);
                                         }
                                     } else {
                                         ORYX.EDITOR._pluginFacade.raiseEvent({
