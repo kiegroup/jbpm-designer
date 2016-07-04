@@ -34,6 +34,7 @@ import javax.xml.stream.XMLStreamReader;
 import bpsim.impl.BpsimFactoryImpl;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.html.simpleparser.HTMLWorker;
 import com.lowagie.text.pdf.PdfWriter;
@@ -44,7 +45,6 @@ import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.fop.svg.PDFTranscoder;
 import org.eclipse.bpmn2.DataInputAssociation;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.FlowElement;
@@ -168,25 +168,49 @@ public class TransformerServlet extends HttpServlet {
         Repository repository = profile.getRepository();
 
         if (transformto != null && transformto.equals(TO_PDF)) {
-            try {
-                if(respaction != null && respaction.equals(RESPACTION_SHOWURL)) {
-                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
-                    PDFTranscoder t = new PDFTranscoder();
+            if(respaction != null && respaction.equals(RESPACTION_SHOWURL)) {
+
+                try {
+                    ByteArrayOutputStream pdfBout = new ByteArrayOutputStream();
+                    Document pdfDoc = new Document(PageSize.A4);
+                    PdfWriter pdfWriter = PdfWriter.getInstance(pdfDoc, pdfBout);
+                    pdfDoc.open();
+                    pdfDoc.addCreationDate();
+
+                    PNGTranscoder t = new PNGTranscoder();
+                    t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
+
                     float widthHint = getFloatParam(req, SVG_WIDTH_PARAM, DEFAULT_PDF_WIDTH);
                     float heightHint = getFloatParam(req, SVG_HEIGHT_PARAM, DEFAULT_PDF_HEIGHT);
                     String objStyle = "style=\"width:" + widthHint + "px;height:" + heightHint + "px;\"";
                     t.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, widthHint);
                     t.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, heightHint);
-                    TranscoderInput input = new TranscoderInput(new StringReader(formattedSvg));
-                    TranscoderOutput output = new TranscoderOutput(bout);
+
+
+                    ByteArrayOutputStream imageBout = new ByteArrayOutputStream();
+                    TranscoderInput input = new TranscoderInput(new StringReader(
+                            formattedSvg));
+                    TranscoderOutput output = new TranscoderOutput(imageBout);
                     t.transcode(input, output);
+
+                    Image processImage = Image.getInstance(imageBout.toByteArray());
+                    scalePDFImage(pdfDoc, processImage);
+                    pdfDoc.add(processImage);
+
+                    pdfDoc.close();
+
                     resp.setCharacterEncoding("UTF-8");
                     resp.setContentType("text/plain");
 
-                    resp.getWriter().write("<object type=\"application/pdf\" " + objStyle +  " data=\"data:application/pdf;base64," + Base64.encodeBase64String(bout.toByteArray()) +  "\"></object>");
-                } else {
-                    storeInRepository(uuid, formattedSvg, transformto, processid, repository);
+                    resp.getWriter().write("<object type=\"application/pdf\" " + objStyle + " data=\"data:application/pdf;base64," + Base64.encodeBase64String(pdfBout.toByteArray()) + "\"></object>");
+                } catch(Exception e) {
+                    resp.sendError(500, e.getMessage());
+                }
+            } else {
+                storeInRepository(uuid, formattedSvg, transformto, processid, repository);
 
+                try {
+                    resp.setCharacterEncoding("UTF-8");
                     resp.setContentType("application/pdf");
                     if (processid != null) {
                         resp.setHeader("Content-Disposition",
@@ -196,13 +220,27 @@ public class TransformerServlet extends HttpServlet {
                                 "attachment; filename=\"" + uuid + ".pdf\"");
                     }
 
-                    PDFTranscoder t = new PDFTranscoder();
-                    TranscoderInput input = new TranscoderInput(new StringReader(formattedSvg));
-                    TranscoderOutput output = new TranscoderOutput(resp.getOutputStream());
+                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                    Document pdfDoc = new Document(PageSize.A4);
+                    PdfWriter pdfWriter = PdfWriter.getInstance(pdfDoc, resp.getOutputStream());
+                    pdfDoc.open();
+                    pdfDoc.addCreationDate();
+
+                    PNGTranscoder t = new PNGTranscoder();
+                    t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
+                    TranscoderInput input = new TranscoderInput(new StringReader(
+                            formattedSvg));
+                    TranscoderOutput output = new TranscoderOutput(bout);
                     t.transcode(input, output);
+
+                    Image processImage = Image.getInstance(bout.toByteArray());
+                    scalePDFImage(pdfDoc, processImage);
+                    pdfDoc.add(processImage);
+
+                    pdfDoc.close();
+                } catch(Exception e) {
+                    resp.sendError(500, e.getMessage());
                 }
-            } catch (TranscoderException e) {
-                resp.sendError(500, e.getMessage());
             }
         } else if (transformto != null && transformto.equals(TO_PNG)) {
             try {
@@ -605,11 +643,25 @@ public class TransformerServlet extends HttpServlet {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
                 if (transformto.equals(TO_PDF)) {
-                    PDFTranscoder t = new PDFTranscoder();
+
+                    ByteArrayOutputStream bout = new ByteArrayOutputStream();
+                    Document pdfDoc = new Document(PageSize.A4);
+                    PdfWriter pdfWriter = PdfWriter.getInstance(pdfDoc, outputStream);
+                    pdfDoc.open();
+                    pdfDoc.addCreationDate();
+
+                    PNGTranscoder t = new PNGTranscoder();
+                    t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
                     TranscoderInput input = new TranscoderInput(new StringReader(
                             svg));
-                    TranscoderOutput output = new TranscoderOutput(outputStream);
+                    TranscoderOutput output = new TranscoderOutput(bout);
                     t.transcode(input, output);
+
+                    Image processImage = Image.getInstance(bout.toByteArray());
+                    scalePDFImage(pdfDoc, processImage);
+                    pdfDoc.add(processImage);
+
+                    pdfDoc.close();
                 } else if (transformto.equals(TO_PNG)) {
                     PNGTranscoder t = new PNGTranscoder();
                     t.addTranscodingHint(ImageTranscoder.KEY_MEDIA, "screen");
@@ -674,5 +726,12 @@ public class TransformerServlet extends HttpServlet {
             }
         }
         return value;
+    }
+
+    public void scalePDFImage(Document document, Image image) {
+        float scaler = ((document.getPageSize().getWidth() - document.leftMargin()
+                - document.rightMargin()) / image.getWidth()) * 100;
+
+        image.scalePercent(scaler);
     }
 }
