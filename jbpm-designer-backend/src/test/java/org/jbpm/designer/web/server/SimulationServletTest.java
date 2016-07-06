@@ -135,6 +135,31 @@ public class SimulationServletTest {
         assertTrue(responseText.contains("июн"));
     }
 
+    @Test
+    public void testNotAbleToFindPathsInProcess() throws Exception {
+        SimulationServlet simulationServlet = new SimulationServlet();
+        simulationServlet.setProfile(new JbpmProfileImpl());
+
+        // Request json is encoded
+        String rawJson = readFile("BPSim_pathfindererror.json");
+        String encodedJson = Base64.encodeBase64String(UriUtils.encode(rawJson.toString()).getBytes("UTF-8"));
+
+        // setup parameters
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("json", encodedJson);
+        params.put("action", SimulationServlet.ACTION_GETPATHINFO);
+        params.put("ppdata", "Email,Log,Rest,WebService");
+        params.put("numinstances", "10");
+        params.put("interval", "5");
+        params.put("intervalUnit", "minutes");
+
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        simulationServlet.doPost(new TestHttpServletRequest(params), response);
+
+        int responseStatus = response.getStatus();
+        assertEquals(500, responseStatus);
+    }
+
     private String readFile(String fileName) throws Exception {
         URL fileURL = SimulationServletTest.class.getResource(fileName);
         return new String(Files.readAllBytes(Paths.get(fileURL.toURI())));

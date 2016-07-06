@@ -113,7 +113,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                         title       : ''
 
                     });
-	            },
+	            }.bind(this),
 	            params: {
 	            	action: 'getpathinfo',
 	            	profile: ORYX.PROFILE,
@@ -331,7 +331,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                     title       : ''
 
                 });
-            },
+            }.bind(this),
             params: {
             	action: 'getpathinfo',
             	profile: ORYX.PROFILE,
