@@ -79,6 +79,10 @@ public class Bpmn2JsonUnmarshaller {
 
     public static final String defaultRelationshipType = "BPSimData";
 
+    // Variables for setting UserTask name to "Task_n" if empty
+    public static final String DEFAULT_USERTASK_NAME_PREFIX = "Task_";
+    private int LastUserTaskID = 0;
+
     // a list of the objects created, kept in memory with their original id for
     // fast lookup.
     private Map<Object, String> _objMap = new HashMap<Object, String>();
@@ -167,6 +171,7 @@ public class Bpmn2JsonUnmarshaller {
             Definitions def = (Definitions) unmarshallItem(parser, preProcessingData);
             def.setExporter("jBPM Designer");
             def.setExporterVersion("6.2.0");
+            revisitUserTasks(def);
             revisitServiceTasks(def);
             revisitMessages(def);
             revisitCatchEvents(def);
@@ -209,6 +214,48 @@ public class Bpmn2JsonUnmarshaller {
             _currentResource = null;
         }
     }
+
+    public void revisitUserTasks(Definitions def) {
+        List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                setUserTaskInfo((Process) root);
+            }
+        }
+    }
+
+    private void setUserTaskInfo(FlowElementsContainer container) {
+        List<FlowElement> flowElements =  container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            // Set name and metaData "elementname" to "Task_n" if empty
+            if(fe instanceof UserTask) {
+                UserTask task = (UserTask) fe;
+                String name = task.getName();
+                if (name == null || name.length() == 0) {
+                    LastUserTaskID++;
+                    String newName = DEFAULT_USERTASK_NAME_PREFIX + LastUserTaskID;
+                    task.setName(newName);
+                    if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
+                        for (ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+                            FeatureMap extensionElements = extattrval.getValue();
+                            List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
+                                    .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+                            for (MetaDataType eleMetadata : metadataExtensions) {
+                                if (eleMetadata.getName() != null && eleMetadata.getName().equals("elementname")) {
+                                    eleMetadata.setMetaValue(wrapInCDATABlock(newName));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(fe instanceof FlowElementsContainer) {
+                setUserTaskInfo((FlowElementsContainer) fe);
+            }
+        }
+    }
+
 
     public void revisitItemDefinitions(Definitions def) {
         List<String> itemIds = new ArrayList<String>();
@@ -6234,6 +6281,8 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     protected void applyUserTaskProperties(UserTask task, Map<String, String> properties) {
+        setLastUserTaskID(task);
+
         if(properties.get("actors") != null && properties.get("actors").length() > 0) {
             String[] allActors = properties.get("actors").split( ",\\s*" );
             for(String actor : allActors) {
@@ -7050,6 +7099,30 @@ public class Bpmn2JsonUnmarshaller {
         	List<EObject> values = new ArrayList<EObject>();
         	values.add(resourceParameters);
         	_simulationElementParameters.put(task.getId(), values);
+        }
+    }
+
+    /*
+     * Set LastUserTaskID variable so that UserTasks with no name
+     * can be given a default name of "Task_n"
+     *
+     * @param task
+     */
+    protected void setLastUserTaskID(UserTask task) {
+        String name = task.getName();
+        if (name != null && name.length() > 0) {
+            int i = name.indexOf(DEFAULT_USERTASK_NAME_PREFIX);
+            if (i == 0) {
+                String numStr = name.substring(5);
+                try {
+                    int num = Integer.parseInt(numStr);
+                    if (num >= LastUserTaskID) {
+                        LastUserTaskID = num;
+                    }
+                } catch (NumberFormatException nfe) {
+                    // do nothing
+                }
+            }
         }
     }
 
