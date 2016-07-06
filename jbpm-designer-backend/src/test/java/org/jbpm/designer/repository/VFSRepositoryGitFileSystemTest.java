@@ -809,6 +809,10 @@ public class VFSRepositoryGitFileSystemTest {
         assertNotNull(foundJSONAssets);
         assertEquals(3, foundJSONAssets.size());
 
+        Collection<Asset> foundWidAssets = repository.listAssets("/mytestproject", new FilterByExtension("wid"));
+        assertNotNull(foundWidAssets);
+        assertEquals(0, foundWidAssets.size());
+
         // call again to try to trigger FileAlreadyExistsException
         repository.createGlobalDirOnNewProject(event);
 
@@ -823,6 +827,10 @@ public class VFSRepositoryGitFileSystemTest {
         Collection<Asset> foundJSONAssetsAfterSecondCall = repository.listAssets("/mytestproject/global", new FilterByExtension("json"));
         assertNotNull(foundJSONAssetsAfterSecondCall);
         assertEquals(3, foundJSONAssetsAfterSecondCall.size());
+
+        Collection<Asset> foundWidAssetsAfterSecondCall = repository.listAssets("/mytestproject", new FilterByExtension("wid"));
+        assertNotNull(foundWidAssetsAfterSecondCall);
+        assertEquals(0, foundWidAssetsAfterSecondCall.size());
 
     }
 
