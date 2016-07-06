@@ -30,6 +30,7 @@ public class TestHttpServletResponse  implements HttpServletResponse {
 
     private PrintWriter printWriter;
     private ServletOutputStream servletOutputStream;
+    private int sc;
 
     public TestHttpServletResponse() {
         this.printWriter = new PrintWriter(outputStream);
@@ -112,7 +113,7 @@ public class TestHttpServletResponse  implements HttpServletResponse {
     }
 
     public void setStatus(int sc) {
-        
+        this.sc = sc;
     }
 
     public void setStatus(int sc, String sm) {
@@ -121,7 +122,7 @@ public class TestHttpServletResponse  implements HttpServletResponse {
 
     @Override
     public int getStatus() {
-        return 0;
+        return sc;
     }
 
     @Override

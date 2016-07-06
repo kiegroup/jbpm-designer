@@ -150,37 +150,44 @@ public class SimulationServlet extends HttpServlet {
 		}
 
         if(action != null && action.equals(ACTION_GETPATHINFO)) {
-        	DroolsFactoryImpl.init();
-            BpsimFactoryImpl.init();
+			try {
+				DroolsFactoryImpl.init();
+				BpsimFactoryImpl.init();
 
-        	Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-            Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
-            PathFinder pfinder = null;
-            if(selectionId != null && selectionId.length() > 0) {
-            	// find the embedded, event subprocess
-            	SubProcess selectedContainer = null;
-            	List<RootElement> rootElements =  def.getRootElements();
-                for(RootElement root : rootElements) {
-                	if(root instanceof Process) {
-                		Process process = (Process) root;
-                		selectedContainer = findSelectedContainer(selectionId, process);
-                		if(selectedContainer != null) {
-                        	pfinder = PathFinderFactory.getInstance(selectedContainer);
-                        }
-                		else {
-                        	_logger.error("Could not find selected contaner with id: " + selectionId);
-                        }
-                	}
-                }
-            }
-            if(pfinder == null) {
-            	pfinder = PathFinderFactory.getInstance(def);
-            }
-            JSONObject pathjson =  pfinder.findPaths(new JSONPathFormatConverter());
-            PrintWriter pw = resp.getWriter();
-			resp.setContentType("text/plain");
-			resp.setCharacterEncoding("UTF-8");
-			pw.write(pathjson.toString());
+				Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+				Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
+				PathFinder pfinder = null;
+				if (selectionId != null && selectionId.length() > 0) {
+					// find the embedded, event subprocess
+					SubProcess selectedContainer = null;
+					List<RootElement> rootElements = def.getRootElements();
+					for (RootElement root : rootElements) {
+						if (root instanceof Process) {
+							Process process = (Process) root;
+							selectedContainer = findSelectedContainer(selectionId, process);
+							if (selectedContainer != null) {
+								pfinder = PathFinderFactory.getInstance(selectedContainer);
+							} else {
+								_logger.error("Could not find selected contaner with id: " + selectionId);
+							}
+						}
+					}
+				}
+				if (pfinder == null) {
+					pfinder = PathFinderFactory.getInstance(def);
+				}
+				JSONObject pathjson = pfinder.findPaths(new JSONPathFormatConverter());
+				PrintWriter pw = resp.getWriter();
+				resp.setContentType("text/plain");
+				resp.setCharacterEncoding("UTF-8");
+				pw.write(pathjson.toString());
+			} catch( Exception e ) {
+				_logger.error("Error during path finding", e);
+				// need to return error code to use failure callback on client (js) side
+				resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				PrintWriter pw = resp.getWriter();
+				pw.write(e.getMessage());
+			}
         } else if(action != null && action.equals(ACTION_RUNSIMULATION)) {
         	try {
 				DroolsFactoryImpl.init();
