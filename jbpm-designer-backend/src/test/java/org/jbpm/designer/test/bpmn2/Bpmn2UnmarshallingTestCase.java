@@ -1014,4 +1014,18 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("Swimlane name is wrong.", lane.getName(), "Documented Swimlane");
         assertEquals("<![CDATA[Some documentation for swimlane.]]>", lane.getDocumentation().get(0).getText());
     }
+
+    @Test
+    public void testUserTasksWithNoName() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("usertaskswithnoname.json"), "").getContents().get(0));
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = getRootProcess(definitions);
+        UserTask t1 = (UserTask) process.getFlowElements().get(6);
+        assertEquals("Task_1", t1.getName());
+        UserTask t2 = (UserTask) process.getFlowElements().get(8);
+        assertEquals("Task_2", t2.getName());
+    }
+
+
 }
