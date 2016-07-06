@@ -1361,9 +1361,34 @@ ORYX.Editor = {
         
         
         this.getCanvas().updateSize();
+		this.setLastUserTaskID(shapes);
         return shapes;
     },
-    
+
+	setLastUserTaskID: function ( shapes ) {
+		if (ORYX.LastUserTaskID === undefined) {
+			ORYX.LastUserTaskID = 0;
+		}
+
+		shapes.each(function (shape) {
+			if (shape.properties !== undefined && shape.properties["oryx-tasktype"] === "User") {
+				var name = shape.properties["oryx-name"];
+				if (name !== undefined) {
+					var i = name.indexOf("Task_");
+					if (i == 0) {
+						var numStr = name.substring(5);
+						var num = parseInt(numStr);
+						if (!isNaN(num)) {
+							if (num >= ORYX.LastUserTaskID) {
+								ORYX.LastUserTaskID = num;
+							}
+						}
+					}
+				}
+			}
+		});
+	},
+
     /**
      * Calls ORYX.Editor.prototype.ss_extension_namespace for each element
      * @param {Array} ss_extension_namespaces An array of stencil set extension namespaces.
