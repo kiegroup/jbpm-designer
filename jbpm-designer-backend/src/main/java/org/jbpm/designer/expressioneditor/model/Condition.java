@@ -21,6 +21,20 @@ import java.util.List;
 
 public class Condition {
 
+    public static final String BETWEEN = "between";
+    public static final String IS_NULL = "isNull";
+    public static final String EQUALS_TO = "equalsTo";
+    public static final String IS_EMPTY = "isEmpty";
+    public static final String CONTAINS = "contains";
+    public static final String STARTS_WITH = "startsWith";
+    public static final String ENDS_WITH = "endsWith";
+    public static final String GREATER_THAN = "greaterThan";
+    public static final String GREATER_OR_EQUAL_THAN = "greaterOrEqualThan";
+    public static final String LESS_THAN = "lessThan";
+    public static final String LESS_OR_EQUAL_THAN = "lessOrEqualThan";
+    public static final String IS_TRUE = "isTrue";
+    public static final String IS_FALSE = "isFalse";
+
     private String function;
 
     private List<String> parameters = new ArrayList<String>();

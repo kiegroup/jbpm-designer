@@ -16,10 +16,12 @@
 
 package org.jbpm.designer.expressioneditor.parser;
 
+import org.drools.core.util.KieFunctions;
 import org.jbpm.designer.expressioneditor.model.Condition;
 import org.jbpm.designer.expressioneditor.model.ConditionExpression;
 import org.jbpm.designer.expressioneditor.server.ExpressionEditorErrors;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 
@@ -52,7 +54,6 @@ public class ExpressionScriptGenerator {
             } else {
                 //we have an invalid condition.
                 //at the moment the approach is that all the generation fails.
-                errors.add(ExpressionEditorErrors.INVALID_CONDITION_ERROR);
                 return null;
             }
         }
@@ -61,9 +62,12 @@ public class ExpressionScriptGenerator {
     }
 
     private int addConditionToScript(final Condition condition, final StringBuilder script, final String operator, final int validTerms, final List<String> errors) {
-        if (condition == null) return 0;
+        if (condition == null) {
+            errors.add(ExpressionEditorErrors.INVALID_CONDITION_ERROR);
+            return 0;
+        }
         if (!isValidFunction(condition.getFunction())) {
-            errors.add("Invalid function : " + condition.getFunction());
+            errors.add("Invalid function: " + condition.getFunction());
             return 0;
         }
         //TODO evaluate if we put more validations.
@@ -72,7 +76,8 @@ public class ExpressionScriptGenerator {
         } else {
             script.append(" ");
         }
-        script.append(ExpressionParser.KIE_FUNCTIONS + condition.getFunction().trim());
+        String function = condition.getFunction().trim();
+        script.append(ExpressionParser.KIE_FUNCTIONS + function);
         script.append("(");
         boolean first = true;
         for (String param : condition.getParameters()) {
@@ -84,7 +89,11 @@ public class ExpressionScriptGenerator {
                 //the other parameters are always string parameters.
                 //TODO escape " and line break charactrers.
                 script.append(", ");
-                script.append("\""+escapeStringParam(param)+"\"");
+                script.append("\"" + escapeStringParam(param) + "\"");
+            }
+            if(param == null || param.isEmpty()) {
+                errors.add(ExpressionEditorErrors.PARAMETER_NULL_EMPTY);
+                return 0;
             }
         }
         script.append(")");
@@ -118,7 +127,25 @@ public class ExpressionScriptGenerator {
         return escapedParam.toString();
     }
 
+
     private boolean isValidFunction(String function) {
-        return function != null && !"".equals(function.trim());
+        if(function == null) {
+            return false;
+        }
+
+        if(function.trim().isEmpty()) {
+            return false;
+        }
+
+        function = function.trim();
+
+        for(Method method : KieFunctions.class.getMethods()) {
+            if(function.equals(method.getName())) {
+                return true;
+            }
+        }
+
+
+        return false;
     }
 }

@@ -1,0 +1,1 @@
+return KieFunctions.greaterThan(variable, "value");
