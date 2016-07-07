@@ -130,10 +130,6 @@ public class Bpmn2JsonMarshallerTest {
         return getPropertyValue(bpmnElement, "documentation");
     }
 
-    private static String getPropertyValue(JSONObject bpmnElement, String propertyName) throws JSONException {
-        return bpmnElement.getJSONObject("properties").getString(propertyName);
-    }
-
     @Test
     public void testCallActivityAssignments() throws Exception {
         JSONObject process = loadProcessFrom("callActivityInSubprocess.bpmn2");
@@ -146,7 +142,13 @@ public class Bpmn2JsonMarshallerTest {
 
         assertTrue(assignments.contains("[dout]innerOutput->intVariable"));
         assertTrue(assignments.contains("[din]intVariable->innerInput"));
+        assertTrue(assignments.contains("[din]innerConstant=stringConstant"));
         assertTrue(datainputset.contains("innerInput:Integer"));
+        assertTrue(datainputset.contains("innerConstant:String"));
         assertTrue(dataoutputset.contains("innerOutput:Integer"));
+    }
+
+    private static String getPropertyValue(JSONObject bpmnElement, String propertyName) throws JSONException {
+        return bpmnElement.getJSONObject("properties").getString(propertyName);
     }
 }
