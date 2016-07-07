@@ -564,47 +564,7 @@ public class Bpmn2JsonMarshaller {
             properties.put("datainput", dinbuff.toString());
 
             StringBuilder associationBuff = new StringBuilder();
-            for(DataInputAssociation datain : event.getDataInputAssociation()) {
-                String lhsAssociation = "";
-                if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
-                    if(datain.getTransformation() != null && datain.getTransformation().getBody() != null) {
-                        lhsAssociation = datain.getTransformation().getBody();
-                    } else {
-                        lhsAssociation = datain.getSourceRef().get(0).getId();
-                    }
-                }
-
-                String rhsAssociation = "";
-                if(datain.getTargetRef() != null) {
-                    rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
-                }
-
-                //boolean isBiDirectional = false;
-                boolean isAssignment = false;
-
-                if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
-                    isAssignment = true;
-                }
-
-                if(isAssignment) {
-                    // only know how to deal with formal expressions
-                    if( datain.getAssignment().get(0).getFrom() instanceof FormalExpression) {
-                        String associationValue = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
-                        if(associationValue == null) {
-                            associationValue = "";
-                        }
-                        String replacer = encodeAssociationValue(associationValue);
-                        associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
-                        associationBuff.append(",");
-                    }
-                }
-                else {
-                    if(lhsAssociation != null && lhsAssociation.length() > 0) {
-                        associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
-                        associationBuff.append(",");
-                    }
-                }
-            }
+            marshallDataInputAssociations(associationBuff, event.getDataInputAssociation());
 
             String assignmentString = associationBuff.toString();
             if(assignmentString.endsWith(",")) {
@@ -1123,92 +1083,9 @@ public class Bpmn2JsonMarshaller {
         StringBuilder associationBuff = new StringBuilder();
         List<DataInputAssociation> inputAssociations = callActivity.getDataInputAssociations();
         List<DataOutputAssociation> outputAssociations = callActivity.getDataOutputAssociations();
-        //List<String> biDirectionalAssociations = new ArrayList<String>();
 
-        for(DataInputAssociation datain : inputAssociations) {
-            String lhsAssociation = "";
-            if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
-            	if(datain.getTransformation() != null && datain.getTransformation().getBody() != null) {
-            		lhsAssociation = datain.getTransformation().getBody();
-            	} else {
-            		lhsAssociation = datain.getSourceRef().get(0).getId();
-            	}
-            }
-
-            String rhsAssociation = "";
-            if(datain.getTargetRef() != null) {
-                rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
-            }
-
-            //boolean isBiDirectional = false;
-            boolean isAssignment = false;
-
-            if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
-                isAssignment = true;
-            }
-//            else {
-//                // check if this is a bi-directional association
-//                for(DataOutputAssociation dataout : outputAssociations) {
-//                    if(dataout.getTargetRef().getId().equals(lhsAssociation) &&
-//                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
-//                        isBiDirectional = true;
-//                        break;
-//                    }
-//                }
-//            }
-
-            if(isAssignment) {
-            	// only know how to deal with formal expressions
-            	if( datain.getAssignment().get(0).getFrom() instanceof FormalExpression) {
-            		String associationValue = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
-            		if(associationValue == null) {
-            			associationValue = "";
-            		}
-            		String replacer = encodeAssociationValue(associationValue);
-            		associationBuff.append(rhsAssociation).append("=").append(replacer);
-                	associationBuff.append(",");
-            	}
-            }
-//            else if(isBiDirectional) {
-//                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
-//                associationBuff.append(",");
-//                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
-//            }
-            else {
-                if(lhsAssociation != null && lhsAssociation.length() > 0) {
-                    associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
-                    associationBuff.append(",");
-                }
-            }
-        }
-
-        for(DataOutputAssociation dataout : outputAssociations) {
-            if(dataout.getSourceRef().size() > 0) {
-                String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
-                String rhsAssociation = dataout.getTargetRef().getId();
-
-                boolean wasBiDirectional = false;
-                // check if we already addressed this association as bidirectional
-//                for(String bda : biDirectionalAssociations) {
-//                    String[] dbaparts = bda.split( ",\\s*" );
-//                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
-//                        wasBiDirectional = true;
-//                        break;
-//                    }
-//                }
-
-                if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
-                	rhsAssociation = encodeAssociationValue(dataout.getTransformation().getBody());
-                }
-
-                if(!wasBiDirectional) {
-                    if(lhsAssociation != null && lhsAssociation.length() > 0) {
-                        associationBuff.append("[dout]" + lhsAssociation).append("->").append(rhsAssociation);
-                        associationBuff.append(",");
-                    }
-                }
-            }
-        }
+        marshallDataInputAssociations(associationBuff, inputAssociations);
+        marshallDataOutputAssociations(associationBuff, outputAssociations);
 
         String assignmentString = associationBuff.toString();
         if(assignmentString.endsWith(",")) {
@@ -2270,92 +2147,9 @@ public class Bpmn2JsonMarshaller {
         StringBuilder associationBuff = new StringBuilder();
         List<DataInputAssociation> inputAssociations = subProcess.getDataInputAssociations();
         List<DataOutputAssociation> outputAssociations = subProcess.getDataOutputAssociations();
-        //List<String> biDirectionalAssociations = new ArrayList<String>();
 
-        for(DataInputAssociation datain : inputAssociations) {
-            String lhsAssociation = "";
-            if(datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
-            	if(datain.getTransformation() != null && datain.getTransformation().getBody() != null) {
-            		lhsAssociation = datain.getTransformation().getBody();
-            	} else {
-            		lhsAssociation = datain.getSourceRef().get(0).getId();
-            	}
-            }
-
-            String rhsAssociation = "";
-            if(datain.getTargetRef() != null) {
-                rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
-            }
-
-            //boolean isBiDirectional = false;
-            boolean isAssignment = false;
-
-            if(datain.getAssignment() != null && datain.getAssignment().size() > 0) {
-                isAssignment = true;
-            }
-//            else {
-//                // check if this is a bi-directional association
-//                for(DataOutputAssociation dataout : outputAssociations) {
-//                    if(dataout.getTargetRef().getId().equals(lhsAssociation) &&
-//                       ((DataOutput) dataout.getSourceRef().get(0)).getName().equals(rhsAssociation)) {
-//                        isBiDirectional = true;
-//                        break;
-//                    }
-//                }
-//            }
-
-            if(isAssignment) {
-            	// only know how to deal with formal expressions
-            	if( datain.getAssignment().get(0).getFrom() instanceof FormalExpression) {
-            		String associationValue = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
-            		if(associationValue == null) {
-            			associationValue = "";
-            		}
-            		String replacer = encodeAssociationValue(associationValue);
-            		associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
-                	associationBuff.append(",");
-            	}
-            }
-//            else if(isBiDirectional) {
-//                associationBuff.append(lhsAssociation).append("<->").append(rhsAssociation);
-//                associationBuff.append(",");
-//                biDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
-//            }
-            else {
-                if(lhsAssociation != null && lhsAssociation.length() > 0) {
-                    associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
-                    associationBuff.append(",");
-                }
-            }
-        }
-
-        for(DataOutputAssociation dataout : outputAssociations) {
-            if(dataout.getSourceRef().size() > 0) {
-                String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
-                String rhsAssociation = dataout.getTargetRef().getId();
-
-                boolean wasBiDirectional = false;
-                // check if we already addressed this association as bidirectional
-//                for(String bda : biDirectionalAssociations) {
-//                    String[] dbaparts = bda.split( ",\\s*" );
-//                    if(dbaparts[0].equals(rhsAssociation) && dbaparts[1].equals(lhsAssociation)) {
-//                        wasBiDirectional = true;
-//                        break;
-//                    }
-//                }
-
-                if(dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
-                	rhsAssociation = encodeAssociationValue(dataout.getTransformation().getBody());
-                }
-
-                if(!wasBiDirectional) {
-                    if(lhsAssociation != null && lhsAssociation.length() > 0) {
-                        associationBuff.append("[dout]" + lhsAssociation).append("->").append(rhsAssociation);
-                        associationBuff.append(",");
-                    }
-                }
-            }
-        }
+        marshallDataInputAssociations(associationBuff, inputAssociations);
+        marshallDataOutputAssociations(associationBuff, outputAssociations);
 
         String assignmentString = associationBuff.toString();
         if(assignmentString.endsWith(",")) {
@@ -2598,6 +2392,72 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeEndObject();
 	    generator.writeEndObject();
 
+    }
+
+    private void marshallDataOutputAssociations(StringBuilder associationBuff, List<DataOutputAssociation> outputAssociations) {
+        if(outputAssociations != null) {
+            for (DataOutputAssociation dataout : outputAssociations) {
+                if (dataout.getSourceRef().size() > 0) {
+                    String lhsAssociation = ((DataOutput) dataout.getSourceRef().get(0)).getName();
+                    String rhsAssociation = dataout.getTargetRef().getId();
+
+                    if (dataout.getTransformation() != null && dataout.getTransformation().getBody() != null) {
+                        rhsAssociation = encodeAssociationValue(dataout.getTransformation().getBody());
+                    }
+
+                    if (lhsAssociation != null && lhsAssociation.length() > 0) {
+                        associationBuff.append("[dout]" + lhsAssociation).append("->").append(rhsAssociation);
+                        associationBuff.append(",");
+                    }
+
+                }
+            }
+        }
+    }
+
+    private void marshallDataInputAssociations(StringBuilder associationBuff, List<DataInputAssociation> inputAssociations) {
+        if (inputAssociations != null) {
+            for (DataInputAssociation datain : inputAssociations) {
+                String lhsAssociation = "";
+                if (datain.getSourceRef() != null && datain.getSourceRef().size() > 0) {
+                    if (datain.getTransformation() != null && datain.getTransformation().getBody() != null) {
+                        lhsAssociation = datain.getTransformation().getBody();
+                    } else {
+                        lhsAssociation = datain.getSourceRef().get(0).getId();
+                    }
+                }
+
+                String rhsAssociation = "";
+                if (datain.getTargetRef() != null) {
+                    rhsAssociation = ((DataInput) datain.getTargetRef()).getName();
+                }
+
+                //boolean isBiDirectional = false;
+                boolean isAssignment = false;
+
+                if (datain.getAssignment() != null && datain.getAssignment().size() > 0) {
+                    isAssignment = true;
+                }
+
+                if (isAssignment) {
+                    // only know how to deal with formal expressions
+                    if (datain.getAssignment().get(0).getFrom() instanceof FormalExpression) {
+                        String associationValue = ((FormalExpression) datain.getAssignment().get(0).getFrom()).getBody();
+                        if (associationValue == null) {
+                            associationValue = "";
+                        }
+                        String replacer = encodeAssociationValue(associationValue);
+                        associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
+                        associationBuff.append(",");
+                    }
+                } else {
+                    if (lhsAssociation != null && lhsAssociation.length() > 0) {
+                        associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
+                        associationBuff.append(",");
+                    }
+                }
+            }
+        }
     }
 
     protected void marshallSequenceFlow(SequenceFlow sequenceFlow, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset) throws JsonGenerationException, IOException {

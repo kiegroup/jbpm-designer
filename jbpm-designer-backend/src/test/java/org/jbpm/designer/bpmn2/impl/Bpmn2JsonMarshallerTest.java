@@ -375,7 +375,9 @@ public class Bpmn2JsonMarshallerTest {
 
         assertTrue(assignments.contains("[dout]innerOutput->intVariable"));
         assertTrue(assignments.contains("[din]intVariable->innerInput"));
+        assertTrue(assignments.contains("[din]innerConstant=stringConstant"));
         assertTrue(datainputset.contains("innerInput:Integer"));
+        assertTrue(datainputset.contains("innerConstant:String"));
         assertTrue(dataoutputset.contains("innerOutput:Integer"));
     }
 
