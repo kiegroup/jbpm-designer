@@ -1171,5 +1171,19 @@ public class Bpmn2UnmarshallingTest {
 
         fail(attributeName + " with value: " + attributeValue + " was not found");
     }
+
+    @Test
+    public void testUserTasksWithNoName() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = loader.loadProcessFromJson("usertaskswithnoname.json");
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = getRootProcess(definitions);
+        UserTask t1 = (UserTask) process.getFlowElements().get(6);
+        assertEquals("Task_1", t1.getName());
+        UserTask t2 = (UserTask) process.getFlowElements().get(8);
+        assertEquals("Task_2", t2.getName());
+    }
+
+
 }
 
