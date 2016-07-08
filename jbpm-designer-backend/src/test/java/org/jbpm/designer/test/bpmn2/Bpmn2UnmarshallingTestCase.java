@@ -1053,6 +1053,48 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(foundGroupId);
     }
 
+    @Test
+    public void testTaskInputOutputSet() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("taskInputOutputSet.json");
+        Process process = getRootProcess(definitions);
+        assertTrue(process.getFlowElements().get(1) instanceof UserTask);
+        UserTask task = (UserTask) process.getFlowElements().get(1);
+        assertEquals("userTask", task.getName());
+        InputSet inputSet = task.getIoSpecification().getInputSets().get(0);
+        OutputSet outputSet = task.getIoSpecification().getOutputSets().get(0);
+        assertEquals(4, inputSet.getDataInputRefs().size());
+        assertEquals("firstInput", inputSet.getDataInputRefs().get(0).getName());
+        assertEquals("secondInput", inputSet.getDataInputRefs().get(1).getName());
+        assertEquals("TaskName", inputSet.getDataInputRefs().get(2).getName());
+        assertEquals("Skippable", inputSet.getDataInputRefs().get(3).getName());
+        assertEquals(1, outputSet.getDataOutputRefs().size());
+        assertEquals("firstOutput", outputSet.getDataOutputRefs().get(0).getName());
+    }
+
+    @Test
+    public void testSubprocessDefaultInputOutputSets() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("defaultSubprocessInputOutputSets.json");
+        Process process = getRootProcess(definitions);
+        assertTrue(process.getFlowElements().get(1) instanceof SubProcess);
+        SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
+        InputSet inputSet = subProcess.getIoSpecification().getInputSets().get(0);
+        OutputSet outputSet = subProcess.getIoSpecification().getOutputSets().get(0);
+        assertEquals(0, inputSet.getDataInputRefs().size());
+        assertEquals(0, outputSet.getDataOutputRefs().size());
+    }
+
+    @Test
+    public void testSubprocessDefaultOutputSet() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("subprocessDefaultOutputSet.json");
+        Process process = getRootProcess(definitions);
+        assertTrue(process.getFlowElements().get(1) instanceof SubProcess);
+        SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
+        InputSet inputSet = subProcess.getIoSpecification().getInputSets().get(0);
+        OutputSet outputSet = subProcess.getIoSpecification().getOutputSets().get(0);
+        assertEquals(1, inputSet.getDataInputRefs().size());
+        assertEquals(0, outputSet.getDataOutputRefs().size());
+    }
+
     private FlowElement getFlowElement(List<FlowElement> elements, String name) {
         for(FlowElement element : elements) {
             if (element.getName() != null && name.compareTo(element.getName()) == 0) {
