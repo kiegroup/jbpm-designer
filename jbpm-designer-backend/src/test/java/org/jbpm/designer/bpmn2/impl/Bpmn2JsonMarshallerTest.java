@@ -133,4 +133,20 @@ public class Bpmn2JsonMarshallerTest {
     private static String getPropertyValue(JSONObject bpmnElement, String propertyName) throws JSONException {
         return bpmnElement.getJSONObject("properties").getString(propertyName);
     }
+
+    @Test
+    public void testCallActivityAssignments() throws Exception {
+        JSONObject process = loadProcessFrom("callActivityInSubprocess.bpmn2");
+        JSONObject subProcess = getChildByName(process, "SubProcess");
+        JSONObject callActivity = getChildByName(subProcess, "callActivity");
+        JSONObject properties = callActivity.getJSONObject("properties");
+        String datainputset = properties.getString("datainputset");
+        String dataoutputset = properties.getString("dataoutputset");
+        String assignments = properties.getString("assignments");
+
+        assertTrue(assignments.contains("[dout]innerOutput->intVariable"));
+        assertTrue(assignments.contains("[din]intVariable->innerInput"));
+        assertTrue(datainputset.contains("innerInput:Integer"));
+        assertTrue(dataoutputset.contains("innerOutput:Integer"));
+    }
 }

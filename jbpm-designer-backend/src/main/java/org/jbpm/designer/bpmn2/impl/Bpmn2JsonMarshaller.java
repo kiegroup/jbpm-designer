@@ -1278,46 +1278,10 @@ public class Bpmn2JsonMarshaller {
         properties.put("isasync", customAsync);
 
         // data inputs
-        if(callActivity.getIoSpecification() != null) {
-            List<InputSet> inputSetList = callActivity.getIoSpecification().getInputSets();
-            StringBuilder dataInBuffer = new StringBuilder();
-            for(InputSet inset : inputSetList) {
-                List<DataInput> dataInputList =  inset.getDataInputRefs();
-                for(DataInput dataIn : dataInputList) {
-                    if(dataIn.getName() != null) {
-                        dataInBuffer.append(dataIn.getName());
-                        if(dataIn.getItemSubjectRef() != null && dataIn.getItemSubjectRef().getStructureRef() != null && dataIn.getItemSubjectRef().getStructureRef().length() > 0) {
-                        	dataInBuffer.append(":").append(dataIn.getItemSubjectRef().getStructureRef());
-                        }
-                        dataInBuffer.append(",");
-                    }
-                }
-            }
-            if(dataInBuffer.length() > 0) {
-                dataInBuffer.setLength(dataInBuffer.length() - 1);
-            }
-            properties.put("datainputset", dataInBuffer.toString());
-        }
+        marshallDataInputSet(callActivity, properties);
 
         // data outputs
-        if(callActivity.getIoSpecification() != null) {
-            List<OutputSet> outputSetList = callActivity.getIoSpecification().getOutputSets();
-            StringBuilder dataOutBuffer = new StringBuilder();
-            for(OutputSet outset : outputSetList) {
-                List<DataOutput> dataOutputList =  outset.getDataOutputRefs();
-                for(DataOutput dataOut : dataOutputList) {
-                    dataOutBuffer.append(dataOut.getName());
-                    if(dataOut.getItemSubjectRef() != null && dataOut.getItemSubjectRef().getStructureRef() != null && dataOut.getItemSubjectRef().getStructureRef().length() > 0) {
-                    	dataOutBuffer.append(":").append(dataOut.getItemSubjectRef().getStructureRef());
-                    }
-                    dataOutBuffer.append(",");
-                }
-            }
-            if(dataOutBuffer.length() > 0) {
-                dataOutBuffer.setLength(dataOutBuffer.length() - 1);
-            }
-            properties.put("dataoutputset", dataOutBuffer.toString());
-        }
+        marshallDataOutputSet(callActivity, properties);
 
         // assignments
         StringBuilder associationBuff = new StringBuilder();
@@ -1768,6 +1732,13 @@ public class Bpmn2JsonMarshaller {
         }
 
         // data inputs
+        List<String> disallowedInputs = new ArrayList<String>();
+        disallowedInputs.add("miinputCollection");
+        if((task instanceof UserTask) || isCustomElement) {
+            disallowedInputs.add("TaskName");
+        }
+        marshallDataInputSet(task, properties, disallowedInputs);
+
         DataInput groupDataInput = null;
         DataInput skippableDataInput = null;
         DataInput commentDataInput = null;
@@ -1782,28 +1753,11 @@ public class Bpmn2JsonMarshaller {
         DataInput notStartedNotificationInput = null;
         if(task.getIoSpecification() != null) {
             List<InputSet> inputSetList = task.getIoSpecification().getInputSets();
-            StringBuilder dataInBuffer = new StringBuilder();
             for(InputSet inset : inputSetList) {
                 List<DataInput> dataInputList =  inset.getDataInputRefs();
                 for(DataInput dataIn : dataInputList) {
                     // dont add "TaskName" as that is added manually
                     String dataInName = dataIn.getName();
-                    if(dataInName != null &&
-                            !(dataInName.equals("TaskName") && ((task instanceof UserTask) || isCustomElement)) &&
-                            !dataInName.equals("miinputCollection")) {
-                        dataInBuffer.append(dataInName);
-                        if(dataIn.getItemSubjectRef() != null && dataIn.getItemSubjectRef().getStructureRef() != null && dataIn.getItemSubjectRef().getStructureRef().length() > 0) {
-                        	dataInBuffer.append(":").append(dataIn.getItemSubjectRef().getStructureRef());
-                        }
-                        else if (task.eContainer() instanceof SubProcess) {
-                            // BZ1247105: for Inputs on Tasks inside sub-processes
-                            String dtype = getAnyAttributeValue(dataIn, "dtype");
-                            if (dtype != null && !dtype.isEmpty()) {
-                                dataInBuffer.append(":").append(dtype);
-                            }
-                        }
-                        dataInBuffer.append(",");
-                    }
 
                     if (task instanceof UserTask && dataInName != null) {
                         if (dataInName.equals("GroupId")) {
@@ -1845,40 +1799,10 @@ public class Bpmn2JsonMarshaller {
                     }
                 }
             }
-            if(dataInBuffer.length() > 0) {
-                dataInBuffer.setLength(dataInBuffer.length() - 1);
-            }
-            properties.put("datainputset", dataInBuffer.toString());
         }
 
         // data outputs
-        if(task.getIoSpecification() != null) {
-            List<OutputSet> outputSetList = task.getIoSpecification().getOutputSets();
-            StringBuilder dataOutBuffer = new StringBuilder();
-            for(OutputSet outset : outputSetList) {
-                List<DataOutput> dataOutputList =  outset.getDataOutputRefs();
-                for(DataOutput dataOut : dataOutputList) {
-                    if(!dataOut.getName().equals("mioutputCollection")) {
-                        dataOutBuffer.append(dataOut.getName());
-                        if(dataOut.getItemSubjectRef() != null && dataOut.getItemSubjectRef().getStructureRef() != null && dataOut.getItemSubjectRef().getStructureRef().length() > 0) {
-                            dataOutBuffer.append(":").append(dataOut.getItemSubjectRef().getStructureRef());
-                        }
-                        else if (task.eContainer() instanceof SubProcess) {
-                            // BZ1247105: for Outputs on Tasks inside sub-processes
-                            String dtype = getAnyAttributeValue(dataOut, "dtype");
-                            if (dtype != null && !dtype.isEmpty()) {
-                                dataOutBuffer.append(":").append(dtype);
-                            }
-                        }
-                        dataOutBuffer.append(",");
-                    }
-                }
-            }
-            if(dataOutBuffer.length() > 0) {
-                dataOutBuffer.setLength(dataOutBuffer.length() - 1);
-            }
-            properties.put("dataoutputset", dataOutBuffer.toString());
-        }
+        marshallDataOutputSet(task, properties, Arrays.asList("mioutputCollection"));
 
         // assignments
         StringBuilder associationBuff = new StringBuilder();
@@ -2242,6 +2166,70 @@ public class Bpmn2JsonMarshaller {
             marshallNode(task, properties, (String) properties.get("taskname"), plane, generator, xOffset, yOffset);
         } else {
             marshallNode(task, properties, "Task", plane, generator, xOffset, yOffset);
+        }
+    }
+
+    private void marshallDataInputSet(Activity activity, Map<String, Object> properties) {
+        marshallDataInputSet(activity, properties, new ArrayList<String>());
+    }
+
+    private void marshallDataInputSet(Activity activity, Map<String, Object> properties, List<String> disallowedNames) {
+        if(activity.getIoSpecification() != null) {
+            List<InputSet> inputSetList = activity.getIoSpecification().getInputSets();
+            StringBuilder dataInBuffer = new StringBuilder();
+            for(InputSet inset : inputSetList) {
+                List<DataInput> dataInputList =  inset.getDataInputRefs();
+                marshallItemAwareElements(activity, dataInputList, dataInBuffer, disallowedNames);
+            }
+            if(dataInBuffer.length() > 0) {
+                dataInBuffer.setLength(dataInBuffer.length() - 1);
+            }
+            properties.put("datainputset", dataInBuffer.toString());
+        }
+    }
+
+    private void marshallDataOutputSet(Activity activity, Map<String, Object> properties) {
+        marshallDataOutputSet(activity, properties, new ArrayList<String>());
+    }
+
+    private void marshallDataOutputSet(Activity activity, Map<String, Object> properties, List<String> disallowedNames) {
+        if(activity.getIoSpecification() != null) {
+            List<OutputSet> outputSetList = activity.getIoSpecification().getOutputSets();
+            StringBuilder dataOutBuffer = new StringBuilder();
+            for(OutputSet outset : outputSetList) {
+                List<DataOutput> dataOutputList =  outset.getDataOutputRefs();
+                marshallItemAwareElements(activity, dataOutputList, dataOutBuffer, disallowedNames);
+            }
+            if(dataOutBuffer.length() > 0) {
+                dataOutBuffer.setLength(dataOutBuffer.length() - 1);
+            }
+            properties.put("dataoutputset", dataOutBuffer.toString());
+        }
+    }
+
+    private void marshallItemAwareElements(Activity activity, List<? extends ItemAwareElement> elements, StringBuilder buffer, List<String> disallowedNames) {
+        for(ItemAwareElement element : elements) {
+            String name = null;
+            if(element instanceof DataInput) {
+                name = ((DataInput) element).getName();
+            }
+            if(element instanceof DataOutput) {
+                name = ((DataOutput) element).getName();
+            }
+            if(name != null && !name.isEmpty() && !disallowedNames.contains(name)) {
+                buffer.append(name);
+                if(element.getItemSubjectRef() != null && element.getItemSubjectRef().getStructureRef() != null && !element.getItemSubjectRef().getStructureRef().isEmpty()) {
+                    buffer.append(":").append(element.getItemSubjectRef().getStructureRef());
+                }
+                else if (activity.eContainer() instanceof SubProcess) {
+                    // BZ1247105: for Outputs on Tasks inside sub-processes
+                    String dtype = getAnyAttributeValue(element, "dtype");
+                    if (dtype != null && !dtype.isEmpty()) {
+                        buffer.append(":").append(dtype);
+                    }
+                }
+                buffer.append(",");
+            }
         }
     }
 
@@ -2619,46 +2607,10 @@ public class Bpmn2JsonMarshaller {
         properties.put("isasync", customAsync);
 
 		// data inputs
-        if(subProcess.getIoSpecification() != null) {
-            List<InputSet> inputSetList = subProcess.getIoSpecification().getInputSets();
-            StringBuilder dataInBuffer = new StringBuilder();
-            for(InputSet inset : inputSetList) {
-                List<DataInput> dataInputList =  inset.getDataInputRefs();
-                for(DataInput dataIn : dataInputList) {
-                	if(dataIn.getName() != null) {
-                        dataInBuffer.append(dataIn.getName());
-                        if(dataIn.getItemSubjectRef() != null && dataIn.getItemSubjectRef().getStructureRef() != null && dataIn.getItemSubjectRef().getStructureRef().length() > 0) {
-                        	dataInBuffer.append(":").append(dataIn.getItemSubjectRef().getStructureRef());
-                        }
-                        dataInBuffer.append(",");
-                    }
-                }
-            }
-            if(dataInBuffer.length() > 0) {
-                dataInBuffer.setLength(dataInBuffer.length() - 1);
-            }
-            properties.put("datainputset", dataInBuffer.toString());
-        }
+        marshallDataInputSet(subProcess, properties);
 
         // data outputs
-        if(subProcess.getIoSpecification() != null) {
-            List<OutputSet> outputSetList = subProcess.getIoSpecification().getOutputSets();
-            StringBuilder dataOutBuffer = new StringBuilder();
-            for(OutputSet outset : outputSetList) {
-                List<DataOutput> dataOutputList =  outset.getDataOutputRefs();
-                for(DataOutput dataOut : dataOutputList) {
-                    dataOutBuffer.append(dataOut.getName());
-                    if(dataOut.getItemSubjectRef() != null && dataOut.getItemSubjectRef().getStructureRef() != null && dataOut.getItemSubjectRef().getStructureRef().length() > 0) {
-                    	dataOutBuffer.append(":").append(dataOut.getItemSubjectRef().getStructureRef());
-                    }
-                    dataOutBuffer.append(",");
-                }
-            }
-            if(dataOutBuffer.length() > 0) {
-                dataOutBuffer.setLength(dataOutBuffer.length() - 1);
-            }
-            properties.put("dataoutputset", dataOutBuffer.toString());
-        }
+        marshallDataOutputSet(subProcess, properties);
 
         // assignments
         StringBuilder associationBuff = new StringBuilder();

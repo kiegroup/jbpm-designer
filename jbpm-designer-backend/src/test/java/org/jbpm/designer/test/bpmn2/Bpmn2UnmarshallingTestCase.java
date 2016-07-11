@@ -19,6 +19,7 @@ import static junit.framework.Assert.*;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,7 @@ import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.MetaDataType;
@@ -969,6 +971,42 @@ public class Bpmn2UnmarshallingTestCase {
     }
 
     @Test
+    public void testCallActivityAssignments() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("callActivityInSubprocess.json"), "").getContents().get(0));
+        Process process = getRootProcess(definitions);
+        FlowElement subProcess = getFlowElement(process.getFlowElements(), "SubProcess");
+        assertTrue(subProcess instanceof SubProcess);
+        FlowElement activity = getFlowElement(((SubProcess)subProcess).getFlowElements(), "callActivity");
+        assertTrue(activity instanceof CallActivity);
+        CallActivity callActivity = (CallActivity) activity;
+        InputOutputSpecification specification = callActivity.getIoSpecification();
+
+        DataInput dataInput = getDataInput(specification.getDataInputs(), "innerInput");
+        verifyAttribute(dataInput, "dtype", "Integer");
+        DataOutput dataOutput = getDataOutput(specification.getDataOutputs(), "innerOutput");
+        verifyAttribute(dataOutput, "dtype", "Integer");
+    }
+
+    private FlowElement getFlowElement(List<FlowElement> elements, String name) {
+        for(FlowElement element : elements) {
+            if (element.getName() != null && name.compareTo(element.getName()) == 0) {
+                return  element;
+            }
+        }
+        return null;
+    }
+
+    private String getMetaDataValue(List<ExtensionAttributeValue> extensionValues, String metaDataName) {
+        for(MetaDataType type : this.<MetaDataType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA)) {
+            if(type.getName() != null && type.getName().equals(metaDataName)) {
+                return type.getMetaValue();
+            }
+        }
+        return null;
+    }
+
+    @Test
     public void testSimpleDefinitionsUnmarshalling() throws Exception {
         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
         Definitions definitions = ((Definitions) unmarshaller.unmarshall(getTestJsonFile("empty.json"), "").getContents().get(0));
@@ -1027,5 +1065,48 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("Task_2", t2.getName());
     }
 
+    private <T> List<T> extractFeature(List<ExtensionAttributeValue> extensionValues, EStructuralFeature feature) {
+        List<T> result = new ArrayList<T>();
+        if(extensionValues != null) {
+            for (ExtensionAttributeValue extattrval : extensionValues) {
+                FeatureMap extensionElements = extattrval.getValue();
+                result.addAll((List<T>) extensionElements.get(feature, true));
+            }
+        }
+        return result;
+    }
 
+    private DataInput getDataInput(List<DataInput> inputs, String name) {
+        if(inputs != null) {
+            for(DataInput input : inputs) {
+                if(input.getName() != null && input.getName().equals(name)) {
+                    return input;
+                }
+            }
+        }
+        return null;
+    }
+
+    private DataOutput getDataOutput(List<DataOutput> outputs, String name) {
+        if(outputs != null) {
+            for(DataOutput output : outputs) {
+                if(output.getName() != null && output.getName().equals(name)) {
+                    return output;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void verifyAttribute(BaseElement element, String attributeName, Object attributeValue) {
+        Iterator<FeatureMap.Entry> iter = element.getAnyAttribute().iterator();
+        while (iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if (entry.getEStructuralFeature().getName().equals(attributeName) && entry.getValue().equals(attributeValue)) {
+                return;
+            }
+        }
+
+        fail(attributeName + " with value: " + attributeValue + " was not found");
+    }
 }
