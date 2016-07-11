@@ -66,61 +66,61 @@ public class ExpressionParser {
 
         //Operators for all types:
 
-        FunctionDef isNull = new FunctionDef("isNull");
+        FunctionDef isNull = new FunctionDef(Condition.IS_NULL);
         isNull.addParam("param1", Object.class);
         functionsRegistry.put(isNull.getName(), isNull);
 
         //Global operators:
 
-        FunctionDef equalsTo = new FunctionDef("equalsTo");
+        FunctionDef equalsTo = new FunctionDef(Condition.EQUALS_TO);
         equalsTo.addParam("param1", Object.class);
         equalsTo.addParam("param2", String.class);
         functionsRegistry.put(equalsTo.getName(), equalsTo);
 
         //Operators for String type:
 
-        FunctionDef isEmpty = new FunctionDef("isEmpty");
+        FunctionDef isEmpty = new FunctionDef(Condition.IS_EMPTY);
         isEmpty.addParam("param1", Object.class);
         functionsRegistry.put(isEmpty.getName(), isEmpty);
 
-        FunctionDef contains = new FunctionDef("contains");
+        FunctionDef contains = new FunctionDef(Condition.CONTAINS);
         contains.addParam("param1", Object.class);
         contains.addParam("param2", String.class);
         functionsRegistry.put(contains.getName(), contains);
 
-        FunctionDef startsWith = new FunctionDef("startsWith");
+        FunctionDef startsWith = new FunctionDef(Condition.STARTS_WITH);
         startsWith.addParam("param1", Object.class);
         startsWith.addParam("param2", String.class);
         functionsRegistry.put(startsWith.getName(), startsWith);
 
-        FunctionDef endsWith = new FunctionDef("endsWith");
+        FunctionDef endsWith = new FunctionDef(Condition.ENDS_WITH);
         endsWith.addParam("param1", Object.class);
         endsWith.addParam("param2", String.class);
         functionsRegistry.put(endsWith.getName(), endsWith);
 
         // Operators for Numeric types:
 
-        FunctionDef greaterThan = new FunctionDef("greaterThan");
+        FunctionDef greaterThan = new FunctionDef(Condition.GREATER_THAN);
         greaterThan.addParam("param1", Object.class);
         greaterThan.addParam("param2", String.class);
         functionsRegistry.put(greaterThan.getName(), greaterThan);
 
-        FunctionDef greaterOrEqualThan = new FunctionDef("greaterOrEqualThan");
+        FunctionDef greaterOrEqualThan = new FunctionDef(Condition.GREATER_OR_EQUAL_THAN);
         greaterOrEqualThan.addParam("param1", Object.class);
         greaterOrEqualThan.addParam("param2", String.class);
         functionsRegistry.put(greaterOrEqualThan.getName(), greaterOrEqualThan);
 
-        FunctionDef lessThan = new FunctionDef("lessThan");
+        FunctionDef lessThan = new FunctionDef(Condition.LESS_THAN);
         lessThan.addParam("param1", Object.class);
         lessThan.addParam("param2", String.class);
         functionsRegistry.put(lessThan.getName(), lessThan);
 
-        FunctionDef lessOrEqualThan = new FunctionDef("lessOrEqualThan");
+        FunctionDef lessOrEqualThan = new FunctionDef(Condition.LESS_OR_EQUAL_THAN);
         lessOrEqualThan.addParam("param1", Object.class);
         lessOrEqualThan.addParam("param2", String.class);
         functionsRegistry.put(lessOrEqualThan.getName(), lessOrEqualThan);
 
-        FunctionDef between = new FunctionDef("between");
+        FunctionDef between = new FunctionDef(Condition.BETWEEN);
         between.addParam("param1", Object.class);
         between.addParam("param2", String.class);
         between.addParam("param3", String.class);
@@ -128,12 +128,12 @@ public class ExpressionParser {
 
         // Operators for Boolean type:
 
-        FunctionDef isTrue = new FunctionDef("isTrue");
+        FunctionDef isTrue = new FunctionDef(Condition.IS_TRUE);
         isTrue.addParam("param1", Object.class);
         functionsRegistry.put(isTrue.getName(), isTrue);
 
 
-        FunctionDef isFalse = new FunctionDef("isFalse");
+        FunctionDef isFalse = new FunctionDef(Condition.IS_FALSE);
         isFalse.addParam("param1", Object.class);
         functionsRegistry.put(isFalse.getName(), isFalse);
 
@@ -193,7 +193,6 @@ public class ExpressionParser {
         //all parameters were consumed
         parseFunctionClose();
         parseSentenceClose();
-
 
        return conditionExpression;
     }
