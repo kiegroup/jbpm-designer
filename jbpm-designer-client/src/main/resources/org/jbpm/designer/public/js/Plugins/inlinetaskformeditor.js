@@ -75,7 +75,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                             params: {
                                 formtype: formType,
                                 action: 'load',
-                                taskname: options.tn,
+                                taskname: window.btoa(encodeURI(options.tn)),
                                 profile: ORYX.PROFILE,
                                 uuid :  window.btoa(encodeURI(ORYX.UUID))
                             }

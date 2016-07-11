@@ -16,6 +16,7 @@
 package org.jbpm.designer.web.server;
 
 import org.apache.commons.codec.binary.Base64;
+import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,8 +54,8 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	private static final String TASKFORM_FILE_EXTENSION = "ftl";
     private static final String FORMMODELER_FILE_EXTENSION = "form";
 	private static final String TASKFORM_NAME_EXTENSION = "-taskform";
-	private static final String ACTION_LOAD = "load";
-	private static final String ACTION_SAVE = "save";
+	protected static final String ACTION_LOAD = "load";
+	protected static final String ACTION_SAVE = "save";
 
     private IDiagramProfile profile;
     // this is here just for unit testing purpose
@@ -84,7 +85,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 		 String action = req.getParameter("action");
          String uuid = Utils.getUUID(req);
 	     String profileName = req.getParameter("profile");
-	     String taskName = req.getParameter("taskname");
+	     String taskName = UriUtils.decode(Utils.getEncodedParam(req, "taskname"));
 	     String taskFormValue = req.getParameter("tfvalue");
          String formType = req.getParameter("formtype");
 
