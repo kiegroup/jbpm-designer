@@ -1,94 +1,334 @@
 {
-    "resourceId": "userTask",
-    "properties": {
-        "name": "",
-        "documentation": "",
-        "auditing": "",
-        "monitoring": "",
-        "version": "",
-        "author": "",
-        "language": "English",
-        "namespaces": "",
-        "targetnamespace": "http://www.omg.org/bpmn20",
-        "expressionlanguage": "http://www.w3.org/1999/XPath",
-        "typelanguage": "http://www.w3.org/2001/XMLSchema",
-        "creationdate": "",
-        "modificationdate": ""
-    },
-    "stencil": {
-        "id": "BPMNDiagram"
-    },
-    "childShapes": [{
-        "resourceId": "oryx_5770641A-7585-4205-8E55-522B97E77D31",
-        "properties": {
-            "name": "ask user",
-            "documentation": "",
-            "auditing": "",
-            "monitoring": "",
-            "categories": "",
-            "startquantity": 1,
-            "completionquantity": 1,
-            "isforcompensation": "",
-            "assignments": "",
-            "callacitivity": "",
-            "tasktype": "User",
-            "implementation": "webService",
-            "resources": "",
-            "messageref": "",
-            "operationref": "",
-            "instantiate": "",
-            "script": "",
-            "script_language": "",
-            "bgcolor": "#b1c2d6",
-            "looptype": "None",
-            "testbefore": "",
-            "loopcondition": "",
-            "loopmaximum": "",
-            "loopcardinality": "",
-            "loopdatainput": "",
-            "loopdataoutput": "",
-            "inputdataitem": "",
-            "outputdataitem": "",
-            "behavior": "all",
-            "complexbehaviordefinition": "",
-            "completioncondition": "",
-            "onebehavioreventref:": "signal",
-            "nonebehavioreventref": "signal",
-            "properties": "",
-            "datainputset": "",
-            "dataoutputset": "",
-            "cost": ""
-        },
-        "stencil": {
-            "id": "Task"
-        },
-        "childShapes": [],
-        "outgoing": [],
-        "bounds": {
-            "lowerRight": {
-                "x": 397,
-                "y": 166
-            },
-            "upperLeft": {
-                "x": 297,
-                "y": 86
-            }
-        },
-        "dockers": []
-    }],
-    "bounds": {
-        "lowerRight": {
-            "x": 1485,
-            "y": 1050
-        },
-        "upperLeft": {
-            "x": 0,
-            "y": 0
+  "resourceId":"Definition",
+  "properties":{
+    "namespaces":"",
+    "name":"",
+    "expressionlanguage":"http://www.mvel.org/2.0",
+    "executable":"true",
+    "package":"org.jbpm",
+    "vardefs":"",
+    "customdescription":"",
+    "adhocprocess":"false",
+    "imports":"",
+    "globals":"",
+    "id":"project1.userTask",
+    "version":"1.0",
+    "timeunit":"min",
+    "currency":"",
+    "targetnamespace":"http://www.omg.org/bpmn20",
+    "typelanguage":"http://www.java.com/javaTypes",
+    "processn":"userTask",
+    "documentation":""
+  },
+  "stencil":{
+    "id":"BPMNDiagram"
+  },
+  "childShapes":[
+    {
+      "resourceId":"processStartEvent",
+      "properties":{
+        "name":"",
+        "documentation":"",
+        "isselectable":"true",
+        "invisid":"",
+        "dataoutputassociations":"",
+        "dataoutputassociationsview":"no data output",
+        "dataoutput":"",
+        "min":"5",
+        "max":"10",
+        "standarddeviation":"1",
+        "mean":"0",
+        "distributiontype":"uniform",
+        "probability":"100",
+        "isinterrupting":"true",
+        "bgcolor":"#9acd32",
+        "bordercolor":"#000000",
+        "fontcolor":"#000000",
+        "fontsize":"",
+        "origbgcolor":"#9acd32",
+        "origbordercolor":"#000000"
+      },
+      "stencil":{
+        "id":"StartNoneEvent"
+      },
+      "childShapes":[
+
+      ],
+      "outgoing":[
+        {
+          "resourceId":"_26751897-1744-446D-9115-CDD435079AD4"
         }
+      ],
+      "bounds":{
+        "lowerRight":{
+          "x":150,
+          "y":195
+        },
+        "upperLeft":{
+          "x":120,
+          "y":165
+        }
+      },
+      "dockers":[
+
+      ]
     },
-    "stencilset": {
-        "url": "/designer/stencilsets/bpmn2.0/bpmn2.0.json",
-        "namespace": "http://b3mn.org/stencilset/bpmn2.0#"
+    {
+      "resourceId":"_4EE60588-A876-4163-AB58-A00F1DC9A95B",
+      "properties":{
+        "name":"User Task One",
+        "documentation":"",
+        "isselectable":"true",
+        "invisid":0.8274585078310073,
+        "isforcompensation":"",
+        "assignments":"",
+        "assignmentsview":"0 data inputs, 0 data outputs",
+        "tasktype":"User",
+        "messageref":"",
+        "script":"",
+        "script_language":"java",
+        "bgcolor":"#fafad2",
+        "bordercolor":"#000000",
+        "fontcolor":"#000000",
+        "fontsize":"",
+        "datainputset":"",
+        "dataoutputset":"",
+        "origbgcolor":"#fafad2",
+        "nomorph":"true",
+        "origbordercolor":"#000000",
+        "ruleflowgroup":"",
+        "onentryactions":"",
+        "onexitactions":"",
+        "isasync":"false",
+        "taskname":"taskForAssignedActor",
+        "serviceoperation":"",
+        "serviceinterface":"",
+        "serviceimplementation":"Java",
+        "actors":"assignedActor",
+        "groupid":"assignedGroup",
+        "subject":"",
+        "description":"",
+        "content":"",
+        "reassignment":"",
+        "notifications":"",
+        "locale":"",
+        "createdby":"",
+        "skippable":"true",
+        "priority":"",
+        "multipleinstance":false,
+        "multipleinstancecollectioninput":"",
+        "multipleinstancecollectionoutput":"",
+        "multipleinstancedatainput":"",
+        "multipleinstancedataoutput":"",
+        "multipleinstancecompletioncondition":"",
+        "min":"5",
+        "max":"10",
+        "standarddeviation":"1",
+        "mean":"0",
+        "distributiontype":"uniform",
+        "quantity":"1",
+        "workinghours":"8",
+        "unitcost":"0"
+      },
+      "stencil":{
+        "id":"Task"
+      },
+      "childShapes":[
+
+      ],
+      "outgoing":[
+        {
+          "resourceId":"_59A2CA47-FFF8-4A1B-90B3-64B53EBCE9A6"
+        }
+      ],
+      "bounds":{
+        "lowerRight":{
+          "x":295,
+          "y":220
+        },
+        "upperLeft":{
+          "x":195,
+          "y":140
+        }
+      },
+      "dockers":[
+
+      ]
     },
-    "ssextensions": ["http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#"]
+    {
+      "resourceId":"_26751897-1744-446D-9115-CDD435079AD4",
+      "properties":{
+        "name":"",
+        "documentation":"",
+        "isselectable":"true",
+        "invisid":"",
+        "conditiontype":"None",
+        "conditionexpression":"",
+        "conditionexpressionlanguage":"java",
+        "priority":"",
+        "probability":"100",
+        "isimmediate":"false",
+        "showdiamondmarker":"",
+        "bgcolor":"#000000",
+        "origbgcolor":"#000000",
+        "bordercolor":"#000000",
+        "origbordercolor":"#000000",
+        "fontcolor":"#000000",
+        "fontsize":""
+      },
+      "stencil":{
+        "id":"SequenceFlow"
+      },
+      "childShapes":[
+
+      ],
+      "outgoing":[
+        {
+          "resourceId":"_4EE60588-A876-4163-AB58-A00F1DC9A95B"
+        }
+      ],
+      "bounds":{
+        "lowerRight":{
+          "x":194.15625,
+          "y":181
+        },
+        "upperLeft":{
+          "x":150.609375,
+          "y":179
+        }
+      },
+      "dockers":[
+        {
+          "x":15,
+          "y":15
+        },
+        {
+          "x":50,
+          "y":40
+        }
+      ],
+      "target":{
+        "resourceId":"_4EE60588-A876-4163-AB58-A00F1DC9A95B"
+      }
+    },
+    {
+      "resourceId":"_64DC92AA-B3EF-488F-982E-A21AB824EE4C",
+      "properties":{
+        "name":"",
+        "documentation":"",
+        "isselectable":"true",
+        "invisid":0.09410406630984469,
+        "eventdefinitions":"",
+        "datainputassociations":"",
+        "datainputassociationsview":"no data input",
+        "datainput":"",
+        "min":"5",
+        "max":"10",
+        "standarddeviation":"1",
+        "mean":"0",
+        "distributiontype":"uniform",
+        "bgcolor":"#ff6347",
+        "bordercolor":"#000000",
+        "fontcolor":"#000000",
+        "fontsize":"",
+        "origbgcolor":"#ff6347",
+        "origbordercolor":"#000000"
+      },
+      "stencil":{
+        "id":"EndNoneEvent"
+      },
+      "childShapes":[
+
+      ],
+      "outgoing":[
+
+      ],
+      "bounds":{
+        "lowerRight":{
+          "x":368,
+          "y":194
+        },
+        "upperLeft":{
+          "x":340,
+          "y":166
+        }
+      },
+      "dockers":[
+
+      ]
+    },
+    {
+      "resourceId":"_59A2CA47-FFF8-4A1B-90B3-64B53EBCE9A6",
+      "properties":{
+        "name":"",
+        "documentation":"",
+        "isselectable":"true",
+        "invisid":"",
+        "conditiontype":"None",
+        "conditionexpression":"",
+        "conditionexpressionlanguage":"java",
+        "priority":"",
+        "probability":"100",
+        "isimmediate":"false",
+        "showdiamondmarker":"",
+        "bgcolor":"#000000",
+        "origbgcolor":"#000000",
+        "bordercolor":"#000000",
+        "origbordercolor":"#000000",
+        "fontcolor":"#000000",
+        "fontsize":""
+      },
+      "stencil":{
+        "id":"SequenceFlow"
+      },
+      "childShapes":[
+
+      ],
+      "outgoing":[
+        {
+          "resourceId":"_64DC92AA-B3EF-488F-982E-A21AB824EE4C"
+        }
+      ],
+      "bounds":{
+        "lowerRight":{
+          "x":339.375,
+          "y":181
+        },
+        "upperLeft":{
+          "x":295.390625,
+          "y":179
+        }
+      },
+      "dockers":[
+        {
+          "x":50,
+          "y":40
+        },
+        {
+          "x":14,
+          "y":14
+        }
+      ],
+      "target":{
+        "resourceId":"_64DC92AA-B3EF-488F-982E-A21AB824EE4C"
+      }
+    }
+  ],
+  "bounds":{
+    "lowerRight":{
+      "x":3000,
+      "y":2000
+    },
+    "upperLeft":{
+      "x":0,
+      "y":0
+    }
+  },
+  "stencilset":{
+    "url":"/org.kie.workbench.KIEWebapp/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json",
+    "namespace":"http://b3mn.org/stencilset/bpmn2.0#"
+  },
+  "ssextensions":[
+
+  ]
 }
