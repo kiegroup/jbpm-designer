@@ -92,7 +92,7 @@ public class DefaultDesignerAssetService
     public static final String PROCESS_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
     "<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:bpsim=\"http://www.bpsim.org/schemas/1.0\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:drools=\"http://www.jboss.org/drools\" \n" +
         "id=\"Definition\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd\" expressionLanguage=\"http://www.mvel.org/2.0\" targetNamespace=\"http://www.omg.org/bpmn20\" typeLanguage=\"http://www.java.com/javaTypes\"> \n" +
-    "   <bpmn2:process id=\"${processid}\" drools:packageName=\"org.jbpm\" drools:version=\"1.0\" name=\"\" isExecutable=\"true\"> \n" +
+    "   <bpmn2:process id=\"${processid}\" drools:packageName=\"${packageName}\" drools:version=\"1.0\" name=\"\" isExecutable=\"true\"> \n" +
     "      <bpmn2:startEvent id=\"processStartEvent\" drools:bgcolor=\"#9acd32\" drools:selectable=\"true\" name=\"\"/> \n" +
     "   </bpmn2:process> \n" +
     "   <bpmndi:BPMNDiagram> \n" +
@@ -201,8 +201,11 @@ public class DefaultDesignerAssetService
         String location = Paths.convert( path ).getParent().toString();
         String name = path.getFileName();
         String processId = buildProcessId( location, name );
+        String packageName = buildPackageName(location, name);
 
-        String processContent = PROCESS_STUB.replaceAll( "\\$\\{processid\\}", processId.replaceAll("\\s", "") );
+
+        String processContent = PROCESS_STUB.replaceAll( "\\$\\{processid\\}", processId.replaceAll("\\s", "") )
+                                            .replaceAll("\\$\\{packageName\\}", packageName.replaceAll("\\s", ""));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder( name );
         builder.location( location ).content( processContent ).uniqueId( path.toURI() );
@@ -229,6 +232,21 @@ public class DefaultDesignerAssetService
         return location + "." + name;
     }
 
+    private String buildPackageName( String location, String name ) {
+        // replace file name in case it exists
+        String packageName = location.replaceFirst("/"+name, "")
+        // replace project and resources structure
+        .replaceFirst(".*/src/main/resources", "")
+        // replace  with . to form package name
+        .replaceAll("/", ".");
+        // lastly if there is . at the beginning just remove it
+        if (packageName.startsWith(".")) {
+            packageName = packageName.substring(1);
+        }
+
+        return packageName;
+    }
+
     @Override
     public void updateMetadata( final Path resource, final Metadata metadata ) {
         ioService.setAttributes( Paths.convert( resource ),
@@ -238,5 +256,9 @@ public class DefaultDesignerAssetService
     @Override
     protected DesignerContent constructContent(Path path, Overview overview) {
         return new DesignerContent(overview);
+    }
+
+    public void setRepository(Repository repository) {
+        this.repository = repository;
     }
 }

@@ -1,31 +1,24 @@
-package org.jbpm.designer.service;
+package org.jbpm.designer.server.service;
+
+import java.util.ArrayList;
+import java.util.List;
+import javax.enterprise.event.Event;
 
 import org.jbpm.designer.repository.RepositoryBaseTest;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
-import org.jbpm.designer.server.service.DefaultDesignerAssetService;
-import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.uberfire.mocks.EventSourceMock;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.enterprise.event.Event;
-import org.uberfire.mocks.EventSourceMock;
-
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class DesignerAssetServiceTest extends RepositoryBaseTest {
 
