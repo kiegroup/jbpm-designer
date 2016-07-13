@@ -1095,6 +1095,22 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(0, outputSet.getDataOutputRefs().size());
     }
 
+    @Test
+    public void testCallActivity() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("callActivity.json");
+        Process process = getRootProcess(definitions);
+        CallActivity callActivity = null;
+        for (FlowElement flowElement : process.getFlowElements()) {
+            if (flowElement instanceof CallActivity) {
+                callActivity = (CallActivity) flowElement;
+                break;
+            }
+        }
+        assertNotNull(callActivity);
+        assertEquals("callActivity", callActivity.getName());
+        assertEquals("abc.noCalledElementCallActivity", callActivity.getCalledElement());
+    }
+
     private FlowElement getFlowElement(List<FlowElement> elements, String name) {
         for(FlowElement element : elements) {
             if (element.getName() != null && name.compareTo(element.getName()) == 0) {
