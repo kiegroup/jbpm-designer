@@ -52,7 +52,9 @@ import org.slf4j.LoggerFactory;
 public class CalledElementServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static final Logger logger = LoggerFactory.getLogger(CalledElementServlet.class);
-	private ServletConfig config;
+
+
+    protected IDiagramProfile profile;
 
     @Inject
     private IDiagramProfileService _profileService = null;
@@ -63,19 +65,19 @@ public class CalledElementServlet extends HttpServlet {
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        this.config = config;
     }
 	
 	@Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String profileName = req.getParameter("profile");
-        String uuid = Utils.getUUID(req);
+        String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String processPackage = req.getParameter("ppackage");
         String processId = req.getParameter("pid");
         String action = req.getParameter("action");
         
-        IDiagramProfile profile = _profileService.findProfile(req, profileName);
+        if(profile == null) {
+            profile = _profileService.findProfile(req, profileName);
+        }
         if(action != null && action.equals("openprocessintab")) {
         	String retValue = "";
         	List<String> allPackageNames = ServletUtil.getPackageNamesFromRepository(profile);

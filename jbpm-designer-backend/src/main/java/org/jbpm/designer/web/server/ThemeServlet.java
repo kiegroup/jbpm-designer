@@ -33,7 +33,6 @@ import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.json.JSONObject;
 
 /**
@@ -49,26 +48,27 @@ public class ThemeServlet extends HttpServlet {
     public static final String THEME_EXT = ".json";
 	private static final String DEFAULT_THEME = "jBPM";
 	private static final Logger _logger = LoggerFactory.getLogger(ThemeServlet.class);
-	private ServletConfig config;
-	private String themeInfo;
 
-    @Inject
+	protected IDiagramProfile profile;
+
+	@Inject
     private IDiagramProfileService _profileService = null;
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        this.config = config;
     }
 	
 	@Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-		String profileName = req.getParameter("profile");
+		String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
 		String action = req.getParameter("action");
         String uuid = Utils.getUUID(req);
 
-		IDiagramProfile profile = _profileService.findProfile(req, profileName);
+		if(profile == null) {
+			profile = _profileService.findProfile(req, profileName);
+		}
 
 		if(action != null && action.equals(ACTION_GETTHEMENAMES)) {
 			String themeStr = getThemeNames(profile, getServletContext(), uuid);

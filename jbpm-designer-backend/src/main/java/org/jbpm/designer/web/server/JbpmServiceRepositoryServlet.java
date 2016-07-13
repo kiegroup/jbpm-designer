@@ -40,7 +40,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +75,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
         String uuid = Utils.getUUID(req);
-		String profileName = req.getParameter("profile");
+		String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
 		String action = req.getParameter("action");
 		String assetsToInstall = req.getParameter("asset");
 		String categoryToInstall = req.getParameter("category");

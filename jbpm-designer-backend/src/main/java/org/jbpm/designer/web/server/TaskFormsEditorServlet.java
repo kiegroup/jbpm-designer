@@ -51,7 +51,6 @@ import java.io.UnsupportedEncodingException;
 public class TaskFormsEditorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger _logger = LoggerFactory.getLogger(TaskFormsEditorServlet.class);
-	private static final String TASKFORM_FILE_EXTENSION = "ftl";
     private static final String FORMMODELER_FILE_EXTENSION = "form";
 	private static final String TASKFORM_NAME_EXTENSION = "-taskform";
 	protected static final String ACTION_LOAD = "load";
@@ -84,7 +83,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		 String action = req.getParameter("action");
          String uuid = Utils.getUUID(req);
-	     String profileName = req.getParameter("profile");
+	     String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
 	     String taskName = UriUtils.decode(Utils.getEncodedParam(req, "taskname"));
 	     String taskFormValue = req.getParameter("tfvalue");
          String formType = req.getParameter("formtype");

@@ -15,12 +15,11 @@
 
 package org.jbpm.designer.web.server.menu;
 
+import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.designer.web.profile.impl.ProfileServiceImpl;
 import org.jdom.Document;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
@@ -39,6 +38,9 @@ import java.util.StringTokenizer;
 
 public class MenuServlet extends HttpServlet {
     private Document _doc = null;
+
+    protected IDiagramProfile profile;
+
     @Inject
     private IDiagramProfileService _profileService = null;
     private static final Logger _logger = LoggerFactory.getLogger(MenuServlet.class);
@@ -58,14 +60,10 @@ public class MenuServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Document doc = (Document) _doc.clone();
-        String profileName = request.getParameter("profile");
-        if(profileName == null || profileName.length() < 1) {
-            // default to jbpm
-            profileName = "jbpm";
+        String profileName = Utils.getDefaultProfileName(request.getParameter("profile"));
+        if(profile == null) {
+            profile = _profileService.findProfile(request, profileName);
         }
-        IDiagramProfile profile = _profileService.findProfile(
-                request, profileName);
         if (profile == null) {
             _logger.error("No profile with the name " + profileName
                     + " was registered");
@@ -73,6 +71,7 @@ public class MenuServlet extends HttpServlet {
                     "No profile with the name " + profileName +
                             " was registered");
         }
+        Document doc = (Document) _doc.clone();
         XMLOutputter outputter = new XMLOutputter();
         Format format = Format.getPrettyFormat();
         format.setExpandEmptyElements(true);
