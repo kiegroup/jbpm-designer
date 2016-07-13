@@ -74,7 +74,7 @@ public class AssetServiceServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        String profileName = req.getParameter("profile");
+        String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String action = req.getParameter("action");
         String preprocessingData = req.getParameter("pp");
         String assetId = Utils.getEncodedParam(req, "assetid");

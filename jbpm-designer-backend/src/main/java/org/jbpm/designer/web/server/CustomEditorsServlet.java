@@ -61,7 +61,7 @@ public class CustomEditorsServlet extends HttpServlet {
 	@Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-		String profileName = req.getParameter("profile");
+		String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String uuid = Utils.getUUID(req);
 
         if (isExpressionEditorRequest(req)) {

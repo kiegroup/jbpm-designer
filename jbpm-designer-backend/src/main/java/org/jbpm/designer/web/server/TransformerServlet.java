@@ -101,7 +101,6 @@ public class TransformerServlet extends HttpServlet {
     private static final String JSON_TO_BPMN2 = "json2bpmn2";
     private static final String HTML_TO_PDF = "html2pdf";
     private static final String RESPACTION_SHOWURL = "showurl";
-    private static final String RESPACTION_SHOWEMBEDDABLE = "showembeddable";
 
     private static final String SVG_WIDTH_PARAM = "svgwidth";
     private static final String SVG_HEIGHT_PARAM = "svgheight";
@@ -136,7 +135,7 @@ public class TransformerServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         String formattedSvgEncoded = req.getParameter("fsvg");
         String uuid = Utils.getUUID(req);
-        String profileName = req.getParameter("profile");
+        String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String transformto = req.getParameter("transformto");
         String jpdl = req.getParameter("jpdl");
         String gpd = req.getParameter("gpd");

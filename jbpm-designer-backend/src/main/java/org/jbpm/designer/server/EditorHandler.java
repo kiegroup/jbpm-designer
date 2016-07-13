@@ -136,6 +136,8 @@ public class EditorHandler extends HttpServlet {
 
     private String _doc;
 
+    private IDiagramProfile profile;
+
     /**
      * The profile service, a global registry to get the
      * profiles.
@@ -215,7 +217,7 @@ public class EditorHandler extends HttpServlet {
     public void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws ServletException, IOException {
-        String profileName = request.getParameter("profile");
+        String profileName = Utils.getDefaultProfileName(request.getParameter("profile"));
         String uuid = Utils.getUUID(request);
 
         String editorID = request.getParameter("editorid");
@@ -243,12 +245,10 @@ public class EditorHandler extends HttpServlet {
             viewLocked = "false";
         }
 
-
-        if (profileName == null || profileName.length() < 1) {
-            profileName = "jbpm";
+        if(profile == null) {
+            profile = _profileService.findProfile(request, profileName);
         }
-        IDiagramProfile profile = _profileService.findProfile(
-                request, profileName);
+
         if (profile == null) {
             _logger.error("No profile with the name " + profileName
                     + " was registered");
@@ -476,5 +476,9 @@ public class EditorHandler extends HttpServlet {
 
     public boolean doShowPDFDoc(ServletConfig config) {
         return Boolean.parseBoolean(System.getProperty(SHOW_PDF_DOC) == null ? config.getInitParameter(SHOW_PDF_DOC) : System.getProperty(SHOW_PDF_DOC));
+    }
+
+    public void setProfile(IDiagramProfile profile) {
+        this.profile = profile;
     }
 }

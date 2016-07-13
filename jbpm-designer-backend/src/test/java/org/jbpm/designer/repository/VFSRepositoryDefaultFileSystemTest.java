@@ -35,23 +35,12 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
     @Before
     public void setup() {
-        new File(REPOSITORY_ROOT).mkdir();
-        profile = new JbpmProfileImpl();
-
-        producer = new VFSFileSystemProducer();
-        HashMap<String, String> env = new HashMap<String, String>();
-        env.put("repository.root", VFS_REPOSITORY_ROOT);
-        env.put("repository.globaldir", "/global");
-        descriptor = producer.produceFileSystem(env);
+        super.setup();
     }
 
     @After
     public void teardown() {
-        File repo = new File(REPOSITORY_ROOT);
-        if(repo.exists()) {
-            deleteFiles(repo);
-        }
-        repo.delete();
+        super.teardown();
     }
     
     @Test
