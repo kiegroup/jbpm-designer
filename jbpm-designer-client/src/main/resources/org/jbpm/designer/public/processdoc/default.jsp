@@ -112,8 +112,8 @@
             <h3 id="{{this.0.group}}" class="list-group-item-heading">{{this.0.groupdispname}}</h3>
             <p class="list-group-item-text">
                 {{#each this}}
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><img src="{{icon}}"> <b>Name:</b> {{nodename}} <b>Type:</b> {{dispname}}</div>
+                    <div id="{{id}}" class="panel panel-default">
+                        <div class="panel-heading"><img src="{{icon}}"> <b>Name:</b> {{nodename}} <b>Type:</b> {{dispname}}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-secondary btn-sm" onclick="showElementInModel( '{{id}}' );return false;">View in Model</button></div>
                         <table class="table table-inverse">
                             <thead>
                             <tr>

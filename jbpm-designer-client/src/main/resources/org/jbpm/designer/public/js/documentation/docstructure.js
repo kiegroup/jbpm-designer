@@ -729,6 +729,17 @@ function displayProcessImg() {
     }
 }
 
+function showElementInModel(eleID) {
+    // raise event to focus on specific node id
+    parent.ORYX.EDITOR._pluginFacade.raiseEvent({
+        type 		: parent.ORYX.CONFIG.EVENT_DOCELEMENT_TO_MODEL,
+        eleid		: eleID
+    });
+
+    // switch to modeling tab
+    parent.Ext.getCmp('maintabs').setActiveTab(0);
+}
+
 function showAsPDF() {
     var transformval = 'html2pdf';
     $("table").attr("border", "1");
