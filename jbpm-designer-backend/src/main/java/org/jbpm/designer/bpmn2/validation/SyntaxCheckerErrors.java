@@ -1,7 +1,6 @@
 package org.jbpm.designer.bpmn2.validation;
 
 public class SyntaxCheckerErrors {
-
     public static final String AN_EDGE_MUST_HAVE_A_SOURCE_NODE = "An Edge must have a source node.";
     public static final String AN_EDGE_MUST_HAVE_A_TARGET_NODE = "An Edge must have a target node.";
     public static final String AT_LEAST_ONE_OUTGOING_PROBABILITY_VALUE_100 = "At least one outgoing connection should have probability equal to 100.";
@@ -36,6 +35,7 @@ public class SyntaxCheckerErrors {
     public static final String IT_SHOULD_BE_DIVERGING = " It should be 'Diverging'.";
     public static final String NODE_NO_INCOMING_CONNECTIONS = "Node has no incoming connections";
     public static final String NODE_NO_OUTGOING_CONNECTIONS = "Node has no outgoing connections";
+    public static final String NOT_VALID_DEFAULT_GATE = "Default gate must be one of outgoing flows.";
     public static final String PACKAGE_NAME_CONTAINS_INVALID_CHARACTERS = "Package name contains invalid characters.";
     public static final String PARALLEL_GATEWAY = "Parallel Gateway.";
     public static final String PROBABILITY_VALUE_MUST_BE_POSITIVE = "Probability value must be positive.";
@@ -61,5 +61,4 @@ public class SyntaxCheckerErrors {
     public static final String processVariableContainsWhiteSpaces(String variableId) {
         return "Process variable \"" + variableId + "\" contains white spaces.";
     }
-
 }

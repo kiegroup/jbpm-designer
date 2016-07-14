@@ -446,6 +446,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 					SyntaxCheckerErrors.EXCLUSING_GATEWAY +
 					SyntaxCheckerErrors.IT_SHOULD_BE_CONVERGING_OR_DIVERGING));
 			}
+			checkDefaultGate(gateway, ((ExclusiveGateway) gateway).getDefault());
 		}
 		if(gateway instanceof EventBasedGateway) {
 			if(gateway.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue()) {
@@ -470,6 +471,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 					SyntaxCheckerErrors.INCLUSIVE_GATEWAY +
 					SyntaxCheckerErrors.IT_SHOULD_BE_DIVERGING));
 			}
+			checkDefaultGate(gateway, ((InclusiveGateway) gateway).getDefault());
 		}
 		if(gateway instanceof ComplexGateway) {
 			if(gateway.getGatewayDirection().getValue() != GatewayDirection.DIVERGING.getValue() && gateway.getGatewayDirection().getValue() != GatewayDirection.CONVERGING.getValue()) {
@@ -504,7 +506,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 		List<SequenceFlow> outgoingGwSequenceFlows = gateway.getOutgoing();
 		if(outgoingGwSequenceFlows != null && outgoingGwSequenceFlows.size() > 0) {
 			double probabilitySum = 0;
-			boolean defaultOutgoingFlow = false;
+			boolean defaultSimulationOutgoingFlow = false;
 			for(SequenceFlow sf : outgoingGwSequenceFlows) {
 				for(ElementParameters eleType : getElementParameters(defaultScenario, sf)) {
 					if (eleType.getControlParameters() != null && eleType.getControlParameters().getProbability() != null) {
@@ -513,7 +515,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 							addError(sf, new ValidationSyntaxError(sf, SIMULATION_TYPE, SyntaxCheckerErrors.PROBABILITY_VALUE_MUST_BE_POSITIVE));
 						} else {
 							if (valType.getValue() == 100) {
-								defaultOutgoingFlow = true;
+								defaultSimulationOutgoingFlow = true;
 							}
 							probabilitySum += valType.getValue();
 						}
@@ -526,7 +528,7 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 
 			if(!(gateway instanceof ParallelGateway)) {
 				if(gateway instanceof InclusiveGateway) {
-					if(!defaultOutgoingFlow) {
+					if(!defaultSimulationOutgoingFlow) {
 						addError(gateway, new ValidationSyntaxError(gateway, SIMULATION_TYPE, SyntaxCheckerErrors.AT_LEAST_ONE_OUTGOING_PROBABILITY_VALUE_100));
 					}
 				} else {
@@ -606,6 +608,12 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			if(((CompensateEventDefinition) ed).getActivityRef() == null) {
 				addError(event, new ValidationSyntaxError(event, BPMN2_TYPE, prefix + SyntaxCheckerErrors.HAS_NO_ACTIVITYREF));
 			}
+		}
+	}
+
+	private void checkDefaultGate(Gateway gateway, SequenceFlow defaultSequenceFlow) {
+		if(defaultSequenceFlow != null && (gateway.getOutgoing() != null && !gateway.getOutgoing().contains(defaultSequenceFlow))) {
+			addError(gateway, new ValidationSyntaxError(gateway, BPMN2_TYPE, SyntaxCheckerErrors.NOT_VALID_DEFAULT_GATE));
 		}
 	}
 
