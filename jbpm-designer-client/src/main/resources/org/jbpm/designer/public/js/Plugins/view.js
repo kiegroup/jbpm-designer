@@ -54,6 +54,8 @@ ORYX.Plugins.View = {
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DRAGDOCKER_MOVE_FINISHED, this.refreshCanvasForIE.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_RESIZE_END, this.refreshCanvasForIE.bind(this));
 
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DOCELEMENT_TO_MODEL, this.showDocElementInModel.bind(this));
+
         //Standard Values
         this.zoomLevel = 1.0;
         this.maxFitToScreenLevel=1.5;
@@ -2181,6 +2183,35 @@ ORYX.Plugins.View = {
            //this.facade.getCanvas().update();
            //this.facade.updateSelection();
 
+        }
+    },
+
+    showDocElementInModel : function( options ) {
+        this.shapeFromDoc = undefined;
+        ORYX.EDITOR._canvas.getChildren().each((function(child) {
+            this.findShapeWithId(child, options.eleid);
+        }).bind(this));
+
+        if(this.shapeFromDoc !== undefined) {
+            // set selection
+            this.facade.setSelection([this.shapeFromDoc]);
+            this.facade.getCanvas().update();
+            this.facade.updateSelection();
+        }
+    },
+
+    findShapeWithId : function(shape, nodeid) {
+        if(shape instanceof ORYX.Core.Node) {
+            if(shape.resourceId == nodeid) {
+                this.shapeFromDoc = shape;
+            }
+        }
+        if(shape.getChildren().size() > 0) {
+            for (var i = 0; i < shape.getChildren().size(); i++) {
+                if(shape.getChildren()[i] instanceof ORYX.Core.Node) {
+                    this.findShapeWithId(shape.getChildren()[i], nodeid);
+                }
+            }
         }
     },
 
