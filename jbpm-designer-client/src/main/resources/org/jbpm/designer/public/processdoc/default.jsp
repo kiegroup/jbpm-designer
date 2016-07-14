@@ -336,12 +336,16 @@
                         if(nextPart.indexOf(":") > 0) {
                             var innerParts = nextPart.split(":");
                             if(innerParts.length == 2) {
-                                processVarData['processvarsglobals'].push({"name":innerParts[0],"type":innerParts[1],"kpi":"false","count":pcount});
+                                if(innerParts[1] != "false" && innerParts[1] != "true") {
+                                    processVarData['processvarsglobals'].push({"name":innerParts[0],"type":innerParts[1],"kpi":"false","count":pcount});
+                                } else {
+                                    processVarData['processvarsglobals'].push({"name":innerParts[0],"type":"no defined type","kpi":innerParts[1],"count":pcount});
+                                }
                             } else if(innerParts.length == 3) {
                                 processVarData['processvarsglobals'].push({"name":innerParts[0],"type":innerParts[1],"kpi":innerParts[2],"count":pcount});
                             }
                         } else {
-                            processVarData['processvarsglobals'].push({"name":nextPart,"type":"java.lang.String","kpi":"false","count":pcount});
+                            processVarData['processvarsglobals'].push({"name":nextPart,"type":"no defined type","kpi":"false","count":pcount});
                         }
                         pcount++;
                     }
@@ -350,7 +354,7 @@
 
             $("#processvarcontent").html(processVarTemplate(processVarData));
         } else {
-            $("#processvarcontent").html("No Process Variables present");;
+            $("#processvarcontent").html("No Process Variables present");
         }
 
         return pcount-1;
