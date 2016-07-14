@@ -578,7 +578,11 @@ function parsePropertyValue(propname, propvalue) {
             var nextPart = propParts[i];
             if(nextPart.indexOf(":") > 0) {
                 var innerParts = nextPart.split(":");
-                retVal += innerParts[0] +"(" + innerParts[1] + ")\n";
+                if(innerParts[1] != "false" && innerParts[1] != "true") {
+                    retVal += innerParts[0] + "(" + innerParts[1] + ")\n";
+                } else {
+                    retVal += innerParts[0] + "(no defined type)\n";
+                }
             } else {
                 if(nextPart.trim().length > 0) {
                     retVal += nextPart + "(no defined type)\n";
