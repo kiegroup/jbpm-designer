@@ -2201,14 +2201,14 @@ ORYX.Plugins.View = {
     },
 
     findShapeWithId : function(shape, nodeid) {
-        if(shape instanceof ORYX.Core.Node) {
+        if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
             if(shape.resourceId == nodeid) {
                 this.shapeFromDoc = shape;
             }
         }
         if(shape.getChildren().size() > 0) {
             for (var i = 0; i < shape.getChildren().size(); i++) {
-                if(shape.getChildren()[i] instanceof ORYX.Core.Node) {
+                if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
                     this.findShapeWithId(shape.getChildren()[i], nodeid);
                 }
             }
