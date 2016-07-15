@@ -406,7 +406,7 @@ var elementDataInfo = {
         "dispname": "Sequence Flow",
         "groupicon": "stencilsets/bpmn2.0jbpm/icons/connector/sequenceflow.png",
         "icon": "stencilsets/bpmn2.0jbpm/icons/connector/sequenceflow.png",
-        "properties": "name,documentation,priority"
+        "properties": "name,documentation,priority,conditionexpression"
     },
     "Association_Undirected": {
         "group": "ConnectingObjects",
@@ -455,7 +455,8 @@ var propertyNameMappings = {
     "isinterrupting": "Is Interrupting",
     "waitforcompletion" : "Wait for completion",
     "eventtype": "Event Type",
-    "groupid": "Groups"
+    "groupid": "Groups",
+    "conditionexpression":"Condition Expression"
 
 };
 
@@ -551,15 +552,23 @@ function addElement(element, myElementGroups) {
             });
         }
 
+        var showInDocumentation = true;
+        if(elementInfoDetails["group"] == "ConnectingObjects") {
+            if(!element.properties.name.length && !element.properties.documentation.length && !element.properties.conditionexpression.length) {
+                showInDocumentation = false;
+            }
+        }
+
         myElementGroups[elementInfoDetails.group].push({
-            "id":element.resourceId,
-            "group":elementInfoDetails["group"],
-            "groupdispname":elementInfoDetails["groupdispname"],
-            "dispname":elementInfoDetails["dispname"],
-            "groupicon":ctx + elementInfoDetails["groupicon"],
-            "icon":ctx + elementInfoDetails["icon"],
-            "properties":propsArray,
-            "nodename":nodeName.trim().length > 0 ? nodeName : "(Not Named)"
+            "id": element.resourceId,
+            "group": elementInfoDetails["group"],
+            "groupdispname": elementInfoDetails["groupdispname"],
+            "dispname": elementInfoDetails["dispname"],
+            "groupicon": ctx + elementInfoDetails["groupicon"],
+            "icon": ctx + elementInfoDetails["icon"],
+            "properties": propsArray,
+            "nodename": nodeName.trim().length > 0 ? nodeName : "(Not Named)",
+            "showindocumentation": showInDocumentation
         });
     }
 }
