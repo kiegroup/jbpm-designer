@@ -209,6 +209,63 @@ public class BPMN2SyntaxCheckerTest {
     }
 
     @Test
+    public void testScriptTaskNoScriptNoLanguage() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("scriptTaskNoScriptNoLanguage.bpmn2");
+        JSONObject task = loader.getChildByName(process, "scriptTask");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+        String taskId = task.getString("resourceId");
+        assertEquals(2, errors.get(taskId).size());
+        assertEquals(SyntaxCheckerErrors.SCRIPT_TASK_HAS_NO_SCRIPT, errors.get(taskId).get(0).getError());
+        assertEquals(SyntaxCheckerErrors.SCRIPT_TASK_HAS_NO_SCRIPT_FORMAT, errors.get(taskId).get(1).getError());
+    }
+
+    @Test
+    public void testScriptTaskNoScript() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("scriptTaskNoScript.bpmn2");
+        JSONObject task = loader.getChildByName(process, "scriptTask");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+        String taskId = task.getString("resourceId");
+        assertEquals(1, errors.get(taskId).size());
+        assertEquals(SyntaxCheckerErrors.SCRIPT_TASK_HAS_NO_SCRIPT, errors.get(taskId).get(0).getError());
+    }
+
+    @Test
+    public void testScriptTaskNoLanguage() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("scriptTaskNoLanguage.bpmn2");
+        JSONObject task = loader.getChildByName(process, "scriptTask");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertTrue(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+        String taskId = task.getString("resourceId");
+        assertEquals(1, errors.get(taskId).size());
+        assertEquals(SyntaxCheckerErrors.SCRIPT_TASK_HAS_NO_SCRIPT_FORMAT, errors.get(taskId).get(0).getError());
+    }
+
+    @Test
+    public void testScriptTask() throws Exception {
+        loader.loadProcessFromXml("scriptTask.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        assertFalse(syntaxChecker.errorsFound());
+        errors  = syntaxChecker.getErrors();
+        assertEquals(0, errors.size());
+    }
+
+    @Test
     public void testIsCompensatingFlowNodeInSubprocessForTextAnnotation() throws Exception {
         BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker("", "", null);
 
