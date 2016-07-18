@@ -55,6 +55,10 @@
   <inherits name="org.jbpm.formModeler.editor.FormModelerEditorClient"/>
   <inherits name="org.jbpm.formModeler.renderer.FormRendererClient"/>
 
+  <!-- kie server -->
+  <inherits name="org.kie.workbench.common.screens.server.management.ServerManagementAPI"/>
+  <inherits name="org.kie.workbench.common.screens.server.management.ServerManagementClient"/>
+
   <!-- Specify the application specific style sheet. -->
   <stylesheet src='css/uberfire-showcase.css'/>
 
