@@ -865,34 +865,6 @@ public class Bpmn2UnmarshallingTestCase {
     }
 
     @Test
-    public void testDefaultInterfaceForServiceTask() throws Exception {
-        Process process = getRootProcess(loader.loadProcessFromJson("defaultServiceTask.json"));
-        assertTrue(process.getFlowElements().get(0) instanceof ServiceTask);
-        ServiceTask serviceTask = (ServiceTask) process.getFlowElements().get(0);
-        String serviceImplementation = null;
-        String serviceInterface = null;
-        String serviceOperation = null;
-
-        Iterator<FeatureMap.Entry> iter = serviceTask.getAnyAttribute().iterator();
-        while (iter.hasNext()) {
-            FeatureMap.Entry entry = iter.next();
-            if (entry.getEStructuralFeature().getName().equals("serviceimplementation")) {
-                serviceImplementation = (String) entry.getValue();
-            }
-            if (entry.getEStructuralFeature().getName().equals("serviceoperation")) {
-                serviceOperation = (String) entry.getValue();
-            }
-            if (entry.getEStructuralFeature().getName().equals("serviceinterface")) {
-                serviceInterface = (String) entry.getValue();
-            }
-        }
-
-        assertEquals(serviceImplementation, "Java");
-        assertNull(serviceInterface);
-        assertNull(serviceOperation);
-    }
-
-    @Test
     public void testDefaultMessageRefsCombined() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("defaultMessagesCombined.json");
         Process process = getRootProcess(definitions);
@@ -1100,6 +1072,27 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("abc.noCalledElementCallActivity", callActivity.getCalledElement());
     }
 
+
+    @Test
+    public void testDefaultInterfaceForServiceTask() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("defaultServiceTask.json");
+        Process process = getRootProcess(definitions);
+        assertTrue(process.getFlowElements().get(0) instanceof ServiceTask);
+        ServiceTask serviceTask = (ServiceTask) process.getFlowElements().get(0);
+        verifyServiceTask(serviceTask, "Java", null, null);
+    }
+
+    @Test
+    public void testServiceTaskInterfaceAndOperation() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("serviceTaskInterfaceAndOperation.json");
+        Process process = getRootProcess(definitions);
+        FlowElement element = getFlowElement(process.getFlowElements(), "Send PO");
+        assertTrue(element instanceof ServiceTask);
+        ServiceTask serviceTask = (ServiceTask) element;
+        verifyServiceTask(serviceTask, "Java", "sendInterface", "sendOperation");
+    }
+
+
     private FlowElement getFlowElement(List<FlowElement> elements, String name) {
         for(FlowElement element : elements) {
             if (element.getName() != null && name.compareTo(element.getName()) == 0) {
@@ -1162,7 +1155,7 @@ public class Bpmn2UnmarshallingTestCase {
 
         fail(attributeName + " with value: " + attributeValue + " was not found");
     }
-
+    
     private String getOnEntryScript(List<ExtensionAttributeValue> extensionValues) {
         for(OnEntryScriptType type : this.<OnEntryScriptType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT)) {
             return type.getScript();
@@ -1171,9 +1164,36 @@ public class Bpmn2UnmarshallingTestCase {
     }
 
     private String getOnExitScript(List<ExtensionAttributeValue> extensionValues) {
-        for(OnExitScriptType type : this.<OnExitScriptType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT)) {
+        for (OnExitScriptType type : this.<OnExitScriptType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT)) {
             return type.getScript();
         }
         return null;
+    }
+
+    private void verifyServiceTask(ServiceTask serviceTask,
+                                   String serviceImplementation,
+                                   String serviceInterface,
+                                   String serviceOperation) {
+        String foundServiceImplementation = null;
+        String foundServiceInterface = null;
+        String foundServiceOperation = null;
+
+        Iterator<FeatureMap.Entry> iter = serviceTask.getAnyAttribute().iterator();
+        while (iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if (entry.getEStructuralFeature().getName().equals("serviceimplementation")) {
+                foundServiceImplementation = (String) entry.getValue();
+            }
+            if (entry.getEStructuralFeature().getName().equals("serviceoperation")) {
+                foundServiceOperation = (String) entry.getValue();
+            }
+            if (entry.getEStructuralFeature().getName().equals("serviceinterface")) {
+                foundServiceInterface = (String) entry.getValue();
+            }
+        }
+
+        assertEquals(serviceImplementation, foundServiceImplementation);
+        assertEquals(serviceInterface, foundServiceInterface);
+        assertEquals(serviceOperation, foundServiceOperation);
     }
 }
