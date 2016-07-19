@@ -107,11 +107,11 @@
     <div class="list-group">
         {{#each this}}
         {{#if this.length}}
-        {{#isnt this.0.groupdispname "Connectors"}}
         <span class="list-group-item">
             <h3 id="{{this.0.group}}" class="list-group-item-heading">{{this.0.groupdispname}}</h3>
             <p class="list-group-item-text">
                 {{#each this}}
+                {{#if this.showindocumentation}}
                     <div id="{{id}}" class="panel panel-default">
                         <div class="panel-heading"><img src="{{icon}}"> <b>Name:</b> {{nodename}} <b>Type:</b> {{dispname}}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-secondary btn-sm" onclick="showElementInModel( '{{id}}' );return false;">View in Model</button></div>
                         <table class="table table-inverse">
@@ -131,10 +131,10 @@
                             </tbody>
                         </table>
                     </div>
+                {{/if}}
                 {{/each}}
             </p>
         </span>
-        {{/isnt}}
         {{/if}}
         {{/each}}
     </div>
