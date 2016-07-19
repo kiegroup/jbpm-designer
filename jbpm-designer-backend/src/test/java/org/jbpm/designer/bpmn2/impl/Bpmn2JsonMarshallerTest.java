@@ -306,6 +306,7 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("", properties.getString("serviceoperation"));
     }
 
+    @Test
     public void testSubprocessTaskAssignments() throws Exception {
         JSONObject process = loader.loadProcessFromXml("subprocessTaskAssignments.bpmn2");
         JSONObject subprocess = loader.getChildByName(process, "Embedded subprocess");

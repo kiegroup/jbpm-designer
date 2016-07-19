@@ -139,14 +139,14 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("<![CDATA[System.out.println(\"exit\");]]>", getOnExitScript(scriptTask.getExtensionValues()));
     }
 
-    //@Test
-    // removing until we start supporting global tasks
-    public void testBusinessRuleTaskUnmarshalling() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("businessRuleTask.json");
-        assertTrue(definitions.getRootElements().size() == 1);
-        GlobalBusinessRuleTask task = (GlobalBusinessRuleTask) definitions.getRootElements().get(0);
-        assertEquals("call business rule", task.getName());
-        definitions.eResource().save(System.out, Collections.emptyMap());
+    @Test
+    public void testBusinessRuleTask() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("businessRule.json");
+        Process process = getRootProcess(definitions);
+        FlowElement task = getFlowElement(process.getFlowElements(), "businessRuleTask");
+        assertTrue(task instanceof BusinessRuleTask);
+        BusinessRuleTask ruleTask = (BusinessRuleTask) task;
+        verifyAttribute(ruleTask, "ruleFlowGroup", "simpleGroup");
     }
 
     //@Test
