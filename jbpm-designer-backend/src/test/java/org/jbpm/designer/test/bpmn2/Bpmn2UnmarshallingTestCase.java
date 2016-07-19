@@ -1092,6 +1092,21 @@ public class Bpmn2UnmarshallingTestCase {
         verifyServiceTask(serviceTask, "Java", "sendInterface", "sendOperation");
     }
 
+    @Test
+    public void testSubprocessTaskAssignemtns() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("subprocessTaskAssignments.json");
+        Process process = getRootProcess(definitions);
+        FlowElement subprocess = getFlowElement(process.getFlowElements(), "Embedded subprocess");
+        assertTrue(subprocess instanceof SubProcess);
+        FlowElement element = getFlowElement(((SubProcess)subprocess).getFlowElements(), "UserTask");
+        assertTrue(element instanceof UserTask);
+        UserTask userTask = (UserTask) element;
+        InputOutputSpecification specification = userTask.getIoSpecification();
+        DataInput sInput = getDataInput(specification.getDataInputs(), "sInput");
+        DataOutput iOutput = getDataOutput(specification.getDataOutputs(), "iOutput");
+        verifyAttribute(sInput, "dtype", "String");
+        verifyAttribute(iOutput, "dtype", "Integer");
+    }
 
     private FlowElement getFlowElement(List<FlowElement> elements, String name) {
         for(FlowElement element : elements) {
