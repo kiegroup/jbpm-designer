@@ -313,5 +313,50 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject properties = userTask.getJSONObject("properties");
         assertTrue(properties.getString("datainputset").contains("sInput:String"));
         assertTrue(properties.getString("dataoutputset").contains("iOutput:Integer"));
+        JSONObject subprocessProperties = subprocess.getJSONObject("properties");
+        assertEquals(true, subprocessProperties.getBoolean("isasync"));
+    }
+
+    @Test
+    public void testEndEventsAssignments() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("subprocessTaskAssignments.bpmn2");
+
+        JSONObject subprocess = loader.getChildByName(process, "Embedded subprocess");
+        JSONObject subEnd = loader.getChildByName(subprocess, "SubEnd");
+        JSONObject subProperties = subEnd.getJSONObject("properties");
+        assertEquals("intSubInput:Integer", subProperties.getString("datainput"));
+        assertEquals("[din]intVar->intSubInput", subProperties.getString("datainputassociations"));
+
+        JSONObject endEvent = loader.getChildByName(process, "End Event");
+        JSONObject properties = endEvent.getJSONObject("properties");
+        assertEquals("intInput:Integer", properties.getString("datainput"));
+        assertEquals("[din]intVar->intInput", properties.getString("datainputassociations"));
+    }
+
+    @Test
+    public void testBusinessRuleTask() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("businessRule.bpmn2", BPMN2SyntaxCheckerTest.class);
+        JSONObject ruleTask = loader.getChildByName(process, "businessRuleTask");
+        JSONObject properties = ruleTask.getJSONObject("properties");
+        assertEquals("simpleGroup", properties.getString("ruleflowgroup"));
+        assertEquals(true, properties.getBoolean("isasync"));
+    }
+
+    @Test
+    public void testReceiveTask() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("receiveTask.bpmn2");
+        JSONObject receiveTask = loader.getChildByName(process, "receiveTask");
+        JSONObject properties = receiveTask.getJSONObject("properties");
+        assertEquals("parcel", properties.getString("messageref"));
+        assertEquals(true, properties.getBoolean("isasync"));
+    }
+
+    @Test
+    public void testSendTask() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("sendTask.bpmn2");
+        JSONObject sendTask = loader.getChildByName(process, "sendTask");
+        JSONObject properties = sendTask.getJSONObject("properties");
+        assertEquals("parcel", properties.getString("messageref"));
+        assertEquals(true, properties.getBoolean("isasync"));
     }
 }

@@ -1,12 +1,12 @@
 {
-  "resourceId":"_HGROwCf3EeaV2sc3Z2y6Ow",
+  "resourceId":"_T9SN4C4gEeaBFOq3gB4mnA",
   "properties":{
     "namespaces":"",
     "name":"",
     "expressionlanguage":"http://www.mvel.org/2.0",
     "executable":"true",
     "package":"org.jbpm",
-    "vardefs":"",
+    "vardefs":"intVar:Integer",
     "customdescription":"",
     "adhocprocess":"false",
     "imports":"",
@@ -25,7 +25,7 @@
   },
   "childShapes":[
     {
-      "resourceId":"_28848A8C-81F6-4E3E-9A13-AD71183DDB76",
+      "resourceId":"_164B63B2-35AB-462B-9AB7-EDE7183AC968",
       "properties":{
         "name":"Start Event",
         "documentation":"",
@@ -34,12 +34,12 @@
         "dataoutputassociations":"",
         "dataoutputassociationsview":"",
         "dataoutput":"",
-        "min":"5.0",
-        "max":"10.0",
+        "min":"5",
+        "max":"10",
         "standarddeviation":"1",
         "mean":"0",
         "distributiontype":"uniform",
-        "probability":"100.0",
+        "probability":"100",
         "isinterrupting":"true",
         "bgcolor":"#9acd32",
         "bordercolor":"#000000",
@@ -56,7 +56,7 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_567EB768-EDEF-4976-91C3-3E69A6DF000B"
+          "resourceId":"_2BBEAFC1-8E43-419A-9C6E-5B6632C619A8"
         }
       ],
       "bounds":{
@@ -74,7 +74,7 @@
       ]
     },
     {
-      "resourceId":"_B367CB10-5EC0-461C-B09E-B824D118B13E",
+      "resourceId":"_345B5840-117A-4154-9CBA-2C8B0E0226CF",
       "properties":{
         "name":"Embedded subprocess",
         "documentation":"",
@@ -109,7 +109,7 @@
       },
       "childShapes":[
         {
-          "resourceId":"_421A1DD6-2FC7-4E33-9E3F-8AE65134C082",
+          "resourceId":"_B93948D4-8DCC-4F41-AD3F-871C99C849D1",
           "properties":{
             "name":"SubStart",
             "documentation":"",
@@ -118,12 +118,12 @@
             "dataoutputassociations":"",
             "dataoutputassociationsview":"",
             "dataoutput":"",
-            "min":"5.0",
-            "max":"10.0",
+            "min":"5",
+            "max":"10",
             "standarddeviation":"1",
             "mean":"0",
             "distributiontype":"uniform",
-            "probability":"100.0",
+            "probability":"100",
             "isinterrupting":"true",
             "bgcolor":"#9acd32",
             "bordercolor":"#000000",
@@ -140,7 +140,7 @@
           ],
           "outgoing":[
             {
-              "resourceId":"_06EE6CF1-0900-4B59-B54E-3B5A29549F69"
+              "resourceId":"_DF3985AB-EA87-4335-BBD5-55A41C44F525"
             }
           ],
           "bounds":{
@@ -158,7 +158,7 @@
           ]
         },
         {
-          "resourceId":"_E003BD4E-B614-46B6-912D-BDEB9DD6CB7B",
+          "resourceId":"_10713EC5-9DD7-4B5D-AB14-7D46C4D68760",
           "properties":{
             "name":"UserTask",
             "documentation":"",
@@ -222,7 +222,7 @@
           ],
           "outgoing":[
             {
-              "resourceId":"_340669A7-1197-405F-84A1-2F1732719968"
+              "resourceId":"_51C0077A-AF55-43B6-B596-2C6859052026"
             }
           ],
           "bounds":{
@@ -240,18 +240,18 @@
           ]
         },
         {
-          "resourceId":"_70CF1B48-6646-48D0-BBA0-DCFFF23DD7C3",
+          "resourceId":"_F792CA54-D62D-44CB-AE5E-1BA72600B118",
           "properties":{
             "name":"SubEnd",
             "documentation":"",
             "isselectable":"true",
             "invisid":"",
             "eventdefinitions":"",
-            "datainputassociations":"",
-            "datainputassociationsview":"",
-            "datainput":"",
-            "min":"5.0",
-            "max":"10.0",
+            "datainputassociations":"[din]intVar->intSubInput",
+            "datainputassociationsview":"1 data input",
+            "datainput":"intSubInput:Integer",
+            "min":"5",
+            "max":"10",
             "standarddeviation":"1",
             "mean":"0",
             "distributiontype":"uniform",
@@ -288,17 +288,17 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_A54473C5-4A59-4D85-AC85-E3D9D383C755"
+          "resourceId":"_67BBF181-C7A0-4E28-A369-8421B642490A"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":527,
-          "y":259
+          "x":523,
+          "y":247
         },
         "upperLeft":{
-          "x":214,
-          "y":87
+          "x":210,
+          "y":75
         }
       },
       "dockers":[
@@ -306,7 +306,7 @@
       ]
     },
     {
-      "resourceId":"_06EE6CF1-0900-4B59-B54E-3B5A29549F69",
+      "resourceId":"_DF3985AB-EA87-4335-BBD5-55A41C44F525",
       "properties":{
         "name":"",
         "documentation":"",
@@ -334,17 +334,17 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_E003BD4E-B614-46B6-912D-BDEB9DD6CB7B"
+          "resourceId":"_10713EC5-9DD7-4B5D-AB14-7D46C4D68760"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":319.15625,
-          "y":170
+          "x":315.15625,
+          "y":158
         },
         "upperLeft":{
-          "x":275.609375,
-          "y":168
+          "x":271.609375,
+          "y":156
         }
       },
       "dockers":[
@@ -358,11 +358,11 @@
         }
       ],
       "target":{
-        "resourceId":"_E003BD4E-B614-46B6-912D-BDEB9DD6CB7B"
+        "resourceId":"_10713EC5-9DD7-4B5D-AB14-7D46C4D68760"
       }
     },
     {
-      "resourceId":"_340669A7-1197-405F-84A1-2F1732719968",
+      "resourceId":"_51C0077A-AF55-43B6-B596-2C6859052026",
       "properties":{
         "name":"",
         "documentation":"",
@@ -390,17 +390,17 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_70CF1B48-6646-48D0-BBA0-DCFFF23DD7C3"
+          "resourceId":"_F792CA54-D62D-44CB-AE5E-1BA72600B118"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":464.375,
-          "y":170
+          "x":460.375,
+          "y":158
         },
         "upperLeft":{
-          "x":420.390625,
-          "y":168
+          "x":416.390625,
+          "y":156
         }
       },
       "dockers":[
@@ -414,11 +414,11 @@
         }
       ],
       "target":{
-        "resourceId":"_70CF1B48-6646-48D0-BBA0-DCFFF23DD7C3"
+        "resourceId":"_F792CA54-D62D-44CB-AE5E-1BA72600B118"
       }
     },
     {
-      "resourceId":"_567EB768-EDEF-4976-91C3-3E69A6DF000B",
+      "resourceId":"_2BBEAFC1-8E43-419A-9C6E-5B6632C619A8",
       "properties":{
         "name":"",
         "documentation":"",
@@ -446,17 +446,17 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_B367CB10-5EC0-461C-B09E-B824D118B13E"
+          "resourceId":"_345B5840-117A-4154-9CBA-2C8B0E0226CF"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":213.91015625,
-          "y":174
+          "x":209.9696904360086,
+          "y":172.3472661762463
         },
         "upperLeft":{
-          "x":105.244140625,
-          "y":172
+          "x":105.04007518899141,
+          "y":167.7933588237537
         }
       },
       "dockers":[
@@ -470,22 +470,22 @@
         }
       ],
       "target":{
-        "resourceId":"_B367CB10-5EC0-461C-B09E-B824D118B13E"
+        "resourceId":"_345B5840-117A-4154-9CBA-2C8B0E0226CF"
       }
     },
     {
-      "resourceId":"_3682FE77-B328-49FB-B640-B52329114D8D",
+      "resourceId":"_C8EB514E-FAD2-485F-A28F-1EBBF676A5FA",
       "properties":{
         "name":"End Event",
         "documentation":"",
         "isselectable":"true",
         "invisid":"",
         "eventdefinitions":"",
-        "datainputassociations":"",
-        "datainputassociationsview":"",
-        "datainput":"",
-        "min":"5.0",
-        "max":"10.0",
+        "datainputassociations":"[din]intVar->intInput",
+        "datainputassociationsview":"1 data input",
+        "datainput":"intInput:Integer",
+        "min":"5",
+        "max":"10",
         "standarddeviation":"1",
         "mean":"0",
         "distributiontype":"uniform",
@@ -520,7 +520,7 @@
       ]
     },
     {
-      "resourceId":"_A54473C5-4A59-4D85-AC85-E3D9D383C755",
+      "resourceId":"_67BBF181-C7A0-4E28-A369-8421B642490A",
       "properties":{
         "name":"",
         "documentation":"",
@@ -548,17 +548,17 @@
       ],
       "outgoing":[
         {
-          "resourceId":"_3682FE77-B328-49FB-B640-B52329114D8D"
+          "resourceId":"_C8EB514E-FAD2-485F-A28F-1EBBF676A5FA"
         }
       ],
       "bounds":{
         "lowerRight":{
-          "x":614.873046875,
-          "y":174
+          "x":614.6709651380885,
+          "y":172.34495840631263
         },
         "upperLeft":{
-          "x":527.00390625,
-          "y":172
+          "x":523.3583317369115,
+          "y":168.17066659368737
         }
       },
       "dockers":[
@@ -572,7 +572,7 @@
         }
       ],
       "target":{
-        "resourceId":"_3682FE77-B328-49FB-B640-B52329114D8D"
+        "resourceId":"_C8EB514E-FAD2-485F-A28F-1EBBF676A5FA"
       }
     }
   ],
