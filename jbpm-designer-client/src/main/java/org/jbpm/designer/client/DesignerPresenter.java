@@ -52,11 +52,9 @@ import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.mvp.UpdatedLockStatusEvent;
 import org.uberfire.ext.editor.commons.client.file.CommandWithFileNameAndCommitMessage;
-import org.uberfire.ext.editor.commons.client.file.CopyPopup;
-import org.uberfire.ext.editor.commons.client.file.CopyPopupView;
 import org.uberfire.ext.editor.commons.client.file.FileNameAndCommitMessage;
-import org.uberfire.ext.editor.commons.client.file.RenamePopup;
-import org.uberfire.ext.editor.commons.client.file.RenamePopupView;
+import org.uberfire.ext.editor.commons.client.file.popups.CopyPopUpPresenter;
+import org.uberfire.ext.editor.commons.client.file.popups.RenamePopUpPresenter;
 import org.uberfire.ext.editor.commons.client.history.VersionRecordManager;
 import org.uberfire.ext.editor.commons.service.CopyService;
 import org.uberfire.ext.editor.commons.service.DeleteService;
@@ -260,26 +258,23 @@ public class DesignerPresenter
         vfsServices.call( new RemoteCallback<ObservablePath>() {
             @Override
             public void callback( final ObservablePath mypath ) {
-                final CopyPopupView copyPopupView = CopyPopup.getDefaultView();
-                final CopyPopup popup = new CopyPopup( mypath,
-                                                       fileNameValidator,
-                                                       new CommandWithFileNameAndCommitMessage() {
-                                                           @Override
-                                                           public void execute( final FileNameAndCommitMessage details ) {
-                                                               baseView.showLoading();
-                                                               copyService.call( getCopySuccessCallback( copyPopupView ),
-                                                                                 getCopyErrorCallback( copyPopupView ) ).copy( mypath,
-                                                                                                                               details.getNewFileName(),
-                                                                                                                               details.getCommitMessage() );
-                                                           }
-                                                       },
-                                                       copyPopupView );
-                popup.show();
+                copyPopUpPresenter.show( mypath,
+                                         fileNameValidator,
+                                         new CommandWithFileNameAndCommitMessage() {
+                                             @Override
+                                             public void execute( final FileNameAndCommitMessage details ) {
+                                                 baseView.showLoading();
+                                                 copyService.call( getCopySuccessCallback( copyPopUpPresenter.getView() ),
+                                                                   getCopyErrorCallback( copyPopUpPresenter.getView() ) ).copy( mypath,
+                                                                                                                                details.getNewFileName(),
+                                                                                                                                details.getCommitMessage() );
+                                             }
+                                         } );
             }
         } ).get( URIUtil.encode( uri ) );
     }
 
-    private HasBusyIndicatorDefaultErrorCallback getCopyErrorCallback( final CopyPopupView copyPopupView ) {
+    private HasBusyIndicatorDefaultErrorCallback getCopyErrorCallback( final CopyPopUpPresenter.View copyPopupView ) {
         return new HasBusyIndicatorDefaultErrorCallback( baseView ) {
 
             @Override
@@ -400,33 +395,27 @@ public class DesignerPresenter
         return assignmentData.getVariableCountsString(hasInputVars, isSingleInputVar, hasOutputVars, isSingleOutputVar);
     }
 
-
-
     public void assetRenameEvent( String uri ) {
         vfsServices.call( new RemoteCallback<ObservablePath>() {
             @Override
             public void callback( final ObservablePath mypath ) {
-                final RenamePopupView renamePopupView = RenamePopup.getDefaultView();
-                final RenamePopup popup = new RenamePopup( mypath,
-                                                           fileNameValidator,
-                                                           new CommandWithFileNameAndCommitMessage() {
-                                                               @Override
-                                                               public void execute( final FileNameAndCommitMessage details ) {
-                                                                   baseView.showLoading();
-                                                                   renameService.call( getRenameSuccessCallback( renamePopupView ),
-                                                                                       getRenameErrorCallback( renamePopupView ) ).rename( versionRecordManager.getPathToLatest(),
-                                                                                                                                           details.getNewFileName(),
-                                                                                                                                           details.getCommitMessage() );
-                                                               }
-                                                           },
-                                                           renamePopupView );
-
-                popup.show();
+                renamePopUpPresenter.show( mypath,
+                                           fileNameValidator,
+                                           new CommandWithFileNameAndCommitMessage() {
+                                               @Override
+                                               public void execute( final FileNameAndCommitMessage details ) {
+                                                   baseView.showLoading();
+                                                   renameService.call( getRenameSuccessCallback( renamePopUpPresenter.getView() ),
+                                                                       getRenameErrorCallback( renamePopUpPresenter.getView() ) ).rename( versionRecordManager.getPathToLatest(),
+                                                                                                                                          details.getNewFileName(),
+                                                                                                                                          details.getCommitMessage() );
+                                               }
+                                           } );
             }
         } ).get( URIUtil.encode( uri ) );
     }
 
-    private HasBusyIndicatorDefaultErrorCallback getRenameErrorCallback( final RenamePopupView renamePopupView ) {
+    private HasBusyIndicatorDefaultErrorCallback getRenameErrorCallback( final RenamePopUpPresenter.View renamePopupView ) {
         return new HasBusyIndicatorDefaultErrorCallback( baseView ) {
 
             @Override
@@ -496,7 +485,7 @@ public class DesignerPresenter
         };
     }
 
-    private RemoteCallback<Path> getCopySuccessCallback( final CopyPopupView copyPopupView ) {
+    private RemoteCallback<Path> getCopySuccessCallback( final CopyPopUpPresenter.View copyPopupView ) {
         return new RemoteCallback<Path>() {
             @Override
             public void callback( final Path path ) {
@@ -507,7 +496,7 @@ public class DesignerPresenter
         };
     }
 
-    private RemoteCallback<Path> getRenameSuccessCallback( final RenamePopupView renamePopupView ) {
+    private RemoteCallback<Path> getRenameSuccessCallback( final RenamePopUpPresenter.View renamePopupView ) {
         return new RemoteCallback<Path>() {
 
             @Override
