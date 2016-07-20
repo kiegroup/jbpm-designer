@@ -26,6 +26,7 @@ import bpsim.*;
 import bpsim.impl.BpsimPackageImpl;
 import org.eclipse.emf.common.util.EList;
 import org.jboss.drools.*;
+import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.codehaus.jackson.JsonEncoding;
@@ -217,28 +218,13 @@ public class Bpmn2JsonMarshaller {
 	                    String propVal = "";
 	                    for(int i=0; i<processProperties.size(); i++) {
 	                        Property p = processProperties.get(i);
-                            String pKPI = "";
-                            if(p.getExtensionValues() != null && p.getExtensionValues().size() > 0) {
-                                for(ExtensionAttributeValue extattrval : p.getExtensionValues()) {
-                                    FeatureMap extensionElements = extattrval.getValue();
-
-                                    List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                                            .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                                    for(MetaDataType metaType : metadataExtensions) {
-                                        if(metaType.getName() != null && metaType.getName().equals("customKPI") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                                            pKPI = metaType.getMetaValue();
-                                        }
-                                    }
-                                }
-                            }
-
+                            String pKPI = Utils.getMetaDataValue(p.getExtensionValues(), "customKPI");
 	                        propVal += p.getId();
 	                        // check the structureRef value
 	                        if(p.getItemSubjectRef() != null && p.getItemSubjectRef().getStructureRef() != null) {
 	                            propVal += ":" + p.getItemSubjectRef().getStructureRef();
 	                        }
-                            if(pKPI.length() > 0) {
+                            if(pKPI != null && pKPI.length() > 0) {
                                 propVal += ":" + pKPI;
                             }
 	                        if(i != processProperties.size()-1) {
@@ -588,21 +574,7 @@ public class Bpmn2JsonMarshaller {
         }
 
         // signal scope
-        String signalScope = null;
-        if(event.getExtensionValues() != null && event.getExtensionValues().size() > 0) {
-            for(ExtensionAttributeValue extattrval : event.getExtensionValues()) {
-                FeatureMap extensionElements = extattrval.getValue();
-
-                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getName() != null && metaType.getName().equals("customScope") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                        signalScope = metaType.getMetaValue();
-                    }
-                }
-            }
-        }
+        String signalScope = Utils.getMetaDataValue(event.getExtensionValues(), "customScope");
         if(signalScope != null) {
             properties.put("signalscope", signalScope);
         }
@@ -702,21 +674,7 @@ public class Bpmn2JsonMarshaller {
 	    	}
 
             // overwrite name if elementname extension element is present
-            String elementName = null;
-            if(lane.getExtensionValues() != null && lane.getExtensionValues().size() > 0) {
-                for(ExtensionAttributeValue extattrval : lane.getExtensionValues()) {
-                    FeatureMap extensionElements = extattrval.getValue();
-
-                    List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                            .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                    for(MetaDataType metaType : metadataExtensions) {
-                        if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                            elementName = metaType.getMetaValue();
-                        }
-                    }
-                }
-            }
+            String elementName = Utils.getMetaDataValue(lane.getExtensionValues(), "elementname");
             if(elementName != null) {
                 laneProperties.put("name", elementName);
             }
@@ -1111,21 +1069,8 @@ public class Bpmn2JsonMarshaller {
         }
 
         // custom async
-        String customAsync = "false";
-        if(callActivity.getExtensionValues() != null && callActivity.getExtensionValues().size() > 0) {
-            for(ExtensionAttributeValue extattrval : callActivity.getExtensionValues()) {
-                FeatureMap extensionElements = extattrval.getValue();
-
-                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getName() != null && metaType.getName().equals("customAsync") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                        customAsync = metaType.getMetaValue();
-                    }
-                }
-            }
-        }
+        String customAsyncMetaData = Utils.getMetaDataValue(callActivity.getExtensionValues(), "customAsync");
+        String customAsync = (customAsyncMetaData != null && customAsyncMetaData.length() > 0) ? customAsyncMetaData : "false";
         properties.put("isasync", customAsync);
 
         // data inputs
@@ -1314,21 +1259,8 @@ public class Bpmn2JsonMarshaller {
     	}
 
         // custom async
-        String customAsync = "false";
-        if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
-            for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
-                FeatureMap extensionElements = extattrval.getValue();
-
-                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getName() != null && metaType.getName().equals("customAsync") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                        customAsync = metaType.getMetaValue();
-                    }
-                }
-            }
-        }
+        String customAsyncMetaData = Utils.getMetaDataValue(task.getExtensionValues(), "customAsync");
+        String customAsync = (customAsyncMetaData != null && customAsyncMetaData.length() > 0) ? customAsyncMetaData : "false";
         properties.put("isasync", customAsync);
 
 
@@ -1948,21 +1880,7 @@ public class Bpmn2JsonMarshaller {
             }
         }
         // overwrite name if elementname extension element is present
-        String elementName = null;
-        if(node.getExtensionValues() != null && node.getExtensionValues().size() > 0) {
-            for(ExtensionAttributeValue extattrval : node.getExtensionValues()) {
-                FeatureMap extensionElements = extattrval.getValue();
-
-                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                        elementName = metaType.getMetaValue();
-                    }
-                }
-            }
-        }
+        String elementName = Utils.getMetaDataValue(node.getExtensionValues(), "elementname");
         if(elementName != null) {
             properties.put("name", elementName);
         }
@@ -2118,21 +2036,7 @@ public class Bpmn2JsonMarshaller {
     	}
 
         // overwrite name if elementname extension element is present
-        String elementName = null;
-        if(dataObject.getExtensionValues() != null && dataObject.getExtensionValues().size() > 0) {
-            for(ExtensionAttributeValue extattrval : dataObject.getExtensionValues()) {
-                FeatureMap extensionElements = extattrval.getValue();
-
-                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                        elementName = metaType.getMetaValue();
-                    }
-                }
-            }
-        }
+        String elementName = Utils.getMetaDataValue(dataObject.getExtensionValues(), "elementname");
         if(elementName != null) {
             properties.put("name", elementName);
         }
@@ -2208,21 +2112,7 @@ public class Bpmn2JsonMarshaller {
 		}
 
         // overwrite name if elementname extension element is present
-        String elementName = null;
-        if(subProcess.getExtensionValues() != null && subProcess.getExtensionValues().size() > 0) {
-            for(ExtensionAttributeValue extattrval : subProcess.getExtensionValues()) {
-                FeatureMap extensionElements = extattrval.getValue();
-
-                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                        elementName = metaType.getMetaValue();
-                    }
-                }
-            }
-        }
+        String elementName = Utils.getMetaDataValue(subProcess.getExtensionValues(), "elementname");
         if(elementName != null) {
             properties.put("name", elementName);
         }
@@ -2243,21 +2133,8 @@ public class Bpmn2JsonMarshaller {
 		}
 
         // custom async
-        String customAsync = "false";
-        if(subProcess.getExtensionValues() != null && subProcess.getExtensionValues().size() > 0) {
-            for(ExtensionAttributeValue extattrval : subProcess.getExtensionValues()) {
-                FeatureMap extensionElements = extattrval.getValue();
-
-                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getName() != null && metaType.getName().equals("customAsync") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                        customAsync = metaType.getMetaValue();
-                    }
-                }
-            }
-        }
+        String customAsyncMetaData = Utils.getMetaDataValue(subProcess.getExtensionValues(), "customAsync");
+        String customAsync = (customAsyncMetaData != null && customAsyncMetaData.length() > 0) ? customAsyncMetaData : "false";
         properties.put("isasync", customAsync);
 
 		// data inputs
@@ -2426,28 +2303,14 @@ public class Bpmn2JsonMarshaller {
             for(int i=0; i<processProperties.size(); i++) {
                 Property p = processProperties.get(i);
 
-                String pKPI = "";
-                if(p.getExtensionValues() != null && p.getExtensionValues().size() > 0) {
-                    for(ExtensionAttributeValue extattrval : p.getExtensionValues()) {
-                        FeatureMap extensionElements = extattrval.getValue();
-
-                        List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                                .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                        for(MetaDataType metaType : metadataExtensions) {
-                            if(metaType.getName() != null && metaType.getName().equals("customKPI") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                                pKPI = metaType.getMetaValue();
-                            }
-                        }
-                    }
-                }
+                String pKPI = Utils.getMetaDataValue(p.getExtensionValues(), "customKPI");
 
                 propVal += p.getId();
                 // check the structureRef value
                 if(p.getItemSubjectRef() != null && p.getItemSubjectRef().getStructureRef() != null) {
                     propVal += ":" + p.getItemSubjectRef().getStructureRef();
                 }
-                if(pKPI.length() > 0) {
+                if(pKPI != null && pKPI.length() > 0) {
                     propVal += ":" + pKPI;
                 }
                 if(i != processProperties.size()-1) {
@@ -2611,26 +2474,10 @@ public class Bpmn2JsonMarshaller {
     	    properties.put("name", "");
     	}
         // overwrite name if elementname extension element is present
-        String elementName = null;
-        if(sequenceFlow.getExtensionValues() != null && sequenceFlow.getExtensionValues().size() > 0) {
-            for(ExtensionAttributeValue extattrval : sequenceFlow.getExtensionValues()) {
-                FeatureMap extensionElements = extattrval.getValue();
-
-                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                        elementName = metaType.getMetaValue();
-                    }
-                }
-            }
-        }
+        String elementName = Utils.getMetaDataValue(sequenceFlow.getExtensionValues(), "elementname");
         if(elementName != null) {
             properties.put("name", elementName);
         }
-
-
 
     	if(sequenceFlow.getDocumentation() != null && sequenceFlow.getDocumentation().size() > 0) {
             properties.put("documentation", sequenceFlow.getDocumentation().get(0).getText());
@@ -2916,21 +2763,7 @@ public class Bpmn2JsonMarshaller {
     protected void marshallTextAnnotation(TextAnnotation textAnnotation, BPMNPlane plane, JsonGenerator generator, float xOffset, float yOffset, String preProcessingData, Definitions def, Map<String, Object> flowElementProperties) throws JsonGenerationException, IOException {
         flowElementProperties.put("name", textAnnotation.getText());
         // overwrite name if elementname extension element is present
-        String elementName = null;
-        if(textAnnotation.getExtensionValues() != null && textAnnotation.getExtensionValues().size() > 0) {
-            for(ExtensionAttributeValue extattrval : textAnnotation.getExtensionValues()) {
-                FeatureMap extensionElements = extattrval.getValue();
-
-                List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
-
-                for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getName()!= null && metaType.getName().equals("elementname") && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
-                        elementName = metaType.getMetaValue();
-                    }
-                }
-            }
-        }
+        String elementName = Utils.getMetaDataValue(textAnnotation.getExtensionValues(), "elementname");
         if(elementName != null) {
             flowElementProperties.put("name", elementName);
         }
