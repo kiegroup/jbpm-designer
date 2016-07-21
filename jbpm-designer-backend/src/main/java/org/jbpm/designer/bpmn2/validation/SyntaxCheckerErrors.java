@@ -53,6 +53,7 @@ public class SyntaxCheckerErrors {
     public static final String SERVICE_TASK_HAS_NO_OPERATION = "Service Task has no operation.";
     public static final String STAFF_AVAILABILITY_VALUE_MUST_BE_POSITIVE = "Staff Availability value must be positive.";
     public static final String START_NODE_NO_OUTGOING_CONNECTIONS = "Start node has no outgoing connections";
+    public static final String TASK_NO_MESSAGE = "Task has no message.";
     public static final String THE_SUM_OF_PROBABILITIES_MUST_BE_EQUAL_100 = "The sum of probability values of all outgoing Sequence Flows must be equal 100.";
     public static final String THROW_EVENT = "Throw Event ";
     public static final String USER_TASK_HAS_NO_TASK_NAME = "User Task has no task name.";

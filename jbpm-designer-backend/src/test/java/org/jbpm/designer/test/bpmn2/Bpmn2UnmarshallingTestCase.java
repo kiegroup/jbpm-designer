@@ -147,6 +147,29 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(task instanceof BusinessRuleTask);
         BusinessRuleTask ruleTask = (BusinessRuleTask) task;
         verifyAttribute(ruleTask, "ruleFlowGroup", "simpleGroup");
+        assertEquals("<![CDATA[true]]>", getMetaDataValue(task.getExtensionValues(), "customAsync"));
+    }
+
+    @Test
+    public void testReceiveTask() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("receiveTask.json");
+        Process process = getRootProcess(definitions);
+        FlowElement task = getFlowElement(process.getFlowElements(), "receiveTask");
+        assertTrue(task instanceof ReceiveTask);
+        ReceiveTask receiveTask = (ReceiveTask) task;
+        verifyAttribute(receiveTask, "msgref", "parcel");
+        assertEquals("<![CDATA[true]]>", getMetaDataValue(task.getExtensionValues(), "customAsync"));
+    }
+
+    @Test
+    public void testSendTask() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("sendTask.json");
+        Process process = getRootProcess(definitions);
+        FlowElement task = getFlowElement(process.getFlowElements(), "sendTask");
+        assertTrue(task instanceof SendTask);
+        SendTask sendTask = (SendTask) task;
+        verifyAttribute(sendTask, "msgref", "parcel");
+        assertEquals("<![CDATA[true]]>", getMetaDataValue(task.getExtensionValues(), "customAsync"));
     }
 
     //@Test
@@ -337,7 +360,7 @@ public class Bpmn2UnmarshallingTestCase {
     @Test
     public void testEndMessageEventUnmarshalling() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("endMessageEvent.json");
-        assertTrue(definitions.getRootElements().size() == 3);
+        assertTrue(definitions.getRootElements().size() == 1);
         Process process = getRootProcess(definitions);
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end message event", g.getName());
@@ -542,7 +565,7 @@ public class Bpmn2UnmarshallingTestCase {
     @Test
     public void testIntermediateThrowMessageEventUnmarshalling() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("intermediateThrowMessageEvent.json");
-        assertTrue(definitions.getRootElements().size() == 3);
+        assertTrue(definitions.getRootElements().size() == 1);
         Process process = getRootProcess(definitions);
         ThrowEvent g = (ThrowEvent) process.getFlowElements().get(0);
         assertEquals("throw message event", g.getName());
@@ -720,6 +743,7 @@ public class Bpmn2UnmarshallingTestCase {
         }
 
         assertNotNull(subProcess);
+        assertEquals("<![CDATA[true]]>", getMetaDataValue(subProcess.getExtensionValues(), "customAsync"));
         assertFalse(containerContainsElement(subProcess, OUTTIMER_NAME));
         assertFalse(containerContainsElement(subProcess, SUBPROCESSMESSAGE_NAME));
         assertTrue(containerContainsElement(subProcess, SUBTIMER_NAME));
@@ -1012,6 +1036,7 @@ public class Bpmn2UnmarshallingTestCase {
 
         assertTrue(foundTaskName);
         assertTrue(foundGroupId);
+        assertEquals("<![CDATA[true]]>", getMetaDataValue(userTask.getExtensionValues(), "customAsync"));
     }
 
     @Test
@@ -1090,6 +1115,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(element instanceof ServiceTask);
         ServiceTask serviceTask = (ServiceTask) element;
         verifyServiceTask(serviceTask, "Java", "sendInterface", "sendOperation");
+        assertEquals("<![CDATA[true]]>", getMetaDataValue(serviceTask.getExtensionValues(), "customAsync"));
     }
 
     @Test

@@ -263,6 +263,40 @@ public class BPMN2SyntaxCheckerTest {
         assertTrue(syntaxChecker.isCompensatingFlowNodeInSubprocess(textAnnotation, subprocess));
     }
 
+    @Test
+    public void testReceiveTask() throws Exception {
+        loader.loadProcessFromXml("receiveTask.bpmn2", Bpmn2JsonMarshallerTest.class);
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        verifyNoErrors(syntaxChecker);
+    }
+
+    @Test
+    public void testReceiveTaskMissingMessage() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("receiveTaskMissingMessage.bpmn2");
+        JSONObject receiveTask = loader.getChildByName(process, "receiveTask");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        verifyErrorsOfElement(syntaxChecker, receiveTask, Arrays.asList(SyntaxCheckerErrors.TASK_NO_MESSAGE));
+    }
+
+    @Test
+    public void testSendTask() throws Exception {
+        loader.loadProcessFromXml("sendTask.bpmn2", Bpmn2JsonMarshallerTest.class);
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        verifyNoErrors(syntaxChecker);
+    }
+
+    @Test
+    public void testSendTaskMissingMessage() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("sendTaskMissingMessage.bpmn2");
+        JSONObject sendTask = loader.getChildByName(process, "sendTask");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        verifyErrorsOfElement(syntaxChecker, sendTask, Arrays.asList(SyntaxCheckerErrors.TASK_NO_MESSAGE));
+    }
+
     private void verifyNoErrors(SyntaxChecker syntaxChecker) throws Exception {
         syntaxChecker.checkSyntax();
         assertFalse(syntaxChecker.errorsFound());

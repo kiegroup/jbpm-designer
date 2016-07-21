@@ -232,6 +232,7 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject userTask = loader.getChildByName(process, "User Task");
         JSONObject properties = userTask.getJSONObject("properties");
         assertEquals("taskForSomebody", properties.getString("taskname"));
+        assertEquals(true, properties.getBoolean("isasync"));
     }
 
     @Test
@@ -294,6 +295,7 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("Java", properties.getString("serviceimplementation"));
         assertEquals("sendInterface", properties.getString("serviceinterface"));
         assertEquals("sendOperation", properties.getString("serviceoperation"));
+        assertEquals(true, properties.getBoolean("isasync"));
     }
 
     @Test
