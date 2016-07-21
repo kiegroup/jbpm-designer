@@ -631,12 +631,20 @@ These don't have a static icon
   background-position: left -976px;
 }
 
+.images_documentation {
+    width: 17px;
+    height: 17px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/palette-images-sprite.png');
+  background-position: left -993px;
+}
+
 .images_processforms {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -993px;
+  background-position: left -1010px;
 }
 
 .images_view {
@@ -644,7 +652,7 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -1009px;
+  background-position: left -1026px;
 }
 
 .images_dataio {
@@ -652,5 +660,5 @@ These don't have a static icon
     height: 16px;
     background-repeat: no-repeat;
   background-image: url('../../images/sprites/palette-images-sprite.png');
-  background-position: left -1025px;
+  background-position: left -1042px;
 }
