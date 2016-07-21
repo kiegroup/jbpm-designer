@@ -558,10 +558,12 @@ ORYX.I18N.ShapeMenuPlugin.drag = '<i18n:message key="ORYX.I18N.ShapeMenuPlugin.d
 ORYX.I18N.ShapeMenuPlugin.clickDrag = '<i18n:message key="ORYX.I18N.ShapeMenuPlugin.clickDrag">Click or drag</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.morphMsg = '<i18n:message key="ORYX.I18N.ShapeMenuPlugin.morphMsg">Morph shape</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.addTpProcessDic='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.addTpProcessDic">Add to Process Dictionary</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.showInDocs='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.showInDocs">Show in process Documentation</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.viewSourceNode='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.viewSourceNode">View Node Source</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.editDataIO='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.editDataIO">Edit Data I/O</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.nameNotSpecified='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.nameNotSpecified">Name not specified.</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.unableToFindNodeSource='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.unableToFindNodeSource">Unable to find node source.</i18n:message>';
+ORYX.I18N.ShapeMenuPlugin.elementNotIncludedInDoc='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.elementNotIncludedInDoc">Element not included in documentation.</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.userTask='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.userTask">User Task</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.sendTask='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.sendTask">Send Task</i18n:message>';
 ORYX.I18N.ShapeMenuPlugin.receiveTask='<i18n:message key="ORYX.I18N.ShapeMenuPlugin.receiveTask">Receive Task</i18n:message>';

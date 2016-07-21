@@ -570,6 +570,13 @@ These don't have a static icon
     background-image: url(../../images/dictionary.png);  /** sprite-ref: palette-images-sprite; */
 }
 
+.images_documentation {
+    width: 17px;
+    height: 17px;
+    background-repeat: no-repeat;
+    background-image: url(../../images/documentation.png);  /** sprite-ref: palette-images-sprite; */
+}
+
 .images_processforms {
     width: 16px;
     height: 16px;

@@ -36,6 +36,7 @@
         ORYX.AUTOSAVE_ENABLED = false;
         ORYX.CONFIG.STORESVGONSAVE = "$storesvgonsave$";
         ORYX.PRESET_PERSPECTIVE = "$presetperspective$";
+        ORYX.PROCESSDOC_RESOURCEID = "";
 
         ORYX.DEFAULT_JSON_MODEL = {"resourceId":"Definition","properties":{"namespaces":"","name":"","expressionlanguage":"http://www.mvel.org/2.0","executable":"true","package":"org.jbpm","vardefs":"","adhocprocess":"false","imports":"","globals":"","id":"defaultprocess","version":"1.0","timeunit":"min","currency":"","targetnamespace":"http://www.omg.org/bpmn20","typelanguage":"http://www.java.com/javaTypes","processn":"","documentation":""},"stencil":{"id":"BPMNDiagram"},"childShapes":[],"bounds":{"lowerRight":{"x":3000,"y":2000},"upperLeft":{"x":0,"y":0}},"stencilset":{"url":"/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json","namespace":"http://b3mn.org/stencilset/bpmn2.0#"},"ssextensions":[]};
 
