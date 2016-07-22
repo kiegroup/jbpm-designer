@@ -91,6 +91,9 @@ ORYX.Plugins.ShapeMenuPlugin = {
 					// Show the Morph Button
 					this.showMorphButton(this.currentShapes);
 
+					// Show the documentation Button
+					this.showDocumentationButton();
+
 					// Show the dictionary Button
 					this.showDictionaryButton();
 
@@ -227,13 +230,21 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			align: 			ORYX.CONFIG.SHAPEMENU_BOTTOM,
 			group:			0,
 			msg:			ORYX.I18N.ShapeMenuPlugin.morphMsg
-		});	
-		
+		});
+
+		var docbutton = new ORYX.Plugins.ShapeMenuButton({
+			callback:		this.showElementInDocs.bind(this),
+			icon: 			ORYX.BASE_FILE_PATH + 'images/documentation.png',
+			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
+			group:			0,
+			msg:			ORYX.I18N.ShapeMenuPlugin.showInDocs
+		});
+
 		var dbutton = new ORYX.Plugins.ShapeMenuButton({
 			callback:		this.addDictionaryItem.bind(this), 
 			icon: 			ORYX.BASE_FILE_PATH + 'images/dictionary.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
-			group:			0,
+			group:			1,
 			msg:			ORYX.I18N.ShapeMenuPlugin.addTpProcessDic
 		});	
 		
@@ -241,7 +252,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			callback:		this.editTaskForm.bind(this), 
 			icon: 			ORYX.BASE_FILE_PATH + 'images/processforms.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
-			group:			1,
+			group:			2,
 			msg:			ORYX.I18N.View.editTaskForm
 		});
 		
@@ -249,7 +260,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			callback:		this.viewNodeSource.bind(this), 
 			icon: 			ORYX.BASE_FILE_PATH + 'images/view.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
-			group:			2,
+			group:			3,
 			msg:			ORYX.I18N.ShapeMenuPlugin.viewSourceNode
 		});
 
@@ -257,19 +268,21 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			callback:		this.showDataIOEditor.bind(this),
 			icon: 			ORYX.BASE_FILE_PATH + 'images/dataio.png',
 			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
-			group:			3,
+			group:			4,
 			msg:			ORYX.I18N.ShapeMenuPlugin.editDataIO
 		});
 
 		this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_BOTTOM, 2);
 		//this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_TOP, 2)
 		this.shapeMenu.addButton(button);
+		this.shapeMenu.addButton(docbutton);
 		this.shapeMenu.addButton(dbutton);
 		this.shapeMenu.addButton(utfbutton);
 		this.shapeMenu.addButton(swbutton);
 		this.shapeMenu.addButton(diobutton);
 		this.morphMenu.getEl().appendTo(button.node);
 		this.morphButton = button;
+		this.documentationButton = docbutton;
 		this.dictionaryButton = dbutton;
 		this.taskFormButton = utfbutton;
 		this.sourceViewButton = swbutton;
@@ -309,6 +322,28 @@ ORYX.Plugins.ShapeMenuPlugin = {
                 title       : ''
 
             });
+		}
+	},
+
+	showElementInDocs: function() {
+		var showInDocs = true;
+		if(this.currentShapes[0] instanceof ORYX.Core.Edge) {
+			// condition under which edge is displayed in the generated docs
+			if(!this.currentShapes[0].properties['oryx-name'].length && !this.currentShapes[0].properties['oryx-documentation'].length && !this.currentShapes[0].properties['oryx-conditionexpression'].length) {
+				showInDocs = false;
+			}
+		}
+		if(showInDocs) {
+			ORYX.PROCESSDOC_RESOURCEID = this.currentShapes[0].resourceId;
+			Ext.getCmp('maintabs').setActiveTab(2);
+		} else {
+			this.facade.raiseEvent({
+				type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+				ntype		: 'info',
+				msg         : ORYX.I18N.ShapeMenuPlugin.elementNotIncludedInDoc,
+				title       : ''
+
+			});
 		}
 	},
 	
@@ -417,6 +452,10 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	
 	showDictionaryButton: function() {
 		this.dictionaryButton.prepareToShow();
+	},
+
+	showDocumentationButton: function() {
+		this.documentationButton.prepareToShow();
 	},
 
 	showTaskFormButton : function() {

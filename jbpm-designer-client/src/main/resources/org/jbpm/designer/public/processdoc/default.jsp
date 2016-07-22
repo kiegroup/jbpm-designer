@@ -247,6 +247,7 @@
         showProcessTotals(processDataTotals, processJSON);
         showProcessElementsInfo(processJSON);
         displayProcessImg();
+        scrollToElement();
     }
 
     function showProcessElementsInfo(processJSON) {
