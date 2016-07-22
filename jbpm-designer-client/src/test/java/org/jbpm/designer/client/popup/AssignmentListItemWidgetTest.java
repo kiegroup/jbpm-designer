@@ -20,7 +20,8 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.regexp.shared.RegExp;
-import com.google.gwtmockito.GwtMockitoTestRunner;
+import com.google.gwtmockito.GwtMock;
+import com.google.gwtmockito.GwtMockito;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.TextBox;
 import org.gwtbootstrap3.client.ui.ValueListBox;
@@ -35,6 +36,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -43,32 +45,29 @@ import static org.mockito.Mockito.*;
  * Tests the data get/set behaviour of AssignmentListItemWidget
  *
  */
-@RunWith(GwtMockitoTestRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AssignmentListItemWidgetTest {
 
-    @Mock
+
     ValueListBox<String> dataType;
 
-    @Mock
-    TextBox customDataType;
-
-    @Mock
     ValueListBox<String> processVar;
 
-    @Mock
+    TextBox customDataType;
+
     TextBox constant;
 
-    @Mock ComboBox dataTypeComboBox;
+    ComboBox dataTypeComboBox;
 
-    @Mock ComboBox processVarComboBox;
+    ComboBox processVarComboBox;
 
-    @Mock
+    @GwtMock
     DataIOEditorNameTextBox name;
 
-    @Mock
+    @GwtMock
     Button deleteButton;
 
-    @Mock
+    @GwtMock
     DataBinder<AssignmentRow> assignment;
 
     @Captor
@@ -80,6 +79,14 @@ public class AssignmentListItemWidgetTest {
 
     @Before
     public void initTestCase() {
+        GwtMockito.initMocks(this);
+        dataType = mock(ValueListBox.class);
+        processVar = mock(ValueListBox.class);
+        customDataType = mock(TextBox.class);
+        constant = mock(TextBox.class);
+        dataTypeComboBox = mock(ComboBox.class);
+        processVarComboBox = mock(ComboBox.class);
+
         widget = GWT.create(AssignmentListItemWidgetViewImpl.class);
         AssignmentRow assignmentRow = new AssignmentRow();
 

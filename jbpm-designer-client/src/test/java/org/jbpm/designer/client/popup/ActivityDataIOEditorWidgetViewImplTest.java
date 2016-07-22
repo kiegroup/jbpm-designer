@@ -16,9 +16,11 @@
 
 package org.jbpm.designer.client.popup;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.TableCellElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwtmockito.GwtMock;
-import com.google.gwtmockito.GwtMockitoTestRunner;
+import com.google.gwtmockito.GwtMockito;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.jboss.errai.ui.client.widget.ListWidget;
@@ -30,14 +32,18 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.uberfire.mocks.EventSourceMock;
+import org.uberfire.workbench.events.NotificationEvent;
 
+import javax.enterprise.event.Event;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-@RunWith(GwtMockitoTestRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class ActivityDataIOEditorWidgetViewImplTest {
 
     @Mock
@@ -46,25 +52,45 @@ public class ActivityDataIOEditorWidgetViewImplTest {
     @GwtMock
     private Button button;
 
+    @Mock
+    private TableCellElement nameth;
+
+    @Mock
+    private TableCellElement datatypeth;
+
     @GwtMock
     private ListWidget<AssignmentRow, AssignmentListItemWidgetViewImpl> assignments;
 
-    @GwtMock
     private ActivityDataIOEditorWidgetViewImpl view;
 
     @Captor
     private ArgumentCaptor<List<AssignmentRow>> captor;
 
+    @Captor
+    private ArgumentCaptor<NotificationEvent> eventCaptor;
+
     private List<AssignmentRow> rows;
+
+    protected Event<NotificationEvent> notification = mock(EventSourceMock.class);
 
     @Before
     public void setUp() {
+        GwtMockito.initMocks(this);
+
+        view = GWT.create(ActivityDataIOEditorWidgetViewImpl.class);
         view.assignments = assignments;
         view.addVarButton = button;
+        view.nameth = nameth;
+        view.datatypeth = datatypeth;
+        view.notification = notification;
 
         doCallRealMethod().when(view).setAssignmentRows(any(List.class));
         doCallRealMethod().when(view).init(any(ActivityDataIOEditorWidgetView.Presenter.class));
         doCallRealMethod().when(view).handleAddVarButton(any(ClickEvent.class));
+        doCallRealMethod().when(view).showOnlySingleEntryAllowed();
+        doCallRealMethod().when(view).getAssignmentRows();
+        doCallRealMethod().when(view).getAssignmentWidget(anyInt());
+        doCallRealMethod().when(view).getAssignmentsCount();
 
         rows = new ArrayList<AssignmentRow>();
         rows.add(new AssignmentRow("varName", null, null, null, "varName", null));
@@ -74,9 +100,8 @@ public class ActivityDataIOEditorWidgetViewImplTest {
     @Test
     public void testInit() {
         view.init(presenter);
-
-        verify(button, timeout(1)).setText(DesignerEditorConstants.INSTANCE.Add());
-        verify(button, timeout(1)).setIcon(IconType.PLUS);
+        verify(button, times(1)).setText(DesignerEditorConstants.INSTANCE.Add());
+        verify(button, times(1)).setIcon(IconType.PLUS);
     }
 
     @Test
@@ -95,5 +120,42 @@ public class ActivityDataIOEditorWidgetViewImplTest {
         assertEquals("varName", captor.getValue().get(0).getProcessVar());
         assertEquals("varName2", captor.getValue().get(1).getName());
         assertEquals("varName2", captor.getValue().get(1).getProcessVar());
+    }
+
+    @Test
+    public void testOnlySingleEntryAllowed() {
+        view.showOnlySingleEntryAllowed();
+        verify(notification).fire(eventCaptor.capture());
+        assertEquals(DesignerEditorConstants.INSTANCE.Only_single_entry_allowed(), eventCaptor.getValue().getNotification());
+    }
+
+    @Test
+    public void testGetAssignmentRows() {
+        when(assignments.getValue()).thenReturn(rows);
+        assertEquals(rows, view.getAssignmentRows());
+    }
+
+    @Test
+    public void testGetAssignmentsCountEmpty() {
+        when(assignments.getValue()).thenReturn(new ArrayList<AssignmentRow>());
+        assertEquals(0, view.getAssignmentsCount());
+    }
+
+    @Test
+    public void testGetAssignmentsCount() {
+        when(assignments.getValue()).thenReturn(rows);
+        assertEquals(2, view.getAssignmentsCount());
+    }
+
+    @Test
+    public void testGetAssignmentWidget() {
+        view.getAssignmentWidget(0);
+        verify(assignments).getWidget(0);
+    }
+
+    @Test
+    public void testGetAssignmentWidgetMoreComplex() {
+        view.getAssignmentWidget(123);
+        verify(assignments).getWidget(123);
     }
 }

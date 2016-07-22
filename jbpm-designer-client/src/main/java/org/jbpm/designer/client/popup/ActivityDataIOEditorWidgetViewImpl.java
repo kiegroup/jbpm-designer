@@ -20,11 +20,18 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.HeadingElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Composite;
+
+import com.google.gwt.dom.client.*;
+import java.util.List;
+
+import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.constants.IconType;
+
 import org.jboss.errai.ui.client.widget.ListWidget;
 import org.jboss.errai.ui.client.widget.Table;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
@@ -33,11 +40,6 @@ import org.jboss.errai.ui.shared.api.annotations.Templated;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.uberfire.workbench.events.NotificationEvent;
-
-import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import java.util.List;
 
 @Dependent
 @Templated("ActivityDataIOEditorWidget.html#widget" )
@@ -50,13 +52,19 @@ public class ActivityDataIOEditorWidgetViewImpl extends Composite implements Act
     protected Button addVarButton;
 
     @DataField
-    private final Element table = DOM.createTable();
+    private final TableElement table = Document.get().createTableElement();
 
     @DataField
     private HeadingElement tabletitle = Document.get().createHElement(3);
 
     @DataField
-    private final Element processvarorconstantth = DOM.createTH();
+    protected TableCellElement nameth = Document.get().createTHElement();
+
+    @DataField
+    protected TableCellElement datatypeth = Document.get().createTHElement();
+
+    @DataField
+    private final TableCellElement processvarorconstantth = Document.get().createTHElement();
 
     /**
      * The list of assignments that currently exist.
@@ -67,7 +75,7 @@ public class ActivityDataIOEditorWidgetViewImpl extends Composite implements Act
     protected ListWidget<AssignmentRow, AssignmentListItemWidgetViewImpl> assignments;
 
     @Inject
-    private Event<NotificationEvent> notification;
+    protected Event<NotificationEvent> notification;
 
     @Override
     public void init(Presenter presenter) {
