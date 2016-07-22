@@ -850,3 +850,11 @@ function formatScript(str) {
     }
     return result;
 }
+
+function scrollToElement() {
+    if(parent.ORYX.PROCESSDOC_RESOURCEID != "" && parent.ORYX.PROCESSDOC_RESOURCEID.length > 0) {
+        document.getElementById(parent.ORYX.PROCESSDOC_RESOURCEID).scrollIntoView();
+        parent.ORYX.PROCESSDOC_RESOURCEID = "";
+    }
+
+}
