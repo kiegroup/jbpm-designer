@@ -52,12 +52,6 @@ public class ActivityDataIOEditorWidgetViewImplTest {
     @GwtMock
     private Button button;
 
-    @Mock
-    private TableCellElement nameth;
-
-    @Mock
-    private TableCellElement datatypeth;
-
     @GwtMock
     private ListWidget<AssignmentRow, AssignmentListItemWidgetViewImpl> assignments;
 
@@ -80,8 +74,6 @@ public class ActivityDataIOEditorWidgetViewImplTest {
         view = GWT.create(ActivityDataIOEditorWidgetViewImpl.class);
         view.assignments = assignments;
         view.addVarButton = button;
-        view.nameth = nameth;
-        view.datatypeth = datatypeth;
         view.notification = notification;
 
         doCallRealMethod().when(view).setAssignmentRows(any(List.class));
