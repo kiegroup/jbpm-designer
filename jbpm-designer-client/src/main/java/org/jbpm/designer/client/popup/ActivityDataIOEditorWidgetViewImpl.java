@@ -58,12 +58,6 @@ public class ActivityDataIOEditorWidgetViewImpl extends Composite implements Act
     private HeadingElement tabletitle = Document.get().createHElement(3);
 
     @DataField
-    protected TableCellElement nameth = Document.get().createTHElement();
-
-    @DataField
-    protected TableCellElement datatypeth = Document.get().createTHElement();
-
-    @DataField
     private final TableCellElement processvarorconstantth = Document.get().createTHElement();
 
     /**
