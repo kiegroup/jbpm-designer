@@ -34,6 +34,7 @@ import org.uberfire.java.nio.base.options.CommentedOption;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.containsString;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BusinessProcessCopyHelperTest {
@@ -97,8 +98,9 @@ public class BusinessProcessCopyHelperTest {
         try {
             Definitions def = new JbpmProfileImpl().getDefinitions(newBPMN2);
             org.eclipse.bpmn2.Process process = helper.getRootProcess(def);
-
-            assertEquals(process.getId(), "Evaluation.MyNewProcess");
+            assertNotNull(process);
+            assertNotNull(process.getId());
+            assertThat(process.getId(), containsString("MyNewProcess"));
         } catch (Exception e) {
             fail("Cannot parse new process: " + e.getMessage());
         }
