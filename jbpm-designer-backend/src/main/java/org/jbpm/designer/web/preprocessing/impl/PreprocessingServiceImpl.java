@@ -19,13 +19,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import javax.enterprise.event.Event;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.guvnor.common.services.project.service.POMService;
+import org.guvnor.common.services.project.service.ProjectService;
+import org.guvnor.common.services.shared.metadata.MetadataService;
+import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingService;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.workbench.events.NotificationEvent;
 
 
 /**
@@ -50,9 +56,15 @@ public class PreprocessingServiceImpl implements IDiagramPreprocessingService {
         return preprocessingUnits.get(profile.getName());
     }
 
-    public void init(ServletContext context, VFSService vfsService) {
-        _registry.put("default", new DefaultPreprocessingUnit(context, vfsService));
-        _registry.put("jbpm", new JbpmPreprocessingUnit(context, vfsService));
+    public void init(ServletContext context,
+                     VFSService vfsService,
+                     Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent,
+                     Event<NotificationEvent> notification,
+                     POMService pomService,
+                     ProjectService projectService,
+                     MetadataService metadataService) {
+        _registry.put("default", new DefaultPreprocessingUnit(context, vfsService, workitemInstalledEventEvent, notification, pomService, projectService, metadataService));
+        _registry.put("jbpm", new JbpmPreprocessingUnit(context, vfsService, workitemInstalledEventEvent, notification, pomService, projectService, metadataService));
     }
 
 }

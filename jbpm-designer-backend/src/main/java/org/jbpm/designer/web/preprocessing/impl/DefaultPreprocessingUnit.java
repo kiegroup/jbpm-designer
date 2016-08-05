@@ -20,13 +20,16 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.guvnor.common.services.project.service.POMService;
+import org.guvnor.common.services.project.service.ProjectService;
+import org.guvnor.common.services.shared.metadata.MetadataService;
+import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.io.IOService;
-import org.uberfire.workbench.events.ResourceAddedEvent;
-import org.uberfire.workbench.events.ResourceUpdatedEvent;
+import org.uberfire.workbench.events.NotificationEvent;
 
 
 /**
@@ -35,7 +38,13 @@ import org.uberfire.workbench.events.ResourceUpdatedEvent;
  */
 public class DefaultPreprocessingUnit implements IDiagramPreprocessingUnit {
 
-    public DefaultPreprocessingUnit(ServletContext servletContext, VFSService vfsService) {
+    public DefaultPreprocessingUnit(ServletContext servletContext,
+                                    VFSService vfsService,
+                                    Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent,
+                                    Event<NotificationEvent> notification,
+                                    POMService pomService,
+                                    ProjectService projectService,
+                                    MetadataService metadataService) {
         
     }
     

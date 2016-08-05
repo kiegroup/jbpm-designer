@@ -1,0 +1,21 @@
+import org.drools.core.process.core.datatype.impl.type.StringDataType;
+[
+    [
+        "name" : "SwitchYardService",
+        "description" : "Switch Yart Service Integration",
+        "parameters" : [
+            "ServiceName" : new StringDataType(),
+            "ServiceOperationName" : new StringDataType()
+        ],
+        "displayName" : "SwitchYard Service",
+        "icon" : "switchyard.gif",
+        "category": "Integration",
+	"defaultHandler": "reflection: com.switchyard.SwitchYardHandler",
+	"dependencies": [
+
+    	],
+	"mavenDependencies" : [
+		"org.jboss:switchyard:3.2"
+        ]
+    ]
+] 
