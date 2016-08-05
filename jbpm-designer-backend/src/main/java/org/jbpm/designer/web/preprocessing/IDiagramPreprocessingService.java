@@ -21,11 +21,13 @@ import javax.enterprise.event.Event;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.guvnor.common.services.project.service.POMService;
+import org.guvnor.common.services.project.service.ProjectService;
+import org.guvnor.common.services.shared.metadata.MetadataService;
+import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.workbench.events.ResourceAddedEvent;
-import org.uberfire.workbench.events.ResourceUpdatedEvent;
-
+import org.uberfire.workbench.events.NotificationEvent;
 
 /**
  * A service to find pre-processing units.
@@ -36,5 +38,11 @@ import org.uberfire.workbench.events.ResourceUpdatedEvent;
 public interface IDiagramPreprocessingService {
     public Collection<IDiagramPreprocessingUnit> getRegisteredPreprocessingUnits(HttpServletRequest request);
     public IDiagramPreprocessingUnit findPreprocessingUnit(HttpServletRequest request, IDiagramProfile profile);
-    public void init(ServletContext servletContext,VFSService vfsService);
+    public void init(ServletContext servletContext,
+                     VFSService vfsService,
+                     Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent,
+                     Event<NotificationEvent> notification,
+                     POMService pomService,
+                     ProjectService projectService,
+                     MetadataService metadataService);
 }

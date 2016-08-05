@@ -25,16 +25,8 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
+import javax.enterprise.event.Event;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -47,19 +39,25 @@ import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
 import org.drools.core.util.MVELSafeHelper;
+import org.guvnor.common.services.project.service.POMService;
+import org.guvnor.common.services.project.service.ProjectService;
+import org.guvnor.common.services.shared.metadata.MetadataService;
+import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.repository.filters.FilterByExtension;
-import org.jbpm.designer.repository.filters.FilterByFileName;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
+import org.jbpm.designer.server.EditorHandler;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.jbpm.designer.web.server.ServiceRepoUtils;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
+import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -70,6 +68,7 @@ import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.NoSuchFileException;
+import org.uberfire.workbench.events.NotificationEvent;
 
 /**
  * JbpmPreprocessingUnit - preprocessing unit for the jbpm profile
@@ -113,12 +112,39 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String globalDir;
     private VFSService vfsService;
     private boolean includeDataObjects;
+    private Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent;
+    private Event<NotificationEvent> notification;
+    private POMService pomService;
+    private ProjectService projectService;
+    private MetadataService metadataService;
 
-    public JbpmPreprocessingUnit(ServletContext servletContext, VFSService vfsService) {
-        this(servletContext, ConfigurationProvider.getInstance().getDesignerContext(), vfsService);
+    public JbpmPreprocessingUnit() {}
+
+    public JbpmPreprocessingUnit(ServletContext servletContext,
+                                 VFSService vfsService,
+                                 Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent,
+                                 Event<NotificationEvent> notification,
+                                 POMService pomService,
+                                 ProjectService projectService,
+                                 MetadataService metadataService) {
+        this(servletContext,
+                ConfigurationProvider.getInstance().getDesignerContext(),
+                vfsService,
+                workitemInstalledEventEvent,
+                notification,
+                pomService,
+                projectService,
+                metadataService);
     }
 
-    public JbpmPreprocessingUnit(ServletContext servletContext, String designerPath, VFSService vfsService) {
+    public JbpmPreprocessingUnit(ServletContext servletContext,
+                                 String designerPath,
+                                 VFSService vfsService,
+                                 Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent,
+                                 Event<NotificationEvent> notification,
+                                 POMService pomService,
+                                 ProjectService projectService,
+                                 MetadataService metadataService) {
         this.designer_path = designerPath.substring(0, designerPath.length()-1);
         this.vfsService = vfsService;
         stencilPath = servletContext.getRealPath(designer_path + "/" + STENCILSET_PATH);
@@ -136,6 +162,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         patternsData = servletContext.getRealPath(designer_path + "/defaults/patterns.json");
         sampleBpmn2 = servletContext.getRealPath(designer_path + "/defaults/SampleProcess.bpmn2");
         includeDataObjects = Boolean.parseBoolean(System.getProperty(INCLUDE_DATA_OBJECT) == null ? "true" : System.getProperty(INCLUDE_DATA_OBJECT));
+        this.workitemInstalledEventEvent = workitemInstalledEventEvent;
+        this.notification = notification;
+        this.pomService = pomService;
+        this.projectService = projectService;
+        this.metadataService = metadataService;
     }
 
     public String getOutData() {
@@ -147,7 +178,14 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return outData;
     }
 
-    public void preprocess(HttpServletRequest req, HttpServletResponse res, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, boolean viewLocked, IOService ioService, RepositoryDescriptor descriptor) {
+    public void preprocess(HttpServletRequest req,
+                           HttpServletResponse res,
+                           IDiagramProfile profile,
+                           ServletContext serlvetContext,
+                           boolean readOnly,
+                           boolean viewLocked,
+                           IOService ioService,
+                           RepositoryDescriptor descriptor) {
         try {
 
             if(readOnly) {
@@ -189,6 +227,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             String uuid = Utils.getUUID(req);
             //createAssetIfNotExisting(repository, "/defaultPackage", "BPMN2-SampleProcess", "bpmn2", getBytesFromFile(new File(sampleBpmn2)));
+
+            installDefaultRepositoryWorkitems(uuid, repository, vfsService);
 
             Asset<String> asset = repository.loadAsset(uuid);
             this.globalDir = profile.getRepositoryGlobalDir( uuid );
@@ -383,13 +423,10 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 workDefinition.setCategory(category);
 
                 String icon = (String) workDefinitionMap.get("icon");
-
                 if (icon == null) {
                 	icon = this.globalDir + "/defaultservicenodeicon.png";
                 }
-
-                Asset<byte[]> iconAsset = null;
-
+                Asset<byte[]> iconAsset;
                 boolean iconFound = false;
                 // Look for icon located relative to the asset
                 String absoluteIcon = createAbsoluteIconPath(assetLocation, icon);
@@ -397,7 +434,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     icon = absoluteIcon;
                     iconFound = true;
                 }
-
                 // Icon not found relative to asset, look for it relative to globalDir
                 if (!iconFound) {
                     if(!icon.startsWith(this.globalDir)) {
@@ -417,16 +453,18 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     _logger.error(e.getMessage());
                     icon = this.globalDir + "/defaultservicenodeicon.png";
                 }
-
                 iconAsset = repository.loadAssetFromPath(icon);
-
                 workDefinition.setIcon(icon);
 
                 String iconEncoded = "data:image/png;base64," + javax.xml.bind.DatatypeConverter.printBase64Binary(iconAsset.getAssetContent());
                 workDefinition.setIconEncoded(URLEncoder.encode(iconEncoded, "UTF-8"));
+
                 if(workDefinitionMap.get("customEditor") != null) {
                     workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
+                } else {
+                    workDefinition.setCustomEditor("");
                 }
+
                 Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
                 if(workDefinitionMap.get("parameters") != null) {
                     Map<String, DataType> parameterMap = (Map<String, DataType>) workDefinitionMap.get("parameters");
@@ -435,25 +473,62 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                             parameters.add(new ParameterDefinitionImpl(entry.getKey(), entry.getValue()));
                         }
                     }
-                    workDefinition.setParameters(parameters);
                 }
+                workDefinition.setParameters(parameters);
 
+                Set<ParameterDefinition> results = new HashSet<ParameterDefinition>();
                 if(workDefinitionMap.get("results") != null) {
-                    Set<ParameterDefinition> results = new HashSet<ParameterDefinition>();
                     Map<String, DataType> resultMap = (Map<String, DataType>) workDefinitionMap.get("results");
                     if (resultMap != null) {
                         for (Map.Entry<String, DataType> entry : resultMap.entrySet()) {
                             results.add(new ParameterDefinitionImpl(entry.getKey(), entry.getValue()));
                         }
                     }
-                    workDefinition.setResults(results);
                 }
+                workDefinition.setResults(results);
+
                 if(workDefinitionMap.get("defaultHandler") != null) {
                     workDefinition.setDefaultHandler((String) workDefinitionMap.get("defaultHandler"));
+                } else {
+                    workDefinition.setDefaultHandler("");
                 }
+
                 if(workDefinitionMap.get("dependencies") != null) {
                     workDefinition.setDependencies(((List<String>) workDefinitionMap.get("dependencies")).toArray(new String[0]));
+                } else {
+                    workDefinition.setDependencies(new String[] {});
                 }
+
+                if(workDefinitionMap.get("documentation") != null) {
+                    workDefinition.setDocumentation((String) workDefinitionMap.get("documentation"));
+                } else {
+                    workDefinition.setDocumentation("");
+                }
+
+                if(workDefinitionMap.get("defaultHandler") != null) {
+                    workDefinition.setDefaultHandler((String) workDefinitionMap.get("defaultHandler"));
+                } else {
+                    workDefinition.setDefaultHandler("");
+                }
+
+                if(workDefinitionMap.get("version") != null) {
+                    workDefinition.setVersion((String) workDefinitionMap.get("version"));
+                } else {
+                    workDefinition.setVersion("");
+                }
+
+                if(workDefinitionMap.get("description") != null) {
+                    workDefinition.setDescription((String) workDefinitionMap.get("description"));
+                } else {
+                    workDefinition.setDescription("");
+                }
+
+                if(workDefinitionMap.get("mavenDependencies") != null) {
+                    workDefinition.setMavenDependencies(((List<String>) workDefinitionMap.get("mavenDependencies")).toArray(new String[0]));
+                } else {
+                    workDefinition.setMavenDependencies(new String[]{});
+                }
+
                 workDefinitions.put(workDefinition.getName(), workDefinition);
             }
         }
@@ -610,6 +685,42 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             _logger.error(e.getMessage());
         }
 
+    }
+
+    private void installDefaultRepositoryWorkitems(String uuid,
+                                                   Repository repository,
+                                                   VFSService vfsService) throws IOException {
+        String defaultServiceRepo = System.getProperty(EditorHandler.SERVICE_REPO) == null ? null : System.getProperty(EditorHandler.SERVICE_REPO);
+        String defaultServiceRepoTasks = System.getProperty(EditorHandler.SERVICE_REPO_TASKS) == null ? null : System.getProperty(EditorHandler.SERVICE_REPO_TASKS);
+
+        if(defaultServiceRepo != null &&
+                defaultServiceRepo.trim().length() > 0 &&
+                defaultServiceRepoTasks != null &&
+                defaultServiceRepoTasks.trim().length() > 0 &&
+                workitemInstalledEventEvent != null &&
+                notification != null &&
+                projectService != null &&
+                pomService != null &&
+                metadataService != null) {
+            Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(defaultServiceRepo);
+            if(workitemsFromRepo != null && workitemsFromRepo.size() > 0) {
+                List<String> toInstallTasks = Arrays.asList(defaultServiceRepoTasks.split("\\s*,\\s*"));
+                for(String installTask : toInstallTasks) {
+                    if(workitemsFromRepo.containsKey(installTask)) {
+                        ServiceRepoUtils.installWorkItem(workitemsFromRepo,
+                                installTask,
+                                uuid,
+                                repository,
+                                vfsService,
+                                workitemInstalledEventEvent,
+                                notification,
+                                pomService,
+                                projectService,
+                                metadataService);
+                    }
+                }
+            }
+        }
     }
 
     private void setupDefaultWorkflowPatterns(String location, Repository repository) {

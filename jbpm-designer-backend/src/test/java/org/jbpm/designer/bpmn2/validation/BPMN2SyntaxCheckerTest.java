@@ -248,7 +248,7 @@ public class BPMN2SyntaxCheckerTest {
         BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
         verifyErrorsOfElement(syntaxChecker,
                                 process.getJSONObject("properties").getString("id"),
-                                Arrays.asList("Task node 'generic task' [2] has no task type."));
+                                Arrays.asList("Node 'generic task' [2] Task has no task type."));
     }
 
     @Test

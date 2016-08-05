@@ -21,7 +21,11 @@
     <style xmlns="http://www.w3.org/1999/xhtml" media="screen" type="text/css">@import url("<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/ext-2.0.2/resources/css/ext-all.css");
     .extensive-remove {
         background-image: url(<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/remove.gif) ! important;
-    }</style>
+    }
+    .extensive-install {
+        background-image: url(<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/wrench.png) ! important;
+    }
+    </style>
     <!-- utility scripts -->
     <script xmlns="http://www.w3.org/1999/xhtml" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/compressed/designer-utils.js" type="text/javascript"></script>
 
