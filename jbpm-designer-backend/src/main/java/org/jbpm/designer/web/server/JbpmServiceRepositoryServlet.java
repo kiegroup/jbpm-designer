@@ -16,28 +16,33 @@
 package org.jbpm.designer.web.server;
 
 import org.apache.commons.io.IOUtils;
+import org.guvnor.common.services.project.model.Project;
+import org.guvnor.common.services.project.service.POMService;
+import org.guvnor.common.services.project.service.ProjectService;
+import org.guvnor.common.services.shared.metadata.MetadataService;
+import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
+import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.drools.core.util.ConfFileUtils;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONObject;
+import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.java.nio.file.FileAlreadyExistsException;
+import org.uberfire.workbench.events.NotificationEvent;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -66,6 +71,24 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
     @Inject
     private IDiagramProfileService _profileService = null;
 
+	@Inject
+	private Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent;
+
+	@Inject
+	private Event<NotificationEvent> notification;
+
+	@Inject
+	private VFSService vfsServices;
+
+	@Inject
+	private POMService pomService;
+
+	@Inject
+	private ProjectService<? extends Project> projectService;
+
+	@Inject
+	private MetadataService metadataService;
+
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -80,8 +103,8 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 		String assetsToInstall = req.getParameter("asset");
 		String categoryToInstall = req.getParameter("category");
 		String repoURL = req.getParameter("repourl");
-		
-		
+
+
 		if(repoURL == null || repoURL.length() < 1) {
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("application/json");
@@ -130,7 +153,18 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 					List<String> keyList = new ArrayList<String>();
 					keyList.add(wd.getName() == null ? "" : wd.getName());
 					keyList.add(wd.getDisplayName() == null ? "" : wd.getDisplayName());
-					keyList.add(repoURL + "/" + wd.getName() + "/" + wd.getIcon());
+
+					if(wd.getIcon() != null && wd.getIcon().trim().length() > 0) {
+						if(repoURL.startsWith("file:")) {
+							keyList.add(getFileIconEncoded(repoURL + "/" + wd.getName() + "/" + wd.getIcon()));
+						} else {
+							keyList.add(repoURL + "/" + wd.getName() + "/" + wd.getIcon());
+						}
+					} else {
+						_logger.warn("No icon specified. Showing default");
+						keyList.add(getFileIconEncoded(""));
+					}
+
 					keyList.add(wd.getCategory() == null ? "" : wd.getCategory());
 					keyList.add(wd.getExplanationText() == null ? "" : wd.getExplanationText());
 					keyList.add(repoURL + "/" + wd.getName() + "/" + wd.getDocumentation());
@@ -148,16 +182,21 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 						String delim = "";
 					    for (String resName : wd.getResultNames()) {
 					        br.append(delim).append(resName);
-					        delim = ",";
-					    }
+							delim = ",";
+						}
 					}
 					keyList.add(br.toString());
+
+					keyList.add(wd.getDefaultHandler() == null ? "" : wd.getDefaultHandler());
 					retMap.put(key, keyList);
+
 				}
 				JSONObject jsonObject = new JSONObject();
 				for (Entry<String,List<String>> retMapKey : retMap.entrySet()) {
 					try {
-						jsonObject.put(retMapKey.getKey(), retMapKey.getValue());
+						if(retMapKey != null && retMapKey.getKey() != null) {
+							jsonObject.put(retMapKey.getKey(), retMapKey.getValue());
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -175,46 +214,30 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("application/json");
 			if(workitemsFromRepo != null && workitemsFromRepo.size() > 0) {
-				boolean gotPackage = false;
-				String pkg = "";
 				for(String key : workitemsFromRepo.keySet()) {
-					if(key.equals(assetsToInstall) && categoryToInstall.equals(workitemsFromRepo.get(key).getCategory())) {
-                        String workitemDefinitionURL = workitemsFromRepo.get(key).getPath() + "/" + workitemsFromRepo.get(key).getName() + ".wid";
-                        String iconFileURL = workitemsFromRepo.get(key).getPath() + "/" + workitemsFromRepo.get(key).getIcon();
-						String workItemDefinitionContent = ConfFileUtils.URLContentsToString(new URL(workitemDefinitionURL));
-						String iconName = workitemsFromRepo.get(key).getIcon();
-						String widName = workitemsFromRepo.get(key).getName();
-						byte[] iconContent = null;
+					if(key != null &&
+							key.equals(assetsToInstall) &&
+							categoryToInstall.equals(workitemsFromRepo.get(key).getCategory())) {
+
 						try {
-							iconContent = getImageBytes(new URL(iconFileURL)
-							.openStream());
-						} catch (Exception e1) {
-							_logger.error("Could not read icon image: " + e1.getMessage());
+							ServiceRepoUtils.installWorkItem(workitemsFromRepo,
+									key,
+									uuid,
+									repository,
+									vfsServices,
+									workitemInstalledEventEvent,
+									notification,
+									pomService,
+									projectService,
+									metadataService);
+						} catch (FileAlreadyExistsException e) {
+							_logger.warn("Workitem already installed.");
+							resp.setCharacterEncoding("UTF-8");
+							resp.setContentType("application/json");
+							resp.getWriter().write("alreadyinstalled");
+							return;
 						}
-						// install wid and icon
-                        repository.deleteAsset(getRepositoryDir( uuid ) + "/" +  widName + ".wid");
 
-                        AssetBuilder widAssetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-                        widAssetBuilder.name(widName)
-                                       .location(getRepositoryDir( uuid ))
-                                       .type("wid")
-                                       .content(workItemDefinitionContent);
-
-                        repository.createAsset(widAssetBuilder.getAsset());
-
-                        AssetBuilder iconAssetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
-                        String iconExtension = iconName.substring(iconName.lastIndexOf(".") + 1);
-                        String iconFileName = iconName.substring(0, iconName.lastIndexOf("."));
-
-
-                        repository.deleteAsset(getRepositoryDir( uuid ) + "/" + iconFileName + "." + iconExtension);
-
-                        iconAssetBuilder.name(iconFileName)
-                                .location(getRepositoryDir( uuid ))
-                                .type(iconExtension)
-                                .content(iconContent);
-
-                        repository.createAsset(iconAssetBuilder.getAsset());
 					}
 				}
 			} else {
@@ -227,22 +250,22 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 		} 
 	}
 
-	private byte[] getImageBytes(InputStream is) throws Exception {
+	private String getFileIconEncoded(String fileIconPath) {
 		try {
-			return IOUtils.toByteArray(is);
-		}
-		catch (IOException e) {
-			throw new Exception("Error creating image byte array.");
-		}
-		finally {
-			if (is != null) { is.close(); }
+			return javax.xml.bind.DatatypeConverter.printBase64Binary (
+					IOUtils.toByteArray( new FileInputStream( new File( fileIconPath.substring(5) ) ) )
+			);
+		} catch(Exception e) {
+			try {
+				// return default service icon
+				String defaultServiceNodeIcon = getServletContext().getRealPath(ConfigurationProvider.getInstance().getDesignerContext() + "/defaults/defaultservicenodeicon.png");
+				return javax.xml.bind.DatatypeConverter.printBase64Binary(
+						IOUtils.toByteArray( new FileInputStream( new File( defaultServiceNodeIcon ) ) )
+				);
+			} catch(Exception ee) {
+				_logger.error("Unable to load workitem icon: " + ee.getMessage());
+				return "";
+			}
 		}
 	}
-
-    private String getRepositoryDir(String uuid) {
-        int iStart = uuid.indexOf("//");
-        iStart = uuid.indexOf('/', iStart + 2);
-        int iEnd = uuid.lastIndexOf('/');
-        return uuid.substring(iStart, iEnd);
-    }
 }

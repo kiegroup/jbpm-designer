@@ -306,6 +306,7 @@ ORYX.CONFIG.EVENT_DEF_DELETED = "notification.def.deleted";
 ORYX.CONFIG.EVENT_UPDATE_TASK_TYPE = "updatetaskevent";
 ORYX.CONFIG.EVENT_PASTE_END = "paste.end";
 ORYX.CONFIG.EVENT_DOCELEMENT_TO_MODEL = "docelementtomodelevent";
+ORYX.CONFIG.EVENT_INSTALL_WORKITEM = "workitem.install";
 
 // paint
 ORYX.CONFIG.EVENT_PAINT_NEWSHAPE = "paint.newshape";

@@ -696,8 +696,10 @@ ORYX.I18N.View.headerDocumentation='<i18n:message key="ORYX.I18N.View.headerDocu
 ORYX.I18N.View.headerInput='<i18n:message key="ORYX.I18N.View.headerInput">INPUT PARAMETERS</i18n:message>';
 ORYX.I18N.View.headerResults='<i18n:message key="ORYX.I18N.View.headerResults">RESULTS</i18n:message>';
 ORYX.I18N.View.headerCategory='<i18n:message key="ORYX.I18N.View.headerCategory">CATEGORY</i18n:message>';
+ORYX.I18N.View.headerHandler='<i18n:message key="ORYX.I18N.View.headerHandler">HANDLER</i18n:message>';
 ORYX.I18N.View.clickOnRowToInstall='<i18n:message key="ORYX.I18N.View.clickOnRowToInstall">Service Nodes. doud-click on a row to install.</i18n:message>';
 ORYX.I18N.View.failInstallation='<i18n:message key="ORYX.I18N.View.failInstallation">Failed to install the repository assets.</i18n:message>';
+ORYX.I18N.View.alreadyInstalled='<i18n:message key="ORYX.I18N.View.alreadyInstalled">Service Task already installed.</i18n:message>';
 ORYX.I18N.View.successInstall='<i18n:message key="ORYX.I18N.View.successInstall">Assets successfully installed. Save and re-open your process to start using them.</i18n:message>';
 ORYX.I18N.View.failAssetsInstallation='<i18n:message key="ORYX.I18N.View.failAssetsInstallation">Installing the repository assets failed</i18n:message>';
 ORYX.I18N.View.serviceNodes='<i18n:message key="ORYX.I18N.View.serviceNodes">Service Nodes</i18n:message>';
@@ -1364,6 +1366,7 @@ ORYX.I18N.view.failRetrieveVersionsSource='<i18n:message key="ORYX.I18N.view.fai
 ORYX.I18N.view.convertingToBPMN2Fail='<i18n:message key="ORYX.I18N.view.convertingToBPMN2Fail">Converting to BPMN2 failed</i18n:message>';
 ORYX.I18N.view.compareBPMN2PReviousVersions='<i18n:message key="ORYX.I18N.view.compareBPMN2PReviousVersions">Compare process BPMN2 with previous versions</i18n:message>';
 ORYX.I18N.view.replaceExistingModel='<i18n:message key="ORYX.I18N.view.replaceExistingModel">Replace existing model?</i18n:message>';
+ORYX.I18N.view.installSelectedWorkitem='<i18n:message key="ORYX.I18N.view.installSelectedWorkitem">Install selected item?</i18n:message>';
 ORYX.I18N.view.importSuccess='<i18n:message key="ORYX.I18N.view.importSuccess">Successfully imported</i18n:message>';
 ORYX.I18N.view.unableImportProvided='<i18n:message key="ORYX.I18N.view.unableImportProvided">Unable to import provided</i18n:message>';
 ORYX.I18N.view.processSVGSource='<i18n:message key="ORYX.I18N.view.processSVGSource">Process SVG Source</i18n:message>';
