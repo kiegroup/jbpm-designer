@@ -5087,7 +5087,7 @@ if(typeof VMM != 'undefined' && typeof VMM.Language == 'undefined') {
 			time_only : "hh:MM:ss:L"
 		},
 		messages: {
-			loading_timeline: "Loading Timeline... ",
+			loading_timeline: parent.parent.ORYX.I18N.View.sim.LoadingTimeline,
 			return_to_title: "Return to Title",
 			expand_timeline: "Expand Timeline",
 			contract_timeline: "Contract Timeline",
