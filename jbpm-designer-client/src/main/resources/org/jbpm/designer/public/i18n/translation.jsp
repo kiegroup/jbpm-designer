@@ -781,6 +781,7 @@ ORYX.I18N.View.sim.HorizontalBarChart = '<i18n:message key="ORYX.I18N.View.sim.H
 ORYX.I18N.View.sim.PieChart = '<i18n:message key="ORYX.I18N.View.sim.PieChart">Pie Chart</i18n:message>';
 ORYX.I18N.View.sim.Table = '<i18n:message key="ORYX.I18N.View.sim.Table">Table</i18n:message>';
 ORYX.I18N.View.sim.Timeline = '<i18n:message key="ORYX.I18N.View.sim.Timeline">Timeline</i18n:message>';
+ORYX.I18N.View.sim.LoadingTimeline = '<i18n:message key="ORYX.I18N.View.sim.LoadingTimeline">Loading Timeline...</i18n:message>';
 ORYX.I18N.View.sim.LineChart = '<i18n:message key="ORYX.I18N.View.sim.LineChart">Line Chart</i18n:message>';
 ORYX.I18N.View.sim.NoDataAvailable = '<i18n:message key="ORYX.I18N.View.sim.NoDataAvailable">No Data Available.</i18n:message>';
 ORYX.I18N.View.sim.Chart = '<i18n:message key="ORYX.I18N.View.sim.Chart">Chart</i18n:message>';
