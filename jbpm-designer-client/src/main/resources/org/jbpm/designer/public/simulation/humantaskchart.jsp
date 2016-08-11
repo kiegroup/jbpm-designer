@@ -21,9 +21,11 @@ function clearChart() {
 <center>
 <div style="margin:20;padding:0;">
 	<!-- <div class="timelineicon"><a href="#" onclick="clearChart(); showTimeline(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/timelineicon.png" title="Timeline"/></a></div> -->
-	<div class="tableicon"><a href="#" onclick="clearChart(); showTables(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/tableicon.png" title="Tables"/></a></div>
-    <div class="hbcharticon"><a href="#" onclick="clearChart(); showBarCharts(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/hbarcharticon.png" title="Bar Charts"/></a></div>
-    <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartNodeName + ")");</script></div>
+	<div class="tableicon"><a href="#" onclick="clearChart(); showTables(); return false;"><img id="tableiconimg" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/tableicon.png" title="Table"/></a></div>
+	<script>document.getElementById('tableiconimg').title = parent.ORYX.I18N.View.sim.Table;</script>
+	<div class="hbcharticon"><a href="#" onclick="clearChart(); showBarCharts(); return false;"><img id="hbarcharticonimg" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/hbarcharticon.png" title="Horizontal Bar Chart"/></a></div>
+	<script>document.getElementById('hbarcharticonimg').title = parent.ORYX.I18N.View.sim.HorizontalBarChart;</script>
+	<div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartNodeName + ")");</script></div>
 </div><br/>
 <div class="outterchart">
     <h2><script>document.write(parent.ORYX.I18N.View.sim.chartsExecutionTimes);</script></h2>
