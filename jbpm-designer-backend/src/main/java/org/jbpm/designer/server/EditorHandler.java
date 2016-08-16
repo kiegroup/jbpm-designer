@@ -15,6 +15,7 @@
  */
 package org.jbpm.designer.server;
 
+import javax.enterprise.event.Event;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -22,12 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.WeakHashMap;
+import java.util.*;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletConfig;
@@ -39,7 +35,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.io.IOUtils;
+import org.guvnor.common.services.project.model.Project;
+import org.guvnor.common.services.project.service.POMService;
+import org.guvnor.common.services.project.service.ProjectService;
+import org.guvnor.common.services.shared.metadata.MetadataService;
 import org.jboss.drools.impl.DroolsFactoryImpl;
+import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.util.Utils;
@@ -58,6 +59,7 @@ import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.io.IOService;
+import org.uberfire.workbench.events.NotificationEvent;
 
 /**
  * Servlet to load plugin and Oryx stencilset
@@ -99,6 +101,10 @@ public class EditorHandler extends HttpServlet {
      */
     public static final String SKIN = "designer.skin";
 
+    public static final String SERVICE_REPO = "org.jbpm.service.repository";
+
+    public static final String SERVICE_REPO_TASKS = "org.jbpm.service.servicetasknames";
+
     /**
      * The designer bundle version looked up from the manifest.
      */
@@ -138,6 +144,9 @@ public class EditorHandler extends HttpServlet {
 
     private IDiagramProfile profile;
 
+    private String serviceRepo;
+    private String serviceRepoTasks;
+
     /**
      * The profile service, a global registry to get the
      * profiles.
@@ -154,6 +163,21 @@ public class EditorHandler extends HttpServlet {
 
     @Inject
     private RepositoryDescriptor descriptor;
+
+    @Inject
+    private Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent;
+
+    @Inject
+    private Event<NotificationEvent> notification;
+
+    @Inject
+    private POMService pomService;
+
+    @Inject
+    private ProjectService<? extends Project> projectService;
+
+    @Inject
+    private MetadataService metadataService;
 
     /**
      * The pre-processing service, a global registry to get
@@ -182,7 +206,7 @@ public class EditorHandler extends HttpServlet {
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());
         _preProcessingService = PreprocessingServiceImpl.INSTANCE;
-        _preProcessingService.init(config.getServletContext(), vfsServices);
+        _preProcessingService.init(config.getServletContext(), vfsServices, workitemInstalledEventEvent, notification, pomService, projectService, metadataService);
 
         _devMode = Boolean.parseBoolean(System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV));
         _useOldDataAssignments = Boolean.parseBoolean(System.getProperty(USEOLDDATAASSIGNMENTS) == null ? config.getInitParameter(USEOLDDATAASSIGNMENTS) : System.getProperty(USEOLDDATAASSIGNMENTS));
@@ -190,6 +214,9 @@ public class EditorHandler extends HttpServlet {
         _skin = System.getProperty(SKIN) == null ? config.getInitParameter(SKIN) : System.getProperty(SKIN);
         _designerVersion = readDesignerVersion(config.getServletContext());
         showPDFDoc = doShowPDFDoc(config);
+        serviceRepo = System.getProperty(SERVICE_REPO) == null ? config.getInitParameter(SERVICE_REPO) : System.getProperty(SERVICE_REPO);
+        serviceRepoTasks = System.getProperty(SERVICE_REPO_TASKS) == null ? config.getInitParameter(SERVICE_REPO_TASKS) : System.getProperty(SERVICE_REPO_TASKS);
+
 
         String editor_file = config.
                 getServletContext().getRealPath(designer_path + "editor.st");
@@ -264,7 +291,14 @@ public class EditorHandler extends HttpServlet {
                         "Performing diagram information pre-processing steps. ");
             }
             preprocessingUnit = _preProcessingService.findPreprocessingUnit(request, profile);
-            preprocessingUnit.preprocess(request, response, profile, getServletContext(), Boolean.parseBoolean(readOnly), Boolean.parseBoolean(viewLocked), ioService, descriptor);
+            preprocessingUnit.preprocess(request,
+                    response,
+                    profile,
+                    getServletContext(),
+                    Boolean.parseBoolean(readOnly),
+                    Boolean.parseBoolean(viewLocked),
+                    ioService,
+                    descriptor);
         }
 
         //output env javascript files
@@ -320,6 +354,8 @@ public class EditorHandler extends HttpServlet {
         }
 
         ST editorTemplate = new ST(_doc, '$', '$');
+        editorTemplate.add("bopen", "{");
+        editorTemplate.add("bclose", "}");
         editorTemplate.add("editorprofile", profileName);
         editorTemplate.add("editoruuid", uuid);
         editorTemplate.add("editorid", editorID);
@@ -381,6 +417,9 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("ssextensions", ssexts.toString());
 
         editorTemplate.add("contextroot", request.getContextPath());
+
+        editorTemplate.add("servicerepo", serviceRepo == null ? "" : serviceRepo);
+        editorTemplate.add("servicerepotasks", serviceRepoTasks == null ? "" : Arrays.asList(serviceRepoTasks.split(",")));
 
         response.setContentType("text/javascript; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
@@ -481,4 +520,5 @@ public class EditorHandler extends HttpServlet {
     public void setProfile(IDiagramProfile profile) {
         this.profile = profile;
     }
+
 }

@@ -3476,7 +3476,7 @@
                     "fortasktypes":"None|Send|Receive|User|Manual|Service",
                     "ifproptrue":"multipleinstance"
                 $bclose$,
-		$bopen$
+				$bopen$
                     "id":"multipleinstancecompletioncondition",
                     "type":"Expression",
                     "title":"MI completion condition",
@@ -3529,7 +3529,7 @@
 					"id":"documentation",
 					"type":"Text",
 					"title":"Documentation",
-					"value":"$workitemDefs.(k).explanationText$", 
+					"value":"$workitemDefs.(k).documentation$",
 					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
 					"description_ja":"この属性は、説明やドキュメントなど、BPMN要素の注釈に使用されます。",
 					"readonly":false,
@@ -3538,6 +3538,88 @@
 					"wrapLines":true,
 					"extra" : true
 				$bclose$,
+				$bopen$
+					"id":"category",
+					"type":"Text",
+					"title":"Category",
+					"value":"$workitemDefs.(k).category$",
+					"description":"Category.",
+					"description_ja":"Category",
+					"readonly":true,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"extra" : true
+                $bclose$,
+                $if(workitemDefs.(k).dependencies)$
+					$bopen$
+						"id":"dependencies",
+						"type":"Text",
+						"title":"Dependencies",
+						"value":"$workitemDefs.(k).dependencies:{k1| $k1$}; separator=","$",
+						"description":"Dependencies.",
+						"description_ja":"Dependencies",
+						"readonly":true,
+						"optional":true,
+						"length":"",
+						"wrapLines":true,
+						"extra" : true
+					$bclose$,
+				$endif$
+				$if(workitemDefs.(k).mavendependencies)$
+					$bopen$
+						"id":"mavendependencies",
+						"type":"Text",
+						"title":"Maven Dependencies",
+						"value":"$workitemDefs.(k).mavenDependencies:{k1| $k1$}; separator=","$",
+						"description":"Maven Dependencies.",
+						"description_ja":"Maven Dependencies",
+						"readonly":true,
+						"optional":true,
+						"length":"",
+						"wrapLines":true,
+						"extra" : true
+					$bclose$,
+				$endif$
+                $bopen$
+					"id":"defaulthandler",
+					"type":"Text",
+					"title":"Default Handler",
+					"value":"$workitemDefs.(k).defaultHandler$",
+					"description":"Default Handler.",
+					"description_ja":"Default Handler",
+					"readonly":true,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"extra" : true
+                $bclose$,
+                $bopen$
+					"id":"description",
+					"type":"Text",
+					"title":"Description",
+					"value":"$workitemDefs.(k).description$",
+					"description":"Description",
+					"description_ja":"Description",
+					"readonly":true,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"extra" : true
+                $bclose$,
+                $bopen$
+					"id":"version",
+					"type":"Text",
+					"title":"Version",
+					"value":"$workitemDefs.(k).version$",
+					"description":"Version",
+					"description_ja":"Version",
+					"readonly":true,
+					"optional":true,
+					"length":"",
+					"wrapLines":true,
+					"extra" : true
+                $bclose$,
 				$bopen$
 					"id":"taskName",
 					"type":"String",
