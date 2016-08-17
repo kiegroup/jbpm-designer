@@ -116,7 +116,8 @@ public class JbpmServiceRepositoryServletTest extends RepositoryBaseTest {
 
         assertEquals(1, repository.listAssetsRecursively("/", new FilterByExtension("bpmn2")).size());
         assertEquals(1, repository.listAssetsRecursively("/", new FilterByExtension("wid")).size());
-        assertEquals(1, repository.listAssetsRecursively("/", new FilterByExtension("png")).size());
+        // rewards wid has no icon
+        assertEquals(0, repository.listAssetsRecursively("/", new FilterByExtension("png")).size());
     }
 
     @Test

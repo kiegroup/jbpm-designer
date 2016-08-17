@@ -82,19 +82,20 @@ public class ServiceRepoUtils {
 
         repository.createAsset(widAssetBuilder.getAsset());
 
-        AssetBuilder iconAssetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
-        String iconExtension = iconName.substring(iconName.lastIndexOf(".") + 1);
-        String iconFileName = iconName.substring(0, iconName.lastIndexOf("."));
+        if(iconName != null) {
+            AssetBuilder iconAssetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+            String iconExtension = iconName.substring(iconName.lastIndexOf(".") + 1);
+            String iconFileName = iconName.substring(0, iconName.lastIndexOf("."));
 
+            repository.deleteAsset(getRepositoryDir(uuid) + "/" + iconFileName + "." + iconExtension);
 
-        repository.deleteAsset(getRepositoryDir(uuid) + "/" + iconFileName + "." + iconExtension);
+            iconAssetBuilder.name(iconFileName)
+                    .location(getRepositoryDir(uuid))
+                    .type(iconExtension)
+                    .content(iconContent);
 
-        iconAssetBuilder.name(iconFileName)
-                .location(getRepositoryDir( uuid ))
-                .type(iconExtension)
-                .content(iconContent);
-
-        repository.createAsset(iconAssetBuilder.getAsset());
+            repository.createAsset(iconAssetBuilder.getAsset());
+        }
 
         if(vfsServices != null ) {
             Path assetPath = vfsServices.get(uuid);
