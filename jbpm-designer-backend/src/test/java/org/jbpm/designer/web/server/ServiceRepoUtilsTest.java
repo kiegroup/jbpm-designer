@@ -166,6 +166,12 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
         Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(getClass().getResource("servicerepo").toURI().toString());
 
+        // should not fail if icon is not defined
+        assertNotNull(workitemsFromRepo.get("Rewardsystem"));
+        WorkDefinitionImpl rewardSystemWorkItem = workitemsFromRepo.get("Rewardsystem");
+        assertEquals("Rewardsystem", rewardSystemWorkItem.getName());
+        assertNull(rewardSystemWorkItem.getIcon());
+
         ServiceRepoUtils.installWorkItem(workitemsFromRepo,
                 "Rewardsystem",
                 uuid,
