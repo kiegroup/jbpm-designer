@@ -115,15 +115,20 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             handler: function(){
                 var tosaveVal = "";
                 var repoURLsCookieValue = this._readCookie("designerservicerepos");
+                var serviceUrlField = Ext.getCmp('serviceurlfield').getRawValue();
                 if(repoURLsCookieValue != null) {
-                    tosaveVal = repoURLsCookieValue + "," + Ext.getCmp('serviceurlfield').getRawValue();
+                    if(repoURLsCookieValue.indexOf(serviceUrlField) == -1) {
+                        tosaveVal = repoURLsCookieValue + "," + serviceUrlField;
+                    } else {
+                        tosaveVal = repoURLsCookieValue;
+                    }
                 } else {
-                    tosaveVal = Ext.getCmp('serviceurlfield').getRawValue();
+                    tosaveVal = serviceUrlField;
                 }
 
                 this._createCookie("designerservicerepos", tosaveVal, 365);
-                this._updateRepoDialog(Ext.getCmp('serviceurlfield').getRawValue(), dialogSize.width);
-                this.selectedrepourl = Ext.getCmp('serviceurlfield').getRawValue();
+                this._updateRepoDialog(serviceUrlField, dialogSize.width);
+                this.selectedrepourl = serviceUrlField;
             }.bind(this)
         });
 
@@ -199,7 +204,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             var valueParts = repoURLsCookieValue.split(",");
             for(var i = 0; i < valueParts.length; i++) {
                 var nextPart = valueParts[i];
-                if(nextPart.length >= 0) {
+                if(nextPart.length >= 0 && nextPart != ORYX.SERVICE_REPO) {
                     var nextPartArray = new Array();
                     nextPartArray.push(nextPart);
                     nextPartArray.push(nextPart);
