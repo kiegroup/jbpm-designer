@@ -12,7 +12,6 @@ import org.drools.core.process.core.datatype.impl.type.StringDataType;
     ],
     "displayName" : "Rewardsystem",
     "defaultHandler": "mvel: com.rewardsystem.MyRewardsHandler()",
-    "icon" : "reward.png",
     "category" : "Rewards",
     "dependencies": [
 
