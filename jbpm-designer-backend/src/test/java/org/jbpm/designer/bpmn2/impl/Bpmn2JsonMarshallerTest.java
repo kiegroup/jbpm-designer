@@ -1,30 +1,23 @@
 package org.jbpm.designer.bpmn2.impl;
 
-import static org.junit.Assert.*;
-
-import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxCheckerTest;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.DefaultProfileImpl;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
-
+import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxCheckerTest;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class Bpmn2JsonMarshallerTest {
 
-    DefaultProfileImpl profile = new DefaultProfileImpl();
-    // It is by design (Unmarshaller = marshaller)
-    IDiagramProfile.IDiagramUnmarshaller marshaller = profile.createUnmarshaller();
-
-    public static final String COST_PER_TIME_UNIT = "unitcost";
-    public static final String PROCESSING_TIME_MAX = "max";
-    public static final String PROCESSING_TIME_MIN = "min";
-    public static final String PROCESSING_TIME_MEAN = "mean";
-    public static final String PROBABILITY = "probability";
-    public static final String WORKING_HOURS = "workinghours";
-    public static final String QUANTITY = "quantity";
-    public static final String STANDARD_DEVIATION = "standarddeviation";
-    public static final String DISTRIBUTION_TYPE = "distributiontype";
+    private static final String COST_PER_TIME_UNIT = "unitcost";
+    private static final String PROCESSING_TIME_MAX = "max";
+    private static final String PROCESSING_TIME_MIN = "min";
+    private static final String PROCESSING_TIME_MEAN = "mean";
+    private static final String PROBABILITY = "probability";
+    private static final String WORKING_HOURS = "workinghours";
+    private static final String QUANTITY = "quantity";
+    private static final String STANDARD_DEVIATION = "standarddeviation";
+    private static final String DISTRIBUTION_TYPE = "distributiontype";
 
     private Bpmn2Loader loader = new Bpmn2Loader(Bpmn2JsonMarshallerTest.class);
 
