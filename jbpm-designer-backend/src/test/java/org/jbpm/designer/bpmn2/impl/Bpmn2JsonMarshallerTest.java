@@ -60,6 +60,40 @@ public class Bpmn2JsonMarshallerTest {
     }
 
     @Test
+    public void testMultiLineNames() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("multiLineNames.bpmn2");
+
+        // Lane elements
+        JSONObject lane = Bpmn2Loader.getChildByName(process, "my\nlane");
+        assertNotNull(lane);
+        assertNotNull(Bpmn2Loader.getChildByName(lane, "my\nuser\ntask"));
+        assertNotNull(Bpmn2Loader.getChildByName(lane, "my\nmessage"));
+        JSONObject adhocSubprocess = Bpmn2Loader.getChildByName(lane, "my\nadhoc\nsubprocess");
+
+        assertNotNull(adhocSubprocess);
+        assertNotNull(Bpmn2Loader.getChildByName(adhocSubprocess, "my\ntask\nin\nadhoc"));
+        assertNotNull(Bpmn2Loader.getChildByName(adhocSubprocess, "my\nmessage\nin\nsubprocess\nin\nlane"));
+
+        // Other elements in process
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nstart"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nflow\nin\nlane"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\ngate"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nterminate\nend"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nthrowing\nmessage"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nend"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nflow"));
+
+        // Embedded subprocess elements
+        JSONObject embeddedSubprocess = Bpmn2Loader.getChildByName(process, "my\nsubprocess");
+        assertNotNull(embeddedSubprocess);
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nmessage\nstart"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\ninner\nend"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nflow\nin\nsubprocess"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nmanual\ntask"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nescalation\nevent"));
+    }
+
+    @Test
     public void testSendTaskDataInputs() throws Exception {
         String[] variableNames = {"Comment", "Content", "CreatedBy", "GroupId", "Locale",
                 "NotCompletedNotify", "NotCompletedReassign", "NotStartedNotify", "NotStartedReassign",
