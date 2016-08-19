@@ -10,33 +10,39 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.bpmn2.Definitions;
 import org.jboss.drools.impl.DroolsPackageImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.DefaultProfileImpl;
+import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.File;
-import java.net.URL;
 
 public class Bpmn2Loader {
 
     private Class testClass;
     private String processJson;
-    DefaultProfileImpl profile = new DefaultProfileImpl();
+    JbpmProfileImpl profile = new JbpmProfileImpl();
 
     // It is by design (Unmarshaller = marshaller and vice versa)
     IDiagramProfile.IDiagramUnmarshaller marshaller = profile.createUnmarshaller();
-    IDiagramProfile.IDiagramMarshaller unmarshaller = profile.createMarshaller();
 
     public Bpmn2Loader(Class testClass) {
         this.testClass = testClass;
     }
 
-    public Definitions loadProcessFromJson(String fileName) throws Exception {
+    public Definitions loadProcessFromJson(String fileName, String zOrderEnabled) throws Exception {
+
+        profile.setZOrder(zOrderEnabled);
+
+        // It is by design (Unmarshaller = marshaller and vice versa)
+        IDiagramProfile.IDiagramMarshaller unmarshaller = profile.createMarshaller();
+
         URL fileURL = testClass.getResource(fileName);
         String json = new String(FileUtils.readFileToString(new File(fileURL.toURI())));
 
         return  unmarshaller.getDefinitions(json, "Email,HelloWorkItemHandler,Log,Rest,WebService");
+    }
+
+    public Definitions loadProcessFromJson(String fileName) throws Exception {
+        return loadProcessFromJson(fileName, "false");
     }
 
     public JSONObject loadProcessFromXml(String fileName, Class nonDefaultTestClass) throws Exception {
@@ -98,6 +104,7 @@ public class Bpmn2Loader {
         return bpmnElement.getJSONObject("properties").getString(propertyName);
     }
 
+
     public static String getResourceId(JSONObject bpmnElement) throws JSONException {
         return bpmnElement.getString("resourceId");
     }
@@ -106,15 +113,11 @@ public class Bpmn2Loader {
         return bpmnElement.getJSONObject("stencil").getString(propertyName);
     }
 
-    public DefaultProfileImpl getProfile() {
+    public JbpmProfileImpl getProfile() {
         return profile;
     }
 
     public String getProcessJson() {
         return processJson;
-    }
-
-    public IDiagramProfile.IDiagramMarshaller getUnmarshaller() {
-        return unmarshaller;
     }
 }
