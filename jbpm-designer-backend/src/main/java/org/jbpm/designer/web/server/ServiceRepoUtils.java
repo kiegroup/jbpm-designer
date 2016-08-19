@@ -72,8 +72,7 @@ public class ServiceRepoUtils {
             _logger.error("Could not read icon image: " + e1.getMessage());
         }
         // install wid and icon
-        repository.deleteAsset(getRepositoryDir( uuid ) + "/" +  widName + ".wid");
-
+        repository.deleteAssetFromPath(getRepositoryDir( uuid ) + "/" +  widName + ".wid");
         AssetBuilder widAssetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         widAssetBuilder.name(widName)
                 .location(getRepositoryDir( uuid ))
@@ -87,8 +86,7 @@ public class ServiceRepoUtils {
             String iconExtension = iconName.substring(iconName.lastIndexOf(".") + 1);
             String iconFileName = iconName.substring(0, iconName.lastIndexOf("."));
 
-            repository.deleteAsset(getRepositoryDir(uuid) + "/" + iconFileName + "." + iconExtension);
-
+            repository.deleteAssetFromPath(getRepositoryDir(uuid) + "/" + iconFileName + "." + iconExtension);
             iconAssetBuilder.name(iconFileName)
                     .location(getRepositoryDir(uuid))
                     .type(iconExtension)
