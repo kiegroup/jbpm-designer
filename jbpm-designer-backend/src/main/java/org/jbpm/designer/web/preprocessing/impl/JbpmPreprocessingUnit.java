@@ -254,7 +254,15 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 workitemConfigInfo = globalWorkitemConfigInfo;
             }
 
-            if(workitemConfigInfo == null || workitemConfigInfo.size() < 1) {
+            boolean defaultWidFound = false;
+            for ( Asset workItem : workitemConfigInfo ) {
+                if(workItem.getFullName().endsWith(defaultClasspathWid)) {
+                    defaultWidFound = true;
+                    break;
+                }
+            }
+
+            if( !defaultWidFound ) {
                 setupDefaultWorkitemConfigs(asset.getAssetLocation(), repository);
                 workitemConfigInfo = findWorkitemInfoForUUID(asset.getAssetLocation(), repository);
             }
