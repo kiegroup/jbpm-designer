@@ -23,6 +23,7 @@ import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
 import org.eclipse.bpmn2.di.impl.BPMNEdgeImpl;
+import org.eclipse.bpmn2.di.BPMNShape;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.dd.di.Edge;
@@ -97,17 +98,51 @@ public class Bpmn2UnmarshallingTest {
     }
 
     @Test
-    public void testLaneUnmarshalling() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("pool.json");
+    public void testLaneUnmarshallingOrdering() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("lane.json", "true");
         assertTrue(definitions.getRootElements().size() == 1);
         assertTrue(definitions.getRootElements().get(0) instanceof Process);
         Process process = getRootProcess(definitions);
         assertTrue(process.getLaneSets().size() == 1);
         assertTrue(process.getLaneSets().get(0).getLanes().size() == 1);
-        Lane l = process.getLaneSets().get(0).getLanes().get(0);
-        assertEquals("my first lane", l.getName());
+        Lane lane = process.getLaneSets().get(0).getLanes().get(0);
+        assertEquals("my first lane", lane.getName());
+        verifyBpmnShapePresent(lane, definitions);
+        Task task = (Task) process.getFlowElements().get(4);
+        assertEquals("task", task.getName());
+        verifyBpmnShapePresent(task, definitions);
+        assertEquals(0, getDIElementOrder(lane, definitions));
+        assertTrue(getDIElementOrder(lane, definitions) < getDIElementOrder(task, definitions));
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
+
+    @Test
+    public void testLaneUnmarshallingWithoutOrdering() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("lane.json", "false");
+        Process process = getRootProcess(definitions);
+        Lane lane = process.getLaneSets().get(0).getLanes().get(0);
+        verifyBpmnShapePresent(lane, definitions);
+        Task task = (Task) process.getFlowElements().get(4);
+        verifyBpmnShapePresent(task, definitions);
+        assertNotEquals(-1, getDIElementOrder(task, definitions));
+        assertNotEquals(0, getDIElementOrder(lane, definitions));
+        assertTrue(getDIElementOrder(lane, definitions) > getDIElementOrder(task, definitions));
+    }
+
+    @Test
+    public void testNestedElementsOrdering() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("nestedElements.json", "true");
+        Process process = getRootProcess(definitions);
+        Lane lane = process.getLaneSets().get(0).getLanes().get(0);
+        assertEquals(0, getDIElementOrder(lane, definitions));
+        SubProcess subProcess = (SubProcess) getFlowElement(process.getFlowElements(), "subprocess");
+        assertEquals(1, getDIElementOrder(subProcess, definitions));
+        UserTask task = (UserTask) getFlowElement(subProcess.getFlowElements(), "task");
+        assertEquals(2, getDIElementOrder(task, definitions));
+        BoundaryEvent event = (BoundaryEvent) getFlowElement(subProcess.getFlowElements(), "boundary");
+        assertEquals(3, getDIElementOrder(event, definitions));
+    }
+
 
     @Test
     public void testSequenceFlowUnmarshalling() throws Exception {
@@ -124,6 +159,7 @@ public class Bpmn2UnmarshallingTest {
         assertEquals(task, flow.getSourceRef());
         assertEquals(task2, flow.getTargetRef());
         definitions.eResource().save(System.out, Collections.emptyMap());
+        verifyBpmnEdgePresent(flow, definitions);
     }
 
     @Test
@@ -347,42 +383,42 @@ public class Bpmn2UnmarshallingTest {
         List<SimpleEdge> expectedEdges = new ArrayList<SimpleEdge>();
         expectedEdges.add(createEdge("<![CDATA[Start\nAnnotation]]>")
                 .addPoint(120, 320)
-                .addPoint(120, 160)
+                .addPoint(170, 160)
         );
         expectedEdges.add(createEdge("<![CDATA[Task\nIn\nLane\nAnnotation]]>")
                 .addPoint(155, 125)
                 .addPoint(380, 184)
                 .addPoint(331, 184)
-                .addPoint(330, 130)
+                .addPoint(380, 130)
         );
         expectedEdges.add(createEdge("<![CDATA[WID\nTask\nannotation]]>")
                 .addPoint(690, 650)
                 .addPoint(690, 507)
-                .addPoint(741, 507)
+                .addPoint(791, 507)
         );
         expectedEdges.add(createEdge("<![CDATA[User\nTask\nAnnotation]]>")
                 .addPoint(100, 76)
                 .addPoint(196, 646)
-                .addPoint(195, 550)
+                .addPoint(245, 550)
         );
         expectedEdges.add(createEdge("<![CDATA[Gateway\nin\nlane\nannotation]]>")
                 .addPoint(270, 125)
-                .addPoint(359, 125)
+                .addPoint(409, 125)
         );
         expectedEdges.add(createEdge("<![CDATA[End\nIn\nSwimlane]]>")
                 .addPoint(270, 36)
                 .addPoint(915, 231)
-                .addPoint(914, 133)
+                .addPoint(964, 133)
         );
         expectedEdges.add(createEdge("<![CDATA[Subprocess's\nAnnotation]]>")
                 .addPoint(495, 650)
                 .addPoint(495, 847)
-                .addPoint(664, 848)
+                .addPoint(714, 848)
         );
         expectedEdges.add(createEdge("<![CDATA[Swimlane's\nAnnotation]]>")
                 .addPoint(525, 320)
                 .addPoint(1066, 320)
-                .addPoint(1065, 505)
+                .addPoint(1115, 505)
         );
 
         List<SimpleEdge> actualEdges = new ArrayList<SimpleEdge>();
@@ -396,7 +432,7 @@ public class Bpmn2UnmarshallingTest {
             actualEdges.add(currentEdge);
         }
 
-        assertEquals(actualEdges, expectedEdges);
+        assertEquals(expectedEdges, actualEdges);
     }
 
     private String getEdgeName(Edge edge) {
@@ -728,6 +764,7 @@ public class Bpmn2UnmarshallingTest {
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.NONE, association.getAssociationDirection());
+        verifyBpmnEdgePresent(association, definitions);
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 
@@ -749,11 +786,11 @@ public class Bpmn2UnmarshallingTest {
     public void testAssociationBidirectionalUnmarshalling() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("associationBoth.json");
         Process process = getRootProcess(definitions);
-        Task g = (Task) process.getFlowElements().get(0);
-        assertEquals("task", g.getName());
+        Task task = (Task) process.getFlowElements().get(0);
+        assertEquals("task", task.getName());
         TextAnnotation textA = (TextAnnotation) process.getFlowElements().get(1);
         Association association = (Association) process.getArtifacts().get(0);
-        assertEquals(g, association.getSourceRef());
+        assertEquals(task, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.BOTH, association.getAssociationDirection());
         definitions.eResource().save(System.out, Collections.emptyMap());
@@ -802,26 +839,50 @@ public class Bpmn2UnmarshallingTest {
         Definitions definitions = loader.loadProcessFromJson("boundaryEventsContainers.json");
         Process process = getRootProcess(definitions);
 
-        for(FlowElement element : process.getFlowElements()) {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        boolean foundTimer1 = false;
+        boolean foundTimer2 = false;
+        boolean foundTimer3 = false;
+
+        for (FlowElement element : process.getFlowElements()) {
             if (element instanceof BoundaryEvent) {
                 BoundaryEvent be = (BoundaryEvent) element;
-                Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-                if ("Timer1".equals(element.getName())) {
-                    SubProcess sp = (SubProcess) unmarshaller.findContainerForBoundaryEvent(process, be);
-                    assertEquals("Subprocess1", sp.getName());
-                }
-
-                if ("Timer2".equals(element.getName())) {
-                    SubProcess sp = (SubProcess) unmarshaller.findContainerForBoundaryEvent(process, be);
-                    assertEquals("Subprocess2", sp.getName());
-                }
-
                 if ("Timer3".equals(element.getName())) {
                     Process sp = (Process) unmarshaller.findContainerForBoundaryEvent(process, be);
                     assertEquals("DemoProcess", sp.getName());
+                    verifyAttribute(be, "dockerinfo", "17.0^70.0|");
+                    foundTimer3 = true;
                 }
             }
         }
+
+        SubProcess subProcessOne = (SubProcess) getFlowElement(process.getFlowElements(), "Subprocess1");
+        for(FlowElement element : subProcessOne.getFlowElements()) {
+            if(element instanceof BoundaryEvent) {
+                BoundaryEvent be = (BoundaryEvent) element;
+                if ("Timer1".equals(element.getName())) {
+                    SubProcess sp = (SubProcess) unmarshaller.findContainerForBoundaryEvent(process, be);
+                    assertEquals("Subprocess1", sp.getName());
+                    verifyAttribute(be, "dockerinfo", "47.0^80.0|");
+                    foundTimer1 = true;
+                }
+            }
+        }
+
+        SubProcess subProcessTwo = (SubProcess) getFlowElement(process.getFlowElements(), "Subprocess2");
+        for(FlowElement element : subProcessTwo.getFlowElements()) {
+            if(element instanceof BoundaryEvent) {
+                BoundaryEvent be = (BoundaryEvent) element;
+                if ("Timer2".equals(element.getName())) {
+                    SubProcess sp = (SubProcess) unmarshaller.findContainerForBoundaryEvent(process, be);
+                    assertEquals("Subprocess2", sp.getName());
+                    verifyAttribute(be, "dockerinfo", "46.0^77.0|");
+                    foundTimer2 = true;
+                }
+            }
+        }
+
+        assertTrue(foundTimer1 && foundTimer2 && foundTimer3);
     }
 
     @Test
@@ -988,6 +1049,94 @@ public class Bpmn2UnmarshallingTest {
     }
 
     @Test
+    public void testDefaultMessageRefForStartMessageEvent() throws Exception {
+        Process process = getRootProcess(loader.loadProcessFromJson("defaultMessageStartEvent.json"));
+        assertTrue(process.getFlowElements().get(0) instanceof StartEvent);
+        StartEvent startEvent = (StartEvent) process.getFlowElements().get(0);
+
+        assertTrue(startEvent.getEventDefinitions().size() == 1);
+        assertTrue(startEvent.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+
+        MessageEventDefinition messageEventDef = (MessageEventDefinition) startEvent.getEventDefinitions().iterator().next();
+
+        assertNull(messageEventDef.getMessageRef());
+    }
+
+    @Test
+    public void testDefaultMessageRefsCombined() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("defaultMessagesCombined.json");
+        Process process = getRootProcess(definitions);
+
+        assertTrue(process.getFlowElements().get(0) instanceof SendTask);
+        SendTask sendTask = (SendTask) process.getFlowElements().get(0);
+        assertNull(sendTask.getMessageRef());
+
+        assertTrue(process.getFlowElements().get(1) instanceof ReceiveTask);
+        ReceiveTask receiveTask = (ReceiveTask) process.getFlowElements().get(1);
+        assertNull(receiveTask.getMessageRef());
+
+        assertTrue(process.getFlowElements().get(2) instanceof StartEvent);
+        StartEvent startEvent = (StartEvent) process.getFlowElements().get(2);
+        assertTrue(startEvent.getEventDefinitions().size() == 1);
+        assertTrue(startEvent.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+        MessageEventDefinition messageEventDefStart = (MessageEventDefinition) startEvent.getEventDefinitions().iterator().next();
+        assertNull(messageEventDefStart.getMessageRef());
+
+
+        assertTrue(process.getFlowElements().get(3) instanceof EndEvent);
+        EndEvent endEvent = (EndEvent) process.getFlowElements().get(3);
+        assertTrue(endEvent.getEventDefinitions().size() == 1);
+        assertTrue(endEvent.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+        MessageEventDefinition messageEventDefEnd = (MessageEventDefinition) endEvent.getEventDefinitions().iterator().next();
+        assertNull(messageEventDefEnd.getMessageRef());
+
+        assertTrue(process.getFlowElements().get(4) instanceof IntermediateCatchEvent);
+        IntermediateCatchEvent catchEvent = (IntermediateCatchEvent) process.getFlowElements().get(4);
+        assertTrue(catchEvent.getEventDefinitions().size() == 1);
+        assertTrue(catchEvent.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+        MessageEventDefinition messageEventDefCatch = (MessageEventDefinition) catchEvent.getEventDefinitions().iterator().next();
+        assertNull(messageEventDefCatch.getMessageRef());
+
+        assertTrue(process.getFlowElements().get(5) instanceof IntermediateThrowEvent);
+        IntermediateThrowEvent throwEvent = (IntermediateThrowEvent) process.getFlowElements().get(5);
+        assertTrue(throwEvent.getEventDefinitions().size() == 1);
+        assertTrue(throwEvent.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
+        MessageEventDefinition messageEventDefThrow = (MessageEventDefinition) throwEvent.getEventDefinitions().iterator().next();
+        assertNull(messageEventDefThrow.getMessageRef());
+    }
+
+    @Test
+    public void testCallActivityAssignments() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("callActivityInSubprocess.json");
+        Process process = getRootProcess(definitions);
+        FlowElement subProcess = getFlowElement(process.getFlowElements(), "SubProcess");
+        assertTrue(subProcess instanceof SubProcess);
+        FlowElement activity = getFlowElement(((SubProcess)subProcess).getFlowElements(), "callActivity");
+        assertTrue(activity instanceof CallActivity);
+        CallActivity callActivity = (CallActivity) activity;
+        InputOutputSpecification specification = callActivity.getIoSpecification();
+
+        DataInput dataInput = getDataInput(specification.getDataInputs(), "innerInput");
+        verifyAttribute(dataInput, "dtype", "Integer");
+        DataOutput dataOutput = getDataOutput(specification.getDataOutputs(), "innerOutput");
+        verifyAttribute(dataOutput, "dtype", "Integer");
+    }
+
+    @Test
+    public void testSubProcessDiagramElements() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("callActivityInSubprocess.json");
+        Process process = getRootProcess(definitions);
+        FlowElement subProcess = getFlowElement(process.getFlowElements(), "SubProcess");
+        verifyBpmnShapePresent(subProcess, definitions);
+    }
+
+    @Test
+    public void testNoDefaultMessageCreated() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("message.json");
+        assertTrue(definitions.getRootElements().size() == 1);
+    }
+
+    @Test
     public void testDocumentationForSwimlane() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("swimlane.json");
         Process process = getRootProcess(definitions);
@@ -1031,6 +1180,7 @@ public class Bpmn2UnmarshallingTest {
         assertTrue(foundTaskName);
         assertTrue(foundGroupId);
         assertEquals("<![CDATA[true]]>", getMetaDataValue(userTask.getExtensionValues(), "customAsync"));
+        verifyBpmnShapePresent(userTask, definitions);
     }
 
     @Test
@@ -1067,21 +1217,6 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(callActivity);
         assertEquals("callActivity", callActivity.getName());
         assertEquals("abc.noCalledElementCallActivity", callActivity.getCalledElement());
-    }
-
-    @Test
-    public void testDefaultMessageRefForStartMessageEvent() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("defaultMessageStartEvent.json");
-        Process process = getRootProcess(definitions);
-        assertTrue(process.getFlowElements().get(0) instanceof StartEvent);
-        StartEvent startEvent = (StartEvent) process.getFlowElements().get(0);
-
-        assertTrue(startEvent.getEventDefinitions().size() == 1);
-        assertTrue(startEvent.getEventDefinitions().iterator().next() instanceof MessageEventDefinition);
-
-        MessageEventDefinition messageEventDef = (MessageEventDefinition) startEvent.getEventDefinitions().iterator().next();
-
-        assertNull(messageEventDef.getMessageRef());
     }
 
     @Test
@@ -1161,23 +1296,6 @@ public class Bpmn2UnmarshallingTest {
         }
         DataOutput dataOutput = getDataOutput(specification.getDataOutputs(), "Result");
         verifyAttribute(dataOutput, "dtype", "java.lang.Object");
-    }
-
-    @Test
-    public void testCallActivityAssignments() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("callActivityInSubprocess.json");
-        Process process = getRootProcess(definitions);
-        FlowElement subProcess = getFlowElement(process.getFlowElements(), "SubProcess");
-        assertTrue(subProcess instanceof SubProcess);
-        FlowElement activity = getFlowElement(((SubProcess)subProcess).getFlowElements(), "callActivity");
-        assertTrue(activity instanceof CallActivity);
-        CallActivity callActivity = (CallActivity) activity;
-        InputOutputSpecification specification = callActivity.getIoSpecification();
-
-        DataInput dataInput = getDataInput(specification.getDataInputs(), "innerInput");
-        verifyAttribute(dataInput, "dtype", "Integer");
-        DataOutput dataOutput = getDataOutput(specification.getDataOutputs(), "innerOutput");
-        verifyAttribute(dataOutput, "dtype", "Integer");
     }
 
     @Test
@@ -1388,5 +1506,37 @@ public class Bpmn2UnmarshallingTest {
         assertEquals(taskOnExitScript, "<![CDATA[if ( b == null || b ) { System.out.println(b); }]]>");
     }
 
+    private void verifyBpmnShapePresent(BaseElement element, Definitions definitions) {
+        boolean diagramElementPresent = false;
+        for(DiagramElement diagramElement : definitions.getDiagrams().get(0).getPlane().getPlaneElement()) {
+            if(diagramElement instanceof BPMNShape && ((BPMNShape) diagramElement).getBpmnElement() == element) {
+                diagramElementPresent = true;
+            }
+        }
+        assertTrue(diagramElementPresent);
+    }
+
+    private void verifyBpmnEdgePresent(BaseElement element, Definitions definitions) {
+        boolean diagramElementPresent = false;
+        for(DiagramElement diagramElement : definitions.getDiagrams().get(0).getPlane().getPlaneElement()) {
+            if(diagramElement instanceof BPMNEdge && ((BPMNEdge) diagramElement).getBpmnElement() == element) {
+                diagramElementPresent = true;
+            }
+        }
+        assertTrue(diagramElementPresent);
+    }
+
+
+
+    private int getDIElementOrder(BaseElement element, Definitions definitions) {
+        int counter = 0;
+        for(DiagramElement diagramElement : definitions.getDiagrams().get(0).getPlane().getPlaneElement()) {
+            if(diagramElement instanceof BPMNShape && ((BPMNShape) diagramElement).getBpmnElement() == element) {
+                return counter;
+            }
+            counter++;
+        }
+        return -1;
+    }
 }
 
