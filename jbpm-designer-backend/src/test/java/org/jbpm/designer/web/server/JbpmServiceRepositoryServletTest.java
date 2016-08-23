@@ -83,7 +83,7 @@ public class JbpmServiceRepositoryServletTest extends RepositoryBaseTest {
         assertNotNull(response);
         JSONObject json = new JSONObject(response);
         assertNotNull(json);
-        assertEquals(3, json.length());
+        assertEquals(4, json.length());
         JSONArray maArray = (JSONArray) json.get("MicrosoftAcademy");
         assertNotNull(maArray);
         assertEquals(9, maArray.length());
@@ -94,11 +94,15 @@ public class JbpmServiceRepositoryServletTest extends RepositoryBaseTest {
         assertEquals(9, syArray.length());
         assertEquals("SwitchYardService", syArray.get(0));
 
+        JSONArray minimalisticArray = (JSONArray) json.get("Minimalistic");
+        assertNotNull(minimalisticArray);
+        assertEquals(9, minimalisticArray.length());
+        assertEquals("Minimalistic", minimalisticArray.get(0));
+
         JSONArray rsArray = (JSONArray) json.get("Rewardsystem");
         assertNotNull(rsArray);
         assertEquals(9, rsArray.length());
         assertEquals("Rewardsystem", rsArray.get(0));
-
     }
 
     @Test
