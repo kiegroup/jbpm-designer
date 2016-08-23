@@ -37,9 +37,28 @@ import static org.junit.Assert.assertNotNull;
 
 public class JbpmServiceRepositoryServletTest extends RepositoryBaseTest {
 
+    private Repository repository;
+
+    private String uniqueId;
+
+    private Map<String, String> params;
+
     @Before
     public void setup() {
         super.setup();
+
+        repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("bpmn2 content")
+                .type("bpmn2")
+                .name("samplebpmn2process")
+                .location("/defaultPackage");
+        uniqueId = repository.createAsset(builder.getAsset());
+
+        params = new HashMap<String, String>();
     }
 
     @After
@@ -49,11 +68,6 @@ public class JbpmServiceRepositoryServletTest extends RepositoryBaseTest {
 
     @Test
     public void testDisplayRepoContent() throws Exception {
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        profile.setRepository(repository);
-
-        Map<String, String> params = new HashMap<String, String>();
         params.put("repourl", getClass().getResource("servicerepo").toURI().toString());
         params.put("profile", "jbpm");
         params.put("action", "display");
@@ -88,20 +102,24 @@ public class JbpmServiceRepositoryServletTest extends RepositoryBaseTest {
     }
 
     @Test
+    public void testDisplayEmptyRepoContent() throws Exception {
+        params.put("repourl", getClass().getResource("emptyservicerepo").toURI().toString());
+        params.put("profile", "jbpm");
+        params.put("action", "display");
+
+        TestHttpServletResponse testResponse = new TestHttpServletResponse();
+
+        JbpmServiceRepositoryServlet jbpmServiceRepositoryServlet = new JbpmServiceRepositoryServlet();
+        jbpmServiceRepositoryServlet.setProfile(profile);
+        jbpmServiceRepositoryServlet.init(new TestServletConfig(new TestServletContext(repository)));
+        jbpmServiceRepositoryServlet.doPost(new TestHttpServletRequest(params), testResponse);
+
+        assertEquals("false", new String(testResponse.getContent()));
+    }
+
+    @Test
     public void testInstallWid() throws Exception {
 
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        profile.setRepository(repository);
-        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content("bpmn2 content")
-                .type("bpmn2")
-                .name("samplebpmn2process")
-                .location("/defaultPackage");
-        String uniqueId = repository.createAsset(builder.getAsset());
-
-        // setup parameters
-        Map<String, String> params = new HashMap<String, String>();
         params.put("repourl", getClass().getResource("servicerepo").toURI().toString());
         params.put("asset", "Rewardsystem");
         params.put("profile", "jbpm");
@@ -122,18 +140,7 @@ public class JbpmServiceRepositoryServletTest extends RepositoryBaseTest {
 
     @Test
     public void testInstallInvalidWid() throws Exception {
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        profile.setRepository(repository);
-        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content("bpmn2 content")
-                .type("bpmn2")
-                .name("samplebpmn2process")
-                .location("/defaultPackage");
-        String uniqueId = repository.createAsset(builder.getAsset());
 
-        // setup parameters
-        Map<String, String> params = new HashMap<String, String>();
         params.put("repourl", getClass().getResource("servicerepo").toURI().toString());
         params.put("asset", "InvalidService");
         params.put("profile", "jbpm");
@@ -149,5 +156,48 @@ public class JbpmServiceRepositoryServletTest extends RepositoryBaseTest {
         assertEquals(1, repository.listAssetsRecursively("/", new FilterByExtension("bpmn2")).size());
         assertEquals(0, repository.listAssetsRecursively("/", new FilterByExtension("wid")).size());
         assertEquals(0, repository.listAssetsRecursively("/", new FilterByExtension("png")).size());
+    }
+
+    @Test
+    public void testInstallWidTwice() throws Exception {
+
+        // setup parameters
+        params.put("repourl", getClass().getResource("servicerepo").toURI().toString());
+        params.put("asset", "MicrosoftAcademy");
+        params.put("profile", "jbpm");
+        params.put("category", "Search");
+        params.put("action", "install");
+        params.put("uuid", uniqueId);
+
+        JbpmServiceRepositoryServlet jbpmServiceRepositoryServlet = new JbpmServiceRepositoryServlet();
+        jbpmServiceRepositoryServlet.setProfile(profile);
+        jbpmServiceRepositoryServlet.init(new TestServletConfig(new TestServletContext(repository)));
+
+        jbpmServiceRepositoryServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
+        jbpmServiceRepositoryServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
+
+        assertEquals(1, repository.listAssetsRecursively("/", new FilterByExtension("bpmn2")).size());
+        assertEquals(1, repository.listAssetsRecursively("/", new FilterByExtension("wid")).size());
+        assertEquals(1, repository.listAssetsRecursively("/", new FilterByExtension("png")).size());
+    }
+
+    @Test
+    public void testInstallWidEmptyRepository() throws Exception {
+
+        // setup parameters
+        params.put("repourl", getClass().getResource("emptyservicerepo").toURI().toString());
+        params.put("asset", "MicrosoftAcademy");
+        params.put("profile", "jbpm");
+        params.put("category", "Search");
+        params.put("action", "install");
+        params.put("uuid", uniqueId);
+
+        JbpmServiceRepositoryServlet jbpmServiceRepositoryServlet = new JbpmServiceRepositoryServlet();
+        jbpmServiceRepositoryServlet.setProfile(profile);
+        jbpmServiceRepositoryServlet.init(new TestServletConfig(new TestServletContext(repository)));
+
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        jbpmServiceRepositoryServlet.doPost(new TestHttpServletRequest(params), response);
+        assertEquals("false", new String(response.getContent()));
     }
 }
