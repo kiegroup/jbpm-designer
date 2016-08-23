@@ -20,7 +20,6 @@ import org.jbpm.designer.helper.TestIDiagramProfile;
 import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -49,8 +48,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     private static String gitLocalClone = System.getProperty("java.io.tmpdir") + "git-repo";
     private static Map<String, String> env = new HashMap<String, String>();
 
-    private static int counter = -100;
-    private RepositoryDescriptor descriptor;
     private VFSFileSystemProducer producer = new VFSFileSystemProducer();
 
     @Spy
@@ -84,9 +81,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
 
     @Test
     public void testProprocess() {
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        profile.setRepository(repository);
+        Repository repository = createRepository();
         //prepare folders that will be used
         repository.createDirectory("/myprocesses");
         repository.createDirectory("/global");
@@ -157,9 +152,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
 
     @Test
     public void testEmptyCustomEditor() throws Exception {
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        profile.setRepository(repository);
+        Repository repository = createRepository();
         //prepare folders that will be used
         repository.createDirectory("/myprocesses");
         repository.createDirectory("/global");

@@ -15,23 +15,33 @@
 
 package org.jbpm.designer.web.preprocessing.impl;
 
+import org.guvnor.common.services.project.model.Project;
+import org.guvnor.common.services.project.service.POMService;
+import org.guvnor.common.services.project.service.ProjectService;
+import org.guvnor.common.services.shared.metadata.MetadataService;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestIDiagramProfile;
 import org.jbpm.designer.helper.TestServletContext;
+import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
+import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.VFSRepository;
+import org.jbpm.designer.server.EditorHandler;
+import org.jbpm.designer.web.server.ServiceRepoUtilsTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
+import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.uberfire.backend.vfs.VFSService;
+import org.uberfire.workbench.events.NotificationEvent;
 
+import javax.enterprise.event.Event;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -40,25 +50,41 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(MockitoJUnitRunner.class)
 public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
 
+    @Mock
+    private Event<DesignerWorkitemInstalledEvent> workitemInstalledEvent;
+
+    @Mock
+    private Event<NotificationEvent> notificationEvent;
+
+    @Mock
+    private POMService pomService;
+
+    @Mock
+    private ProjectService<? extends Project> projectService;
+
+    @Mock
+    private MetadataService metadataService;
 
     @Spy
     @InjectMocks
     private JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
 
+    private Repository repository;
+
+    private String uniqueId;
+
+    private Map<String, String> params;
+
     @Before
     public void setup() {
         super.setup();
-    }
+        preprocessingUnitVFS.workitemInstalledEventEvent = workitemInstalledEvent;
+        preprocessingUnitVFS.notification = notificationEvent;
 
-    @After
-    public void teardown() {
-        super.teardown();
-    }
-    @Test
-    public void testProprocess() {
-        Repository repository = new VFSRepository(producer.getIoService());
+        repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         profile.setRepository(repository);
+
         //prepare folders that will be used
         repository.createDirectory("/myprocesses");
         repository.createDirectory("/global");
@@ -69,15 +95,24 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                 .type("bpmn2")
                 .name("process")
                 .location("/myprocesses");
-        String uniqueId = repository.createAsset(builder.getAsset());
+        uniqueId = repository.createAsset(builder.getAsset());
 
-        preprocessingUnitVFS.init(new TestServletContext(), "/", null);
+        preprocessingUnitVFS.init(new TestServletContext(), "/", Mockito.mock(VFSService.class));
 
         // setup parameters
-        Map<String, String> params = new HashMap<String, String>();
+        params = new HashMap<String, String>();
         params.put("uuid", uniqueId);
+    }
 
-        // run preprocess
+    @After
+    public void teardown() {
+        super.teardown();
+        System.clearProperty(EditorHandler.SERVICE_REPO);
+        System.clearProperty(EditorHandler.SERVICE_REPO_TASKS);
+    }
+    @Test
+    public void testPreprocess() {
+
         preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
 
         // validate results
@@ -123,4 +158,105 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         repository.assetExists("/myprocesses/process.bpmn2");
 
     }
+
+    @Test
+    public void testInstallDefaultWids() throws Exception{
+        System.setProperty(EditorHandler.SERVICE_REPO, ServiceRepoUtilsTest.class.getResource("servicerepo").toURI().toString());
+        System.setProperty(EditorHandler.SERVICE_REPO_TASKS, "SwitchYardService,Rewardsystem");
+
+        // run preprocess
+        preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
+
+        verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid", "/myprocesses/SwitchYardService.wid", "/myprocesses/Rewardsystem.wid"),
+                Arrays.asList("/myprocesses/defaultservicenodeicon.png"),
+                Arrays.asList("/myprocesses/switchyard.gif", "/myprocesses/defaultemailicon.gif", "/myprocesses/defaultlogicon.gif"));
+
+        Mockito.verify(workitemInstalledEvent, Mockito.times(2)).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
+    }
+
+    @Test
+    public void testInstallNoServiceRepo() throws Exception{
+        System.setProperty(EditorHandler.SERVICE_REPO_TASKS, "SwitchYardService,Rewardsystem");
+
+        // run preprocess
+        preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
+
+        verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid"),
+                            Arrays.asList("/myprocesses/defaultservicenodeicon.png"),
+                            Arrays.asList("/myprocesses/defaultemailicon.gif", "/myprocesses/defaultlogicon.gif"));
+
+        Mockito.verify(workitemInstalledEvent, Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
+    }
+
+    @Test
+    public void testInstallNoServiceTasks() throws Exception{
+        System.setProperty(EditorHandler.SERVICE_REPO, ServiceRepoUtilsTest.class.getResource("servicerepo").toURI().toString());
+
+        // run preprocess
+        preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
+
+        verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid"),
+                            Arrays.asList("/myprocesses/defaultservicenodeicon.png"),
+                            Arrays.asList("/myprocesses/defaultemailicon.gif", "/myprocesses/defaultlogicon.gif"));
+
+        Mockito.verify(workitemInstalledEvent, Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
+    }
+
+    @Test
+    public void testInstallNotExistingTask() throws Exception{
+        System.setProperty(EditorHandler.SERVICE_REPO, ServiceRepoUtilsTest.class.getResource("servicerepo").toURI().toString());
+        System.setProperty(EditorHandler.SERVICE_REPO_TASKS, "NonExistingTask");
+
+        // run preprocess
+        preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
+
+        verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid"),
+                            Arrays.asList("/myprocesses/defaultservicenodeicon.png"),
+                            Arrays.asList("/myprocesses/defaultemailicon.gif", "/myprocesses/defaultlogicon.gif"));
+
+        Mockito.verify(workitemInstalledEvent, Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
+    }
+
+    @Test
+    public void testInstallTwice() throws Exception{
+        System.setProperty(EditorHandler.SERVICE_REPO, ServiceRepoUtilsTest.class.getResource("servicerepo").toURI().toString());
+        System.setProperty(EditorHandler.SERVICE_REPO_TASKS, "MicrosoftAcademy");
+
+        // run preprocess twice
+        preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
+        preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
+
+        verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid","/myprocesses/MicrosoftAcademy.wid" ),
+                                Arrays.asList("/myprocesses/microsoftacademy.png", "/myprocesses/defaultservicenodeicon.png"),
+                                Arrays.asList("/myprocesses/defaultemailicon.gif", "/myprocesses/defaultlogicon.gif"));
+
+        Mockito.verify(workitemInstalledEvent, Mockito.times(2)).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
+    }
+
+    private void verifyWidsPngsAndGifs(List<String> wids, List<String> pngs, List<String> gifs) {
+        if(wids != null) {
+            Collection<Asset> storedWids = repository.listAssetsRecursively("/", new FilterByExtension("wid"));
+            assertEquals(wids.size(), storedWids.size());
+            for (String wid : wids) {
+                repository.assetExists(wid);
+            }
+        }
+
+        if(pngs != null) {
+            Collection<Asset> storedPngs = repository.listAssetsRecursively("/", new FilterByExtension("png"));
+            assertEquals(pngs.size(), storedPngs.size());
+            for (String png : pngs) {
+                repository.assetExists(png);
+            }
+        }
+
+        if(gifs != null) {
+            Collection<Asset> storedGifs = repository.listAssetsRecursively("/", new FilterByExtension("gif"));
+            assertEquals(gifs.size(), storedGifs.size());
+            for (String gif : gifs) {
+                repository.assetExists(gif);
+            }
+        }
+    }
+
 }

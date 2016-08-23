@@ -118,10 +118,10 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private boolean includeDataObjects;
 
     @Inject
-    private Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent;
+    protected Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent;
 
     @Inject
-    private Event<NotificationEvent> notification;
+    protected Event<NotificationEvent> notification;
 
     @Inject
     private POMService pomService;
@@ -702,16 +702,20 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 List<String> toInstallTasks = Arrays.asList(defaultServiceRepoTasks.split("\\s*,\\s*"));
                 for(String installTask : toInstallTasks) {
                     if(workitemsFromRepo.containsKey(installTask)) {
-                        ServiceRepoUtils.installWorkItem(workitemsFromRepo,
-                                installTask,
-                                uuid,
-                                repository,
-                                vfsService,
-                                workitemInstalledEventEvent,
-                                notification,
-                                pomService,
-                                projectService,
-                                metadataService);
+                        try {
+                            ServiceRepoUtils.installWorkItem(workitemsFromRepo,
+                                    installTask,
+                                    uuid,
+                                    repository,
+                                    vfsService,
+                                    workitemInstalledEventEvent,
+                                    notification,
+                                    pomService,
+                                    projectService,
+                                    metadataService);
+                        } catch (Exception e) {
+                            _logger.error("Work Item '" + installTask + "' was not installed correctly: " + e.getMessage());
+                        }
                     }
                 }
             }
