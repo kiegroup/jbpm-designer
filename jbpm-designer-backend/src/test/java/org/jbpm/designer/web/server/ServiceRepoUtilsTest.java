@@ -55,10 +55,13 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Matchers.any;
+
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ServiceRepoUtilsTest extends RepositoryBaseTest {
@@ -86,7 +89,9 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
     protected Event<NotificationEvent> notification = mock(EventSourceMock.class);
 
-    private final List<Object> receivedWidInstallEvents = new ArrayList<>();
+
+    private final List<Object> receivedWidInstallEvents = new ArrayList<Object>();
+
     private Event<DesignerWorkitemInstalledEvent> widinstall = new EventSourceMock<DesignerWorkitemInstalledEvent>() {
 
         @Override
@@ -96,13 +101,19 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
     };
 
+    private Repository repository;
+
+    private String uuid;
+
+    private POM projectPOM;
+
 
     @Before
     public void setup() {
         super.setup();
         //MockitoAnnotations.initMocks(this);
 
-        when(vfsServices.get(any())).thenAnswer(new Answer<Path>() {
+        when(vfsServices.get(anyString())).thenAnswer(new Answer<Path>() {
             @Override
             public Path answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
@@ -110,16 +121,7 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
             }
         });
 
-    }
-
-    @After
-    public void teardown() {
-        super.teardown();
-    }
-
-    @Test
-    public void testInstallWorkitem() throws Exception {
-        Repository repository = new VFSRepository(producer.getIoService());
+        repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         profile.setRepository(repository);
 
@@ -147,7 +149,7 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
         Path rootPath = Paths.convert(((VFSRepository) repository).getDescriptor().getRepositoryRootPath());
 
-        String uuid = rootPath.toURI() + "/src/main/resources/samplebpmn2process.bpmn2";
+        uuid = rootPath.toURI() + "/src/main/resources/samplebpmn2process.bpmn2";
         String pomuuid = rootPath.toURI() + "/pom.xml";
 
         KieProject project = Mockito.mock(KieProject.class);
@@ -158,11 +160,21 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         when( pomXmlPath.toURI() ).thenReturn(pomuuid);
         when(project.getPomXMLPath() ).thenReturn( pomXmlPath );
 
-        POM projectPOM = new POM();
+        projectPOM = new POM();
         when( pomService.load(pomXmlPath) ).thenReturn(projectPOM);
 
         when(ioService.exists(any(org.uberfire.java.nio.file.Path.class))).thenReturn(true);
         when(projectService.resolveProject(any(Path.class))).thenReturn(project);
+
+    }
+
+    @After
+    public void teardown() {
+        super.teardown();
+    }
+
+    @Test
+    public void testInstallWorkitem() throws Exception {
 
         Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(getClass().getResource("servicerepo").toURI().toString());
 
@@ -200,12 +212,12 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         assertTrue(event instanceof DesignerWorkitemInstalledEvent);
         DesignerWorkitemInstalledEvent eventReceived = (DesignerWorkitemInstalledEvent) event;
         assertEquals("Rewardsystem", eventReceived.getName());
-        assertEquals("mvel: com.rewardsystem.MyRewardsHandler()", eventReceived.getValue());
+        assertEquals("mvel: new com.rewardsystem.MyRewardsHandler()", eventReceived.getValue());
 
         // nake sure the correct wid maven dependencies got installed into the pom
         assertNotNull(projectPOM);
         assertNotNull(projectPOM.getDependencies());
-        assertEquals(2, projectPOM.getDependencies().size());
+        assertEquals(3, projectPOM.getDependencies().size());
         Dependencies pomDepends = projectPOM.getDependencies();
 
         Dependency depends1 = pomDepends.get(0);
@@ -220,7 +232,95 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         assertEquals("systemhelper", depends2.getArtifactId());
         assertEquals("1.2", depends2.getVersion());
 
+        Dependency depends3 = pomDepends.get(2);
+        assertNotNull(depends3);
+        assertEquals("com.sample.demo", depends3.getGroupId());
+        assertEquals("demo-test", depends3.getArtifactId());
+        assertEquals("1.2.3", depends3.getVersion());
+        assertEquals("test", depends3.getScope());
+    }
 
+    @Test
+    public void testInstallTwiceTheSameWorkItem() throws Exception {
+
+        Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(getClass().getResource("servicerepo").toURI().toString());
+
+        Collection<Asset> wids = repository.listAssetsRecursively("/", new FilterByExtension("wid"));
+        assertEquals(0, wids.size());
+
+        Collection<Asset> pngs = repository.listAssetsRecursively("/", new FilterByExtension("png"));
+        assertEquals(0, pngs.size());
+
+        ServiceRepoUtils.installWorkItem(workitemsFromRepo,
+                "MicrosoftAcademy",
+                uuid,
+                repository,
+                vfsServices,
+                widinstall,
+                notification,
+                pomService,
+                projectService,
+                metadataService);
+
+        ServiceRepoUtils.installWorkItem(workitemsFromRepo,
+                "MicrosoftAcademy",
+                uuid,
+                repository,
+                vfsServices,
+                widinstall,
+                notification,
+                pomService,
+                projectService,
+                metadataService);
+
+        assertEquals(2, receivedWidInstallEvents.size());
+        // make sure the event content is valid
+        Object event = receivedWidInstallEvents.get(0);
+        assertTrue(event instanceof DesignerWorkitemInstalledEvent);
+        DesignerWorkitemInstalledEvent eventReceived = (DesignerWorkitemInstalledEvent) event;
+        assertEquals("MicrosoftAcademy", eventReceived.getName());
+        assertEquals("mvel: new org.msho.app.MicrosoftAcademyWorkItemHandler()", eventReceived.getValue());
+
+        // nake sure the correct wid maven dependencies got installed into the pom
+        assertNotNull(projectPOM);
+        assertNotNull(projectPOM.getDependencies());
+        assertEquals(1, projectPOM.getDependencies().size());
+        Dependencies pomDepends = projectPOM.getDependencies();
+
+        Dependency depends1 = pomDepends.get(0);
+        assertNotNull(depends1);
+        assertEquals("com.microsoft", depends1.getGroupId());
+        assertEquals("microsoftacademy", depends1.getArtifactId());
+        assertEquals("1.0", depends1.getVersion());
+
+        wids = repository.listAssetsRecursively("/", new FilterByExtension("wid"));
+        assertEquals(1, wids.size());
+
+        pngs = repository.listAssetsRecursively("/", new FilterByExtension("png"));
+        assertEquals(1, pngs.size());
+
+        verify(notification, never()).fire(any(NotificationEvent.class));
+    }
+
+    @Test
+    public void testInstallMinimalisticWorkItem() throws Exception {
+
+        Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(getClass().getResource("servicerepo").toURI().toString());
+
+        ServiceRepoUtils.installWorkItem(workitemsFromRepo,
+                "Minimalistic",
+                uuid,
+                repository,
+                vfsServices,
+                widinstall,
+                notification,
+                pomService,
+                projectService,
+                metadataService);
+
+        assertEquals(0, receivedWidInstallEvents.size());
+        verify(notification).fire(notificationCaptor.capture());
+        assertEquals("Installed workitem cannot be registered in project configuration.", notificationCaptor.getValue().getNotification());
     }
 
 }

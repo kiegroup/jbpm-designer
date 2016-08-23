@@ -11,14 +11,15 @@ import org.drools.core.process.core.datatype.impl.type.StringDataType;
         "amount" : new StringDataType() 
     ],
     "displayName" : "Rewardsystem",
-    "defaultHandler": "mvel: com.rewardsystem.MyRewardsHandler()",
+    "defaultHandler": "mvel: new com.rewardsystem.MyRewardsHandler()",
     "category" : "Rewards",
     "dependencies": [
 
     ],
     "mavenDependencies" : [ 
 	"com.rewardssystem:myrewardssystem:2.0",
-        "com.rewardssystem:systemhelper:1.2"
+        "com.rewardssystem:systemhelper:1.2",
+        "com.sample.demo:demo-test:1.2.3:test"
     ]
   ]
 
