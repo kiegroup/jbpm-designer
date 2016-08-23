@@ -39,10 +39,5 @@ public interface IDiagramPreprocessingService {
     public Collection<IDiagramPreprocessingUnit> getRegisteredPreprocessingUnits(HttpServletRequest request);
     public IDiagramPreprocessingUnit findPreprocessingUnit(HttpServletRequest request, IDiagramProfile profile);
     public void init(ServletContext servletContext,
-                     VFSService vfsService,
-                     Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent,
-                     Event<NotificationEvent> notification,
-                     POMService pomService,
-                     ProjectService projectService,
-                     MetadataService metadataService);
+                     VFSService vfsService);
 }

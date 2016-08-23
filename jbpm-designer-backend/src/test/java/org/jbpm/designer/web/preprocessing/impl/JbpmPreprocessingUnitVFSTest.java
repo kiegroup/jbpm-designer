@@ -27,14 +27,23 @@ import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+@RunWith(MockitoJUnitRunner.class)
 public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
 
+
+    @Spy
+    @InjectMocks
+    private JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
 
     @Before
     public void setup() {
@@ -62,8 +71,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                 .location("/myprocesses");
         String uniqueId = repository.createAsset(builder.getAsset());
 
-        // create instance of preprocessing unit
-        JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit(new TestServletContext(), "/", null, null, null, null, null, null);
+        preprocessingUnitVFS.init(new TestServletContext(), "/", null);
 
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();

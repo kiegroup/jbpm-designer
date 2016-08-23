@@ -20,6 +20,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,6 +42,14 @@ import org.uberfire.workbench.events.NotificationEvent;
  */
 public class PreprocessingServiceImpl implements IDiagramPreprocessingService {
 
+    @Inject
+    @Named("defaultPreprocessingUnit")
+    private IDiagramPreprocessingUnit defaultPreprocessingUnit;
+
+    @Inject
+    @Named("jbpmPreprocessingUnit")
+    private IDiagramPreprocessingUnit jbpmPreprocessingUnit;
+
     public final static PreprocessingServiceImpl INSTANCE = new PreprocessingServiceImpl();
     private Map<String, IDiagramPreprocessingUnit> _registry = new HashMap<String, IDiagramPreprocessingUnit>();
 
@@ -57,14 +67,10 @@ public class PreprocessingServiceImpl implements IDiagramPreprocessingService {
     }
 
     public void init(ServletContext context,
-                     VFSService vfsService,
-                     Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent,
-                     Event<NotificationEvent> notification,
-                     POMService pomService,
-                     ProjectService projectService,
-                     MetadataService metadataService) {
-        _registry.put("default", new DefaultPreprocessingUnit(context, vfsService, workitemInstalledEventEvent, notification, pomService, projectService, metadataService));
-        _registry.put("jbpm", new JbpmPreprocessingUnit(context, vfsService, workitemInstalledEventEvent, notification, pomService, projectService, metadataService));
+                     VFSService vfsService) {
+        ((JbpmPreprocessingUnit)jbpmPreprocessingUnit).init(context, vfsService);
+        _registry.put("default", defaultPreprocessingUnit);
+        _registry.put("jbpm", jbpmPreprocessingUnit);
     }
 
 }

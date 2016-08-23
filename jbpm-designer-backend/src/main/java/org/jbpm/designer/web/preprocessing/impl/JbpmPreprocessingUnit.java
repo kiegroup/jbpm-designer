@@ -27,6 +27,8 @@ import java.io.Writer;
 import java.net.URLEncoder;
 import java.util.*;
 import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,7 @@ import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
 import org.drools.core.util.MVELSafeHelper;
+import org.guvnor.common.services.project.model.Project;
 import org.guvnor.common.services.project.service.POMService;
 import org.guvnor.common.services.project.service.ProjectService;
 import org.guvnor.common.services.shared.metadata.MetadataService;
@@ -75,6 +78,7 @@ import org.uberfire.workbench.events.NotificationEvent;
  *
  * @author Tihomir Surdilovic
  */
+@Named("jbpmPreprocessingUnit")
 public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private static final Logger _logger =
             LoggerFactory.getLogger(JbpmPreprocessingUnit.class);
@@ -112,39 +116,34 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String globalDir;
     private VFSService vfsService;
     private boolean includeDataObjects;
+
+    @Inject
     private Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent;
+
+    @Inject
     private Event<NotificationEvent> notification;
+
+    @Inject
     private POMService pomService;
-    private ProjectService projectService;
+
+    @Inject
+    private ProjectService<? extends Project> projectService;
+
+    @Inject
     private MetadataService metadataService;
 
     public JbpmPreprocessingUnit() {}
 
-    public JbpmPreprocessingUnit(ServletContext servletContext,
-                                 VFSService vfsService,
-                                 Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent,
-                                 Event<NotificationEvent> notification,
-                                 POMService pomService,
-                                 ProjectService projectService,
-                                 MetadataService metadataService) {
-        this(servletContext,
+    public void init(ServletContext servletContext,
+                                 VFSService vfsService) {
+        init(servletContext,
                 ConfigurationProvider.getInstance().getDesignerContext(),
-                vfsService,
-                workitemInstalledEventEvent,
-                notification,
-                pomService,
-                projectService,
-                metadataService);
+                vfsService);
     }
 
-    public JbpmPreprocessingUnit(ServletContext servletContext,
+    public void init(ServletContext servletContext,
                                  String designerPath,
-                                 VFSService vfsService,
-                                 Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent,
-                                 Event<NotificationEvent> notification,
-                                 POMService pomService,
-                                 ProjectService projectService,
-                                 MetadataService metadataService) {
+                                 VFSService vfsService) {
         this.designer_path = designerPath.substring(0, designerPath.length()-1);
         this.vfsService = vfsService;
         stencilPath = servletContext.getRealPath(designer_path + "/" + STENCILSET_PATH);
@@ -162,11 +161,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         patternsData = servletContext.getRealPath(designer_path + "/defaults/patterns.json");
         sampleBpmn2 = servletContext.getRealPath(designer_path + "/defaults/SampleProcess.bpmn2");
         includeDataObjects = Boolean.parseBoolean(System.getProperty(INCLUDE_DATA_OBJECT) == null ? "true" : System.getProperty(INCLUDE_DATA_OBJECT));
-        this.workitemInstalledEventEvent = workitemInstalledEventEvent;
-        this.notification = notification;
-        this.pomService = pomService;
-        this.projectService = projectService;
-        this.metadataService = metadataService;
     }
 
     public String getOutData() {
@@ -266,7 +260,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             for(Asset entry : workItemsContent) {
 
                 try {
-                    evaluateWorkDefinitions(workDefinitions, entry, asset.getAssetLocation(), repository, profile);
+                    evaluateWorkDefinitions(workDefinitions, entry, asset.getAssetLocation(), repository);
                 } catch(Exception e) {
                     _logger.error("Unable to parse a workitem definition: " + e.getMessage());
                 }
@@ -402,7 +396,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, Asset<String> widAsset, String assetLocation, Repository repository, IDiagramProfile profile) throws Exception {
+    public void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, Asset<String> widAsset, String assetLocation, Repository repository) throws Exception {
         List<Map<String, Object>> workDefinitionsMaps;
 
         try {
