@@ -13,7 +13,7 @@ import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
     "displayName" : "Microsoft Academy",
     "icon" : "microsoftacademy.png",
     "category" : "Search",
-    "defaultHandler" : "mvel: org.msho.app.MicrosoftAcademyWorkItemHandler()",
+    "defaultHandler" : "mvel: new org.msho.app.MicrosoftAcademyWorkItemHandler()",
     "documentation" : "index.html",
     "dependencies": [
 

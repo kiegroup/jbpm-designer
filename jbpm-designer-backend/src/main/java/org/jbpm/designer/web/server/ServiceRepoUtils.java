@@ -81,7 +81,7 @@ public class ServiceRepoUtils {
 
         repository.createAsset(widAssetBuilder.getAsset());
 
-        if(iconName != null) {
+        if(iconName != null && !iconName.isEmpty()) {
             AssetBuilder iconAssetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
             String iconExtension = iconName.substring(iconName.lastIndexOf(".") + 1);
             String iconFileName = iconName.substring(0, iconName.lastIndexOf("."));
