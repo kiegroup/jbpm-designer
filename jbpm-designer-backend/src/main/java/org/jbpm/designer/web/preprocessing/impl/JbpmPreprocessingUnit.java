@@ -708,16 +708,20 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 List<String> toInstallTasks = Arrays.asList(defaultServiceRepoTasks.split("\\s*,\\s*"));
                 for(String installTask : toInstallTasks) {
                     if(workitemsFromRepo.containsKey(installTask)) {
-                        ServiceRepoUtils.installWorkItem(workitemsFromRepo,
-                                installTask,
-                                uuid,
-                                repository,
-                                vfsService,
-                                workitemInstalledEventEvent,
-                                notification,
-                                pomService,
-                                projectService,
-                                metadataService);
+                        try {
+                            ServiceRepoUtils.installWorkItem(workitemsFromRepo,
+                                    installTask,
+                                    uuid,
+                                    repository,
+                                    vfsService,
+                                    workitemInstalledEventEvent,
+                                    notification,
+                                    pomService,
+                                    projectService,
+                                    metadataService);
+                        } catch (Exception e) {
+                            _logger.error("Work Item '" + installTask + "' was not installed correctly: " + e.getMessage());
+                        }
                     }
                 }
             }

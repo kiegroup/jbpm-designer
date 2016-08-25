@@ -10,7 +10,7 @@ import org.drools.core.process.core.datatype.impl.type.StringDataType;
         "displayName" : "SwitchYard Service",
         "icon" : "switchyard.gif",
         "category": "Integration",
-	"defaultHandler": "reflection: com.switchyard.SwitchYardHandler",
+	"defaultHandler": "reflection: new com.switchyard.SwitchYardHandler",
 	"dependencies": [
 
     	],
