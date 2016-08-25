@@ -183,6 +183,15 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
                 projectService,
                 metadataService);
 
+        Collection<Asset> foundWids = repository.listAssetsRecursively("/", new FilterByExtension("wid"));
+        assertNotNull(foundWids);
+        assertEquals(1, foundWids.size());
+        assertTrue(new ArrayList<Asset>(foundWids).get(0).getFullName().endsWith("Rewardsystem.wid"));
+
+        Collection<Asset> foundPngs = repository.listAssetsRecursively("/", new FilterByExtension("png"));
+        assertNotNull(foundPngs);
+        assertEquals(0, foundPngs.size());
+
         // jbpm-console stores deployment descriptor if it receives install event from designer
         // make sure that the install event was fired
         assertEquals(1, receivedWidInstallEvents.size());
