@@ -26,6 +26,7 @@ import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import org.jbpm.designer.type.Bpmn2TypeDefinition;
+import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +36,14 @@ import org.uberfire.io.IOService;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
+import org.w3c.dom.Document;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
@@ -90,8 +95,9 @@ public class BusinessProcessCopyHelper implements CopyHelper {
                 String[] pathParts = _destination.getParent().toString().split("/");
                 destinationPkg = pathParts[1];
             }
-            String destinationID =  destinationPkg + "." + _destination.getFileName().toString().substring(0, _destination.getFileName().toString().lastIndexOf('.'));
-            process.setId(destinationID);
+
+            String destinationID = destinationPkg + "." + destination.getFileName().toString().substring(0, destination.getFileName().length() - 6);
+            process.setId(Utils.toBPMNIdentifier(destinationID));
 
             ResourceSet rSet = new ResourceSetImpl();
             rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
