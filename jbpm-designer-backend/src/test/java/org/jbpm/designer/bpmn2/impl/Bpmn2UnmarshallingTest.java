@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,29 +16,26 @@
 package org.jbpm.designer.bpmn2.impl;
 
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
+import org.eclipse.bpmn2.di.impl.BPMNEdgeImpl;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
+import org.eclipse.dd.di.Edge;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.FeatureMap;
-import org.jboss.drools.DroolsPackage;
-import org.jboss.drools.MetaDataType;
-import org.jboss.drools.OnEntryScriptType;
-import org.jboss.drools.OnExitScriptType;
+import org.jboss.drools.*;
+import org.jboss.drools.impl.MetaDataTypeImpl;
+import org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.junit.Test;
+
+import static org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge.*;
+import static org.junit.Assert.*;
 
 /**
  * @author Antoine Toulme
@@ -335,13 +332,86 @@ public class Bpmn2UnmarshallingTest {
 
     @Test
     public void testTextAnnotationUnmarshalling() throws Exception {
+        List<SimpleEdge> expectedEdges = new ArrayList<SimpleEdge>();
+        expectedEdges.add(createEdge("<![CDATA[Start\nAnnotation]]>")
+                .addPoint(120, 320)
+                .addPoint(120, 160)
+        );
+        expectedEdges.add(createEdge("<![CDATA[Task\nIn\nLane\nAnnotation]]>")
+                .addPoint(155, 125)
+                .addPoint(380, 184)
+                .addPoint(331, 184)
+                .addPoint(330, 130)
+        );
+        expectedEdges.add(createEdge("<![CDATA[WID\nTask\nannotation]]>")
+                .addPoint(690, 650)
+                .addPoint(690, 507)
+                .addPoint(741, 507)
+        );
+        expectedEdges.add(createEdge("<![CDATA[User\nTask\nAnnotation]]>")
+                .addPoint(100, 76)
+                .addPoint(196, 646)
+                .addPoint(195, 550)
+        );
+        expectedEdges.add(createEdge("<![CDATA[Gateway\nin\nlane\nannotation]]>")
+                .addPoint(270, 125)
+                .addPoint(359, 125)
+        );
+        expectedEdges.add(createEdge("<![CDATA[End\nIn\nSwimlane]]>")
+                .addPoint(270, 36)
+                .addPoint(915, 231)
+                .addPoint(914, 133)
+        );
+        expectedEdges.add(createEdge("<![CDATA[Subprocess's\nAnnotation]]>")
+                .addPoint(495, 650)
+                .addPoint(495, 847)
+                .addPoint(664, 848)
+        );
+        expectedEdges.add(createEdge("<![CDATA[Swimlane's\nAnnotation]]>")
+                .addPoint(525, 320)
+                .addPoint(1066, 320)
+                .addPoint(1065, 505)
+        );
+
+        List<SimpleEdge> actualEdges = new ArrayList<SimpleEdge>();
         Definitions definitions = loader.loadProcessFromJson("textAnnotation.json");
-        assertTrue(definitions.getRootElements().size() == 1);
-        Process process = getRootProcess(definitions);
-        assertTrue(process.getFlowElements().iterator().next() instanceof TextAnnotation);
-        TextAnnotation ta = (TextAnnotation) process.getFlowElements().iterator().next();
-        assertEquals("text annotation", ta.getText());
-        definitions.eResource().save(System.out, Collections.emptyMap());
+        List<BPMNEdge> edges = getAllEdgesFromDefinition(definitions);
+        for (Edge edge : edges) {
+            SimpleEdge currentEdge = createEdge(getEdgeName(edge));
+            for (Point p : edge.getWaypoint()) {
+                currentEdge.addPoint(p.getX(), p.getY());
+            }
+            actualEdges.add(currentEdge);
+        }
+
+        assertEquals(actualEdges, expectedEdges);
+    }
+
+    private String getEdgeName(Edge edge) {
+        return ((MetaDataTypeImpl)((Association)((BPMNEdgeImpl) edge).getBpmnElement()).getTargetRef().getExtensionValues().get(0).getValue().get(0).getValue()).getMetaValue();
+    }
+
+    private List<BPMNEdge> getAllEdgesFromDefinition(Definitions definitions) {
+        List<BPMNEdge> edges = new ArrayList<BPMNEdge>();
+        List<DiagramElement> elements = getPlaneElementsFormDefinition(definitions);
+        for (DiagramElement element : elements) {
+            if (isAssociation(element)) {
+                edges.add((BPMNEdge) element);
+            }
+        }
+        return edges;
+    }
+
+    private List<DiagramElement> getPlaneElementsFormDefinition(Definitions definitions) {
+        return definitions.getDiagrams().get(0).getPlane().getPlaneElement();
+    }
+
+    private boolean isEdge(DiagramElement element) {
+        return element instanceof BPMNEdge;
+    }
+
+    private boolean isAssociation(DiagramElement element) {
+        return isEdge(element) && ((BPMNEdgeImpl) element).getBpmnElement() instanceof Association;
     }
 
     @Test
