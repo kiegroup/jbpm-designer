@@ -547,7 +547,7 @@ function addElement(element, myElementGroups) {
             }
             propsArray.push({
                 "name":presentPropertyName(nextPart),
-                "value":parsePropertyValue(nextPart,element.properties[nextPart])
+                "value":parsePropertyValue(nextPart,element.properties[nextPart]).replace(/</g,'&lt;').replace(/>/g,'&gt;')
             });
         }
 
