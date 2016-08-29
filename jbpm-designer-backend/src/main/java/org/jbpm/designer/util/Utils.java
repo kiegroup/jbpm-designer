@@ -51,7 +51,7 @@ public class Utils {
      */
     public static String toBPMNIdentifier(String str) {
 
-        str = str.replace(" ", "");
+        str = str.replaceAll("\\s+", "");
         StringBuilder sb = new StringBuilder(str.length());
 
         for (int i = 0; i < str.length(); i++) {
