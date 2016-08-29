@@ -47,6 +47,8 @@ public class BusinessProcessCopyHelperTest {
 
     private BusinessProcessCopyHelper helper;
     private Bpmn2TypeDefinition bpmn2ResourceType = new Bpmn2TypeDefinition();
+    private Path pathSource;
+    private Path pathDestination;
 
     public static final String DEFAULT_PROCESS = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
             "<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:bpsim=\"http://www.bpsim.org/schemas/1.0\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:drools=\"http://www.jboss.org/drools\" \n" +
@@ -65,15 +67,15 @@ public class BusinessProcessCopyHelperTest {
 
     @Before
     public void setup() {
+        pathSource = mock( Path.class );
+        pathDestination = mock( Path.class );
         helper = new BusinessProcessCopyHelper( ioService,
                 bpmn2ResourceType,
                 commentedOptionFactory);
     }
 
     @Test
-    public void testBusinessProcessFile() {
-        final Path pathSource = mock( Path.class );
-        final Path pathDestination = mock( Path.class );
+    public void testCopy() {
         when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
         when( pathDestination.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
         when( pathDestination.getFileName() ).thenReturn("MyNewProcess.bpmn2");
@@ -101,6 +103,74 @@ public class BusinessProcessCopyHelperTest {
             assertNotNull(process);
             assertNotNull(process.getId());
             assertThat(process.getId(), containsString("MyNewProcess"));
+        } catch (Exception e) {
+            fail("Cannot parse new process: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testCopyIDWithMultibyteCharsAndSpaces() {
+        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
+        when( pathDestination.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
+        when( pathDestination.getFileName() ).thenReturn("Эож ты дольорэ     My New Process  어디야.bpmn2");
+        when( ioService.readAllString(any(org.uberfire.java.nio.file.Path.class)) ).thenReturn(DEFAULT_PROCESS);
+
+        helper.postProcess(pathSource,
+                pathDestination);
+
+        final ArgumentCaptor<String> bpmn2ArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(ioService,
+                times(1)).write(any(org.uberfire.java.nio.file.Path.class),
+                bpmn2ArgumentCaptor.capture(),
+                any(CommentedOption.class));
+
+        final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
+
+        assertNotNull(newBPMN2);
+
+        DroolsFactoryImpl.init();
+        BpsimFactoryImpl.init();
+
+        try {
+            Definitions def = new JbpmProfileImpl().getDefinitions(newBPMN2);
+            org.eclipse.bpmn2.Process process = helper.getRootProcess(def);
+            assertNotNull(process);
+            assertNotNull(process.getId());
+            assertThat(process.getId(), containsString("Evaluation.D0ADD0BED0B6D182D18BD0B4D0BED0BBD18CD0BED180D18DMyNewProcessEC96B4EB9494EC95BC"));
+        } catch (Exception e) {
+            fail("Cannot parse new process: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testCopyIDWithInvalidID() {
+        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
+        when( pathDestination.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
+        when( pathDestination.getFileName() ).thenReturn("  << my process    >>"); // invalid ncname
+        when( ioService.readAllString(any(org.uberfire.java.nio.file.Path.class)) ).thenReturn(DEFAULT_PROCESS);
+
+        helper.postProcess(pathSource,
+                pathDestination);
+
+        final ArgumentCaptor<String> bpmn2ArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(ioService,
+                times(1)).write(any(org.uberfire.java.nio.file.Path.class),
+                bpmn2ArgumentCaptor.capture(),
+                any(CommentedOption.class));
+
+        final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
+
+        assertNotNull(newBPMN2);
+
+        DroolsFactoryImpl.init();
+        BpsimFactoryImpl.init();
+
+        try {
+            Definitions def = new JbpmProfileImpl().getDefinitions(newBPMN2);
+            org.eclipse.bpmn2.Process process = helper.getRootProcess(def);
+            assertNotNull(process);
+            assertNotNull(process.getId());
+            assertEquals("Evaluation.3C3Cmyprocess", process.getId());
         } catch (Exception e) {
             fail("Cannot parse new process: " + e.getMessage());
         }
