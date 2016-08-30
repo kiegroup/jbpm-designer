@@ -26,9 +26,11 @@ function clearChart() {
 <center>
 <div style="margin:20;padding:0;">
 	<!-- <div class="timelineicon"><a href="#" onclick="clearChart(); showTimeline(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/timelineicon.png" title="Timeline"/></a></div> -->
-	<div class="tableicon"><a href="#" onclick="clearChart(); showTable(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/tableicon.png" title="Table"/></a></div>
-    <div class="pcharticon"><a href="#" onclick="clearChart(); showPieChart(); return false;"><img src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/piecharticon.png" title="Pie Chart"/></a></div>
-    <div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle);</script></div>
+	<div class="tableicon"><a href="#" onclick="clearChart(); showTable(); return false;"><img id="tableiconimg" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/tableicon.png" title="Table"/></a></div>
+	<script>document.getElementById('tableiconimg').title = parent.ORYX.I18N.View.sim.Table;</script>
+	<div class="pcharticon"><a href="#" onclick="clearChart(); showPieChart(); return false;"><img id="piecharticonimg" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/piecharticon.png" title="Pie Chart"/></a></div>
+	<script>document.getElementById('piecharticonimg').title = parent.ORYX.I18N.View.sim.PieChart;</script>
+	<div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle);</script></div>
 </div><br/>
 <div id="outterchart" class="outterchart">
     <h2><script>document.write(parent.ORYX.I18N.View.sim.chartsPathImage);</script></h2>
