@@ -581,6 +581,7 @@ ORYX.I18N.View.sim.HorizontalBarChart = "Horizontal Bar Chart";
 ORYX.I18N.View.sim.PieChart = "Pie Chart";
 ORYX.I18N.View.sim.Table = "Table";
 ORYX.I18N.View.sim.Timeline = "Timeline";
+ORYX.I18N.View.sim.LoadingTimeline = "Loading Timeline...";
 ORYX.I18N.View.sim.LineChart = "Line Chart";
 ORYX.I18N.View.sim.NoDataAvailable = "No Data Available.";
 ORYX.I18N.View.sim.Chart = "Chart";
