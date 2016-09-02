@@ -162,6 +162,7 @@ public class ComboBoxTest {
         String constant = "a constant";
         String quotedConstant = StringUtils.createQuotedConstant(constant);
         when(listBoxValues.isCustomValue(quotedConstant)).thenReturn(true);
+        when(listBoxValues.getValueForDisplayValue(quotedConstant)).thenReturn(quotedConstant);
 
         comboBox.listBoxValueChanged(quotedConstant);
 
@@ -178,6 +179,7 @@ public class ComboBoxTest {
         String constant = "\"hello\"";
         String quotedConstant = StringUtils.createQuotedConstant(constant);
         when(listBoxValues.isCustomValue(quotedConstant)).thenReturn(true);
+        when(listBoxValues.getValueForDisplayValue(quotedConstant)).thenReturn(quotedConstant);
 
         comboBox.listBoxValueChanged(quotedConstant);
 
@@ -194,6 +196,7 @@ public class ComboBoxTest {
         String constant = "greeting={\"hello\"}";
         String quotedConstant = StringUtils.createQuotedConstant(constant);
         when(listBoxValues.isCustomValue(quotedConstant)).thenReturn(true);
+        when(listBoxValues.getValueForDisplayValue(quotedConstant)).thenReturn(quotedConstant);
 
         comboBox.listBoxValueChanged(quotedConstant);
 
@@ -209,6 +212,7 @@ public class ComboBoxTest {
                 processVarConstantPrompt, processVarConstantPlaceholder);
         String constant = "123";
         when(listBoxValues.isCustomValue(constant)).thenReturn(true);
+        when(listBoxValues.getValueForDisplayValue(constant)).thenReturn(constant);
 
         comboBox.listBoxValueChanged(constant);
 
@@ -289,9 +293,10 @@ public class ComboBoxTest {
         String value = "something new";
         String quotedValue = StringUtils.createQuotedConstant(value);
         when(listBoxValues.getNonCustomValueForUserString(value)).thenReturn(null);
+        when(comboBox.addCustomValueToListBoxValues(value, "")).thenReturn(quotedValue);
         comboBox.textBoxValueChanged(value);
 
-        verify(comboBox).addCustomValueToListBoxValues(value, "");
+        verify(comboBox, times(2)).addCustomValueToListBoxValues(value, "");
         verify(view).setListBoxValue(quotedValue);
         verify(view).setListBoxModelValue(quotedValue);
         verify(view).setTextBoxValue(value);

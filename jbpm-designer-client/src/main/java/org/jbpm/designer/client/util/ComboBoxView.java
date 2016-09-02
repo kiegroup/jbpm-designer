@@ -56,7 +56,7 @@ public interface ComboBoxView {
 
         void updateListBoxValues(String listBoxValue);
 
-        void addCustomValueToListBoxValues(String newValue, String oldValue);
+        String addCustomValueToListBoxValues(String newValue, String oldValue);
 
         String getValue();
 

@@ -179,8 +179,7 @@ public class AssignmentListItemWidgetViewImplTest {
         verify(constant, times(1)).setVisible(false);
         verify(customDataType, never()).setValue(DATA_TYPE_NAME);
         verify(dataType, times(1)).setValue(DATA_TYPE_NAME);
-        verify(constant, times(1)).setValue("\"" + CONSTANT_NAME + "\"");
-        verify(processVar, times(1)).setValue("\"" + CONSTANT_NAME + "\"");
+        verify(constant, times(1)).setValue(CONSTANT_NAME);
     }
 
     @Test

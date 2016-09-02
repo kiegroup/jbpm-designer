@@ -18,6 +18,7 @@ package org.jbpm.designer.client.util;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jbpm.designer.client.popup.ActivityDataIOEditorViewImpl;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentData;
 import org.junit.Test;
@@ -166,5 +167,145 @@ public class ListBoxValuesTest {
         assertArrayEquals(expectedAcceptableValuesWithCustomValues, dataTypeValues.getAcceptableValuesWithCustomValues().toArray());
     }
 
+    @Test
+    public void testAddDisplayValue() {
+        List<String> processVarStartValues = Arrays.asList(
+                "** Variable Definitions **", "employee",  "reason", "performance"
+        );
 
+        ListBoxValues processVarValues = new ListBoxValues("Constant ...", "Edit ", null, ActivityDataIOEditorViewImpl.CONSTANT_MAX_DISPLAY_LENGTH);
+
+        // not double-quoted string - displayValue is the same
+        String value = "sVar1";
+        String displayValue = processVarValues.addDisplayValue(value);
+        assertEquals(value, displayValue);
+
+        // double-quoted string shorter than max - displayValue is the same
+        value = "\"hello\"";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals(value, displayValue);
+
+        // value less than MAX and not a quoted string - displayValue is the same
+        value = "sVar";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals(value, displayValue);
+
+        // value less than MAX and a quoted string - displayValue is the same
+        value = "\"abcdeabcde\"";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals(value, displayValue);
+
+        // value longer than MAX and not a quoted string - displayValue is the same
+        value = "sLongVar123";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals(value, displayValue);
+
+        // value much longer than MAX and not a quoted string - displayValue is the same
+        value = "sVeryLongVariableName123";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals(value, displayValue);
+
+        // value longer than MAX and a quoted string - displayValue is truncated with "(01)"
+        value = "\"abcdeabcde1\"";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals("\"abcdeabcde...(01)\"", displayValue);
+
+        // value longer than MAX and a quoted string - displayValue is 1st truncated
+        value = "\"0123456789x\"";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals("\"0123456789...\"", displayValue);
+
+        // value longer than MAX and a quoted string - displayValue is 2nd truncated
+        value = "\"0123456789y\"";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals("\"0123456789...(01)\"", displayValue);
+
+        // value longer than MAX and a quoted string - displayValue is 3rd truncated
+        value = "\"0123456789z\"";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals("\"0123456789...(02)\"", displayValue);
+
+        // value longer than MAX and a quoted string - displayValue is 1st truncated
+        value = "\"hello then goodbye\"";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals("\"hello then...\"", displayValue);
+
+        // value longer than MAX and a quoted string - displayValue is 2nd truncated
+        value = "\"hello then hello\"";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals("\"hello then...(01)\"", displayValue);
+
+        // value longer than MAX but not a quoted string - displayValue is the same
+        value = "hello then hello";
+        displayValue = processVarValues.addDisplayValue(value);
+        assertEquals(value, displayValue);
+
+
+        // Test getValueForDisplayValue for the entries above
+        // not double-quoted string - displayValue is the same
+        displayValue = "sVar1";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals(displayValue, value);
+
+        // double-quoted string shorter than max - displayValue is the same
+        displayValue = "\"hello\"";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals(displayValue, value);
+
+        // value less than MAX and not a quoted string - displayValue is the same
+        displayValue = "sVar";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals(displayValue, value);
+
+        // value less than MAX and a quoted string - displayValue is the same
+        displayValue = "\"abcdeabcde\"";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals(displayValue, value);
+
+        // value longer than MAX and not a quoted string - displayValue is the same
+        displayValue = "sLongVar123";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals(displayValue, value);
+
+        // value much longer than MAX and not a quoted string - displayValue is the same
+        displayValue = "sVeryLongVariableName123";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals(displayValue, value);
+
+        // value longer than MAX and a quoted string - displayValue is truncated with "(01)"
+        displayValue = "\"abcdeabcde...(01)\"";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals("\"abcdeabcde1\"" , value);
+
+        // value longer than MAX and a quoted string - displayValue is 1st truncated
+        displayValue = "\"0123456789...\"";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals("\"0123456789x\"", value);
+
+        // value longer than MAX and a quoted string - displayValue is 2nd truncated
+        displayValue = "\"0123456789...(01)\"";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals("\"0123456789y\"", value);
+
+        // value longer than MAX and a quoted string - displayValue is 3rd truncated
+        displayValue = "\"0123456789...(02)\"";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals("\"0123456789z\"", value);
+
+        // value longer than MAX and a quoted string - displayValue is 1st truncated
+        displayValue = "\"hello then...\"";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals("\"hello then goodbye\"", value);
+
+        // value longer than MAX and a quoted string - displayValue is 2nd truncated
+        displayValue = "\"hello then...(01)\"";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals("\"hello then hello\"", value);
+
+        // value longer than MAX but not a quoted string - displayValue is the same
+        displayValue = "hello then hello";
+        value = processVarValues.getValueForDisplayValue(displayValue);
+        assertEquals(displayValue, value);
+
+    }
 }
