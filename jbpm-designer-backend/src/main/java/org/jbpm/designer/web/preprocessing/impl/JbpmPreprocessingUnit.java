@@ -402,7 +402,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, Asset<String> widAsset, String assetLocation, Repository repository, IDiagramProfile profile) throws Exception {
+    public void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions, Asset<String> widAsset, String assetLocation, Repository repository, IDiagramProfile profile) throws Exception {
         List<Map<String, Object>> workDefinitionsMaps;
 
         try {
@@ -459,10 +459,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 String iconEncoded = "data:image/png;base64," + javax.xml.bind.DatatypeConverter.printBase64Binary(iconAsset.getAssetContent());
                 workDefinition.setIconEncoded(URLEncoder.encode(iconEncoded, "UTF-8"));
 
-                if(workDefinitionMap.get("customEditor") != null) {
+                if(workDefinitionMap.get("customEditor") != null
+                        && ((String) workDefinitionMap.get("customEditor")).length() > 0) {
                     workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
                 } else {
-                    workDefinition.setCustomEditor("");
+                    workDefinition.setCustomEditor(null);
                 }
 
                 Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
