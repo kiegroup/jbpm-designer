@@ -1388,6 +1388,8 @@ ORYX.I18N.Save.rename='<i18n:message key="ORYX.I18N.Save.rename">Rename</i18n:me
 ORYX.I18N.Save.rename_desc='<i18n:message key="ORYX.I18N.Save.rename_desc">Rename asset</i18n:message>';
 ORYX.I18N.Save.delete_name='<i18n:message key="ORYX.I18N.Save.delete_name">Delete</i18n:message>';
 ORYX.I18N.Save.delete_desc='<i18n:message key="ORYX.I18N.Save.delete_desc">Delete asset</i18n:message>';
+ORYX.I18N.Save.saveItem='<i18n:message key="ORYX.I18N.Save.saveItem">Save this item</i18n:message>';
+ORYX.I18N.Save.saveCheckInComment='<i18n:message key="ORYX.I18N.Save.saveCheckInComment">Check in comment</i18n:message>';
 ORYX.I18N.Save.saveCancelled='<i18n:message key="ORYX.I18N.Save.saveCancelled">Save operation has been cancelled.</i18n:message>';
 ORYX.I18N.Save.processReloading='<i18n:message key="ORYX.I18N.Save.processReloading">Reloading process content.</i18n:message>';
 ORYX.I18N.Save.unableReloadContent='<i18n:message key="ORYX.I18N.Save.unableReloadContent">Unable to reload process content.</i18n:message>';
