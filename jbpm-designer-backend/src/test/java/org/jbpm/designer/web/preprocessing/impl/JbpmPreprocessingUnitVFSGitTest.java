@@ -18,51 +18,21 @@ package org.jbpm.designer.web.preprocessing.impl;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestIDiagramProfile;
 import org.jbpm.designer.helper.TestServletContext;
-import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.AssetBuilderFactory;
-import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
-import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.repository.vfs.VFSRepository;
-import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
+import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.junit.*;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import org.stringtemplate.v4.ST;
 
-public class JbpmPreprocessingUnitVFSGitTest {
+import static org.junit.Assert.*;
 
-    // TODO change it to generic independent path
-    private static final String REPOSITORY_ROOT = "designer-playground";
-    private static final String VFS_REPOSITORY_ROOT = "git://" + REPOSITORY_ROOT;
-    private static final String USERNAME = "guvnorngtestuser1";
-    private static final String PASSWORD = "test1234";
-    private static final String ORIGIN_URL      = "https://github.com/mswiderski/designer-playground.git";
-    private static final String FETCH_COMMAND = "?fetch";
-    private JbpmProfileImpl profile;
-
-    private static String gitLocalClone = System.getProperty("java.io.tmpdir") + "git-repo";
-    private static Map<String, String> env = new HashMap<String, String>();
-
-    private static int counter = -100;
-    private RepositoryDescriptor descriptor;
-    private VFSFileSystemProducer producer = new VFSFileSystemProducer();
-
-    @BeforeClass
-    public static void prepare() {
-
-        env.put( "username", USERNAME );
-        env.put( "password", PASSWORD );
-        env.put( "origin", ORIGIN_URL );
-        env.put( "fetch.cmd", FETCH_COMMAND );
-        System.setProperty("org.kie.nio.git.dir", gitLocalClone);
-    }
+public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
 
     @AfterClass
     public static void cleanup() {
@@ -71,36 +41,14 @@ public class JbpmPreprocessingUnitVFSGitTest {
 
     @Before
     public void setup() {
-        profile = new JbpmProfileImpl();
-        producer = new VFSFileSystemProducer();
-        env.put("repository.root", VFS_REPOSITORY_ROOT);
-        env.put("repository.globaldir", "/global");
-        descriptor = producer.produceFileSystem(env);
-    }
-
-    private void deleteFiles(File directory) {
-        for (File file : directory.listFiles()) {
-            if (file.isDirectory()) {
-                deleteFiles(file);
-            }
-            file.delete();
-        }
+        super.setup();
     }
 
     @After
     public void teardown() {
-        File repo = new File(gitLocalClone);
-        if(repo.exists()) {
-            deleteFiles(repo);
-        }
-        repo.delete();
-        repo = new File(".niogit");
-        if(repo.exists()) {
-            deleteFiles(repo);
-        }
-        repo.delete();
-        counter++;
+        super.teardown();
     }
+
     @Test
     public void testProprocess() {
         Repository repository = new VFSRepository(producer.getIoService());
@@ -131,7 +79,7 @@ public class JbpmPreprocessingUnitVFSGitTest {
         // validate results
         Collection<Asset> globalAssets = repository.listAssets("/global");
         assertNotNull(globalAssets);
-        assertEquals(31, globalAssets.size());
+        assertEquals(30, globalAssets.size());
         repository.assetExists("/global/backboneformsinclude.fw");
         repository.assetExists("/global/backbonejsinclude.fw");
         repository.assetExists("/global/cancelbutton.fw");
@@ -166,11 +114,75 @@ public class JbpmPreprocessingUnitVFSGitTest {
 
         Collection<Asset> defaultStuff = repository.listAssets("/myprocesses");
         assertNotNull(defaultStuff);
-        assertEquals(3, defaultStuff.size());
+        assertEquals(2, defaultStuff.size());
         repository.assetExists("/myprocesses/WorkDefinitions.wid");
         // this is the process asset that was created for the test but let's check it anyway
         repository.assetExists("/myprocesses/process.bpmn2");
         repository.assetExists("/myprocesses/.gitignore");
+
+    }
+
+    @Test
+    public void testEmptyCustomEditor() throws Exception {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        //prepare folders that will be used
+        repository.createDirectory("/myprocesses");
+        repository.createDirectory("/global");
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("import org.drools.core.process.core.datatype.impl.type.StringDataType;\n" +
+                "\n" +
+                "[\n" +
+                "\n" +
+                "  [\n" +
+                "    \"name\" : \"Rewardsystem\",\n" +
+                "    \"description\" : \"Notifies the Reward System\",\n" +
+                "    \"displayName\" : \"Rewardsystem\",\n" +
+                "    \"defaultHandler\": \"mvel: com.rewardsystem.MyRewardsHandler()\",\n" +
+                "    \"category\" : \"Rewards\",\n" +
+                "    \"customEditor\" : \"\",\n" +
+                "    \"icon\" : \"widicon.png\",\n" +
+                "  ]\n" +
+                "\n" +
+                "]")
+                .type("wid")
+                .name("processwid")
+                .location("/myprocesses");
+        String uniqueWidID = repository.createAsset(builder.getAsset());
+
+        AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+        builder2.content("".getBytes())
+                .type("png")
+                .name("widicon")
+                .location("/myprocesses");
+        String uniqueIconID = repository.createAsset(builder2.getAsset());
+
+        JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit(new TestServletContext(), "/", null, null, null, null, null, null);
+        Asset<String> widAsset = repository.loadAsset(uniqueWidID);
+        Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+        preprocessingUnitVFS.evaluateWorkDefinitions(workDefinitions, widAsset, widAsset.getAssetLocation(), repository, profile);
+        // $workitemDefs:{k| $if(workitemDefs.(k).customEditor)$ HAVE CUSTOM EDITOR $endif$ }$
+
+        assertNotNull(workDefinitions);
+        assertEquals(1, workDefinitions.size());
+        assertTrue(workDefinitions.containsKey("Rewardsystem"));
+        assertTrue(workDefinitions.get("Rewardsystem").getCustomEditor() == null);
+
+        // run it through a sample ST4 template what has the same code as the bpmn2 stencil set and make sure
+        // we get right results
+        ST workItemTemplate = new ST("$workitemDefs:{k| $if(workitemDefs.(k).customEditor)$CEdefined$else$CEnotdefined$endif$ }$", '$', '$');
+        workItemTemplate.add("workitemDefs", workDefinitions);
+        assertFalse(workItemTemplate.render().contains("CEdefined"));
+        assertTrue(workItemTemplate.render().contains("CEnotdefined"));
+
+        // now test to make sure if "good" value for customEditor is given that it still works as before
+        workDefinitions.get("Rewardsystem").setCustomEditor("myRewardsCustomEditor");
+        ST workItemTemplate2 = new ST("$workitemDefs:{k| $if(workitemDefs.(k).customEditor)$CEdefined$else$CEnotdefined$endif$ }$", '$', '$');
+        workItemTemplate2.add("workitemDefs", workDefinitions);
+        assertTrue(workItemTemplate2.render().contains("CEdefined"));
+        assertFalse(workItemTemplate2.render().contains("CEnotdefined"));
 
     }
 }
