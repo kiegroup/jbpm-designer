@@ -16,6 +16,7 @@
 package org.jbpm.designer.web.preprocessing.impl;
 
 import javax.enterprise.event.Event;
+import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,18 +37,9 @@ import org.uberfire.workbench.events.NotificationEvent;
  * 
  * @author Tihomir Surdilovic
  */
+@Named("defaultPreprocessingUnit")
 public class DefaultPreprocessingUnit implements IDiagramPreprocessingUnit {
 
-    public DefaultPreprocessingUnit(ServletContext servletContext,
-                                    VFSService vfsService,
-                                    Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent,
-                                    Event<NotificationEvent> notification,
-                                    POMService pomService,
-                                    ProjectService projectService,
-                                    MetadataService metadataService) {
-        
-    }
-    
     public void preprocess(HttpServletRequest request,
             HttpServletResponse response, IDiagramProfile profile, ServletContext servletContext, boolean readOnly, boolean viewLocked, IOService ioService, RepositoryDescriptor descriptor) {
         // nothing to do

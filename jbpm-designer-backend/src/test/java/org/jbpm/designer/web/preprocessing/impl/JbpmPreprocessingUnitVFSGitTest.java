@@ -20,19 +20,49 @@ import org.jbpm.designer.helper.TestIDiagramProfile;
 import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.stringtemplate.v4.ST;
-
 import static org.junit.Assert.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
+
+    // TODO change it to generic independent path
+    private static final String REPOSITORY_ROOT = "designer-playground";
+    private static final String VFS_REPOSITORY_ROOT = "git://" + REPOSITORY_ROOT;
+    private static final String USERNAME = "guvnorngtestuser1";
+    private static final String PASSWORD = "test1234";
+    private static final String ORIGIN_URL      = "https://github.com/mswiderski/designer-playground.git";
+    private static final String FETCH_COMMAND = "?fetch";
+
+    private static String gitLocalClone = System.getProperty("java.io.tmpdir") + "git-repo";
+    private static Map<String, String> env = new HashMap<String, String>();
+
+    private VFSFileSystemProducer producer = new VFSFileSystemProducer();
+
+    @Spy
+    @InjectMocks
+    private JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
+
+    @BeforeClass
+    public static void prepare() {
+
+        env.put( "username", USERNAME );
+        env.put( "password", PASSWORD );
+        env.put( "origin", ORIGIN_URL );
+        env.put( "fetch.cmd", FETCH_COMMAND );
+        System.setProperty("org.kie.nio.git.dir", gitLocalClone);
+    }
 
     @AfterClass
     public static void cleanup() {
@@ -51,9 +81,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
 
     @Test
     public void testProprocess() {
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        profile.setRepository(repository);
+        Repository repository = createRepository();
         //prepare folders that will be used
         repository.createDirectory("/myprocesses");
         repository.createDirectory("/global");
@@ -67,7 +95,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         String uniqueId = repository.createAsset(builder.getAsset());
 
         // create instance of preprocessing unit
-        JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit(new TestServletContext(), "/", null, null, null, null, null, null);
+        preprocessingUnitVFS.init(new TestServletContext(), "/", null);
 
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -124,9 +152,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
 
     @Test
     public void testEmptyCustomEditor() throws Exception {
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        profile.setRepository(repository);
+        Repository repository = createRepository();
         //prepare folders that will be used
         repository.createDirectory("/myprocesses");
         repository.createDirectory("/global");
@@ -159,10 +185,11 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                 .location("/myprocesses");
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
-        JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit(new TestServletContext(), "/", null, null, null, null, null, null);
+        JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
+        preprocessingUnitVFS.init(new TestServletContext(), "/", null);
         Asset<String> widAsset = repository.loadAsset(uniqueWidID);
         Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
-        preprocessingUnitVFS.evaluateWorkDefinitions(workDefinitions, widAsset, widAsset.getAssetLocation(), repository, profile);
+        preprocessingUnitVFS.evaluateWorkDefinitions(workDefinitions, widAsset, widAsset.getAssetLocation(), repository);
         // $workitemDefs:{k| $if(workitemDefs.(k).customEditor)$ HAVE CUSTOM EDITOR $endif$ }$
 
         assertNotNull(workDefinitions);

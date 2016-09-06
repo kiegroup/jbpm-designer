@@ -164,26 +164,12 @@ public class EditorHandler extends HttpServlet {
     @Inject
     private RepositoryDescriptor descriptor;
 
-    @Inject
-    private Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent;
-
-    @Inject
-    private Event<NotificationEvent> notification;
-
-    @Inject
-    private POMService pomService;
-
-    @Inject
-    private ProjectService<? extends Project> projectService;
-
-    @Inject
-    private MetadataService metadataService;
-
     /**
      * The pre-processing service, a global registry to get
      * the pre-processing units.
      */
-    private IDiagramPreprocessingService _preProcessingService = null;
+    @Inject
+    private IDiagramPreprocessingService _preProcessingService;
 
     /**
      * The plugin service, a global registry for all plugins.
@@ -205,8 +191,7 @@ public class EditorHandler extends HttpServlet {
         _profileService.init(config.getServletContext());
         _pluginService = PluginServiceImpl.getInstance(
                 config.getServletContext());
-        _preProcessingService = PreprocessingServiceImpl.INSTANCE;
-        _preProcessingService.init(config.getServletContext(), vfsServices, workitemInstalledEventEvent, notification, pomService, projectService, metadataService);
+        _preProcessingService.init(config.getServletContext(), vfsServices);
 
         _devMode = Boolean.parseBoolean(System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV));
         _useOldDataAssignments = Boolean.parseBoolean(System.getProperty(USEOLDDATAASSIGNMENTS) == null ? config.getInitParameter(USEOLDDATAASSIGNMENTS) : System.getProperty(USEOLDDATAASSIGNMENTS));
@@ -424,43 +409,6 @@ public class EditorHandler extends HttpServlet {
         response.setContentType("text/javascript; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(editorTemplate.render());
-    }
-
-    /**
-     * @return read the files to be placed as core scripts
-     *         from a configuration file in a json file.
-     * @throws java.io.IOException
-     */
-    private static String readEnvFiles(ServletContext context) throws IOException {
-        FileInputStream core_scripts = new FileInputStream(
-                context.getRealPath(designer_path + "js/js_files.json"));
-        try {
-            ByteArrayOutputStream stream =
-                    new ByteArrayOutputStream();
-            byte[] buffer = new byte[4096];
-            int read;
-            while ((read = core_scripts.read(buffer)) != -1) {
-                stream.write(buffer, 0, read);
-            }
-            return stream.toString();
-        } finally {
-            try {
-                core_scripts.close();
-            } catch (IOException e) {
-                _logger.error(e.getMessage(), e);
-            }
-        }
-    }
-
-    /**
-     * Determine whether the browser is IE
-     *
-     * @param request
-     * @return true: IE browser false: others browsers
-     */
-    private static boolean isIE(HttpServletRequest request) {
-        return request.getHeader("USER-AGENT").
-                toLowerCase().indexOf("msie") > 0;
     }
 
     /**
