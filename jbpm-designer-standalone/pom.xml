@@ -947,7 +947,7 @@
         </property>
       </activation>
       <properties>
-        <gwt.compiler.localWorkers>4</gwt.compiler.localWorkers>
+        <gwt.compiler.localWorkers>2</gwt.compiler.localWorkers>
       </properties>
       <build>
         <plugins>
