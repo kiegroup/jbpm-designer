@@ -99,7 +99,7 @@
                 "ruleflowgroup":"simpleGroup",
                 "onentryactions":"",
                 "onexitactions":"",
-                "isasync":"false",
+                "isasync":"true",
                 "taskname":"",
                 "serviceoperation":"",
                 "serviceinterface":"",

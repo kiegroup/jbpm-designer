@@ -1,30 +1,23 @@
 package org.jbpm.designer.bpmn2.impl;
 
-import static org.junit.Assert.*;
-
-import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxCheckerTest;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.designer.web.profile.impl.DefaultProfileImpl;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
-
+import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxCheckerTest;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class Bpmn2JsonMarshallerTest {
 
-    DefaultProfileImpl profile = new DefaultProfileImpl();
-    // It is by design (Unmarshaller = marshaller)
-    IDiagramProfile.IDiagramUnmarshaller marshaller = profile.createUnmarshaller();
-
-    public static final String COST_PER_TIME_UNIT = "unitcost";
-    public static final String PROCESSING_TIME_MAX = "max";
-    public static final String PROCESSING_TIME_MIN = "min";
-    public static final String PROCESSING_TIME_MEAN = "mean";
-    public static final String PROBABILITY = "probability";
-    public static final String WORKING_HOURS = "workinghours";
-    public static final String QUANTITY = "quantity";
-    public static final String STANDARD_DEVIATION = "standarddeviation";
-    public static final String DISTRIBUTION_TYPE = "distributiontype";
+    private static final String COST_PER_TIME_UNIT = "unitcost";
+    private static final String PROCESSING_TIME_MAX = "max";
+    private static final String PROCESSING_TIME_MIN = "min";
+    private static final String PROCESSING_TIME_MEAN = "mean";
+    private static final String PROBABILITY = "probability";
+    private static final String WORKING_HOURS = "workinghours";
+    private static final String QUANTITY = "quantity";
+    private static final String STANDARD_DEVIATION = "standarddeviation";
+    private static final String DISTRIBUTION_TYPE = "distributiontype";
 
     private Bpmn2Loader loader = new Bpmn2Loader(Bpmn2JsonMarshallerTest.class);
 
@@ -64,6 +57,40 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject condition2Properties = condition2.getJSONObject("properties");
         assertEquals("return  KieFunctions.endsWith(customVar, \"sample\");", condition1Properties.getString("conditionexpression"));
         assertEquals("return  !KieFunctions.isNull(intVar);", condition2Properties.getString("conditionexpression"));
+    }
+
+    @Test
+    public void testMultiLineNames() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("multiLineNames.bpmn2");
+
+        // Lane elements
+        JSONObject lane = Bpmn2Loader.getChildByName(process, "my\nlane");
+        assertNotNull(lane);
+        assertNotNull(Bpmn2Loader.getChildByName(lane, "my\nuser\ntask"));
+        assertNotNull(Bpmn2Loader.getChildByName(lane, "my\nmessage"));
+        JSONObject adhocSubprocess = Bpmn2Loader.getChildByName(lane, "my\nadhoc\nsubprocess");
+
+        assertNotNull(adhocSubprocess);
+        assertNotNull(Bpmn2Loader.getChildByName(adhocSubprocess, "my\ntask\nin\nadhoc"));
+        assertNotNull(Bpmn2Loader.getChildByName(adhocSubprocess, "my\nmessage\nin\nsubprocess\nin\nlane"));
+
+        // Other elements in process
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nstart"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nflow\nin\nlane"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\ngate"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nterminate\nend"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nthrowing\nmessage"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nend"));
+        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nflow"));
+
+        // Embedded subprocess elements
+        JSONObject embeddedSubprocess = Bpmn2Loader.getChildByName(process, "my\nsubprocess");
+        assertNotNull(embeddedSubprocess);
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nmessage\nstart"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\ninner\nend"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nflow\nin\nsubprocess"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nmanual\ntask"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nescalation\nevent"));
     }
 
     @Test

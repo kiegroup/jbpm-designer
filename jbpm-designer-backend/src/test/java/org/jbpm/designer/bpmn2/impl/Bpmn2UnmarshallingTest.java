@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,69 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jbpm.designer.test.bpmn2;
-
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+package org.jbpm.designer.bpmn2.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.bpmn2.*;
+import org.eclipse.bpmn2.Assignment;
+import org.eclipse.bpmn2.Association;
+import org.eclipse.bpmn2.AssociationDirection;
+import org.eclipse.bpmn2.BaseElement;
+import org.eclipse.bpmn2.BoundaryEvent;
+import org.eclipse.bpmn2.BusinessRuleTask;
+import org.eclipse.bpmn2.CallActivity;
+import org.eclipse.bpmn2.CancelEventDefinition;
+import org.eclipse.bpmn2.CatchEvent;
+import org.eclipse.bpmn2.CompensateEventDefinition;
+import org.eclipse.bpmn2.ConditionalEventDefinition;
+import org.eclipse.bpmn2.DataInput;
+import org.eclipse.bpmn2.DataInputAssociation;
+import org.eclipse.bpmn2.DataObject;
+import org.eclipse.bpmn2.DataOutput;
+import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.EndEvent;
+import org.eclipse.bpmn2.ErrorEventDefinition;
+import org.eclipse.bpmn2.EscalationEventDefinition;
+import org.eclipse.bpmn2.EventBasedGateway;
+import org.eclipse.bpmn2.EventDefinition;
+import org.eclipse.bpmn2.ExclusiveGateway;
+import org.eclipse.bpmn2.ExtensionAttributeValue;
+import org.eclipse.bpmn2.FlowElement;
+import org.eclipse.bpmn2.FlowElementsContainer;
+import org.eclipse.bpmn2.FormalExpression;
+import org.eclipse.bpmn2.GlobalManualTask;
+import org.eclipse.bpmn2.GlobalTask;
+import org.eclipse.bpmn2.Group;
+import org.eclipse.bpmn2.InclusiveGateway;
+import org.eclipse.bpmn2.InputOutputSpecification;
+import org.eclipse.bpmn2.InputSet;
+import org.eclipse.bpmn2.IntermediateCatchEvent;
+import org.eclipse.bpmn2.IntermediateThrowEvent;
+import org.eclipse.bpmn2.Lane;
+import org.eclipse.bpmn2.LinkEventDefinition;
+import org.eclipse.bpmn2.MessageEventDefinition;
+import org.eclipse.bpmn2.OutputSet;
+import org.eclipse.bpmn2.ParallelGateway;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.ProcessType;
+import org.eclipse.bpmn2.ReceiveTask;
+import org.eclipse.bpmn2.RootElement;
+import org.eclipse.bpmn2.ScriptTask;
+import org.eclipse.bpmn2.SendTask;
+import org.eclipse.bpmn2.SequenceFlow;
+import org.eclipse.bpmn2.ServiceTask;
+import org.eclipse.bpmn2.SignalEventDefinition;
+import org.eclipse.bpmn2.StartEvent;
+import org.eclipse.bpmn2.SubProcess;
+import org.eclipse.bpmn2.Task;
+import org.eclipse.bpmn2.TerminateEventDefinition;
+import org.eclipse.bpmn2.TextAnnotation;
+import org.eclipse.bpmn2.ThrowEvent;
+import org.eclipse.bpmn2.TimerEventDefinition;
+import org.eclipse.bpmn2.UserTask;
 import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
 import org.eclipse.dd.dc.Point;
@@ -34,22 +84,20 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.MetaDataType;
-
-import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
-
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
  * @author Antoine Toulme
- *
- * A series of tests to check the unmarshalling of json to bpmn2.
+ *         <p>A series of tests to check the unmarshalling of json to bpmn2.</p>
  */
-public class Bpmn2UnmarshallingTestCase {
+public class Bpmn2UnmarshallingTest {
 
-    private Bpmn2Loader loader = new Bpmn2Loader(Bpmn2UnmarshallingTestCase.class);
+    private Bpmn2Loader loader = new Bpmn2Loader(Bpmn2UnmarshallingTest.class);
 
     //@Test
     // removing until we start supporting global tasks
@@ -87,7 +135,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("pool", process.getName());
         assertEquals(ProcessType.PRIVATE, process.getProcessType());
         assertTrue(process.isIsClosed());
-        definitions.eResource().save(System.out, Collections.emptyMap());
     }
 
     @Test
@@ -126,7 +173,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(definitions.getRootElements().size() == 1);
         Process process = getRootProcess(definitions);
         FlowElement element = getFlowElement(process.getFlowElements(), "scriptTask");
-        if(element == null || !(element instanceof ScriptTask)) {
+        if (element == null || !(element instanceof ScriptTask)) {
             fail("Script task not found");
         }
         ScriptTask scriptTask = (ScriptTask) element;
@@ -235,7 +282,6 @@ public class Bpmn2UnmarshallingTestCase {
     @Test
     public void testStartMessageEventUnmarshalling() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("startMessageEvent.json");
-        assertTrue(definitions.getRootElements().size() == 3);
         Process process = getRootProcess(definitions);
         StartEvent g = (StartEvent) process.getFlowElements().get(0);
         assertEquals("start message event", g.getName());
@@ -330,8 +376,8 @@ public class Bpmn2UnmarshallingTestCase {
         Definitions definitions = loader.loadProcessFromJson("textAnnotation.json");
         assertTrue(definitions.getRootElements().size() == 1);
         Process process = getRootProcess(definitions);
-        assertTrue(process.getFlowElements().get(0) instanceof TextAnnotation);
-        TextAnnotation ta = (TextAnnotation) process.getFlowElements().get(0);
+        assertTrue(process.getFlowElements().iterator().next() instanceof TextAnnotation);
+        TextAnnotation ta = (TextAnnotation) process.getFlowElements().iterator().next();
         assertEquals("text annotation", ta.getText());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
@@ -433,7 +479,7 @@ public class Bpmn2UnmarshallingTestCase {
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 
-    @Test 
+    @Test
     public void testSimpleChainUnmarshalling() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("startEvent-task-endEvent.json");
         assertTrue(definitions.getRootElements().size() == 1);
@@ -447,7 +493,6 @@ public class Bpmn2UnmarshallingTestCase {
     @Test
     public void testIntermediateCatchMessageEventUnmarshalling() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("intermediateCatchMessageEvent.json");
-        assertTrue(definitions.getRootElements().size() == 3);
         Process process = getRootProcess(definitions);
         CatchEvent g = (CatchEvent) process.getFlowElements().get(0);
         assertEquals("catch message event", g.getName());
@@ -671,12 +716,41 @@ public class Bpmn2UnmarshallingTestCase {
     }
 
     @Test
-    public void testBoundaryEventMultiLineName() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("boundaryEventMultiLineName.json");
-        Process process = getRootProcess(definitions);
-        BoundaryEvent event = (BoundaryEvent) process.getFlowElements().get(1);
-        assertEquals("<![CDATA[my\nmessage]]>", getMetaDataValue(event.getExtensionValues(), "elementname"));
+    public void testMultiLineNames() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("multiLineNames.json");
 
+        Process process = getRootProcess(definitions);
+        assertEquals("<![CDATA[my\nstart]]>", getElementName(process, 0));
+        assertEquals("<![CDATA[my\nflow]]>", getElementName(process, 1));
+        assertEquals("<![CDATA[my\ngate]]>", getElementName(process, 2));
+        assertEquals("<![CDATA[my\nend]]>", getElementName(process, 3));
+        assertEquals("<![CDATA[my\nterminate\nend]]>", getElementName(process, 5));
+        assertEquals("<![CDATA[my\nthrowing\nmessage]]>", getElementName(process, 6));
+        assertEquals("<![CDATA[my\nflow\nin\nlane]]>", getElementName(process, 9));
+        assertEquals("<![CDATA[my\nsubprocess]]>", getElementName(process, 10));
+        assertEquals("<![CDATA[my\nuser\ntask]]>", getElementName(process, 14));
+        assertEquals("<![CDATA[my\nmessage]]>", getElementName(process, 15));
+
+        FlowElementsContainer embeddedSubProcess = (FlowElementsContainer) process.getFlowElements().get(10);
+        assertEquals("<![CDATA[my\nmessage\nstart]]>", getElementName(embeddedSubProcess, 0));
+        assertEquals("<![CDATA[my\nmanual\ntask]]>", getElementName(embeddedSubProcess, 1));
+        assertEquals("<![CDATA[my\ninner\nend]]>", getElementName(embeddedSubProcess, 2));
+        assertEquals("<![CDATA[my\nflow\nin\nsubprocess]]>", getElementName(embeddedSubProcess, 3));
+        assertEquals("<![CDATA[my\nescalation\nevent]]>", getElementName(embeddedSubProcess, 5));
+
+        Lane lane = process.getLaneSets().get(0).getLanes().get(0);
+        FlowElementsContainer adHocSubProcess = (FlowElementsContainer) lane.getFlowNodeRefs().get(0);
+        assertEquals("<![CDATA[my\nlane]]>", getMetaDataValue(lane.getExtensionValues(), "elementname"));
+        assertEquals("<![CDATA[my\nadhoc\nsubprocess]]>", getMetaDataValue(adHocSubProcess.getExtensionValues(), "elementname"));
+        assertEquals("<![CDATA[my\ntask\nin\nadhoc]]>", getElementName(adHocSubProcess, 0));
+        assertEquals("<![CDATA[my\nmessage\nin\nsubprocess\nin\nlane]]>", getElementName(adHocSubProcess, 1));
+        assertEquals("<![CDATA[my\nuser\ntask]]>", getMetaDataValue(lane.getFlowNodeRefs().get(1).getExtensionValues(), "elementname"));
+        assertEquals("<![CDATA[my\nmessage]]>", getMetaDataValue(lane.getFlowNodeRefs().get(2).getExtensionValues(), "elementname"));
+    }
+
+    private String getElementName(FlowElementsContainer container, int elementNumber) {
+        BaseElement element = container.getFlowElements().get(elementNumber);
+        return getMetaDataValue(element.getExtensionValues(), "elementname");
     }
 
     @Test
@@ -735,8 +809,8 @@ public class Bpmn2UnmarshallingTestCase {
         assertFalse(containerContainsElement(process, SUBTIMER_NAME));
 
         SubProcess subProcess = null;
-        for(FlowElement flowElement : process.getFlowElements()) {
-            if(flowElement instanceof SubProcess) {
+        for (FlowElement flowElement : process.getFlowElements()) {
+            if (flowElement instanceof SubProcess) {
                 subProcess = (SubProcess) flowElement;
                 break;
             }
@@ -750,7 +824,7 @@ public class Bpmn2UnmarshallingTestCase {
     }
 
     @Test
-    public void testBoundaryEventsContainers() throws Exception{
+    public void testBoundaryEventsContainers() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("boundaryEventsContainers.json");
         Process process = getRootProcess(definitions);
 
@@ -762,7 +836,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertFalse(containerContainsElement(process, TIMER_TWO));
         assertTrue(containerContainsElement(process, TIMER_THREE));
 
-        for(FlowElement flowElement : process.getFlowElements()) {
+        for (FlowElement flowElement : process.getFlowElements()) {
             if ("Subprocess1".equals(flowElement.getName()) && (flowElement instanceof SubProcess)) {
                 SubProcess subProcess = (SubProcess) flowElement;
                 assertTrue(containerContainsElement(subProcess, TIMER_ONE));
@@ -822,7 +896,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(g, secondLane.getFlowNodeRefs().get(0));
         definitions.eResource().save(System.out, Collections.emptyMap());
     }*/
-
 
     private Process getRootProcess(Definitions def) {
         for (RootElement nextRootElement : def.getRootElements()) {
@@ -984,9 +1057,7 @@ public class Bpmn2UnmarshallingTestCase {
     public void testDocumentationForSwimlane() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("swimlane.json");
         Process process = getRootProcess(definitions);
-        LaneSet ls = process.getLaneSets().get(0);
-        assertNotNull(ls);
-        Lane lane = ls.getLanes().get(0);
+        Lane lane = process.getLaneSets().get(0).getLanes().get(0);
         assertEquals("Swimlane name is wrong.", lane.getName(), "Documented Swimlane");
         assertEquals("<![CDATA[Some documentation for swimlane.]]>", lane.getDocumentation().get(0).getText());
     }
@@ -1015,19 +1086,19 @@ public class Bpmn2UnmarshallingTestCase {
         }
         assertNotNull(userTask);
         assertEquals("User Task One", userTask.getName());
-        assertEquals("assignedActor", ((FormalExpression)userTask.getResources().get(0).getResourceAssignmentExpression().getExpression()).getBody());
+        assertEquals("assignedActor", ((FormalExpression) userTask.getResources().get(0).getResourceAssignmentExpression().getExpression()).getBody());
 
         boolean foundTaskName = false;
         boolean foundGroupId = false;
-        for(DataInputAssociation association : userTask.getDataInputAssociations()) {
-            if(association.getAssignment() != null) {
-                for(Assignment assignment : association.getAssignment()) {
-                    String from = ((FormalExpression)assignment.getFrom()).getBody();
-                    String to = ((FormalExpression)assignment.getTo()).getBody();
-                    if(to.contains("TaskName") && from.equals("taskForAssignedActor")) {
+        for (DataInputAssociation association : userTask.getDataInputAssociations()) {
+            if (association.getAssignment() != null) {
+                for (Assignment assignment : association.getAssignment()) {
+                    String from = ((FormalExpression) assignment.getFrom()).getBody();
+                    String to = ((FormalExpression) assignment.getTo()).getBody();
+                    if (to.contains("TaskName") && from.equals("taskForAssignedActor")) {
                         foundTaskName = true;
                     }
-                    if(to.contains("GroupId") && from.equals("<![CDATA[assignedGroup]]>")) {
+                    if (to.contains("GroupId") && from.equals("<![CDATA[assignedGroup]]>")) {
                         foundGroupId = true;
                     }
                 }
@@ -1037,48 +1108,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(foundTaskName);
         assertTrue(foundGroupId);
         assertEquals("<![CDATA[true]]>", getMetaDataValue(userTask.getExtensionValues(), "customAsync"));
-    }
-
-    @Test
-    public void testTaskInputOutputSet() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("taskInputOutputSet.json");
-        Process process = getRootProcess(definitions);
-        assertTrue(process.getFlowElements().get(1) instanceof UserTask);
-        UserTask task = (UserTask) process.getFlowElements().get(1);
-        assertEquals("userTask", task.getName());
-        InputSet inputSet = task.getIoSpecification().getInputSets().get(0);
-        OutputSet outputSet = task.getIoSpecification().getOutputSets().get(0);
-        assertEquals(4, inputSet.getDataInputRefs().size());
-        assertEquals("firstInput", inputSet.getDataInputRefs().get(0).getName());
-        assertEquals("secondInput", inputSet.getDataInputRefs().get(1).getName());
-        assertEquals("TaskName", inputSet.getDataInputRefs().get(2).getName());
-        assertEquals("Skippable", inputSet.getDataInputRefs().get(3).getName());
-        assertEquals(1, outputSet.getDataOutputRefs().size());
-        assertEquals("firstOutput", outputSet.getDataOutputRefs().get(0).getName());
-    }
-
-    @Test
-    public void testSubprocessDefaultInputOutputSets() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("defaultSubprocessInputOutputSets.json");
-        Process process = getRootProcess(definitions);
-        assertTrue(process.getFlowElements().get(1) instanceof SubProcess);
-        SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
-        InputSet inputSet = subProcess.getIoSpecification().getInputSets().get(0);
-        OutputSet outputSet = subProcess.getIoSpecification().getOutputSets().get(0);
-        assertEquals(0, inputSet.getDataInputRefs().size());
-        assertEquals(0, outputSet.getDataOutputRefs().size());
-    }
-
-    @Test
-    public void testSubprocessDefaultOutputSet() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("subprocessDefaultOutputSet.json");
-        Process process = getRootProcess(definitions);
-        assertTrue(process.getFlowElements().get(1) instanceof SubProcess);
-        SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
-        InputSet inputSet = subProcess.getIoSpecification().getInputSets().get(0);
-        OutputSet outputSet = subProcess.getIoSpecification().getOutputSets().get(0);
-        assertEquals(1, inputSet.getDataInputRefs().size());
-        assertEquals(0, outputSet.getDataOutputRefs().size());
     }
 
     @Test
@@ -1096,7 +1125,6 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals("callActivity", callActivity.getName());
         assertEquals("abc.noCalledElementCallActivity", callActivity.getCalledElement());
     }
-
 
     @Test
     public void testDefaultInterfaceForServiceTask() throws Exception {
@@ -1124,7 +1152,7 @@ public class Bpmn2UnmarshallingTestCase {
         Process process = getRootProcess(definitions);
         FlowElement subprocess = getFlowElement(process.getFlowElements(), "Embedded subprocess");
         assertTrue(subprocess instanceof SubProcess);
-        FlowElement element = getFlowElement(((SubProcess)subprocess).getFlowElements(), "UserTask");
+        FlowElement element = getFlowElement(((SubProcess) subprocess).getFlowElements(), "UserTask");
         assertTrue(element instanceof UserTask);
         UserTask userTask = (UserTask) element;
         InputOutputSpecification specification = userTask.getIoSpecification();
@@ -1169,7 +1197,7 @@ public class Bpmn2UnmarshallingTestCase {
         assertTrue(element instanceof Task);
         Task restTask = (Task) element;
         InputOutputSpecification specification = restTask.getIoSpecification();
-        for(String input : taskInputs) {
+        for (String input : taskInputs) {
             DataInput dataInput = getDataInput(specification.getDataInputs(), input);
             verifyAttribute(dataInput, "dtype", "String");
         }
@@ -1177,71 +1205,65 @@ public class Bpmn2UnmarshallingTestCase {
         verifyAttribute(dataOutput, "dtype", "java.lang.Object");
     }
 
+    @Test
+    public void testTaskInputOutputSet() throws Exception {
+        Process process = getRootProcess(loader.loadProcessFromJson("taskInputOutputSet.json"));
+        assertTrue(process.getFlowElements().get(1) instanceof UserTask);
+        UserTask task = (UserTask) process.getFlowElements().get(1);
+        assertEquals("userTask", task.getName());
+        InputSet inputSet = task.getIoSpecification().getInputSets().get(0);
+        OutputSet outputSet = task.getIoSpecification().getOutputSets().get(0);
+        assertEquals(4, inputSet.getDataInputRefs().size());
+        assertEquals("firstInput", inputSet.getDataInputRefs().get(0).getName());
+        assertEquals("secondInput", inputSet.getDataInputRefs().get(1).getName());
+        assertEquals("TaskName", inputSet.getDataInputRefs().get(2).getName());
+        assertEquals("Skippable", inputSet.getDataInputRefs().get(3).getName());
+        assertEquals(1, outputSet.getDataOutputRefs().size());
+        assertEquals("firstOutput", outputSet.getDataOutputRefs().get(0).getName());
+    }
+
+    @Test
+    public void testSubprocessDefaultInputOutputSets() throws Exception {
+        Process process = getRootProcess(loader.loadProcessFromJson("defaultSubprocessInputOutputSets.json"));
+        assertTrue(process.getFlowElements().get(1) instanceof SubProcess);
+        SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
+        InputSet inputSet = subProcess.getIoSpecification().getInputSets().get(0);
+        OutputSet outputSet = subProcess.getIoSpecification().getOutputSets().get(0);
+        assertEquals(0, inputSet.getDataInputRefs().size());
+        assertEquals(0, outputSet.getDataOutputRefs().size());
+    }
+
+    @Test
+    public void testSubprocessDefaultOutputSet() throws Exception {
+        Process process = getRootProcess(loader.loadProcessFromJson("subprocessDefaultOutputSet.json"));
+        assertTrue(process.getFlowElements().get(1) instanceof SubProcess);
+        SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
+        InputSet inputSet = subProcess.getIoSpecification().getInputSets().get(0);
+        OutputSet outputSet = subProcess.getIoSpecification().getOutputSets().get(0);
+        assertEquals(1, inputSet.getDataInputRefs().size());
+        assertEquals(0, outputSet.getDataOutputRefs().size());
+    }
+
     private FlowElement getFlowElement(List<FlowElement> elements, String name) {
-        for(FlowElement element : elements) {
+        for (FlowElement element : elements) {
             if (element.getName() != null && name.compareTo(element.getName()) == 0) {
-                return  element;
+                return element;
             }
         }
         return null;
     }
 
     private String getMetaDataValue(List<ExtensionAttributeValue> extensionValues, String metaDataName) {
-        for(MetaDataType type : this.<MetaDataType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA)) {
-            if(type.getName() != null && type.getName().equals(metaDataName)) {
+        for (MetaDataType type : this.<MetaDataType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA)) {
+            if (type.getName() != null && type.getName().equals(metaDataName)) {
                 return type.getMetaValue();
             }
         }
         return null;
     }
 
-    private <T> List<T> extractFeature(List<ExtensionAttributeValue> extensionValues, EStructuralFeature feature) {
-        List<T> result = new ArrayList<T>();
-        if(extensionValues != null) {
-            for (ExtensionAttributeValue extattrval : extensionValues) {
-                FeatureMap extensionElements = extattrval.getValue();
-                result.addAll((List<T>) extensionElements.get(feature, true));
-            }
-        }
-        return result;
-    }
-
-    private DataInput getDataInput(List<DataInput> inputs, String name) {
-        if(inputs != null) {
-            for(DataInput input : inputs) {
-                if(input.getName() != null && input.getName().equals(name)) {
-                    return input;
-                }
-            }
-        }
-        return null;
-    }
-
-    private DataOutput getDataOutput(List<DataOutput> outputs, String name) {
-        if(outputs != null) {
-            for(DataOutput output : outputs) {
-                if(output.getName() != null && output.getName().equals(name)) {
-                    return output;
-                }
-            }
-        }
-        return null;
-    }
-
-    private void verifyAttribute(BaseElement element, String attributeName, Object attributeValue) {
-        Iterator<FeatureMap.Entry> iter = element.getAnyAttribute().iterator();
-        while (iter.hasNext()) {
-            FeatureMap.Entry entry = iter.next();
-            if (entry.getEStructuralFeature().getName().equals(attributeName) && entry.getValue().equals(attributeValue)) {
-                return;
-            }
-        }
-
-        fail(attributeName + " with value: " + attributeValue + " was not found");
-    }
-    
     private String getOnEntryScript(List<ExtensionAttributeValue> extensionValues) {
-        for(OnEntryScriptType type : this.<OnEntryScriptType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT)) {
+        for (OnEntryScriptType type : this.<OnEntryScriptType>extractFeature(extensionValues, DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT)) {
             return type.getScript();
         }
         return null;
@@ -1252,6 +1274,17 @@ public class Bpmn2UnmarshallingTestCase {
             return type.getScript();
         }
         return null;
+    }
+
+    private <T> List<T> extractFeature(List<ExtensionAttributeValue> extensionValues, EStructuralFeature feature) {
+        List<T> result = new ArrayList<T>();
+        if (extensionValues != null) {
+            for (ExtensionAttributeValue extattrval : extensionValues) {
+                FeatureMap extensionElements = extattrval.getValue();
+                result.addAll((List<T>) extensionElements.get(feature, true));
+            }
+        }
+        return result;
     }
 
     private void verifyServiceTask(ServiceTask serviceTask,
@@ -1279,5 +1312,39 @@ public class Bpmn2UnmarshallingTestCase {
         assertEquals(serviceImplementation, foundServiceImplementation);
         assertEquals(serviceInterface, foundServiceInterface);
         assertEquals(serviceOperation, foundServiceOperation);
+    }
+
+    private DataInput getDataInput(List<DataInput> inputs, String name) {
+        if (inputs != null) {
+            for (DataInput input : inputs) {
+                if (input.getName() != null && input.getName().equals(name)) {
+                    return input;
+                }
+            }
+        }
+        return null;
+    }
+
+    private DataOutput getDataOutput(List<DataOutput> outputs, String name) {
+        if (outputs != null) {
+            for (DataOutput output : outputs) {
+                if (output.getName() != null && output.getName().equals(name)) {
+                    return output;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void verifyAttribute(BaseElement element, String attributeName, Object attributeValue) {
+        Iterator<FeatureMap.Entry> iter = element.getAnyAttribute().iterator();
+        while (iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if (entry.getEStructuralFeature().getName().equals(attributeName) && entry.getValue().equals(attributeValue)) {
+                return;
+            }
+        }
+
+        fail(attributeName + " with value: " + attributeValue + " was not found");
     }
 }
