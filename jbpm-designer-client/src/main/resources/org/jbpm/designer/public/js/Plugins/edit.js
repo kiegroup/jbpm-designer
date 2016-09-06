@@ -76,7 +76,6 @@ ORYX.Plugins.Edit = Clazz.extend({
                 }
              ],
              functionality: this.callEdit.bind(this, this.editPaste),
-             isEnabled: this.clipboard.isOccupied.bind(this.clipboard),
              group: ORYX.I18N.Edit.group,
              index: 3,
              minShape: 0,
