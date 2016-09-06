@@ -678,11 +678,41 @@ public class Bpmn2UnmarshallingTest {
     }
 
     @Test
-    public void testBoundaryEventMultiLineName() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("boundaryEventMultiLineName.json");
+    public void testMultiLineNames() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("multiLineNames.json");
+
         Process process = getRootProcess(definitions);
-        BoundaryEvent event = (BoundaryEvent) process.getFlowElements().get(1);
-        assertEquals("<![CDATA[my\nmessage]]>", getMetaDataValue(event.getExtensionValues(), "elementname"));
+        assertEquals("<![CDATA[my\nstart]]>", getElementName(process, 0));
+        assertEquals("<![CDATA[my\nflow]]>", getElementName(process, 1));
+        assertEquals("<![CDATA[my\ngate]]>", getElementName(process, 2));
+        assertEquals("<![CDATA[my\nend]]>", getElementName(process, 3));
+        assertEquals("<![CDATA[my\nterminate\nend]]>", getElementName(process, 5));
+        assertEquals("<![CDATA[my\nthrowing\nmessage]]>", getElementName(process, 6));
+        assertEquals("<![CDATA[my\nflow\nin\nlane]]>", getElementName(process, 9));
+        assertEquals("<![CDATA[my\nsubprocess]]>", getElementName(process, 10));
+        assertEquals("<![CDATA[my\nuser\ntask]]>", getElementName(process, 14));
+        assertEquals("<![CDATA[my\nmessage]]>", getElementName(process, 15));
+
+        FlowElementsContainer embeddedSubProcess = (FlowElementsContainer) process.getFlowElements().get(10);
+        assertEquals("<![CDATA[my\nmessage\nstart]]>", getElementName(embeddedSubProcess, 0));
+        assertEquals("<![CDATA[my\nmanual\ntask]]>", getElementName(embeddedSubProcess, 1));
+        assertEquals("<![CDATA[my\ninner\nend]]>", getElementName(embeddedSubProcess, 2));
+        assertEquals("<![CDATA[my\nflow\nin\nsubprocess]]>", getElementName(embeddedSubProcess, 3));
+        assertEquals("<![CDATA[my\nescalation\nevent]]>", getElementName(embeddedSubProcess, 5));
+
+        Lane lane = process.getLaneSets().get(0).getLanes().get(0);
+        FlowElementsContainer adHocSubProcess = (FlowElementsContainer) lane.getFlowNodeRefs().get(0);
+        assertEquals("<![CDATA[my\nlane]]>", getMetaDataValue(lane.getExtensionValues(), "elementname"));
+        assertEquals("<![CDATA[my\nadhoc\nsubprocess]]>", getMetaDataValue(adHocSubProcess.getExtensionValues(), "elementname"));
+        assertEquals("<![CDATA[my\ntask\nin\nadhoc]]>", getElementName(adHocSubProcess, 0));
+        assertEquals("<![CDATA[my\nmessage\nin\nsubprocess\nin\nlane]]>", getElementName(adHocSubProcess, 1));
+        assertEquals("<![CDATA[my\nuser\ntask]]>", getMetaDataValue(lane.getFlowNodeRefs().get(1).getExtensionValues(), "elementname"));
+        assertEquals("<![CDATA[my\nmessage]]>", getMetaDataValue(lane.getFlowNodeRefs().get(2).getExtensionValues(), "elementname"));
+    }
+
+    private String getElementName(FlowElementsContainer container, int elementNumber) {
+        BaseElement element = container.getFlowElements().get(elementNumber);
+        return getMetaDataValue(element.getExtensionValues(), "elementname");
     }
 
     @Test

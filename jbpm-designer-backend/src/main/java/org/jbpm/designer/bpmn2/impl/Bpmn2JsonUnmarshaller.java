@@ -1775,6 +1775,9 @@ public class Bpmn2JsonUnmarshaller {
         if(beEntry.getIncoming() != null) {
             be.getIncoming().addAll(beEntry.getIncoming());
         }
+        if(beEntry.getExtensionValues() != null) {
+            be.getExtensionValues().addAll(beEntry.getExtensionValues());
+        }
 
         be.getDocumentation().addAll(beEntry.getDocumentation());
         be.setName(beEntry.getName());
