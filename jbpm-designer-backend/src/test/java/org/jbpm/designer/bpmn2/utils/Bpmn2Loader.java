@@ -1,5 +1,10 @@
 package org.jbpm.designer.bpmn2.utils;
 
+import java.io.File;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import bpsim.impl.BpsimPackageImpl;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.bpmn2.Definitions;
@@ -67,12 +72,38 @@ public class Bpmn2Loader {
         return null;
     }
 
+    public static List<JSONObject> getChildByTypeName(JSONObject parent, String type) throws JSONException {
+        ArrayList<JSONObject> result = new ArrayList();
+        JSONArray children = parent.getJSONArray("childShapes");
+        for (int i = 0; i < children.length(); i++ ) {
+            JSONObject child = children.getJSONObject(i);
+
+            if(type.equals(getStencilValue(child, "id"))) {
+                result.add(child);
+            }
+        }
+
+        return result;
+    }
+
     public static String getDocumentationFor(JSONObject bpmnElement) throws JSONException {
         return getPropertyValue(bpmnElement, "documentation");
     }
 
+    public static String getNameFor(JSONObject bpmnElement) throws JSONException {
+        return getPropertyValue(bpmnElement, "name");
+    }
+
     private static String getPropertyValue(JSONObject bpmnElement, String propertyName) throws JSONException {
         return bpmnElement.getJSONObject("properties").getString(propertyName);
+    }
+
+    public static String getResourceId(JSONObject bpmnElement) throws JSONException {
+        return bpmnElement.getString("resourceId");
+    }
+
+    private static String getStencilValue(JSONObject bpmnElement, String propertyName) throws JSONException {
+        return bpmnElement.getJSONObject("stencil").getString(propertyName);
     }
 
     public DefaultProfileImpl getProfile() {

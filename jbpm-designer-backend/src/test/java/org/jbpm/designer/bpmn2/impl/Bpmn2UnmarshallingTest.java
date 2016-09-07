@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE 2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,80 +15,26 @@
  */
 package org.jbpm.designer.bpmn2.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
-import org.eclipse.bpmn2.Assignment;
-import org.eclipse.bpmn2.Association;
-import org.eclipse.bpmn2.AssociationDirection;
-import org.eclipse.bpmn2.BaseElement;
-import org.eclipse.bpmn2.BoundaryEvent;
-import org.eclipse.bpmn2.BusinessRuleTask;
-import org.eclipse.bpmn2.CallActivity;
-import org.eclipse.bpmn2.CancelEventDefinition;
-import org.eclipse.bpmn2.CatchEvent;
-import org.eclipse.bpmn2.CompensateEventDefinition;
-import org.eclipse.bpmn2.ConditionalEventDefinition;
-import org.eclipse.bpmn2.DataInput;
-import org.eclipse.bpmn2.DataInputAssociation;
-import org.eclipse.bpmn2.DataObject;
-import org.eclipse.bpmn2.DataOutput;
-import org.eclipse.bpmn2.Definitions;
-import org.eclipse.bpmn2.EndEvent;
-import org.eclipse.bpmn2.ErrorEventDefinition;
-import org.eclipse.bpmn2.EscalationEventDefinition;
-import org.eclipse.bpmn2.EventBasedGateway;
-import org.eclipse.bpmn2.EventDefinition;
-import org.eclipse.bpmn2.ExclusiveGateway;
-import org.eclipse.bpmn2.ExtensionAttributeValue;
-import org.eclipse.bpmn2.FlowElement;
-import org.eclipse.bpmn2.FlowElementsContainer;
-import org.eclipse.bpmn2.FormalExpression;
-import org.eclipse.bpmn2.GlobalManualTask;
-import org.eclipse.bpmn2.GlobalTask;
-import org.eclipse.bpmn2.Group;
-import org.eclipse.bpmn2.InclusiveGateway;
-import org.eclipse.bpmn2.InputOutputSpecification;
-import org.eclipse.bpmn2.InputSet;
-import org.eclipse.bpmn2.IntermediateCatchEvent;
-import org.eclipse.bpmn2.IntermediateThrowEvent;
-import org.eclipse.bpmn2.Lane;
-import org.eclipse.bpmn2.LinkEventDefinition;
-import org.eclipse.bpmn2.MessageEventDefinition;
-import org.eclipse.bpmn2.OutputSet;
-import org.eclipse.bpmn2.ParallelGateway;
+import java.util.*;
+
+import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
-import org.eclipse.bpmn2.ProcessType;
-import org.eclipse.bpmn2.ReceiveTask;
-import org.eclipse.bpmn2.RootElement;
-import org.eclipse.bpmn2.ScriptTask;
-import org.eclipse.bpmn2.SendTask;
-import org.eclipse.bpmn2.SequenceFlow;
-import org.eclipse.bpmn2.ServiceTask;
-import org.eclipse.bpmn2.SignalEventDefinition;
-import org.eclipse.bpmn2.StartEvent;
-import org.eclipse.bpmn2.SubProcess;
-import org.eclipse.bpmn2.Task;
-import org.eclipse.bpmn2.TerminateEventDefinition;
-import org.eclipse.bpmn2.TextAnnotation;
-import org.eclipse.bpmn2.ThrowEvent;
-import org.eclipse.bpmn2.TimerEventDefinition;
-import org.eclipse.bpmn2.UserTask;
 import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
+import org.eclipse.bpmn2.di.impl.BPMNEdgeImpl;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
+import org.eclipse.dd.di.Edge;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.FeatureMap;
-import org.jboss.drools.DroolsPackage;
-import org.jboss.drools.MetaDataType;
-import org.jboss.drools.OnEntryScriptType;
-import org.jboss.drools.OnExitScriptType;
+import org.jboss.drools.*;
+import org.jboss.drools.impl.MetaDataTypeImpl;
+import org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.junit.Test;
 
+import static org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge.createEdge;
 import static org.junit.Assert.*;
 
 /**
@@ -373,13 +319,86 @@ public class Bpmn2UnmarshallingTest {
 
     @Test
     public void testTextAnnotationUnmarshalling() throws Exception {
+        List<SimpleEdge> expectedEdges = new ArrayList<SimpleEdge>();
+        expectedEdges.add(createEdge("<![CDATA[Start\nAnnotation]]>")
+                .addPoint(120, 320)
+                .addPoint(120, 160)
+        );
+        expectedEdges.add(createEdge("<![CDATA[Task\nIn\nLane\nAnnotation]]>")
+                .addPoint(155, 125)
+                .addPoint(380, 184)
+                .addPoint(331, 184)
+                .addPoint(330, 130)
+        );
+        expectedEdges.add(createEdge("<![CDATA[WID\nTask\nannotation]]>")
+                .addPoint(690, 650)
+                .addPoint(690, 507)
+                .addPoint(741, 507)
+        );
+        expectedEdges.add(createEdge("<![CDATA[User\nTask\nAnnotation]]>")
+                .addPoint(100, 76)
+                .addPoint(196, 646)
+                .addPoint(195, 550)
+        );
+        expectedEdges.add(createEdge("<![CDATA[Gateway\nin\nlane\nannotation]]>")
+                .addPoint(270, 125)
+                .addPoint(359, 125)
+        );
+        expectedEdges.add(createEdge("<![CDATA[End\nIn\nSwimlane]]>")
+                .addPoint(270, 36)
+                .addPoint(915, 231)
+                .addPoint(914, 133)
+        );
+        expectedEdges.add(createEdge("<![CDATA[Subprocess's\nAnnotation]]>")
+                .addPoint(495, 650)
+                .addPoint(495, 847)
+                .addPoint(664, 848)
+        );
+        expectedEdges.add(createEdge("<![CDATA[Swimlane's\nAnnotation]]>")
+                .addPoint(525, 320)
+                .addPoint(1066, 320)
+                .addPoint(1065, 505)
+        );
+
+        List<SimpleEdge> actualEdges = new ArrayList<SimpleEdge>();
         Definitions definitions = loader.loadProcessFromJson("textAnnotation.json");
-        assertTrue(definitions.getRootElements().size() == 1);
-        Process process = getRootProcess(definitions);
-        assertTrue(process.getFlowElements().iterator().next() instanceof TextAnnotation);
-        TextAnnotation ta = (TextAnnotation) process.getFlowElements().iterator().next();
-        assertEquals("text annotation", ta.getText());
-        definitions.eResource().save(System.out, Collections.emptyMap());
+        List<BPMNEdge> edges = getAllEdgesFromDefinition(definitions);
+        for (Edge edge : edges) {
+            SimpleEdge currentEdge = createEdge(getEdgeName(edge));
+            for (Point p : edge.getWaypoint()) {
+                currentEdge.addPoint(p.getX(), p.getY());
+            }
+            actualEdges.add(currentEdge);
+        }
+
+        assertEquals(actualEdges, expectedEdges);
+    }
+
+    private String getEdgeName(Edge edge) {
+        return ((MetaDataTypeImpl)((Association)((BPMNEdgeImpl) edge).getBpmnElement()).getTargetRef().getExtensionValues().get(0).getValue().get(0).getValue()).getMetaValue();
+    }
+
+    private List<BPMNEdge> getAllEdgesFromDefinition(Definitions definitions) {
+        List<BPMNEdge> edges = new ArrayList<BPMNEdge>();
+        List<DiagramElement> elements = getPlaneElementsFormDefinition(definitions);
+        for (DiagramElement element : elements) {
+            if (isAssociation(element)) {
+                edges.add((BPMNEdge) element);
+            }
+        }
+        return edges;
+    }
+
+    private List<DiagramElement> getPlaneElementsFormDefinition(Definitions definitions) {
+        return definitions.getDiagrams().get(0).getPlane().getPlaneElement();
+    }
+
+    private boolean isEdge(DiagramElement element) {
+        return element instanceof BPMNEdge;
+    }
+
+    private boolean isAssociation(DiagramElement element) {
+        return isEdge(element) && ((BPMNEdgeImpl) element).getBpmnElement() instanceof Association;
     }
 
     @Test

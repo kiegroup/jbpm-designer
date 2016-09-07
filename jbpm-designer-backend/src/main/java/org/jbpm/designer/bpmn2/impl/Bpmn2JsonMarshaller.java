@@ -50,7 +50,7 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 /**
  * @author Antoine Toulme
  * @author  Surdilovic
- * 
+ *
  * a marshaller to transform BPMN 2.0 elements into JSON format.
  *
  */
@@ -742,7 +742,9 @@ public class Bpmn2JsonMarshaller {
 		    }
 		    generator.writeEndArray();
 		    generator.writeArrayFieldStart("outgoing");
-		    generator.writeEndArray();
+            Process process = (Process) plane.getBpmnElement();
+			writeAssociations(process, lane.getId(), generator);
+			generator.writeEndArray();
 		    generator.writeObjectFieldStart("bounds");
 		    generator.writeObjectFieldStart("lowerRight");
 		    generator.writeObjectField("x", bounds.getX() + bounds.getWidth() - xOffset);
@@ -1899,16 +1901,7 @@ public class Bpmn2JsonMarshaller {
         }
         // we need to also add associations as outgoing elements
         Process process = (Process) plane.getBpmnElement();
-        for (Artifact artifact : process.getArtifacts()) {
-        	if (artifact instanceof Association){
-                Association association = (Association) artifact;
-                if (association.getSourceRef().getId().equals(node.getId())) {
-                	generator.writeStartObject();
-                	generator.writeObjectField("resourceId", association.getId());
-                	generator.writeEndObject();
-                }
-        	}
-        }
+        writeAssociations(process, node.getId(), generator);
         // and boundary events for activities
         List<BoundaryEvent> boundaryEvents = new ArrayList<BoundaryEvent>();
         findBoundaryEvents(process, boundaryEvents);
@@ -2367,8 +2360,9 @@ public class Bpmn2JsonMarshaller {
         	generator.writeObjectField("resourceId", outgoing.getId());
         	generator.writeEndObject();
         }
-	    // subprocess boundary events
-	    Process process = (Process) plane.getBpmnElement();
+        Process process = (Process) plane.getBpmnElement();
+		writeAssociations(process, subProcess.getId(), generator);
+		// subprocess boundary events
         List<BoundaryEvent> boundaryEvents = new ArrayList<BoundaryEvent>();
         findBoundaryEvents(process, boundaryEvents);
         for(BoundaryEvent be : boundaryEvents) {
@@ -2393,6 +2387,19 @@ public class Bpmn2JsonMarshaller {
 	    generator.writeEndObject();
 
     }
+
+    private void writeAssociations(Process process, String elementId, JsonGenerator generator) throws IOException {
+		for (Artifact artifact : process.getArtifacts()) {
+			if (artifact instanceof Association){
+				Association association = (Association) artifact;
+				if (association.getSourceRef().getId().equals(elementId)) {
+					generator.writeStartObject();
+					generator.writeObjectField("resourceId", association.getId());
+					generator.writeEndObject();
+				}
+			}
+		}
+	}
 
     private void marshallDataOutputAssociations(StringBuilder associationBuff, List<DataOutputAssociation> outputAssociations) {
         if(outputAssociations != null) {
