@@ -306,122 +306,25 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
             var commitMessage = "";
             if(showCommit && showCommit == true) {
-                commitMessage = prompt("Save this item", "Check in comment");
-                if(commitMessage == null) {
-                    this.facade.raiseEvent({
-                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                        ntype		: 'info',
-                        msg         : ORYX.I18N.Save.saveCancelled,
-                        title       : ''
-                    });
-                    return;
-                }
-            }
-
-            Ext.Ajax.request({
-                url: ORYX.PATH + 'assetservice',
-                method: 'POST',
-                success: function(response) {
-                    try {
-                        if(response.responseText && response.responseText.length > 0) {
-                            var saveResponse = response.responseText.evalJSON();
-                            if(saveResponse.errors && saveResponse.errors.length > 0) {
-                                var errors = saveResponse.errors;
-                                for(var j=0; j < errors.length; j++) {
-                                    var errormessageobj = errors[j];
-                                    this.facade.raiseEvent({
-                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                        ntype		: 'error',
-                                        msg         : errormessageobj.message,
-                                        title       : ''
-                                    });
-                                }
+                Ext.MessageBox.prompt(
+                        ORYX.I18N.Save.saveItem,
+                        ORYX.I18N.Save.saveCheckInComment,
+                        function(btn, commitMessage){
+                            if (btn == 'ok') {
+                                this.doSave(usePathURI, commitMessage);
                             } else {
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                    ntype		: 'success',
-                                    msg         : ORYX.I18N.Save.saveSuccess,
-                                    title       : '',
-                                    timeOut: 1000,
-                                    extendedTimeOut: 1000
+                                    ntype		: 'info',
+                                    msg         : ORYX.I18N.Save.saveCancelled,
+                                    title       : ''
                                 });
-
-                                // set the designer flag
-                                ORYX.PROCESS_SAVED = true;
-
-                                if(ORYX.CONFIG.STORESVGONSAVE && ORYX.CONFIG.STORESVGONSAVE == "true") {
-                                    // svg save
-                                    var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
-                                    var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
-                                    var processJSON = ORYX.EDITOR.getSerializedJSON();
-                                    var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
-                                    Ext.Ajax.request({
-                                        url: ORYX.PATH + "transformer",
-                                        method: 'POST',
-                                        success: function(request) {
-                                            this.facade.raiseEvent({
-                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                                ntype		: 'success',
-                                                msg         : ORYX.I18N.Save.saveImageSuccess,
-                                                title       : ''
-                                            });
-                                        }.bind(this),
-                                        failure:function(response, opts){
-                                            this.facade.raiseEvent({
-                                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                                ntype		: 'error',
-                                                msg         : ORYX.I18N.Save.saveImageFailed,
-                                                title       : ''
-                                            });
-                                        }.bind(this),
-                                        params: {
-                                            fsvg: Base64.encode(formattedSvgDOM),
-                                            rsvg: Base64.encode(rawSvgDOM),
-                                            uuid:  window.btoa(encodeURI(ORYX.UUID)),
-                                            profile: ORYX.PROFILE,
-                                            transformto: 'svg',
-                                            processid: processId
-                                        }
-                                    });
-                                }
                             }
-                        } else {
-                            this.facade.raiseEvent({
-                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                ntype		: 'error',
-                                msg         : ORYX.I18N.Save.unableToSave + ': ' + e,
-                                title       : ''
-                            });
-                        }
-                    } catch(e) {
-                        this.facade.raiseEvent({
-                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                            ntype		: 'error',
-                            msg         : ORYX.I18N.Save.unableToSave + ': ' + e,
-                            title       : ''
-                        });
-                    }
-                }.bind(this),
-                failure: function(){
-                    this.facade.raiseEvent({
-                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                        ntype		: 'error',
-                        msg         : ORYX.I18N.Save.unableToSave+'.',
-                        title       : ''
-                    });
-                }.bind(this),
-                params: {
-                    action: 'updateasset',
-                    profile: ORYX.PROFILE,
-                    assetcontent: window.btoa(encodeURIComponent(ORYX.EDITOR.getSerializedJSON())),
-                    pp: ORYX.PREPROCESSING,
-                    assetid: window.btoa(encodeURI(ORYX.UUID)),
-                    assetcontenttransform: 'jsontobpmn2',
-                    commitmessage: commitMessage,
-                    sessionid: ORYX.SESSION_ID,
-                    latestpath: usePathURI
-                }
-            });
+                        }.bind(this)
+                );
+            } else {
+                this.doSave(usePathURI, commitMessage);
+            }
         } else {
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -430,6 +333,113 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 title       : ''
             });
         }
+    },
+
+    doSave : function(usePathURI, commitMessage) {
+        Ext.Ajax.request({
+            url: ORYX.PATH + 'assetservice',
+            method: 'POST',
+            success: function(response) {
+                try {
+                    if(response.responseText && response.responseText.length > 0) {
+                        var saveResponse = response.responseText.evalJSON();
+                        if(saveResponse.errors && saveResponse.errors.length > 0) {
+                            var errors = saveResponse.errors;
+                            for(var j=0; j < errors.length; j++) {
+                                var errormessageobj = errors[j];
+                                this.facade.raiseEvent({
+                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                    ntype		: 'error',
+                                    msg         : errormessageobj.message,
+                                    title       : ''
+                                });
+                            }
+                        } else {
+                            this.facade.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'success',
+                                msg         : ORYX.I18N.Save.saveSuccess,
+                                title       : '',
+                                timeOut: 1000,
+                                extendedTimeOut: 1000
+                            });
+
+                            // set the designer flag
+                            ORYX.PROCESS_SAVED = true;
+
+                            if(ORYX.CONFIG.STORESVGONSAVE && ORYX.CONFIG.STORESVGONSAVE == "true") {
+                                // svg save
+                                var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+                                var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
+                                var processJSON = ORYX.EDITOR.getSerializedJSON();
+                                var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
+                                Ext.Ajax.request({
+                                    url: ORYX.PATH + "transformer",
+                                    method: 'POST',
+                                    success: function(request) {
+                                        this.facade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'success',
+                                            msg         : ORYX.I18N.Save.saveImageSuccess,
+                                            title       : ''
+                                        });
+                                    }.bind(this),
+                                    failure:function(response, opts){
+                                        this.facade.raiseEvent({
+                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                            ntype		: 'error',
+                                            msg         : ORYX.I18N.Save.saveImageFailed,
+                                            title       : ''
+                                        });
+                                    }.bind(this),
+                                    params: {
+                                        fsvg: Base64.encode(formattedSvgDOM),
+                                        rsvg: Base64.encode(rawSvgDOM),
+                                        uuid:  window.btoa(encodeURI(ORYX.UUID)),
+                                        profile: ORYX.PROFILE,
+                                        transformto: 'svg',
+                                        processid: processId
+                                    }
+                                });
+                            }
+                        }
+                    } else {
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : ORYX.I18N.Save.unableToSave + ': ' + e,
+                            title       : ''
+                        });
+                    }
+                } catch(e) {
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : ORYX.I18N.Save.unableToSave + ': ' + e,
+                        title       : ''
+                    });
+                }
+            }.bind(this),
+            failure: function(){
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : ORYX.I18N.Save.unableToSave+'.',
+                    title       : ''
+                });
+            }.bind(this),
+            params: {
+                action: 'updateasset',
+                profile: ORYX.PROFILE,
+                assetcontent: window.btoa(encodeURIComponent(ORYX.EDITOR.getSerializedJSON())),
+                pp: ORYX.PREPROCESSING,
+                assetid: window.btoa(encodeURI(ORYX.UUID)),
+                assetcontenttransform: 'jsontobpmn2',
+                commitmessage: commitMessage,
+                sessionid: ORYX.SESSION_ID,
+                latestpath: usePathURI
+            }
+        });
     },
 
     saveSync : function() {
