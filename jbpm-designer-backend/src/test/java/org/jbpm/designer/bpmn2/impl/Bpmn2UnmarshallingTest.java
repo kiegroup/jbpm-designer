@@ -1366,4 +1366,21 @@ public class Bpmn2UnmarshallingTest {
 
         fail(attributeName + " with value: " + attributeValue + " was not found");
     }
+
+    @Test
+    public void testOnEntryOnExitScript() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = loader.loadProcessFromJson("onentryonexitactions.json");
+        assertTrue(definitions.getRootElements().size() == 3);
+        Process process = getRootProcess(definitions);
+        UserTask task = (UserTask) process.getFlowElements().get(1);
+        assertNotNull(task);
+        String takOnEntryScript = getOnEntryScript(task.getExtensionValues());
+        String taskOnExitScript = getOnExitScript(task.getExtensionValues());
+        assertNotNull(takOnEntryScript);
+        assertNotNull(taskOnExitScript);
+
+        assertEquals(takOnEntryScript, "<![CDATA[if ( a == null || a ) { System.out.println(a); }]]>");
+        assertEquals(taskOnExitScript, "<![CDATA[if ( b == null || b ) { System.out.println(b); }]]>");
+    }
 }

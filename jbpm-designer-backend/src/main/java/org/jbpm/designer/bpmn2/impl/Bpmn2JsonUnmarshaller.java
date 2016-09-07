@@ -3700,39 +3700,34 @@ public class Bpmn2JsonUnmarshaller {
         }
         // process on-entry and on-exit actions as custom elements
         if(properties.get("onentryactions") != null && properties.get("onentryactions").length() > 0) {
-            String[] allActions = properties.get("onentryactions").split( "\\|\\s*" );
-            for(String action : allActions) {
-                OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
-                onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
+            OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
+            onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onentryactions"))));
 
-                String scriptLanguage;
-                if(properties.get("script_language").equals("java")) {
-                    scriptLanguage = "http://www.java.com/java";
-                } else if(properties.get("script_language").equals("mvel")) {
-                    scriptLanguage = "http://www.mvel.org/2.0";
-                } else if(properties.get("script_language").equals("javascript")) {
-                    scriptLanguage = "http://www.javascript.com/javascript";
-                } else {
-                    // default to java
-                    scriptLanguage = "http://www.java.com/java";
-                }
-                onEntryScript.setScriptFormat(scriptLanguage);
-
-                if(sp.getExtensionValues() == null || sp.getExtensionValues().size() < 1) {
-                	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
-                	sp.getExtensionValues().add(extensionElement);
-                }
-                FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
-                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, onEntryScript);
-                sp.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+            String scriptLanguage;
+            if(properties.get("script_language").equals("java")) {
+                scriptLanguage = "http://www.java.com/java";
+            } else if(properties.get("script_language").equals("mvel")) {
+                scriptLanguage = "http://www.mvel.org/2.0";
+            } else if(properties.get("script_language").equals("javascript")) {
+                scriptLanguage = "http://www.javascript.com/javascript";
+            } else {
+                // default to java
+                scriptLanguage = "http://www.java.com/java";
             }
+            onEntryScript.setScriptFormat(scriptLanguage);
+
+            if(sp.getExtensionValues() == null || sp.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                sp.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, onEntryScript);
+            sp.getExtensionValues().get(0).getValue().add(extensionElementEntry);
         }
 
         if(properties.get("onexitactions") != null && properties.get("onexitactions").length() > 0) {
-            String[] allActions = properties.get("onexitactions").split( "\\|\\s*" );
-            for(String action : allActions) {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
-                onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
+                onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onexitactions"))));
 
                 String scriptLanguage;
                 if(properties.get("script_language").equals("java")) {
@@ -3754,7 +3749,6 @@ public class Bpmn2JsonUnmarshaller {
                 FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
                         (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, onExitScript);
                 sp.getExtensionValues().get(0).getValue().add(extensionElementEntry);
-            }
         }
 
         // isAsync metadata
@@ -5370,61 +5364,55 @@ public class Bpmn2JsonUnmarshaller {
 
         // process on-entry and on-exit actions as custom elements
         if(properties.get("onentryactions") != null && properties.get("onentryactions").length() > 0) {
-            String[] allActions = properties.get("onentryactions").split( "\\|\\s*" );
-            for(String action : allActions) {
-                OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
-                onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
+            OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
+            onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onentryactions"))));
 
-                String scriptLanguage = "";
-                if(properties.get("script_language").equals("java")) {
-                    scriptLanguage = "http://www.java.com/java";
-                } else if(properties.get("script_language").equals("mvel")) {
-                    scriptLanguage = "http://www.mvel.org/2.0";
-                } else if(properties.get("script_language").equals("javascript")) {
-                    scriptLanguage = "http://www.javascript.com/javascript";
-                } else {
-                    // default to java
-                    scriptLanguage = "http://www.java.com/java";
-                }
-                onEntryScript.setScriptFormat(scriptLanguage);
-
-                if(callActivity.getExtensionValues() == null || callActivity.getExtensionValues().size() < 1) {
-                	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
-                	callActivity.getExtensionValues().add(extensionElement);
-                }
-                FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
-                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, onEntryScript);
-                callActivity.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+            String scriptLanguage = "";
+            if(properties.get("script_language").equals("java")) {
+                scriptLanguage = "http://www.java.com/java";
+            } else if(properties.get("script_language").equals("mvel")) {
+                scriptLanguage = "http://www.mvel.org/2.0";
+            } else if(properties.get("script_language").equals("javascript")) {
+                scriptLanguage = "http://www.javascript.com/javascript";
+            } else {
+                // default to java
+                scriptLanguage = "http://www.java.com/java";
             }
+            onEntryScript.setScriptFormat(scriptLanguage);
+
+            if(callActivity.getExtensionValues() == null || callActivity.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                callActivity.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, onEntryScript);
+            callActivity.getExtensionValues().get(0).getValue().add(extensionElementEntry);
         }
 
         if(properties.get("onexitactions") != null && properties.get("onexitactions").length() > 0) {
-            String[] allActions = properties.get("onexitactions").split( "\\|\\s*" );
-            for(String action : allActions) {
-                OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
-                onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
+            OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
+            onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onexitactions"))));
 
-                String scriptLanguage = "";
-                if(properties.get("script_language").equals("java")) {
-                    scriptLanguage = "http://www.java.com/java";
-                } else if(properties.get("script_language").equals("mvel")) {
-                    scriptLanguage = "http://www.mvel.org/2.0";
-                } else if(properties.get("script_language").equals("javascript")) {
-                    scriptLanguage = "http://www.javascript.com/javascript";
-                } else {
-                    // default to java
-                    scriptLanguage = "http://www.java.com/java";
-                }
-                onExitScript.setScriptFormat(scriptLanguage);
-
-                if(callActivity.getExtensionValues() == null || callActivity.getExtensionValues().size() < 1) {
-                	ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
-                	callActivity.getExtensionValues().add(extensionElement);
-                }
-                FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
-                        (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, onExitScript);
-                callActivity.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+            String scriptLanguage = "";
+            if(properties.get("script_language").equals("java")) {
+                scriptLanguage = "http://www.java.com/java";
+            } else if(properties.get("script_language").equals("mvel")) {
+                scriptLanguage = "http://www.mvel.org/2.0";
+            } else if(properties.get("script_language").equals("javascript")) {
+                scriptLanguage = "http://www.javascript.com/javascript";
+            } else {
+                // default to java
+                scriptLanguage = "http://www.java.com/java";
             }
+            onExitScript.setScriptFormat(scriptLanguage);
+
+            if(callActivity.getExtensionValues() == null || callActivity.getExtensionValues().size() < 1) {
+                ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+                callActivity.getExtensionValues().add(extensionElement);
+            }
+            FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, onExitScript);
+            callActivity.getExtensionValues().get(0).getValue().add(extensionElementEntry);
         }
 
         // simulation
@@ -5743,10 +5731,8 @@ public class Bpmn2JsonUnmarshaller {
 
         // process on-entry and on-exit actions as custom elements
         if(properties.get("onentryactions") != null && properties.get("onentryactions").length() > 0) {
-            String[] allActions = properties.get("onentryactions").split( "\\|\\s*" );
-            for(String action : allActions) {
                 OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
-                onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
+                onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onentryactions"))));
 
                 String scriptLanguage = "";
                 if(properties.get("script_language").equals("java")) {
@@ -5768,14 +5754,11 @@ public class Bpmn2JsonUnmarshaller {
                 FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
                         (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, onEntryScript);
                 task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
-            }
         }
 
         if(properties.get("onexitactions") != null && properties.get("onexitactions").length() > 0) {
-            String[] allActions = properties.get("onexitactions").split( "\\|\\s*" );
-            for(String action : allActions) {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
-                onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(action)));
+                onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onexitactions"))));
 
                 String scriptLanguage;
                 if(properties.get("script_language").equals("java")) {
@@ -5797,7 +5780,6 @@ public class Bpmn2JsonUnmarshaller {
                 FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
                         (Internal) DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, onExitScript);
                 task.getExtensionValues().get(0).getValue().add(extensionElementEntry);
-            }
         }
 
         // multi instance
