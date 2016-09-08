@@ -27,6 +27,7 @@ import org.gwtbootstrap3.client.ui.TextBox;
 import org.gwtbootstrap3.client.ui.ValueListBox;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.jboss.errai.databinding.client.api.DataBinder;
+import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable;
 import org.jbpm.designer.client.util.ComboBox;
@@ -115,6 +116,10 @@ public class AssignmentListItemWidgetTest {
         Mockito.doCallRealMethod().when(widget).setProcessVariables(any(ListBoxValues.class));
         Mockito.doCallRealMethod().when(widget).init();
         Mockito.doCallRealMethod().when(widget).setModel(any(AssignmentRow.class));
+
+        Mockito.doCallRealMethod().when(processVarComboBox).addCustomValueToListBoxValues(any(String.class), any(String.class));
+        Mockito.doCallRealMethod().when(processVarComboBox).setListBoxValues(any(ListBoxValues.class));
+
         when(widget.getModel()).thenReturn(assignmentRow);
 
     }
@@ -184,14 +189,25 @@ public class AssignmentListItemWidgetTest {
     }
 
     @Test
-    public void testQuotedConstant() {
+    public void testQuotedConstant1() {
         AssignmentRow row = new AssignmentRow();
-        row.setConstant("abc");
+        String s = "abc";
+        row.setConstant(s);
         when(widget.getModel()).thenReturn(row);
         widget.setModel(row);
 
-        verify(constant).setValue("\"abc\"");
-        verify(processVar).setValue("\"abc\"");
+        verify(constant).setValue(s);
+    }
+
+    @Test
+    public void testQuotedConstant2() {
+        AssignmentRow row = new AssignmentRow();
+        String s = "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.";
+        row.setConstant(s);
+        when(widget.getModel()).thenReturn(row);
+        widget.setModel(row);
+
+        verify(constant).setValue(s);
     }
 
     @Test
@@ -251,14 +267,40 @@ public class AssignmentListItemWidgetTest {
     }
 
     @Test
-    public void testSetProcessVariables() {
-        ListBoxValues processVarListBoxValues = new ListBoxValues(null, null, null);
-        String sConstant = "Mary Wilkins";
+    public void testSetProcessVariablesVar() {
+        ListBoxValues.ValueTester processVarTester =  new ListBoxValues.ValueTester() {
+            public String getNonCustomValueForUserString(String userValue) {
+                return null;
+            }
+        };
+        ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CONSTANT_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ",
+                processVarTester, ActivityDataIOEditorViewImpl.CONSTANT_MAX_DISPLAY_LENGTH);
+        processVarComboBox.setListBoxValues(processVarListBoxValues);
+
+        String sConstant = "sVariableWithALongName";
         widget.setConstant(sConstant);
-
         widget.setProcessVariables(processVarListBoxValues);
-
-        verify(processVarComboBox).setListBoxValues(processVarListBoxValues);
+        verify(processVarComboBox, times(2)).setListBoxValues(processVarListBoxValues);
         verify(processVarComboBox).addCustomValueToListBoxValues(sConstant, "");
+        verify(processVar).setValue(sConstant);
+    }
+
+    @Test
+    public void testSetProcessVariablesConst() {
+        ListBoxValues.ValueTester processVarTester =  new ListBoxValues.ValueTester() {
+            public String getNonCustomValueForUserString(String userValue) {
+                return null;
+            }
+        };
+        ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CONSTANT_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ",
+                processVarTester, ActivityDataIOEditorViewImpl.CONSTANT_MAX_DISPLAY_LENGTH);
+        processVarComboBox.setListBoxValues(processVarListBoxValues);
+
+        String sConstant = "\"abcdeabcde12345\"";
+        widget.setConstant(sConstant);
+        widget.setProcessVariables(processVarListBoxValues);
+        verify(processVarComboBox, times(2)).setListBoxValues(processVarListBoxValues);
+        verify(processVarComboBox).addCustomValueToListBoxValues(sConstant, "");
+        verify(processVar).setValue("\"abcdeabcde...\"");
     }
 }

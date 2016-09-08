@@ -61,6 +61,8 @@ public class ActivityDataIOEditorViewImpl extends BaseModal implements ActivityD
 
     private Column column = new Column( ColumnSize.MD_12 );
 
+    public static final int CONSTANT_MAX_DISPLAY_LENGTH = 10;
+
     public ActivityDataIOEditorViewImpl() {
         super();
     }
@@ -193,7 +195,7 @@ public class ActivityDataIOEditorViewImpl extends BaseModal implements ActivityD
 
     @Override
     public void setInputAssignmentsProcessVariables(List<String> processVariables) {
-        ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CONSTANT_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.processVarTester());
+        ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CONSTANT_PROMPT, DesignerEditorConstants.INSTANCE.Edit() + " ", presenter.processVarTester(), CONSTANT_MAX_DISPLAY_LENGTH);
         processVarListBoxValues.addValues(processVariables);
         inputAssignmentsWidget.setProcessVariables(processVarListBoxValues);
     }

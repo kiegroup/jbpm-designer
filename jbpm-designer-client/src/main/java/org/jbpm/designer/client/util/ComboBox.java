@@ -106,9 +106,9 @@ public class ComboBox implements ComboBoxView.ComboBoxPresenter {
             view.setTextBoxFocus(true);
         } else if (listBoxValues.isCustomValue(newValue)) {
             // A Custom value has been selected
-            String textValue = newValue;
+            String textValue = listBoxValues.getValueForDisplayValue(newValue);
             if (quoteStringValues) {
-                textValue = StringUtils.createUnquotedConstant(newValue);
+                textValue = StringUtils.createUnquotedConstant(textValue);
             }
             setListBoxValue(newValue);
             setTextBoxValue(textValue);
@@ -134,13 +134,10 @@ public class ComboBox implements ComboBoxView.ComboBoxPresenter {
                     currentTextValue = "";
                 } else {
                     String oldValue = currentTextValue;
-                    addCustomValueToListBoxValues(newValue, oldValue);
+                    String displayValue = addCustomValueToListBoxValues(newValue, oldValue);
                     setTextBoxValue(newValue);
                     currentTextValue = newValue;
-                    if (quoteStringValues) {
-                        newValue = StringUtils.createQuotedConstant(newValue);
-                    }
-                    setListBoxValue(newValue);
+                    setListBoxValue(displayValue);
                 }
             } else {
                 // Set the value even if it's ""
@@ -154,12 +151,12 @@ public class ComboBox implements ComboBoxView.ComboBoxPresenter {
     }
 
     @Override
-    public void addCustomValueToListBoxValues(String newValue, String oldValue) {
+    public String addCustomValueToListBoxValues(String newValue, String oldValue) {
         if (quoteStringValues) {
             newValue = StringUtils.createQuotedConstant(newValue);
             oldValue = StringUtils.createQuotedConstant(oldValue);
         }
-        listBoxValues.addCustomValue(newValue, oldValue);
+        return listBoxValues.addCustomValue(newValue, oldValue);
     }
 
     public void setTextBoxValue(String value) {
