@@ -133,6 +133,18 @@ public class Bpmn2UnmarshallingTest {
     }
 
     @Test
+    public void testScriptTaskMvelScriptFormat() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("mvelScriptTask.json");
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = getRootProcess(definitions);
+        FlowElement element = (ScriptTask) getFlowElement(process.getFlowElements(), "mvelScriptTask");
+
+        ScriptTask scriptTask = (ScriptTask) element;
+        assertEquals("<![CDATA[m : Message( status == Message.HELLO )]]>", scriptTask.getScript());
+        assertEquals("http://www.mvel.org/2.0", scriptTask.getScriptFormat());
+    }
+
+    @Test
     public void testBusinessRuleTask() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("businessRule.json");
         Process process = getRootProcess(definitions);
