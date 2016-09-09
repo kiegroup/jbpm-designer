@@ -687,7 +687,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             }
             return fileContents.toString();
         } finally {
-            IOUtils.closeQuietly(scanner);
+            scanner.close();
         }
     }
 
