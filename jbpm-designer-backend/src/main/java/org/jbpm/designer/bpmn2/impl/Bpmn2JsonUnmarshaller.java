@@ -3703,17 +3703,7 @@ public class Bpmn2JsonUnmarshaller {
             OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
             onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onentryactions"))));
 
-            String scriptLanguage;
-            if(properties.get("script_language").equals("java")) {
-                scriptLanguage = "http://www.java.com/java";
-            } else if(properties.get("script_language").equals("mvel")) {
-                scriptLanguage = "http://www.mvel.org/2.0";
-            } else if(properties.get("script_language").equals("javascript")) {
-                scriptLanguage = "http://www.javascript.com/javascript";
-            } else {
-                // default to java
-                scriptLanguage = "http://www.java.com/java";
-            }
+            String scriptLanguage = getScriptLanguageFormat(properties);
             onEntryScript.setScriptFormat(scriptLanguage);
 
             if(sp.getExtensionValues() == null || sp.getExtensionValues().size() < 1) {
@@ -3729,17 +3719,7 @@ public class Bpmn2JsonUnmarshaller {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
                 onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onexitactions"))));
 
-                String scriptLanguage;
-                if(properties.get("script_language").equals("java")) {
-                    scriptLanguage = "http://www.java.com/java";
-                } else if(properties.get("script_language").equals("mvel")) {
-                    scriptLanguage = "http://www.mvel.org/2.0";
-                } else if(properties.get("script_language").equals("javascript")) {
-                    scriptLanguage = "http://www.javascript.com/javascript";
-                } else {
-                    // default to java
-                    scriptLanguage = "http://www.java.com/java";
-                }
+                String scriptLanguage = getScriptLanguageFormat(properties);
                 onExitScript.setScriptFormat(scriptLanguage);
 
                 if(sp.getExtensionValues() == null || sp.getExtensionValues().size() < 1) {
@@ -4093,6 +4073,23 @@ public class Bpmn2JsonUnmarshaller {
             values.add(costParameters);
             _simulationElementParameters.put(sp.getId(), values);
         }
+    }
+
+    private String getScriptLanguageFormat(Map<String, String> properties) {
+        // default to java
+        String scriptLanguage = "http://www.java.com/java";
+
+        if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
+            if(properties.get("script_language").equals("java")) {
+                scriptLanguage = "http://www.java.com/java";
+            } else if(properties.get("script_language").equals("mvel")) {
+                scriptLanguage = "http://www.mvel.org/2.0";
+            } else if(properties.get("script_language").equals("javascript")) {
+                scriptLanguage = "http://www.javascript.com/javascript";
+            }
+        }
+
+        return scriptLanguage;
     }
 
     private void applyDataOutputProperties(Activity activity, Map<String, String> properties) {
@@ -5090,17 +5087,7 @@ public class Bpmn2JsonUnmarshaller {
         }
 
         if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
-            String scriptLanguage;
-            if(properties.get("script_language").equals("java")) {
-                scriptLanguage = "http://www.java.com/java";
-            } else if(properties.get("script_language").equals("mvel")) {
-                scriptLanguage = "http://www.mvel.org/2.0";
-            } else if(properties.get("script_language").equals("javascript")) {
-                scriptLanguage = "http://www.javascript.com/javascript";
-            } else {
-                // default to java
-                scriptLanguage = "http://www.java.com/java";
-            }
+            String scriptLanguage = getScriptLanguageFormat(properties);
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl scriptLanguageElement = (EAttributeImpl) metadata.demandFeature(
                     "http://www.jboss.org/drools", "scriptFormat", false   , false);
@@ -5118,17 +5105,7 @@ public class Bpmn2JsonUnmarshaller {
         }
 
         if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
-            String scriptLanguage;
-            if(properties.get("script_language").equals("java")) {
-                scriptLanguage = "http://www.java.com/java";
-            } else if(properties.get("script_language").equals("mvel")) {
-                scriptLanguage = "http://www.mvel.org/2.0";
-            } else if(properties.get("script_language").equals("javascript")) {
-                scriptLanguage = "http://www.javascript.com/javascript";
-            } else {
-                // default to java
-                scriptLanguage = "http://www.java.com/java";
-            }
+            String scriptLanguage = getScriptLanguageFormat(properties);
             scriptTask.setScriptFormat(scriptLanguage);
         }
     }
@@ -5367,17 +5344,7 @@ public class Bpmn2JsonUnmarshaller {
             OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
             onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onentryactions"))));
 
-            String scriptLanguage = "";
-            if(properties.get("script_language").equals("java")) {
-                scriptLanguage = "http://www.java.com/java";
-            } else if(properties.get("script_language").equals("mvel")) {
-                scriptLanguage = "http://www.mvel.org/2.0";
-            } else if(properties.get("script_language").equals("javascript")) {
-                scriptLanguage = "http://www.javascript.com/javascript";
-            } else {
-                // default to java
-                scriptLanguage = "http://www.java.com/java";
-            }
+            String scriptLanguage = getScriptLanguageFormat(properties);
             onEntryScript.setScriptFormat(scriptLanguage);
 
             if(callActivity.getExtensionValues() == null || callActivity.getExtensionValues().size() < 1) {
@@ -5393,17 +5360,7 @@ public class Bpmn2JsonUnmarshaller {
             OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
             onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onexitactions"))));
 
-            String scriptLanguage = "";
-            if(properties.get("script_language").equals("java")) {
-                scriptLanguage = "http://www.java.com/java";
-            } else if(properties.get("script_language").equals("mvel")) {
-                scriptLanguage = "http://www.mvel.org/2.0";
-            } else if(properties.get("script_language").equals("javascript")) {
-                scriptLanguage = "http://www.javascript.com/javascript";
-            } else {
-                // default to java
-                scriptLanguage = "http://www.java.com/java";
-            }
+            String scriptLanguage = getScriptLanguageFormat(properties);
             onExitScript.setScriptFormat(scriptLanguage);
 
             if(callActivity.getExtensionValues() == null || callActivity.getExtensionValues().size() < 1) {
@@ -5734,17 +5691,7 @@ public class Bpmn2JsonUnmarshaller {
                 OnEntryScriptType onEntryScript = DroolsFactory.eINSTANCE.createOnEntryScriptType();
                 onEntryScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onentryactions"))));
 
-                String scriptLanguage = "";
-                if(properties.get("script_language").equals("java")) {
-                    scriptLanguage = "http://www.java.com/java";
-                } else if(properties.get("script_language").equals("mvel")) {
-                    scriptLanguage = "http://www.mvel.org/2.0";
-                } else if(properties.get("script_language").equals("javascript")) {
-                    scriptLanguage = "http://www.javascript.com/javascript";
-                } else {
-                    // default to java
-                    scriptLanguage = "http://www.java.com/java";
-                }
+                String scriptLanguage = getScriptLanguageFormat(properties);
                 onEntryScript.setScriptFormat(scriptLanguage);
 
                 if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
@@ -5760,17 +5707,7 @@ public class Bpmn2JsonUnmarshaller {
                 OnExitScriptType onExitScript = DroolsFactory.eINSTANCE.createOnExitScriptType();
                 onExitScript.setScript(wrapInCDATABlock(replaceScriptEscapeAndNewLines(properties.get("onexitactions"))));
 
-                String scriptLanguage;
-                if(properties.get("script_language").equals("java")) {
-                    scriptLanguage = "http://www.java.com/java";
-                } else if(properties.get("script_language").equals("mvel")) {
-                    scriptLanguage = "http://www.mvel.org/2.0";
-                } else if(properties.get("script_language").equals("javascript")) {
-                    scriptLanguage = "http://www.javascript.com/javascript";
-                } else {
-                    // default to java
-                    scriptLanguage = "http://www.java.com/java";
-                }
+                String scriptLanguage = getScriptLanguageFormat(properties);
                 onExitScript.setScriptFormat(scriptLanguage);
 
                 if(task.getExtensionValues() == null || task.getExtensionValues().size() < 1) {
@@ -5892,17 +5829,7 @@ public class Bpmn2JsonUnmarshaller {
             }
         }
         if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
-            String scriptLanguage;
-            if(properties.get("script_language").equals("java")) {
-                scriptLanguage = "http://www.java.com/java";
-            } else if(properties.get("script_language").equals("mvel")) {
-                scriptLanguage = "http://www.mvel.org/2.0";
-            } else if(properties.get("script_language").equals("javascript")) {
-                scriptLanguage = "http://www.javascript.com/javascript";
-            } else {
-                // default to java
-                scriptLanguage = "http://www.java.com/java";
-            }
+            String scriptLanguage = getScriptLanguageFormat(properties);
 
             ExtendedMetaData metadata = ExtendedMetaData.INSTANCE;
             EAttributeImpl scriptLanguageElement = (EAttributeImpl) metadata.demandFeature(
