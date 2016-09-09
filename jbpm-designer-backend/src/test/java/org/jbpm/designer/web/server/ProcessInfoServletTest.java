@@ -16,9 +16,11 @@
 
 package org.jbpm.designer.web.server;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
+import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.Test;
 
@@ -38,10 +40,11 @@ public class ProcessInfoServletTest {
         ProcessInfoServlet processInfoServlet = new ProcessInfoServlet();
         processInfoServlet.setProfile(new JbpmProfileImpl());
 
-        String json = readFile("defaultgateforgateway.json");
+        String rawJson = readFile("defaultgateforgateway.json");
+        String encodedJson = Base64.encodeBase64String(UriUtils.encode(rawJson.toString()).getBytes("UTF-8"));
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("json", json);
+        params.put("json", encodedJson);
         params.put("profile", "jbpm");
         params.put("ppdata", "Email,Log,Rest,WebService");
         params.put("gatewayid", "_FD098FB2-3615-4C26-A5F6-06D4B453E234");
