@@ -295,8 +295,10 @@ public class AssignmentListItemWidgetViewImpl extends Composite implements Assig
         processVarComboBox.setCurrentTextValue("");
         processVarComboBox.setListBoxValues(processVarListBoxValues);
         String con = getConstant();
+        // processVar set here because the ListBoxValues must already have been set
         if (con != null && !con.isEmpty()) {
-            processVarComboBox.addCustomValueToListBoxValues(con, "");
+            String displayValue = processVarComboBox.addCustomValueToListBoxValues(con, "");
+            processVar.setValue(displayValue);
         }
     }
 
@@ -348,9 +350,8 @@ public class AssignmentListItemWidgetViewImpl extends Composite implements Assig
 
         String con = getConstant();
         if (con != null && !con.isEmpty()) {
-            con = StringUtils.createQuotedConstant(con);
+            // processVar ListBox is set in setProcessVariables because its ListBoxValues are required
             constant.setValue(con);
-            processVar.setValue(con);
         }
         else if (getProcessVar() != null){
             processVar.setValue(getProcessVar());
