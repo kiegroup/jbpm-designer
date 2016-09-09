@@ -29,6 +29,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import bpsim.impl.BpsimFactoryImpl;
+import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,7 @@ public class ProcessInfoServlet extends HttpServlet {
 
 
         if(gatewayId != null && gatewayId.length() > 0) {
-            String json = req.getParameter("json");
+            String json = UriUtils.decode(Utils.getEncodedParam(req, "json"));
             String preprocessingData = req.getParameter("ppdata");
             DroolsFactoryImpl.init();
             BpsimFactoryImpl.init();

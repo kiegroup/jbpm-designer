@@ -997,67 +997,39 @@ ORYX.Plugins.PropertyWindow = {
                             break;
 
                             case ORYX.CONFIG.TYPE_DYNAMICGATEWAYCONNECTIONS:
-                                var currentShapes = ORYX.Config.FACADE.getSelection();
-                                var options = [];
-                                if(currentShapes && currentShapes.length == 1) {
-                                    var shape = currentShapes.first();
-                                    var shapeid = shape.resourceId;
+								var currentShapes = ORYX.Config.FACADE.getSelection();
+								if(currentShapes && currentShapes.length == 1) {
+									var options = [];
+									var shape = currentShapes.first();
+									var shapeid = shape.resourceId;
 
-                                    var processJSON = ORYX.EDITOR.getSerializedJSON();
-                                    var ajaxObj = new XMLHttpRequest;
-                                    var url = ORYX.PATH + "processinfo";
-                                    var params  = "uuid=" +  window.btoa(encodeURI(ORYX.UUID)) + "&ppdata=" + ORYX.PREPROCESSING + "&profile=" + ORYX.PROFILE + "&gatewayid=" + shapeid + "&json=" + encodeURIComponent(processJSON);
-                                    ajaxObj.open("POST",url,false);
-                                    ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                                    ajaxObj.send(params);
-                                    if (ajaxObj.status == 200) {
-                                        var gatewayconnectionsJson = ajaxObj.responseText.evalJSON();
+									var store = new Ext.data.SimpleStore({
+										fields: [{name: 'icon'},
+											{name: 'title'},
+											{name: 'value'}],
+										data: options
+									});
+									// Set the grid Editor
+									var editorCombo = new Ext.form.ComboBox({
+										editable: false,
+										tpl: '<tpl for="."><div class="x-combo-list-item">{[(values.icon) ? "<img src=\'" + values.icon + "\' />" : ""]} {title}</div></tpl>',
+										store: store,
+										displayField: 'title',
+										valueField: 'value',
+										typeAhead: true,
+										mode: 'local',
+										triggerAction: 'all',
+										selectOnFocus: true
+									});
+									editorCombo.on('select', function (combo, record, index) {
+										this.editDirectly(key, combo.getValue());
+									}.bind(this))
+									editorGrid = new Ext.Editor(editorCombo);
 
-                                        for(var i=0;i<gatewayconnectionsJson.length;i++){
-											this.presInfo = "";
-                                            var csobj = gatewayconnectionsJson[i];
-											this.getSequenceFlowNameForID(csobj.sequenceflowinfo);
-											if(this.presInfo && this.presInfo.length > 0) {
-												this.presInfo = this.presInfo + " : " + csobj.sequenceflowinfo;
-											} else {
-												this.presInfo = csobj.sequenceflowinfo;
-											}
-                                            options.push(["", this.presInfo, this.presInfo]);
-                                        }
-                                    } else {
-                                        ORYX.EDITOR._pluginFacade.raiseEvent({
-                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                            ntype		: 'error',
-                                            msg         : ORYX.I18N.PropertyWindow.errorDetOutConnections,
-                                            title       : ''
-
-                                        });
-                                    }
-                                }
-
-                                var store = new Ext.data.SimpleStore({
-                                    fields: [{name: 'icon'},
-                                        {name: 'title'},
-                                        {name: 'value'}	],
-                                    data : options
-                                });
-                                // Set the grid Editor
-                                var editorCombo = new Ext.form.ComboBox({
-                                    editable: false,
-                                    tpl: '<tpl for="."><div class="x-combo-list-item">{[(values.icon) ? "<img src=\'" + values.icon + "\' />" : ""]} {title}</div></tpl>',
-                                    store: store,
-                                    displayField:'title',
-                                    valueField: 'value',
-                                    typeAhead: true,
-                                    mode: 'local',
-                                    triggerAction: 'all',
-                                    selectOnFocus:true
-                                });
-                                editorCombo.on('select', function(combo, record, index) {
-                                    this.editDirectly(key, combo.getValue());
-                                }.bind(this))
-                                editorGrid = new Ext.Editor(editorCombo);
-                            break;
+									// Set the options for Default Gate asynchronously
+									this.getGatewayRoutes(shapeid, editorCombo);
+								}
+								break;
 
 						case ORYX.CONFIG.TYPE_DATE:
 							var currFormat = ORYX.I18N.PropertyWindow.dateFormat
@@ -1501,6 +1473,64 @@ ORYX.Plugins.PropertyWindow = {
 		ORYX.EDITOR._canvas.getChildren().each((function(child) {
 			this.getSequenceFlowName(child, nodeid);
 		}).bind(this));
+	},
+
+	getGatewayRoutes : function (shapeid, editorCombo) {
+		Ext.Ajax.request({
+			url: ORYX.PATH + 'processinfo',
+			method: 'POST',
+			success: function (response) {
+				try {
+					if (response.responseText && response.responseText.length > 0) {
+						var gatewayconnectionsJson = response.responseText.evalJSON();
+						var options = [];
+						for (var i = 0; i < gatewayconnectionsJson.length; i++) {
+							this.presInfo = "";
+							var csobj = gatewayconnectionsJson[i];
+							this.getSequenceFlowNameForID(csobj.sequenceflowinfo);
+							if (this.presInfo && this.presInfo.length > 0) {
+								this.presInfo = this.presInfo + " : " + csobj.sequenceflowinfo;
+							} else {
+								this.presInfo = csobj.sequenceflowinfo;
+							}
+							options.push(["", this.presInfo, this.presInfo]);
+						}
+						var store = new Ext.data.SimpleStore({
+							fields: [{name: 'icon'},
+								{name: 'title'},
+								{name: 'value'}	],
+							data : options
+						});
+
+						// Set the editorCombo's store
+						editorCombo.store = store;
+					}
+				} catch (e) {
+					ORYX.EDITOR._pluginFacade.raiseEvent({
+						type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+						ntype: 'error',
+						msg: ORYX.I18N.PropertyWindow.errorDetOutConnections,
+						title: ''
+					});
+				}
+			}.bind(this),
+			failure: function () {
+				ORYX.EDITOR._pluginFacade.raiseEvent({
+					type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+					ntype: 'error',
+					msg: ORYX.I18N.PropertyWindow.errorDetOutConnections,
+					title: ''
+				});
+			},
+			params: {
+				uuid: window.btoa(encodeURI(ORYX.UUID)),
+				ppdata: ORYX.PREPROCESSING,
+				profile: ORYX.PROFILE,
+				gatewayid: shapeid,
+				json: window.btoa(encodeURIComponent(ORYX.EDITOR.getSerializedJSON()))
+			}
+		});
+
 	},
 
 	getSequenceFlowName : function(shape, nodeid) {
