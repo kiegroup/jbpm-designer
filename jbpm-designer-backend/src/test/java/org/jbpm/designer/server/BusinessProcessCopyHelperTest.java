@@ -136,7 +136,7 @@ public class BusinessProcessCopyHelperTest {
             org.eclipse.bpmn2.Process process = helper.getRootProcess(def);
             assertNotNull(process);
             assertNotNull(process.getId());
-            assertThat(process.getId(), containsString("Evaluation.D0ADD0BED0B6D182D18BD0B4D0BED0BBD18CD0BED180D18DMyNewProcessEC96B4EB9494EC95BC"));
+            assertThat(process.getId(), containsString("MyNewProcessEC96B4EB9494EC95BC"));
         } catch (Exception e) {
             fail("Cannot parse new process: " + e.getMessage());
         }
@@ -170,7 +170,7 @@ public class BusinessProcessCopyHelperTest {
             org.eclipse.bpmn2.Process process = helper.getRootProcess(def);
             assertNotNull(process);
             assertNotNull(process.getId());
-            assertEquals("Evaluation.3C3Cmyprocess", process.getId());
+            assertThat(process.getId(), containsString("3C3Cmyprocess"));
         } catch (Exception e) {
             fail("Cannot parse new process: " + e.getMessage());
         }
