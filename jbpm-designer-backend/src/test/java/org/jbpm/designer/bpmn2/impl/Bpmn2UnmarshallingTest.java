@@ -1323,6 +1323,43 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("Task_2", t2.getName());
     }
 
+    @Test
+    public void testMIandEventProcessBoundaryEvents() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("miandeventsubprocessboundary.json");
+        Process process = getRootProcess(definitions);
+
+        SubProcess miSubprocess = (SubProcess) process.getFlowElements().get(0);
+        assertNotNull(miSubprocess);
+        assertEquals("MyMISubprocess", miSubprocess.getName());
+
+        SubProcess eventSubprocess = (SubProcess) process.getFlowElements().get(1);
+        assertNotNull(eventSubprocess);
+        assertEquals("MyEventSubprocess", eventSubprocess.getName());
+
+        BoundaryEvent subprocessBoundary1 = (BoundaryEvent) process.getFlowElements().get(2);
+        assertNotNull(subprocessBoundary1);
+        assertNotNull(subprocessBoundary1.getName());
+        if(subprocessBoundary1.getName().equals("MyTimberBoundaryEvent1")) {
+            assertEquals(subprocessBoundary1.getAttachedToRef().getId(), eventSubprocess.getId());
+        } else if(subprocessBoundary1.getName().equals("MyTimberBoundaryEvent2")) {
+            assertEquals(subprocessBoundary1.getAttachedToRef().getId(), miSubprocess.getId());
+        } else {
+            fail("Illegal attached to ref for boundary event");
+        }
+
+        BoundaryEvent subprocessBoundary2 = (BoundaryEvent) process.getFlowElements().get(3);
+        assertNotNull(subprocessBoundary2);
+        assertNotNull(subprocessBoundary2.getName());
+        if(subprocessBoundary2.getName().equals("MyTimberBoundaryEvent1")) {
+            assertEquals(subprocessBoundary2.getAttachedToRef().getId(), eventSubprocess.getId());
+        } else if(subprocessBoundary2.getName().equals("MyTimberBoundaryEvent2")) {
+            assertEquals(subprocessBoundary2.getAttachedToRef().getId(), miSubprocess.getId());
+        } else {
+            fail("Illegal attached to ref for boundary event");
+        }
+
+    }
+
 
 }
 

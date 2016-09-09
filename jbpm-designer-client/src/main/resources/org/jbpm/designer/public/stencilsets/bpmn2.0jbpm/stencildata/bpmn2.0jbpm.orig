@@ -4339,6 +4339,9 @@
 			"propertyPackages" :[
 				"baseAttributes",
 				"flowElement",
+				"activity",
+				"properties",
+				"iospecification",
 				"bgColor",
 				"properties"
 			],
@@ -4751,6 +4754,7 @@
 				"to_task_event",
 				"from_task_event",
 				"fromtoall",
+				"canContainArtifacts",
 				"ActivitiesMorph"
 			]
 		},
@@ -5500,7 +5504,10 @@
  			"layout" : 			[{"type" : "layout.bpmn2_0.subprocess"}],
 			"propertyPackages" :[
 				"baseAttributes",
-				"flowElement"
+				"flowElement",
+				"activity",
+                "properties",
+                "iospecification"
 			],
 			"properties" :		[
 				{
@@ -5779,6 +5786,12 @@
 			],
 			"roles"	:			[
 				"all",
+				"sequence_start",
+				"sequence_end",
+				"messageflow_start",
+				"messageflow_end",
+				"to_task_event",
+				"from_task_event",
 				"fromtoall",
 				"canContainArtifacts"
 			]
@@ -10393,13 +10406,21 @@
 						"from":"Subprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
 					},
-                                        {
+                    {
 						"from":"AdHocSubprocess",
 						"to":["IntermediateEventOnSubprocessBoundary"]
-                                        },
+                    },
 					{
 						"from":"ReusableSubprocess",
-                 				"to":["IntermediateEventOnSubprocessBoundary"]
+                 		"to":["IntermediateEventOnSubprocessBoundary"]
+					},
+					{
+						"from":"EventSubprocess",
+						"to":["IntermediateEventOnSubprocessBoundary"]
+					},
+					{
+						"from":"MultipleInstanceSubprocess",
+						"to":["IntermediateEventOnSubprocessBoundary"]
 					}
 				]
 			},
@@ -10508,7 +10529,12 @@
 				"contains" : [
 					"eventSubprocessElement",
 					"sequence_start",
-					"sequence_end"
+					"sequence_end",
+					"from_task_event",
+					"to_task_event",
+					"TextAnnotation",
+					"from_participant",
+					"wpattern"
 				]
 			},
 			{
@@ -10520,13 +10546,13 @@
 			{
 				"role" : "Lane",
 				"contains" : [
-                    			"sequence_start",
-                    			"sequence_end",
-                    			"from_task_event",
-                    			"to_task_event",
-                    			"EventSubprocess",
-                    			"TextAnnotation",
-                    			"from_participant",
+					"sequence_start",
+					"sequence_end",
+					"from_task_event",
+					"to_task_event",
+					"EventSubprocess",
+					"TextAnnotation",
+					"from_participant",
 					"wpattern"
                 		]
 			},
