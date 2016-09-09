@@ -1351,9 +1351,9 @@ public class Bpmn2UnmarshallingTest {
         BoundaryEvent subprocessBoundary1 = (BoundaryEvent) process.getFlowElements().get(2);
         assertNotNull(subprocessBoundary1);
         assertNotNull(subprocessBoundary1.getName());
-        if(subprocessBoundary1.getName().equals("MyTimberBoundaryEvent1")) {
+        if (subprocessBoundary1.getName().equals("MyTimberBoundaryEvent1")) {
             assertEquals(subprocessBoundary1.getAttachedToRef().getId(), eventSubprocess.getId());
-        } else if(subprocessBoundary1.getName().equals("MyTimberBoundaryEvent2")) {
+        } else if (subprocessBoundary1.getName().equals("MyTimberBoundaryEvent2")) {
             assertEquals(subprocessBoundary1.getAttachedToRef().getId(), miSubprocess.getId());
         } else {
             fail("Illegal attached to ref for boundary event");
@@ -1362,16 +1362,31 @@ public class Bpmn2UnmarshallingTest {
         BoundaryEvent subprocessBoundary2 = (BoundaryEvent) process.getFlowElements().get(3);
         assertNotNull(subprocessBoundary2);
         assertNotNull(subprocessBoundary2.getName());
-        if(subprocessBoundary2.getName().equals("MyTimberBoundaryEvent1")) {
+        if (subprocessBoundary2.getName().equals("MyTimberBoundaryEvent1")) {
             assertEquals(subprocessBoundary2.getAttachedToRef().getId(), eventSubprocess.getId());
-        } else if(subprocessBoundary2.getName().equals("MyTimberBoundaryEvent2")) {
+        } else if (subprocessBoundary2.getName().equals("MyTimberBoundaryEvent2")) {
             assertEquals(subprocessBoundary2.getAttachedToRef().getId(), miSubprocess.getId());
         } else {
             fail("Illegal attached to ref for boundary event");
         }
-
     }
 
+    @Test
+    public void testOnEntryOnExitScript() throws Exception {
+        Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+        Definitions definitions = loader.loadProcessFromJson("onentryonexitactions.json");
+        assertTrue(definitions.getRootElements().size() == 3);
+        Process process = getRootProcess(definitions);
+        UserTask task = (UserTask) process.getFlowElements().get(1);
+        assertNotNull(task);
+        String takOnEntryScript = getOnEntryScript(task.getExtensionValues());
+        String taskOnExitScript = getOnExitScript(task.getExtensionValues());
+        assertNotNull(takOnEntryScript);
+        assertNotNull(taskOnExitScript);
+
+        assertEquals(takOnEntryScript, "<![CDATA[if ( a == null || a ) { System.out.println(a); }]]>");
+        assertEquals(taskOnExitScript, "<![CDATA[if ( b == null || b ) { System.out.println(b); }]]>");
+    }
 
 }
 
