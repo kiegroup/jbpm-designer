@@ -9,14 +9,12 @@
 
     <link href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/patternfly.min.css" rel="stylesheet" media="screen, print">
     <link href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/styles.css" rel="stylesheet" media="screen, print">
-    <link href="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/css/bootstrap-toc.min.css" rel="stylesheet" media="screen, print">
 
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/jquery-2.2.0.min.js" charset="utf-8"></script>
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/html2canvas.js" charset="utf-8"></script>
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/jspdf.min.js" charset="utf-8"></script>
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/bootstrap.min.js" charset="utf-8"></script>
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/patternfly.min.js" charset="utf-8"></script>
-    <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/bootstrap-toc.min.js"></script>
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/handlebars-v4.0.5.js" type="text/javascript"></script>
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/lib/swag.min.js" type="text/javascript"></script>
     <script src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/js/jsonpath.js"></script>
@@ -54,12 +52,9 @@
         }
     </style>
 </head>
-<body data-spy="scroll" data-target="#toc" class="cards-pf">
+<body class="cards-pf">
 <div class="container" id="pagecontainer">
     <div class="row">
-        <div id="pagenav" class="col-sm-3 noprint">
-            <nav id="toc" data-spy="affix" data-toggle="toc"></nav>
-        </div>
         <div class="col-sm-9">
             <p><div id="pagebuttons" class="well noprint" align="right">
                 <button type="button" id="docspngbutton" class="btn btn-default btn-sm" onclick="createDocsPNG()">Doc PNG</button>&nbsp;&nbsp;
