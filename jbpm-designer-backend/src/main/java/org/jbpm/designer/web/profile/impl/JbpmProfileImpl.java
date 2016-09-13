@@ -75,6 +75,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
     private String _localHistoryTimeout;
     private boolean initializeLocalPlugins;
     private String _storeSVGonSaveOption;
+    private String zOrder;
 
     @Inject
     private Repository repository;
@@ -133,48 +134,39 @@ public class JbpmProfileImpl implements IDiagramProfile {
             while(reader.hasNext()) {
                 if (reader.next() == XMLStreamReader.START_ELEMENT) {
                     if ("profile".equals(reader.getLocalName())) {
-                        for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
-                            if ("stencilset".equals(reader.getAttributeLocalName(i))) {
-                                _stencilSet = reader.getAttributeValue(i);
-                            }
-                        }
+                        _stencilSet = readAttribute(reader, "stencilset");
                     } else if ("plugin".equals(reader.getLocalName())) {
-                        String name = null;
-                        for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
-                            if ("name".equals(reader.getAttributeLocalName(i))) {
-                                name = reader.getAttributeValue(i);
-                            }
-                        }
+                        String name = readAttribute(reader, "name");
                         _plugins.put(name, registry.get(name));
                     }  else if("localhistory".equals(reader.getLocalName())) {
-                        for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
-                            if ("enabled".equals(reader.getAttributeLocalName(i))) {
-                                String localhistoryenabled = reader.getAttributeValue(i);
-                                if(!isEmpty(localhistoryenabled)) {
-                                    _localHistoryEnabled = localhistoryenabled;
-                                } else {
-                                    _logger.info("Invalid local history enabled");
-                                }
-                            }
-                            if ("timeout".equals(reader.getAttributeLocalName(i))) {
-                                String localhistorytimeout = reader.getAttributeValue(i);
-                                if(!isEmpty(localhistorytimeout)) {
-                                    _localHistoryTimeout = localhistorytimeout;
-                                } else {
-                                    _logger.info("Invalid local history timeout");
-                                }
-                            }
+                        String localHistoryEnabled = readAttribute(reader, "enabled");
+                        if(!isEmpty(localHistoryEnabled)) {
+                            _localHistoryEnabled = localHistoryEnabled;
+                        } else {
+                            _logger.info("Invalid local history enabled");
                         }
+
+                        String localHistoryTimeout = readAttribute(reader, "timeout");
+                        if(!isEmpty(localHistoryTimeout)) {
+                            _localHistoryTimeout = localHistoryTimeout;
+                        } else {
+                            _logger.info("Invalid local history timeout");
+                        }
+
                     } else if("storesvgonsave".equals(reader.getLocalName())) {
-                        for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
-                            if ("enabled".equals(reader.getAttributeLocalName(i))) {
-                                String storesvgonsaveenabled = reader.getAttributeValue(i);
-                                if(!isEmpty(storesvgonsaveenabled)) {
-                                    _storeSVGonSaveOption = storesvgonsaveenabled;
-                                } else {
-                                    _logger.info("Invalid store svg on save enabled");
-                                }
-                            }
+                        String storesvgonsaveenabled = readAttribute(reader, "enabled");
+                        if(!isEmpty(storesvgonsaveenabled)) {
+                            _storeSVGonSaveOption = storesvgonsaveenabled;
+                        } else {
+                            _logger.info("Invalid store svg on save enabled");
+                        }
+
+                    }  else if("zorder".equals(reader.getLocalName())) {
+                        String zOrderEnabled = readAttribute(reader, "enabled");
+                        if(!isEmpty(zOrderEnabled)) {
+                            zOrder = zOrderEnabled;
+                        } else {
+                            _logger.warn("Invalid zorder enabled");
                         }
                     }
                 }
@@ -185,6 +177,16 @@ public class JbpmProfileImpl implements IDiagramProfile {
         } finally {
             if (fileStream != null) { try { fileStream.close(); } catch(IOException e) {}};
         }
+    }
+
+    private String readAttribute(XMLStreamReader reader, String attributeLocalName) {
+        for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+            if (attributeLocalName.equals(reader.getAttributeLocalName(i))) {
+                return reader.getAttributeValue(i);
+            }
+        }
+
+        return null;
     }
 
 
@@ -232,6 +234,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 DroolsFactoryImpl.init();
                 BpsimFactoryImpl.init();
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+                unmarshaller.setZOrderEnabled(zOrder != null && "true".equals(zOrder));
                 JBPMBpmn2ResourceImpl res;
                 res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -243,6 +246,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                                               String preProcessingData) {
                 try {
                     Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+                    unmarshaller.setZOrderEnabled(zOrder != null && "true".equals(zOrder));
                     JBPMBpmn2ResourceImpl res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
                     return (Definitions) res.getContents().get(0);
                 } catch (JsonParseException e) {
@@ -254,6 +258,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
             public Resource getResource(String jsonModel, String preProcessingData) throws Exception {
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+                unmarshaller.setZOrderEnabled(zOrder != null && "true".equals(zOrder));
                 return (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
             }
         };
@@ -363,6 +368,15 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     public String getStencilSetExtensionURL() {
         return "http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#";
+    }
+
+    /**
+     * For test purposes
+     *
+     * @param zOrderEnabled
+     */
+    public void setZOrder(String zOrderEnabled) {
+        zOrder = zOrderEnabled;
     }
 
     private boolean isEmpty(final CharSequence str) {
