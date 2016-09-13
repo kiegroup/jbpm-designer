@@ -1502,6 +1502,27 @@ public class Bpmn2UnmarshallingTest {
         }
     }
 
+    @Test
+    public void testMITaskProperties() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("mitaskproperties.json");
+        assertTrue(definitions.getRootElements().size() == 6);
+        Process process = getRootProcess(definitions);
+        UserTask task = (UserTask) process.getFlowElements().get(0);
+        assertNotNull(task);
+        assertEquals("MyTask", task.getName());
+        assertEquals("miin", task.getIoSpecification().getInputSets().get(0).getDataInputRefs().get(0).getName());
+        assertEquals("miout", task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().get(0).getName());
+
+        assertTrue(task.getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics);
+        MultiInstanceLoopCharacteristics lc = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
+        assertNotNull(lc);
+        assertEquals("_aaItem", lc.getLoopDataInputRef().getItemSubjectRef().getId());
+        assertEquals("_bbItem", lc.getLoopDataOutputRef().getItemSubjectRef().getId());
+        assertEquals("abcde", ((FormalExpression) lc.getCompletionCondition()).getBody());
+        assertNotNull(lc.getInputDataItem());
+        assertNotNull(lc.getOutputDataItem());
+    }
+
     private void verifyBpmnShapePresent(BaseElement element, Definitions definitions) {
         boolean diagramElementPresent = false;
         for(DiagramElement diagramElement : definitions.getDiagrams().get(0).getPlane().getPlaneElement()) {
@@ -1521,8 +1542,6 @@ public class Bpmn2UnmarshallingTest {
         }
         assertTrue(diagramElementPresent);
     }
-
-
 
     private int getDIElementOrder(BaseElement element, Definitions definitions) {
         int counter = 0;
