@@ -753,7 +753,6 @@ public class Bpmn2JsonUnmarshaller {
 
                                                 loopCharacteristics.setLoopDataInputRef(miCollectionInputDI);
 
-
                                                 DataInputAssociation miCollectionInputDataInputAssociation = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
                                                 miCollectionInputDataInputAssociation.getSourceRef().add(prop);
                                                 miCollectionInputDataInputAssociation.setTargetRef(miCollectionInputDI);
@@ -769,9 +768,6 @@ public class Bpmn2JsonUnmarshaller {
                                         List<Property> properties = process.getProperties();
                                         for(Property prop : properties) {
                                             if(prop.getId() != null && prop.getId().equals(miCollectionOutput)) {
-
-
-
                                                 DataOutput miCollectionOutputDI = Bpmn2Factory.eINSTANCE.createDataOutput();
                                                 miCollectionOutputDI.setName("mioutputCollection");
                                                 ItemDefinition miCollectionOutputDIItemDefinition = this.getMessageItemDefinition(def.getRootElements(), prop.getId());
@@ -779,14 +775,13 @@ public class Bpmn2JsonUnmarshaller {
 
                                                 task.getIoSpecification().getDataOutputs().add(miCollectionOutputDI);
 
-                                                if(task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
-                                                    InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
-                                                    task.getIoSpecification().getInputSets().add(inset);
+                                                if(task.getIoSpecification().getOutputSets() == null || task.getIoSpecification().getOutputSets().size() < 1) {
+                                                    OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
+                                                    task.getIoSpecification().getOutputSets().add(outset);
                                                 }
                                                 task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().add(miCollectionOutputDI);
 
                                                 loopCharacteristics.setLoopDataOutputRef(miCollectionOutputDI);
-
 
                                                 DataOutputAssociation miCollectionInputDataOutputAssociation = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
                                                 miCollectionInputDataOutputAssociation.setTargetRef(prop);
@@ -794,9 +789,6 @@ public class Bpmn2JsonUnmarshaller {
 
                                                 task.getDataOutputAssociations().add(miCollectionInputDataOutputAssociation);
 
-
-
-                                                //loopCharacteristics.setLoopDataOutputRef(prop);
                                                 break;
                                             }
                                         }
