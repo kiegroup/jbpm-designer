@@ -6,6 +6,7 @@ public class SyntaxCheckerErrors {
     public static final String COST_PER_TIME_UNIT_MUST_BE_POSITIVE = "Cost per Time Unit value must be positive.";
     public static final String END_NODE_NO_INCOMING_CONNECTIONS = "End node has no incoming connections";
     public static final String EVENT_HAS_NO_ERROR_REF = " Event has no errorref.";
+    public static final String MULTIPLE_START_EVENTS = "Multiple start events not allowed.";
     public static final String NO_CALLED_ELEMENT_SPECIFIED = "Reusable Subprocess has no called element specified.";
     public static final String NODE_NO_INCOMING_CONNECTIONS = "Node has no incoming connections";
     public static final String NODE_NO_OUTGOING_CONNECTIONS = "Node has no outgoing connections";
