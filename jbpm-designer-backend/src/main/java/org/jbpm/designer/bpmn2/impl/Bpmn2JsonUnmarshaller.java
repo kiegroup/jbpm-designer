@@ -1491,27 +1491,7 @@ public class Bpmn2JsonUnmarshaller {
 
                         }
 					} else if (ed instanceof ErrorEventDefinition) {
-                                                String errorCode = null;
-                                                String errorId = null;
-						Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
-								.iterator();
-						while (iter.hasNext()) {
-							FeatureMap.Entry entry = iter.next();
-							if (entry.getEStructuralFeature().getName()
-									.equals("erefname")) {
-								errorId = (String) entry.getValue();
-								errorCode = (String) entry.getValue();
-							}
-						}
-
-                                                Error err = this._errors.get(errorCode);
-                                                if (err == null){
-                                                    err = Bpmn2Factory.eINSTANCE.createError();
-                                                    err.setId(errorId);
-                                                    err.setErrorCode(errorCode);
-                                                    this._errors.put(errorCode, err);
-                                                }
-
+                        Error err = getError(ed);
 						toAddErrors.add(err);
 						((ErrorEventDefinition) ed).setErrorRef(err);
 
@@ -1576,6 +1556,27 @@ public class Bpmn2JsonUnmarshaller {
 		}
 	}
 
+    private Error getError(EventDefinition ed) {
+        String errorCode = null;
+        Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
+        while (iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if (entry.getEStructuralFeature().getName().equals("erefname")) {
+                errorCode = (String) entry.getValue();
+            }
+        }
+
+        Error err = this._errors.get(errorCode);
+        if (err == null){
+            err = Bpmn2Factory.eINSTANCE.createError();
+            err.setName(errorCode);
+            err.setErrorCode(errorCode);
+            this._errors.put(errorCode, err);
+        }
+
+        return err;
+    }
+
     public void setThrowEventsInfoForLanes(Lane lane,
                                    Definitions def,
                                    List<RootElement> rootElements, List<Signal> toAddSignals,
@@ -1620,27 +1621,7 @@ public class Bpmn2JsonUnmarshaller {
 
                         }
                    } else if (ed instanceof ErrorEventDefinition) {
-                        String errorCode = null;
-                        String errorId = null;
-                        Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
-                                .iterator();
-                        while (iter.hasNext()) {
-                            FeatureMap.Entry entry = iter.next();
-                            if (entry.getEStructuralFeature().getName()
-                                    .equals("erefname")) {
-                                errorId = (String) entry.getValue();
-                                errorCode = (String) entry.getValue();
-                            }
-                        }
-
-                        Error err = this._errors.get(errorCode);
-                        if (err == null){
-                            err = Bpmn2Factory.eINSTANCE.createError();
-                            err.setId(errorId);
-                            err.setErrorCode(errorCode);
-                            this._errors.put(errorCode, err);
-                        }
-
+                        Error err = getError(ed);
                         toAddErrors.add(err);
                         ((ErrorEventDefinition) ed).setErrorRef(err);
 
@@ -2184,27 +2165,7 @@ public class Bpmn2JsonUnmarshaller {
 
                                 }
                             } else if(ed instanceof ErrorEventDefinition) {
-                                String errorCode = null;
-                                String errorId = null;
-                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
-                                                .iterator();
-                                while (iter.hasNext()) {
-                                        FeatureMap.Entry entry = iter.next();
-                                        if (entry.getEStructuralFeature().getName()
-                                                        .equals("erefname")) {
-                                                errorId = (String) entry.getValue();
-                                                errorCode = (String) entry.getValue();
-                                        }
-                                }
-
-                                Error err = this._errors.get(errorCode);
-                                if (err == null){
-                                    err = Bpmn2Factory.eINSTANCE.createError();
-                                    err.setId(errorId);
-                                    err.setErrorCode(errorCode);
-                                    this._errors.put(errorCode, err);
-                                }
-
+                                Error err = getError(ed);
                                 toAddErrors.add(err);
                                 ((ErrorEventDefinition) ed).setErrorRef(err);
 
@@ -2300,27 +2261,7 @@ public class Bpmn2JsonUnmarshaller {
 
                         }
                     } else if(ed instanceof ErrorEventDefinition) {
-                        String errorCode = null;
-                        String errorId = null;
-                        Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
-                                .iterator();
-                        while (iter.hasNext()) {
-                            FeatureMap.Entry entry = iter.next();
-                            if (entry.getEStructuralFeature().getName()
-                                    .equals("erefname")) {
-                                errorId = (String) entry.getValue();
-                                errorCode = (String) entry.getValue();
-                            }
-                        }
-
-                        Error err = this._errors.get(errorCode);
-                        if (err == null){
-                            err = Bpmn2Factory.eINSTANCE.createError();
-                            err.setId(errorId);
-                            err.setErrorCode(errorCode);
-                            this._errors.put(errorCode, err);
-                        }
-
+                        Error err = getError(ed);
                         toAddErrors.add(err);
                         ((ErrorEventDefinition) ed).setErrorRef(err);
 

@@ -512,8 +512,9 @@ public class Bpmn2UnmarshallingTest {
         Process process = getRootProcess(definitions);
         EndEvent g = (EndEvent) process.getFlowElements().get(0);
         assertEquals("end error event", g.getName());
-        assertTrue(g.getEventDefinitions().iterator().next() instanceof ErrorEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
+        ErrorEventDefinition error = (ErrorEventDefinition) g.getEventDefinitions().iterator().next();
+        assertEquals("com.sample.Error", error.getErrorRef().getName());
+        assertEquals("com.sample.Error", error.getErrorRef().getErrorCode());
     }
 
     @Test
