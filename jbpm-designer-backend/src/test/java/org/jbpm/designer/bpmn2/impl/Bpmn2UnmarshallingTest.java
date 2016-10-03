@@ -305,8 +305,9 @@ public class Bpmn2UnmarshallingTest {
         StartEvent g = (StartEvent) process.getFlowElements().get(0);
         assertEquals("start escalation event", g.getName());
         assertTrue(g.getEventDefinitions().size() == 1);
-        assertTrue(g.getEventDefinitions().iterator().next() instanceof EscalationEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
+        EscalationEventDefinition escalationEventDefinition = (EscalationEventDefinition) g.getEventDefinitions().iterator().next();
+        assertEquals("com.sample.escalation", escalationEventDefinition.getEscalationRef().getEscalationCode());
+        assertEquals("com.sample.escalation", escalationEventDefinition.getEscalationRef().getName());
     }
 
     @Test

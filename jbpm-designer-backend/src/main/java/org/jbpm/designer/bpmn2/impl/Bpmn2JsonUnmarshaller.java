@@ -1496,24 +1496,9 @@ public class Bpmn2JsonUnmarshaller {
 						((ErrorEventDefinition) ed).setErrorRef(err);
 
 					} else if (ed instanceof EscalationEventDefinition) {
-						String escalationCode = null;
-                                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
-                                                while(iter.hasNext()) {
-                                                    FeatureMap.Entry entry = iter.next();
-                                                    if(entry.getEStructuralFeature().getName().equals("esccode")) {
-                                                        escalationCode = (String) entry.getValue();
-                                                        break;
-                                                    }
-                                                }
-
-                                                Escalation escalation = this._escalations.get(escalationCode);
-                                                if (escalation == null){
-                                                    escalation = Bpmn2Factory.eINSTANCE.createEscalation();
-                                                    escalation.setEscalationCode(escalationCode);
-                                                    this._escalations.put(escalationCode, escalation);
-                                                }
-                                                toAddEscalations.add(escalation);
-                                                ((EscalationEventDefinition) ed).setEscalationRef(escalation);
+						Escalation escalation = getEscalation(ed);
+                        toAddEscalations.add(escalation);
+                        ((EscalationEventDefinition) ed).setEscalationRef(escalation);
 					} else if (ed instanceof MessageEventDefinition) {
                         ((MessageEventDefinition) ed).setMessageRef(extractMessage(ed, toAddMessages, toAddItemDefinitions));
 					} else if (ed instanceof CompensateEventDefinition) {
@@ -1626,22 +1611,7 @@ public class Bpmn2JsonUnmarshaller {
                         ((ErrorEventDefinition) ed).setErrorRef(err);
 
                     } else if (ed instanceof EscalationEventDefinition) {
-                        String escalationCode = null;
-                        Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
-                        while(iter.hasNext()) {
-                            FeatureMap.Entry entry = iter.next();
-                            if(entry.getEStructuralFeature().getName().equals("esccode")) {
-                                escalationCode = (String) entry.getValue();
-                                break;
-                            }
-                        }
-
-                        Escalation escalation = this._escalations.get(escalationCode);
-                        if (escalation == null){
-                            escalation = Bpmn2Factory.eINSTANCE.createEscalation();
-                            escalation.setEscalationCode(escalationCode);
-                            this._escalations.put(escalationCode, escalation);
-                        }
+                        Escalation escalation = getEscalation(ed);
                         toAddEscalations.add(escalation);
                         ((EscalationEventDefinition) ed).setEscalationRef(escalation);
                     } else if (ed instanceof MessageEventDefinition) {
@@ -2170,22 +2140,7 @@ public class Bpmn2JsonUnmarshaller {
                                 ((ErrorEventDefinition) ed).setErrorRef(err);
 
                             } else if(ed instanceof EscalationEventDefinition) {
-                                String escalationCode = null;
-                                Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
-                                while(iter.hasNext()) {
-                                    FeatureMap.Entry entry = iter.next();
-                                    if(entry.getEStructuralFeature().getName().equals("esccode")) {
-                                        escalationCode = (String) entry.getValue();
-                                        break;
-                                    }
-                                }
-
-                                Escalation escalation = this._escalations.get(escalationCode);
-                                if (escalation == null){
-                                    escalation = Bpmn2Factory.eINSTANCE.createEscalation();
-                                    escalation.setEscalationCode(escalationCode);
-                                    this._escalations.put(escalationCode, escalation);
-                                }
+                                Escalation escalation = getEscalation(ed);
                                 toAddEscalations.add(escalation);
                                 ((EscalationEventDefinition) ed).setEscalationRef(escalation);
                             } else if(ed instanceof MessageEventDefinition) {
@@ -2219,6 +2174,27 @@ public class Bpmn2JsonUnmarshaller {
                     	setCatchEventsInfo((FlowElementsContainer) fe, def, toAddSignals, toAddErrors, toAddEscalations, toAddMessages, toAddItemDefinitions);
                     }
         }
+    }
+
+    private Escalation getEscalation(EventDefinition ed) {
+        String escalationCode = null;
+        Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
+        while(iter.hasNext()) {
+            FeatureMap.Entry entry = iter.next();
+            if(entry.getEStructuralFeature().getName().equals("esccode")) {
+                escalationCode = (String) entry.getValue();
+                break;
+            }
+        }
+
+        Escalation escalation = this._escalations.get(escalationCode);
+        if (escalation == null){
+            escalation = Bpmn2Factory.eINSTANCE.createEscalation();
+            escalation.setName(escalationCode);
+            escalation.setEscalationCode(escalationCode);
+            this._escalations.put(escalationCode, escalation);
+        }
+        return escalation;
     }
 
     public void setCatchEventsInfoForLanes(Lane lane, Definitions def, List<Signal> toAddSignals, Set<Error> toAddErrors,
@@ -2266,22 +2242,7 @@ public class Bpmn2JsonUnmarshaller {
                         ((ErrorEventDefinition) ed).setErrorRef(err);
 
                     } else if(ed instanceof EscalationEventDefinition) {
-                        String escalationCode = null;
-                        Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
-                        while(iter.hasNext()) {
-                            FeatureMap.Entry entry = iter.next();
-                            if(entry.getEStructuralFeature().getName().equals("esccode")) {
-                                escalationCode = (String) entry.getValue();
-                                break;
-                            }
-                        }
-
-                        Escalation escalation = this._escalations.get(escalationCode);
-                        if (escalation == null){
-                            escalation = Bpmn2Factory.eINSTANCE.createEscalation();
-                            escalation.setEscalationCode(escalationCode);
-                            this._escalations.put(escalationCode, escalation);
-                        }
+                        Escalation escalation = getEscalation(ed);
                         toAddEscalations.add(escalation);
                         ((EscalationEventDefinition) ed).setEscalationRef(escalation);
                     } else if(ed instanceof MessageEventDefinition) {
