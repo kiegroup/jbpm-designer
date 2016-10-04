@@ -64,6 +64,8 @@ public class DefaultDesignerAssetService
 
     private static Logger logger = LoggerFactory.getLogger(DefaultDesignerAssetService.class);
 
+    private static final String DEFAULT_CASE_ID_PREFIX = "CASE";
+
     @Inject
     private Repository repository;
     
@@ -94,6 +96,26 @@ public class DefaultDesignerAssetService
         "id=\"Definition\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd\" expressionLanguage=\"http://www.mvel.org/2.0\" targetNamespace=\"http://www.omg.org/bpmn20\" typeLanguage=\"http://www.java.com/javaTypes\"> \n" +
     "   <bpmn2:process id=\"${processid}\" drools:packageName=\"${packageName}\" drools:version=\"1.0\" name=\"\" isExecutable=\"true\"> \n" +
     "      <bpmn2:startEvent id=\"processStartEvent\" drools:bgcolor=\"#9acd32\" drools:selectable=\"true\" name=\"\"/> \n" +
+    "   </bpmn2:process> \n" +
+    "   <bpmndi:BPMNDiagram> \n" +
+    "      <bpmndi:BPMNPlane bpmnElement=\"${processid}\"> \n" +
+    "         <bpmndi:BPMNShape bpmnElement=\"processStartEvent\"> \n" +
+    "            <dc:Bounds height=\"30.0\" width=\"30.0\" x=\"120.0\" y=\"165.0\"/> \n" +
+    "         </bpmndi:BPMNShape> \n" +
+    "      </bpmndi:BPMNPlane> \n" +
+    "   </bpmndi:BPMNDiagram> \n" +
+    "</bpmn2:definitions>";
+
+    public static final String CASE_DEF_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
+    "<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:bpsim=\"http://www.bpsim.org/schemas/1.0\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:drools=\"http://www.jboss.org/drools\" \n" +
+    "id=\"Definition\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd\" expressionLanguage=\"http://www.mvel.org/2.0\" targetNamespace=\"http://www.omg.org/bpmn20\" typeLanguage=\"http://www.java.com/javaTypes\"> \n" +
+    "   <bpmn2:process id=\"${processid}\" drools:packageName=\"${packageName}\" drools:version=\"1.0\" drools:adHoc=\"true\" name=\"\" isExecutable=\"true\"> \n" +
+    "     <bpmn2:extensionElements>\n" +
+    "       <drools:metaData name=\"customCaseIdPrefix\">\n" +
+    "         <drools:metaValue>${caseidprefix}</drools:metaValue>\n" +
+    "      </drools:metaData>\n" +
+    "     </bpmn2:extensionElements>" +
+    "     <bpmn2:startEvent id=\"processStartEvent\" drools:bgcolor=\"#9acd32\" drools:selectable=\"true\" name=\"\"/> \n" +
     "   </bpmn2:process> \n" +
     "   <bpmndi:BPMNDiagram> \n" +
     "      <bpmndi:BPMNPlane bpmnElement=\"${processid}\"> \n" +
@@ -203,9 +225,32 @@ public class DefaultDesignerAssetService
         String processId = buildProcessId( location, name );
         String packageName = buildPackageName(location, name);
 
-
         String processContent = PROCESS_STUB.replaceAll( "\\$\\{processid\\}", processId.replaceAll("\\s", "") )
-                                            .replaceAll("\\$\\{packageName\\}", packageName.replaceAll("\\s", ""));
+                .replaceAll("\\$\\{packageName\\}", packageName.replaceAll("\\s", ""));
+
+        return create(path, name, location, processContent);
+    }
+
+    @Override
+    public Path createCaseDefinition(Path context, String fileName, String caseIdPrefix) {
+        final Path path = Paths.convert( Paths.convert( context ).resolve( fileName ) );
+        String location = Paths.convert( path ).getParent().toString();
+        String name = path.getFileName();
+        String processId = buildProcessId( location, name );
+        String packageName = buildPackageName(location, name);
+
+        if (caseIdPrefix == null || caseIdPrefix.trim().isEmpty()) {
+            caseIdPrefix = DEFAULT_CASE_ID_PREFIX;
+        }
+
+        String processContent = CASE_DEF_STUB.replaceAll( "\\$\\{processid\\}", processId.replaceAll("\\s", "") )
+                .replaceAll("\\$\\{packageName\\}", packageName.replaceAll("\\s", ""))
+                .replaceAll("\\$\\{caseidprefix\\}", caseIdPrefix.replaceAll("\\s", ""));
+
+        return create(path, name, location, processContent);
+    }
+
+    protected Path create(Path path, String name, String location, String processContent) {
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder( name );
         builder.location( location ).content( processContent ).uniqueId( path.toURI() );

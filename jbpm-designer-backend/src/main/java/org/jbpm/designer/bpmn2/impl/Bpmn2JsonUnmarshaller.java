@@ -3189,6 +3189,9 @@ public class Bpmn2JsonUnmarshaller {
                     if(properties.get("customdescription") != null && properties.get("customdescription").length() > 0) {
                         Utils.setMetaDataExtensionValue(rootLevelProcess, "customDescription", wrapInCDATABlock(properties.get("customdescription")));
                     }
+                    if(properties.get("customcaseidprefix") != null && properties.get("customcaseidprefix").length() > 0) {
+                        Utils.setMetaDataExtensionValue(rootLevelProcess, "customCaseIdPrefix", wrapInCDATABlock(properties.get("customcaseidprefix")));
+                    }
 
                     rootLevelProcess.setId(properties.get("id"));
                     applyProcessProperties(rootLevelProcess, properties);
@@ -3312,6 +3315,9 @@ public class Bpmn2JsonUnmarshaller {
 	                            }
                                 if(properties.get("customdescription") != null && properties.get("customdescription").length() > 0) {
                                     Utils.setMetaDataExtensionValue(rootLevelProcess, "customDescription", wrapInCDATABlock(properties.get("customdescription")));
+                                }
+                                if(properties.get("customcaseidprefix") != null && properties.get("customcaseidprefix").length() > 0) {
+                                    Utils.setMetaDataExtensionValue(rootLevelProcess, "customCaseIdPrefix", wrapInCDATABlock(properties.get("customcaseidprefix")));
                                 }
 	                            rootLevelProcess.setId(properties.get("id"));
 	                            applyProcessProperties(rootLevelProcess, properties);

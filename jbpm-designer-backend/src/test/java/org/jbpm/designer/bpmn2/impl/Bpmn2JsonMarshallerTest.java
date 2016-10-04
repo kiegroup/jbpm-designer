@@ -509,4 +509,13 @@ public class Bpmn2JsonMarshallerTest {
         assertTrue(dataoutputset.contains("innerOutput:Integer"));
     }
 
+    @Test
+    public void testProcessCustomProperties() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("customProperties.bpmn2");
+        JSONObject properties = process.getJSONObject("properties");
+        String caseIdPrefix = properties.getString("customcaseidprefix");
+
+        assertEquals("HR", caseIdPrefix);
+    }
+
 }

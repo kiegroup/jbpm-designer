@@ -86,4 +86,8 @@ public interface DesignerEditorConstants extends
     String ProcessModel();
 
     String ConfirmCloseBusinessProcessEditor();
+
+    String CaseDefinition();
+
+    String CaseIdPrefix();
 }

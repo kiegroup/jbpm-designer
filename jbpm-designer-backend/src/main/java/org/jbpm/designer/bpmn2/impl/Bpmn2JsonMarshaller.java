@@ -281,7 +281,13 @@ public class Bpmn2JsonMarshaller {
 	                        }
 
                             for(MetaDataType metaType : metadataExtensions) {
-                                props.put("customdescription", metaType.getMetaValue());
+                                if (metaType.getName().equals("customDescription")) {
+                                    props.put("customdescription", metaType.getMetaValue());
+                                } else if (metaType.getName().equals("customCaseIdPrefix")) {
+                                    props.put("customcaseidprefix", metaType.getMetaValue());
+                                } else {
+                                    props.put(metaType.getName(), metaType.getMetaValue());
+                                }
                             }
 	                    }
                         allImports += importsStr;
