@@ -41,4 +41,7 @@ public interface DesignerAssetService {
 
     public Path createProcess( final Path context,
                                final String fileName );
+
+    public Path createCaseDefinition( final Path context,
+            final String fileName, String caseIdPrefix );
 }

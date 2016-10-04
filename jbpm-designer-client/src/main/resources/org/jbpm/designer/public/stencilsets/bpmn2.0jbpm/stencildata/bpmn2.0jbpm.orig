@@ -726,6 +726,17 @@
                                           "optional":true
                                 },
 				{
+						  "id":"customcaseidprefix",
+						  "type":"String",
+						  "title":"Case ID prefix",
+						  "value":"",
+						  "description":"Case ID prefix",
+						  "description_ja":"",
+						  "readonly":false,
+						  "optional":true,
+						  "ifproptrue":"adhocprocess",
+				},
+				{
 					"id":"adhocprocess",
 					"type":"Choice",
 					"title":"AdHoc",

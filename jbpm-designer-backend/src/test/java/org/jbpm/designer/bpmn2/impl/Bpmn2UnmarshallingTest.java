@@ -1528,6 +1528,19 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(lc.getOutputDataItem());
     }
 
+    @Test
+    public void testProcessCustomProperties() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("customProperties.json");
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = getRootProcess(definitions);
+
+        List<ExtensionAttributeValue> extensionAttributeValues = process.getExtensionValues();
+        assertNotNull(extensionAttributeValues);
+        assertEquals(1, extensionAttributeValues.size());
+
+        assertEquals("<![CDATA[HR]]>",  getMetaDataValue(process.getExtensionValues(), "customCaseIdPrefix"));
+    }
+
     private void verifyBpmnShapePresent(BaseElement element, Definitions definitions) {
         boolean diagramElementPresent = false;
         for(DiagramElement diagramElement : definitions.getDiagrams().get(0).getPlane().getPlaneElement()) {

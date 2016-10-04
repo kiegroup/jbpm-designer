@@ -49,6 +49,8 @@ import org.uberfire.backend.vfs.Path;
 import org.uberfire.io.IOService;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
@@ -209,6 +211,94 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
 
     }
 
+    @Test
+    public void testCreateCaseDefinitionWithDefaultPackage() throws Exception {
+        final Path pathSource = mock( Path.class );
+        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyCase.bpmn2");
+        when( pathSource.getFileName() ).thenReturn("MyCase.bpmn2");
+
+        DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
+        assetService.setRepository(repository);
+
+        final ArgumentCaptor<Asset> assetArgumentCaptor = ArgumentCaptor.forClass(Asset.class);
+
+        assetService.createCaseDefinition(pathSource, "MyCase.bpmn2", "HR");
+
+        verify(repository, times(1)).createAsset(assetArgumentCaptor.capture());
+
+        Asset<String> asset = assetArgumentCaptor.getValue();
+        assertNotNull(asset);
+        assertNotNull(asset.getAssetContent());
+
+        Element element = getProcessElementFromXml(asset.getAssetContent());
+
+        assertNotNull(element);
+        String processId = element.getAttribute("id");
+        assertNotNull(processId);
+        assertEquals("Evaluation.MyCase", processId);
+
+        String packageName = element.getAttribute("drools:packageName");
+        assertNotNull(packageName);
+        assertEquals("", packageName);
+
+        String adHoc = element.getAttribute("drools:adHoc");
+        assertNotNull(adHoc);
+        assertEquals("true", adHoc);
+
+        Element metadataElement = getMetaDataElementFromXml(asset.getAssetContent());
+        String caseIdPrefix = metadataElement.getAttribute("name");
+        assertNotNull(caseIdPrefix);
+        assertEquals("customCaseIdPrefix", caseIdPrefix);
+
+        String caseIdPrefixValue = metadataElement.getFirstChild().getNextSibling().getTextContent();
+        assertNotNull(caseIdPrefixValue);
+        assertEquals("HR", caseIdPrefixValue);
+    }
+
+    @Test
+    public void testCreateCaseDefinitionWithPackageNoPrefix() throws Exception {
+        final Path pathSource = mock( Path.class );
+        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/org/jbpm/test/cases/MyCase.bpmn2");
+        when( pathSource.getFileName() ).thenReturn("MyCase.bpmn2");
+
+        DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
+        assetService.setRepository(repository);
+
+        final ArgumentCaptor<Asset> assetArgumentCaptor = ArgumentCaptor.forClass(Asset.class);
+
+        assetService.createCaseDefinition(pathSource, "MyCase.bpmn2", "");
+
+        verify(repository, times(1)).createAsset(assetArgumentCaptor.capture());
+
+        Asset<String> asset = assetArgumentCaptor.getValue();
+        assertNotNull(asset);
+        assertNotNull(asset.getAssetContent());
+
+        Element element = getProcessElementFromXml(asset.getAssetContent());
+
+        assertNotNull(element);
+        String processId = element.getAttribute("id");
+        assertNotNull(processId);
+        assertEquals("Evaluation.MyCase", processId);
+
+        String packageName = element.getAttribute("drools:packageName");
+        assertNotNull(packageName);
+        assertEquals("org.jbpm.test.cases", packageName);
+
+        String adHoc = element.getAttribute("drools:adHoc");
+        assertNotNull(adHoc);
+        assertEquals("true", adHoc);
+
+        Element metadataElement = getMetaDataElementFromXml(asset.getAssetContent());
+        String caseIdPrefix = metadataElement.getAttribute("name");
+        assertNotNull(caseIdPrefix);
+        assertEquals("customCaseIdPrefix", caseIdPrefix);
+
+        String caseIdPrefixValue = metadataElement.getFirstChild().getNextSibling().getTextContent();
+        assertNotNull(caseIdPrefixValue);
+        assertEquals("CASE", caseIdPrefixValue);
+    }
+
     private Element getProcessElementFromXml(String content) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -216,6 +306,18 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
 
         Document xml = builder.parse(input);
         XPathExpression expr = xpath.compile("/definitions/process");
+        Element element = (Element) expr.evaluate(xml, XPathConstants.NODE);
+
+        return element;
+    }
+
+    private Element getMetaDataElementFromXml(String content) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        ByteArrayInputStream input =  new ByteArrayInputStream(content.getBytes("UTF-8"));
+
+        Document xml = builder.parse(input);
+        XPathExpression expr = xpath.compile("/definitions/process/extensionElements/metaData");
         Element element = (Element) expr.evaluate(xml, XPathConstants.NODE);
 
         return element;
