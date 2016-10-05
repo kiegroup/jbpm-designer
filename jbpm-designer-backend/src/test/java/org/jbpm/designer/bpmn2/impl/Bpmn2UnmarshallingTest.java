@@ -1539,6 +1539,7 @@ public class Bpmn2UnmarshallingTest {
         assertEquals(1, extensionAttributeValues.size());
 
         assertEquals("<![CDATA[HR]]>",  getMetaDataValue(process.getExtensionValues(), "customCaseIdPrefix"));
+        assertEquals("<![CDATA[owner:1,participant:2]]>",  getMetaDataValue(process.getExtensionValues(), "customCaseRoles"));
     }
 
     private void verifyBpmnShapePresent(BaseElement element, Definitions definitions) {

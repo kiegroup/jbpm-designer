@@ -1165,6 +1165,17 @@ ORYX.Plugins.PropertyWindow = {
 							editorGrid = new Ext.Editor(cf);
 							break;
 
+						case ORYX.CONFIG.TYPE_CASE_ROLES:
+							var cf = new Ext.form.ComplexCaseRolesField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade
+							});
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});
+							editorGrid = new Ext.Editor(cf);
+							break;
 
                         case ORYX.CONFIG.TYPE_REASSIGNMENT:
                             var cf = new Ext.form.ComplexReassignmentField({
@@ -1177,7 +1188,6 @@ ORYX.Plugins.PropertyWindow = {
                             cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});
                             editorGrid = new Ext.Editor(cf);
                             break;
-
 
                         case ORYX.CONFIG.TYPE_NOTIFICATIONS:
                             var cf = new Ext.form.ComplexNotificationsField({
@@ -3348,6 +3358,189 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField,  {
             }
         });
     }
+});
+
+Ext.form.ComplexCaseRolesField = Ext.extend(Ext.form.TriggerField,  {
+	editable: false,
+	readOnly: true,
+	/**
+	 * If the trigger was clicked a dialog has to be opened
+	 * to enter the values for the complex property.
+	 */
+	onTriggerClick : function() {
+		if(this.disabled){
+			return;
+		}
+
+		var processJSON = ORYX.EDITOR.getSerializedJSON();
+		var processPackage = jsonPath(processJSON.evalJSON(), "$.properties.package");
+		var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
+
+		var CaseRolesDef = Ext.data.Record.create([
+			{
+				name: 'role'
+			},
+			{
+				name: 'cardinality'
+			}
+		]);
+
+		var caseRolesProxy = new Ext.data.MemoryProxy({
+			root: []
+		});
+
+		var caseroles = new Ext.data.Store({
+			autoDestroy: true,
+			reader: new Ext.data.JsonReader({
+				root: "root"
+			}, CaseRolesDef),
+			proxy: caseRolesProxy,
+			sorters: [{
+				property: 'role',
+				direction:'ASC'
+			}]
+		});
+		caseroles.load();
+
+		if(this.value.length > 0) {
+			var valueParts = this.value.split(",");
+			for(var i=0; i < valueParts.length; i++) {
+				var role = "";
+				var cardinality = "";
+
+				var nextPart = valueParts[i];
+
+				if(nextPart.indexOf(":") > 0) {
+					var innerParts = nextPart.split(":");
+					role = innerParts[0];
+					cardinality = innerParts[1];
+				} else {
+					role = nextPart;
+					cardinality = "";
+				}
+
+				caseroles.add(new CaseRolesDef({
+					'role': role,
+					'cardinality': cardinality
+				}));
+			}
+		}
+
+		var itemDeleter = new Extensive.grid.ItemDeleter();
+
+		var dialogSize = ORYX.Utils.getDialogSize(300, 600);
+		var colWidth = (dialogSize.width - 80) / 5;
+		var gridId = Ext.id();
+		var grid = new Ext.grid.EditorGridPanel({
+			autoScroll: true,
+			autoHeight: true,
+			store: caseroles,
+			id: gridId,
+			stripeRows: true,
+			cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
+				{
+					id: 'caseroles',
+					header: ORYX.I18N.PropertyWindow.caseRole,
+					width: colWidth,
+					dataIndex: 'role',
+					editor: new Ext.form.TextField({ allowBlank: true })
+				},
+				{
+					id: 'casecardinality',
+					header: ORYX.I18N.PropertyWindow.caseCardinality,
+					width: colWidth,
+					dataIndex: 'cardinality',
+					editor: new Ext.form.NumberField({ name: "cardinalityValue", allowDecimals: false, allowBlank: true})
+				},
+				itemDeleter]),
+			selModel: itemDeleter,
+			autoHeight: true,
+			tbar: [{
+				text: ORYX.I18N.PropertyWindow.addCaseRole,
+				handler : function(){
+					caseroles.add(new CaseRolesDef({
+						'role': '',
+						'cardinality': ''
+					}));
+					grid.fireEvent('cellclick', grid, caseroles.getCount()-1, 1, null);
+				}
+			}],
+			clicksToEdit: 1
+		});
+
+		var dialog = new Ext.Window({
+			layout		: 'anchor',
+			autoCreate	: true,
+			title		: ORYX.I18N.PropertyWindow.editorForCaseRoles,
+			height		: dialogSize.height,
+			width		: dialogSize.width,
+			modal		: true,
+			collapsible	: false,
+			fixedcenter	: true,
+			shadow		: true,
+			resizable   : true,
+			proxyDrag	: true,
+			autoScroll  : true,
+			keys:[{
+				key	: 27,
+				fn	: function(){
+					dialog.hide()
+				}.bind(this)
+			}],
+			items		:[grid],
+			listeners	:{
+				hide: function(){
+					this.fireEvent('dialogClosed', this.value);
+					//this.focus.defer(10, this);
+					dialog.destroy();
+				}.bind(this)
+			},
+			buttons		: [{
+				text: ORYX.I18N.PropertyWindow.ok,
+				handler: function(){
+					var outValue = "";
+					grid.getView().refresh();
+					grid.stopEditing();
+
+					caseroles.data.each(function() {
+						if(this.data['role'].length > 0) {
+							if(this.data['cardinality'].toString().length > 0) {
+								outValue += this.data['role'] + ":" + this.data['cardinality'];
+								outValue += ",";
+							} else {
+								outValue += this.data['role'];
+								outValue += ",";
+							}
+						}
+					});
+					if(outValue.length > 0) {
+						outValue = outValue.slice(0, -1)
+					}
+					this.setValue(outValue);
+					this.dataSource.getAt(this.row).set('value', outValue)
+					this.dataSource.commitChanges()
+
+					dialog.hide();
+				}.bind(this)
+			}, {
+				text: ORYX.I18N.PropertyWindow.cancel,
+				handler: function(){
+					dialog.destroy();
+				}.bind(this)
+			}]
+		});
+
+		dialog.show();
+		grid.render();
+
+		this.grid.stopEditing();
+		grid.focus( false, 100 );
+
+
+
+
+
+	}
 });
 
 Ext.form.ComplexActionsField = Ext.extend(Ext.form.TriggerField,  {

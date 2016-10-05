@@ -484,11 +484,15 @@ ORYX.I18N.PropertyWindow.type='<i18n:message key="ORYX.I18N.PropertyWindow.type"
 ORYX.I18N.PropertyWindow.addReassignment='<i18n:message key="ORYX.I18N.PropertyWindow.addReassignment">Add Reassignment</i18n:message>';
 ORYX.I18N.PropertyWindow.editorForReassignment='<i18n:message key="ORYX.I18N.PropertyWindow.editorForReassignment">Editor for Reassignments</i18n:message>';
 ORYX.I18N.PropertyWindow.importType='<i18n:message key="ORYX.I18N.PropertyWindow.importType">Import Type</i18n:message>';
+ORYX.I18N.PropertyWindow.caseRole='<i18n:message key="ORYX.I18N.PropertyWindow.caseRole">Case Role</i18n:message>';
+ORYX.I18N.PropertyWindow.caseCardinality='<i18n:message key="ORYX.I18N.PropertyWindow.caseCardinality">Case Cardinality</i18n:message>';
 ORYX.I18N.PropertyWindow.className='<i18n:message key="ORYX.I18N.PropertyWindow.className">Class Name</i18n:message>';
 ORYX.I18N.PropertyWindow.wsdlLocation='<i18n:message key="ORYX.I18N.PropertyWindow.wsdlLocation">WSDL Location</i18n:message>';
 ORYX.I18N.PropertyWindow.wsdlNamespace='<i18n:message key="ORYX.I18N.PropertyWindow.wsdlNamespace">WSDL Namespace</i18n:message>';
 ORYX.I18N.PropertyWindow.addImport='<i18n:message key="ORYX.I18N.PropertyWindow.addImport">Add Import</i18n:message>';
+ORYX.I18N.PropertyWindow.addCaseRole='<i18n:message key="ORYX.I18N.PropertyWindow.addCaseRole">Add Case Role</i18n:message>';
 ORYX.I18N.PropertyWindow.editorForImports='<i18n:message key="ORYX.I18N.PropertyWindow.editorForImports">Editor for Imports</i18n:message>';
+ORYX.I18N.PropertyWindow.editorForCaseRoles='<i18n:message key="ORYX.I18N.PropertyWindow.editorForCaseRoles">Editor for Case Roles</i18n:message>';
 ORYX.I18N.PropertyWindow.action='<i18n:message key="ORYX.I18N.PropertyWindow.action">Action</i18n:message>';
 ORYX.I18N.PropertyWindow.addAction='<i18n:message key="ORYX.I18N.PropertyWindow.addAction">Add Action</i18n:message>';
 ORYX.I18N.PropertyWindow.editorForActions='<i18n:message key="ORYX.I18N.PropertyWindow.editorForActions">Editor for Actions</i18n:message>';
