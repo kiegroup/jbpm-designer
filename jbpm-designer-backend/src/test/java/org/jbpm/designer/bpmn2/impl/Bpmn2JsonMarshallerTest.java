@@ -514,8 +514,11 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject process = loader.loadProcessFromXml("customProperties.bpmn2");
         JSONObject properties = process.getJSONObject("properties");
         String caseIdPrefix = properties.getString("customcaseidprefix");
+        String caseRoles = properties.getString("customcaseroles");
+
 
         assertEquals("HR", caseIdPrefix);
+        assertEquals("owner:1,participant:2", caseRoles);
     }
 
 }

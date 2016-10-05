@@ -9,6 +9,7 @@
     "vardefs": "",
     "customdescription": "",
     "customcaseidprefix": "HR",
+    "customcaseroles": "owner:1,participant:2",
     "adhocprocess": "true",
     "imports": "",
     "globals": "",

@@ -285,6 +285,8 @@ public class Bpmn2JsonMarshaller {
                                     props.put("customdescription", metaType.getMetaValue());
                                 } else if (metaType.getName().equals("customCaseIdPrefix")) {
                                     props.put("customcaseidprefix", metaType.getMetaValue());
+                                } else if (metaType.getName().equals("customCaseRoles")) {
+                                    props.put("customcaseroles", metaType.getMetaValue());
                                 } else {
                                     props.put(metaType.getName(), metaType.getMetaValue());
                                 }

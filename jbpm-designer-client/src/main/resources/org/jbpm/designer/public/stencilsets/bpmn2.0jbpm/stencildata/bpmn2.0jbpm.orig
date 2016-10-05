@@ -737,6 +737,17 @@
 						  "ifproptrue":"adhocprocess",
 				},
 				{
+						  "id":"customcaseroles",
+						  "type":"Caseroles",
+						  "title":"Case Roles",
+						  "value":"",
+						  "description":"Case Roles",
+						  "description_ja":"",
+						  "readonly":false,
+						  "optional":true,
+						  "ifproptrue":"adhocprocess",
+                },
+				{
 					"id":"adhocprocess",
 					"type":"Choice",
 					"title":"AdHoc",
