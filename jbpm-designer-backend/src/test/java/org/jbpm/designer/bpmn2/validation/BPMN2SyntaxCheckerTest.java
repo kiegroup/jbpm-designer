@@ -297,6 +297,15 @@ public class BPMN2SyntaxCheckerTest {
         verifyErrorsOfElement(syntaxChecker, sendTask, Arrays.asList(SyntaxCheckerErrors.TASK_NO_MESSAGE));
     }
 
+    @Test
+    public void testMultipleSubprocessStartEvents() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("multipleSubprocessStartEvents.bpmn2");
+        JSONObject subProcess = loader.getChildByName(process, "SubProcess");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        verifyErrorsOfElement(syntaxChecker, subProcess, Arrays.asList(SyntaxCheckerErrors.MULTIPLE_START_EVENTS));
+    }
+
     private void verifyNoErrors(SyntaxChecker syntaxChecker) throws Exception {
         syntaxChecker.checkSyntax();
         assertFalse(syntaxChecker.errorsFound());

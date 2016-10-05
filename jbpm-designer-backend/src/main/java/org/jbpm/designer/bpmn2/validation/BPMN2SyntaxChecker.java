@@ -122,17 +122,8 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
                         }
                     }
 
-                    boolean foundStartEvent = false;
-                    boolean foundEndEvent = false;
-                    List<FlowElement> flowElements =  process.getFlowElements();
-                    for(FlowElement fe : flowElements) {
-                        if(fe instanceof StartEvent) {
-                            foundStartEvent = true;
-                        }
-                        if(fe instanceof EndEvent) {
-                            foundEndEvent = true;
-                        }
-                    }
+                    boolean foundStartEvent = checkEventsCount(StartEvent.class, process.getFlowElements()) > 0;
+                    boolean foundEndEvent = checkEventsCount(EndEvent.class, process.getFlowElements()) > 0;
                     if(!foundStartEvent && !isAdHocProcess(process)) {
                         addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, SyntaxCheckerErrors.PROCESS_HAS_NO_START_NODE));
                     }
@@ -235,10 +226,27 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 			}
 			
 			if(fe instanceof SubProcess) {
+                if(checkEventsCount(StartEvent.class, ((SubProcess) fe).getFlowElements()) > 1) {
+                    addError(fe, new ValidationSyntaxError(fe, BPMN2_TYPE, SyntaxCheckerErrors.MULTIPLE_START_EVENTS));
+                }
 				checkFlowElements((SubProcess) fe, process, defaultScenario);
 			}
 		}
 	}
+
+    private int checkEventsCount(Class<? extends Event> event, List<FlowElement> flowElements) {
+        int occurrence = 0;
+
+        if (flowElements != null) {
+           for(FlowElement element : flowElements) {
+               if(event.isInstance(element)) {
+                   occurrence++;
+               }
+           }
+        }
+
+        return occurrence;
+    }
 
 	private void checkStartEvent(StartEvent startEvent, FlowElementsContainer container, Process process) {
 

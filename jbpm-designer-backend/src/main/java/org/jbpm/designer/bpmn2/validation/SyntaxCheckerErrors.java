@@ -33,6 +33,7 @@ public class SyntaxCheckerErrors {
     public static final String INVALID_PROCESS_ID = "Invalid process id. See http://www.w3.org/TR/REC-xml-names/#NT-NCName for more info.";
     public static final String IT_SHOULD_BE_CONVERGING_OR_DIVERGING = " It should be 'Converging' or 'Diverging'.";
     public static final String IT_SHOULD_BE_DIVERGING = " It should be 'Diverging'.";
+    public static final String MULTIPLE_START_EVENTS = "Multiple start events not allowed.";
     public static final String NODE_NO_INCOMING_CONNECTIONS = "Node has no incoming connections";
     public static final String NODE_NO_OUTGOING_CONNECTIONS = "Node has no outgoing connections";
     public static final String NOT_VALID_DEFAULT_GATE = "Default gate must be one of outgoing flows.";
@@ -47,7 +48,6 @@ public class SyntaxCheckerErrors {
     public static final String REUSABLE_SUBPROCESS_HAS_NO_CALLED_ELEMENT_SPECIFIED = "Reusable Subprocess has no called element specified.";
     public static final String SCRIPT_TASK_HAS_NO_SCRIPT_FORMAT = "Script Task has no script format.";
     public static final String SCRIPT_TASK_HAS_NO_SCRIPT = "Script Task has no script.";
-    public static final String SEND_TASK_HAS_NO_MESSAGE = "Send Task has no message.";
     public static final String SEQUENCE_FLOW_HAS_NO_PROBABILITY_DEFINED = "Sequence Flow has no probability defined.";
     public static final String SEQUENCE_FLOW_NO_CONDITION_EXPRESSION_DEFINED = "Sequence flow has no condition expression defined.";
     public static final String SERVICE_TASK_HAS_NO_OPERATION = "Service Task has no operation.";
