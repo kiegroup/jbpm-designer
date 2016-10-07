@@ -369,7 +369,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
                             if(ORYX.CONFIG.STORESVGONSAVE && ORYX.CONFIG.STORESVGONSAVE == "true") {
                                 // svg save
-                                var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(false));
+                                var formattedSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getSVGRepresentation(true));
                                 var rawSvgDOM = DataManager.serialize(ORYX.EDITOR.getCanvas().getRootNode().cloneNode(true));
                                 var processJSON = ORYX.EDITOR.getSerializedJSON();
                                 var processId = jsonPath(processJSON.evalJSON(), "$.properties.id");
