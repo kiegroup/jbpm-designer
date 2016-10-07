@@ -1542,6 +1542,22 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("<![CDATA[owner:1,participant:2]]>",  getMetaDataValue(process.getExtensionValues(), "customCaseRoles"));
     }
 
+    @Test
+    public void testTaskCustomProperties() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("customPropertiesTask.json");
+        Process process = getRootProcess(definitions);
+
+        UserTask task = (UserTask) process.getFlowElements().get(1);
+        assertNotNull(task);
+        assertEquals("Task_1", task.getName());
+
+        List<ExtensionAttributeValue> extensionAttributeValues = task.getExtensionValues();
+        assertNotNull(extensionAttributeValues);
+        assertEquals(1, extensionAttributeValues.size());
+
+        assertEquals("<![CDATA[true]]>",  getMetaDataValue(task.getExtensionValues(), "customAutoStart"));
+    }
+
     private void verifyBpmnShapePresent(BaseElement element, Definitions definitions) {
         boolean diagramElementPresent = false;
         for(DiagramElement diagramElement : definitions.getDiagrams().get(0).getPlane().getPlaneElement()) {

@@ -521,4 +521,14 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("owner:1,participant:2", caseRoles);
     }
 
+    @Test
+    public void testTaskCustomProperties() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("customPropertiesTask.bpmn2");
+        JSONObject task = getChildByName(process, "Task_1");
+        JSONObject properties = task.getJSONObject("properties");
+        String autoStart = properties.getString("customautostart");
+
+        assertEquals("true", autoStart);
+    }
+
 }

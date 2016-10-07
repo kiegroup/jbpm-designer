@@ -2732,6 +2732,30 @@
                     				]
                 		},
 				{
+					"id":"customautostart",
+					"type":"Choice",
+					"title":"Adhoc autostart",
+					"value":"false",
+					"description":"Specifies whether node should be auto started - applies to adhoc tasks only",
+					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule",
+					"extra":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"true",
+							"value":"true"
+						},
+						{
+							"id": "c2",
+							"title": "false",
+							"value": "false"
+						}
+					]
+				},
+				{
 					"id":"taskname",
 					"type":"String",
 					"title":"Task Name",
@@ -3765,6 +3789,29 @@
                                                 ]
                                 $bclose$,
 				$bopen$
+					"id":"customautostart",
+					"type":"Choice",
+					"title":"Adhoc autostart",
+					"value":"false",
+					"description":"Specifies whether node should be auto started - applies to adhoc tasks only",
+					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"extra":true,
+					"items": [
+						$bopen$
+							"id": "c1",
+							"title":"true",
+							"value":"true"
+						$bclose$,
+						$bopen$
+							"id": "c2",
+							"title": "false",
+							"value": "false"
+						$bclose$
+					]
+				$bclose$,
+				$bopen$
 					"id":"script_language",
 					"type":"Choice",
 					"title":"Script Language",
@@ -4172,6 +4219,30 @@
                                                 }
                                                 ]
                                 },
+				{
+					"id":"customautostart",
+					"type":"Choice",
+					"title":"Adhoc autostart",
+					"value":"false",
+					"description":"Specifies whether node should be auto started - applies to adhoc tasks only",
+					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule",
+					"extra":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"true",
+							"value":"true"
+						},
+						{
+							"id": "c2",
+							"title": "false",
+							"value": "false"
+						}
+					]
+				},
 				{
 					"id":"independent",
 					"type":"Choice",
@@ -4675,6 +4746,30 @@
                                                 ]
                                 },
 				{
+					"id":"customautostart",
+					"type":"Choice",
+					"title":"Adhoc autostart",
+					"value":"false",
+					"description":"Specifies whether node should be auto started - applies to adhoc tasks only",
+					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule",
+					"extra":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"true",
+							"value":"true"
+						},
+						{
+							"id": "c2",
+							"title": "false",
+							"value": "false"
+						}
+					]
+				},
+				{
         "id":"unitcost",
         "type":"Float",
         "title":"Cost per time unit",
@@ -5003,6 +5098,30 @@
                                                 }
                                                 ]
                                 },
+				{
+					"id":"customautostart",
+					"type":"Choice",
+					"title":"Adhoc autostart",
+					"value":"false",
+					"description":"Specifies whether node should be auto started - applies to adhoc tasks only",
+					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule",
+					"extra":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"true",
+							"value":"true"
+						},
+						{
+							"id": "c2",
+							"title": "false",
+							"value": "false"
+						}
+					]
+				},
 				{
 					"id":"script_language",
 					"type":"Choice",
@@ -5371,6 +5490,30 @@
                                                 ]
                                 },
 				{
+					"id":"customautostart",
+					"type":"Choice",
+					"title":"Adhoc autostart",
+					"value":"false",
+					"description":"Specifies whether node should be auto started - applies to adhoc tasks only",
+					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule",
+					"extra":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"true",
+							"value":"true"
+						},
+						{
+							"id": "c2",
+							"title": "false",
+							"value": "false"
+						}
+					]
+				},
+				{
 					"id":"script_language",
 					"type":"Choice",
 					"title":"Script Language",
@@ -5713,6 +5856,30 @@
                                                 }
                                                 ]
                                 },
+				{
+					"id":"customautostart",
+					"type":"Choice",
+					"title":"Adhoc autostart",
+					"value":"false",
+					"description":"Specifies whether node should be auto started - applies to adhoc tasks only",
+					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule",
+					"extra":true,
+					"items": [
+						{
+							"id": "c1",
+							"title":"true",
+							"value":"true"
+						},
+						{
+							"id": "c2",
+							"title": "false",
+							"value": "false"
+						}
+					]
+				},
 				{
         "id":"unitcost",
         "type":"Float",

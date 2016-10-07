@@ -5263,6 +5263,11 @@ public class Bpmn2JsonUnmarshaller {
             Utils.setMetaDataExtensionValue(task, "customAsync", wrapInCDATABlock(properties.get("isasync")));
         }
 
+        // autostart metadata
+        if(properties.get("customautostart") != null && properties.get("customautostart").length() > 0 && properties.get("customautostart").equals("true")) {
+            Utils.setMetaDataExtensionValue(task, "customAutoStart", wrapInCDATABlock(properties.get("customautostart")));
+        }
+
         //process data input set
         Map<String, DataInput> alreadyProcessedInputs = new HashMap<String, DataInput>();
         alreadyProcessedInputs.put("TaskName", taskNameDataInput);

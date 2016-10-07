@@ -1,0 +1,285 @@
+{
+  "resourceId": "_t4TosIyXEeaiTeCfReK-EA",
+  "properties": {
+    "expressionlanguage": "http://www.mvel.org/2.0",
+    "name": "",
+    "namespaces": "",
+    "executable": "true",
+    "package": "org.jbpm.demo.cases",
+    "vardefs": "",
+    "customdescription": "",
+    "customcaseidprefix": "HR",
+    "customcaseroles": "",
+    "adhocprocess": "true",
+    "imports": "",
+    "globals": "",
+    "id": "cases.firstcase",
+    "version": "1.0",
+    "timeunit": "min",
+    "currency": "",
+    "targetnamespace": "http://www.omg.org/bpmn20",
+    "typelanguage": "http://www.java.com/javaTypes",
+    "processn": "firstcase",
+    "documentation": ""
+  },
+  "stencil": {"id": "BPMNDiagram"},
+  "childShapes": [
+    {
+      "resourceId": "processStartEvent",
+      "properties": {
+        "name": "",
+        "documentation": "",
+        "isselectable": "true",
+        "invisid": "",
+        "dataoutputassociations": "",
+        "dataoutputassociationsview": "no data output",
+        "dataoutput": "",
+        "min": "5.0",
+        "max": "10.0",
+        "standarddeviation": "1",
+        "mean": "0",
+        "distributiontype": "uniform",
+        "probability": "100.0",
+        "isinterrupting": "true",
+        "bgcolor": "#9acd32",
+        "bordercolor": "#000000",
+        "fontcolor": "#000000",
+        "fontsize": "",
+        "origbgcolor": "#9acd32",
+        "origbordercolor": "#000000"
+      },
+      "stencil": {"id": "StartNoneEvent"},
+      "childShapes": [],
+      "outgoing": [{"resourceId": "_BE5690E9-E108-440F-B2DC-EFE6C5469831"}],
+      "bounds": {
+        "lowerRight": {
+          "x": 150,
+          "y": 195
+        },
+        "upperLeft": {
+          "x": 120,
+          "y": 165
+        }
+      },
+      "dockers": []
+    },
+    {
+      "resourceId": "_4D926D04-43F1-41C0-BD34-C5CCF0604AB4",
+      "properties": {
+        "name": "Task_1",
+        "documentation": "",
+        "isselectable": "true",
+        "invisid": "",
+        "isforcompensation": "",
+        "assignments": "",
+        "assignmentsview": "0 data inputs, 0 data outputs",
+        "tasktype": "User",
+        "messageref": "",
+        "script": "",
+        "script_language": "java",
+        "bgcolor": "#fafad2",
+        "bordercolor": "#000000",
+        "fontcolor": "#000000",
+        "fontsize": "",
+        "datainputset": "Skippable",
+        "dataoutputset": "",
+        "origbgcolor": "#fafad2",
+        "nomorph": "true",
+        "origbordercolor": "#000000",
+        "ruleflowgroup": "",
+        "onentryactions": "",
+        "onexitactions": "",
+        "isasync": "false",
+        "customautostart": "true",
+        "taskname": "",
+        "serviceoperation": "",
+        "serviceinterface": "",
+        "serviceimplementation": "Java",
+        "actors": "",
+        "groupid": "",
+        "subject": "",
+        "description": "",
+        "content": "",
+        "reassignment": "",
+        "notifications": "",
+        "locale": "",
+        "createdby": "",
+        "skippable": "true",
+        "priority": "",
+        "multipleinstance": "false",
+        "multipleinstancecollectioninput": "",
+        "multipleinstancecollectionoutput": "",
+        "multipleinstancedatainput": "",
+        "multipleinstancedataoutput": "",
+        "multipleinstancecompletioncondition": "",
+        "min": "5.0",
+        "max": "10.0",
+        "standarddeviation": "1",
+        "mean": "0",
+        "distributiontype": "uniform",
+        "quantity": "1.0",
+        "workinghours": "8.0",
+        "unitcost": "0.0"
+      },
+      "stencil": {"id": "Task"},
+      "childShapes": [],
+      "outgoing": [{"resourceId": "_09902EAF-4794-4808-A480-0E9D10ED58E3"}],
+      "bounds": {
+        "lowerRight": {
+          "x": 310,
+          "y": 220
+        },
+        "upperLeft": {
+          "x": 210,
+          "y": 140
+        }
+      },
+      "dockers": []
+    },
+    {
+      "resourceId": "_BE5690E9-E108-440F-B2DC-EFE6C5469831",
+      "properties": {
+        "name": "",
+        "documentation": "",
+        "isselectable": "true",
+        "invisid": 0.3422952291152732,
+        "conditiontype": "None",
+        "conditionexpression": "",
+        "conditionexpressionlanguage": "java",
+        "priority": "",
+        "probability": "100",
+        "isimmediate": "false",
+        "showdiamondmarker": "",
+        "bgcolor": "#000000",
+        "origbgcolor": "#000000",
+        "bordercolor": "#000000",
+        "origbordercolor": "#000000",
+        "fontcolor": "#000000",
+        "fontsize": ""
+      },
+      "stencil": {"id": "SequenceFlow"},
+      "childShapes": [],
+      "outgoing": [{"resourceId": "_4D926D04-43F1-41C0-BD34-C5CCF0604AB4"}],
+      "bounds": {
+        "lowerRight": {
+          "x": 209.1953125,
+          "y": 181
+        },
+        "upperLeft": {
+          "x": 150.6484375,
+          "y": 179
+        }
+      },
+      "dockers": [
+        {
+          "x": 15,
+          "y": 15
+        },
+        {
+          "x": 50,
+          "y": 40
+        }
+      ],
+      "target": {"resourceId": "_4D926D04-43F1-41C0-BD34-C5CCF0604AB4"}
+    },
+    {
+      "resourceId": "_BC732577-437D-4FB8-B77C-E7A2F41C2181",
+      "properties": {
+        "name": "",
+        "documentation": "",
+        "isselectable": "true",
+        "invisid": 0.608190454921713,
+        "eventdefinitions": "",
+        "datainputassociations": "",
+        "datainputassociationsview": "no data input",
+        "datainput": "",
+        "min": "5",
+        "max": "10",
+        "standarddeviation": "1",
+        "mean": "0",
+        "distributiontype": "uniform",
+        "bgcolor": "#ff6347",
+        "bordercolor": "#000000",
+        "fontcolor": "#000000",
+        "fontsize": "",
+        "origbgcolor": "#ff6347",
+        "origbordercolor": "#000000"
+      },
+      "stencil": {"id": "EndNoneEvent"},
+      "childShapes": [],
+      "outgoing": [],
+      "bounds": {
+        "lowerRight": {
+          "x": 383,
+          "y": 194
+        },
+        "upperLeft": {
+          "x": 355,
+          "y": 166
+        }
+      },
+      "dockers": []
+    },
+    {
+      "resourceId": "_09902EAF-4794-4808-A480-0E9D10ED58E3",
+      "properties": {
+        "name": "",
+        "documentation": "",
+        "isselectable": "true",
+        "invisid": "",
+        "conditiontype": "None",
+        "conditionexpression": "",
+        "conditionexpressionlanguage": "java",
+        "priority": "",
+        "probability": "100",
+        "isimmediate": "false",
+        "showdiamondmarker": "",
+        "bgcolor": "#000000",
+        "origbgcolor": "#000000",
+        "bordercolor": "#000000",
+        "origbordercolor": "#000000",
+        "fontcolor": "#000000",
+        "fontsize": ""
+      },
+      "stencil": {"id": "SequenceFlow"},
+      "childShapes": [],
+      "outgoing": [{"resourceId": "_BC732577-437D-4FB8-B77C-E7A2F41C2181"}],
+      "bounds": {
+        "lowerRight": {
+          "x": 354.375,
+          "y": 180
+        },
+        "upperLeft": {
+          "x": 310.390625,
+          "y": 180
+        }
+      },
+      "dockers": [
+        {
+          "x": 50,
+          "y": 40
+        },
+        {
+          "x": 14,
+          "y": 14
+        }
+      ],
+      "target": {"resourceId": "_BC732577-437D-4FB8-B77C-E7A2F41C2181"}
+    }
+  ],
+  "bounds": {
+    "lowerRight": {
+      "x": 3000,
+      "y": 2000
+    },
+    "upperLeft": {
+      "x": 0,
+      "y": 0
+    }
+  },
+  "stencilset": {
+    "url": "/org.kie.workbench.KIEWebapp/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json",
+    "namespace": "http://b3mn.org/stencilset/bpmn2.0#"
+  },
+  "ssextensions": []
+}
