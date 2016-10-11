@@ -63,7 +63,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EStructuralFeature.Internal;
 import org.eclipse.emf.ecore.impl.EAttributeImpl;
-import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl.SimpleFeatureMapEntry;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -1299,17 +1298,17 @@ public class Bpmn2JsonUnmarshaller {
         for(FlowElement fe : flowElements) {
             if(fe instanceof ReceiveTask) {
                 ReceiveTask rt = (ReceiveTask) fe;
-                rt.setMessageRef(extractMessage(rt, toAddMessages, toAddItemDefinitions));
+                rt.setMessageRef(getMessage(rt, toAddMessages, toAddItemDefinitions));
             } else if(fe instanceof SendTask) {
                 SendTask st = (SendTask) fe;
-                st.setMessageRef(extractMessage(st, toAddMessages, toAddItemDefinitions));
+                st.setMessageRef(getMessage(st, toAddMessages, toAddItemDefinitions));
             } else if(fe instanceof FlowElementsContainer) {
                 setSendReceiveTasksInfo((FlowElementsContainer) fe, def, toAddMessages, toAddItemDefinitions);
             }
         }
     }
 
-    private Message extractMessage(BaseElement element, Collection<Message> toAddMessages, Collection<ItemDefinition> toAddItemDefinitions) {
+    private Message getMessage(BaseElement element, Collection<Message> toAddMessages, Collection<ItemDefinition> toAddItemDefinitions) {
         String idefId = null;
         String msgId = null;
 
@@ -1332,7 +1331,8 @@ public class Bpmn2JsonUnmarshaller {
             Message msg = _messages.get(msgId);
             if (msg == null){
                 msg = Bpmn2Factory.eINSTANCE.createMessage();
-                msg.setId(msgId);
+                msg.setId(getIdForRootElement(msgId));
+                msg.setName(msgId);
                 msg.setItemRef(idef);
                 _messages.put(msgId, msg);
             }
@@ -1460,36 +1460,7 @@ public class Bpmn2JsonUnmarshaller {
 					EventDefinition ed = ((ThrowEvent) fe)
 							.getEventDefinitions().get(0);
 					if (ed instanceof SignalEventDefinition) {
-                        SignalEventDefinition sed = (SignalEventDefinition) ed;
-                        if(sed.getSignalRef() != null && sed.getSignalRef().length() > 0) {
-                            String signalRef = sed.getSignalRef();
-
-                            boolean shouldAddSignal = true;
-                            for(RootElement re : rootElements) {
-                                if(re instanceof Signal) {
-                                    if(((Signal)re).getName().equals(signalRef)) {
-                                        shouldAddSignal = false;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if(toAddSignals != null) {
-                                for(Signal s : toAddSignals) {
-                                    if(s.getName().equals(signalRef)) {
-                                        shouldAddSignal = false;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if(shouldAddSignal) {
-                                Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-                                signal.setName(signalRef);
-                                toAddSignals.add(signal);
-                            }
-
-                        }
+                        getSignal((SignalEventDefinition) ed, rootElements, toAddSignals);
 					} else if (ed instanceof ErrorEventDefinition) {
                         Error err = getError(ed);
 						toAddErrors.add(err);
@@ -1500,7 +1471,7 @@ public class Bpmn2JsonUnmarshaller {
                         toAddEscalations.add(escalation);
                         ((EscalationEventDefinition) ed).setEscalationRef(escalation);
 					} else if (ed instanceof MessageEventDefinition) {
-                        ((MessageEventDefinition) ed).setMessageRef(extractMessage(ed, toAddMessages, toAddItemDefinitions));
+                        ((MessageEventDefinition) ed).setMessageRef(getMessage(ed, toAddMessages, toAddItemDefinitions));
 					} else if (ed instanceof CompensateEventDefinition) {
 						Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
 								.iterator();
@@ -1554,6 +1525,7 @@ public class Bpmn2JsonUnmarshaller {
         Error err = this._errors.get(errorCode);
         if (err == null){
             err = Bpmn2Factory.eINSTANCE.createError();
+            err.setId(getIdForRootElement(errorCode));
             err.setName(errorCode);
             err.setErrorCode(errorCode);
             this._errors.put(errorCode, err);
@@ -1575,36 +1547,7 @@ public class Bpmn2JsonUnmarshaller {
                     EventDefinition ed = ((ThrowEvent) fe)
                             .getEventDefinitions().get(0);
                     if (ed instanceof SignalEventDefinition) {
-                        SignalEventDefinition sed = (SignalEventDefinition) ed;
-                        if(sed.getSignalRef() != null && sed.getSignalRef().length() > 0) {
-                            String signalRef = sed.getSignalRef();
-
-                            boolean shouldAddSignal = true;
-                            for(RootElement re : rootElements) {
-                                if(re instanceof Signal) {
-                                    if(((Signal)re).getName().equals(signalRef)) {
-                                        shouldAddSignal = false;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if(toAddSignals != null) {
-                                for(Signal s : toAddSignals) {
-                                    if(s.getName().equals(signalRef)) {
-                                        shouldAddSignal = false;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if(shouldAddSignal) {
-                                Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-                                signal.setName(signalRef);
-                                toAddSignals.add(signal);
-                            }
-
-                        }
+                        getSignal((SignalEventDefinition) ed, rootElements, toAddSignals);
                    } else if (ed instanceof ErrorEventDefinition) {
                         Error err = getError(ed);
                         toAddErrors.add(err);
@@ -1615,7 +1558,7 @@ public class Bpmn2JsonUnmarshaller {
                         toAddEscalations.add(escalation);
                         ((EscalationEventDefinition) ed).setEscalationRef(escalation);
                     } else if (ed instanceof MessageEventDefinition) {
-                        ((MessageEventDefinition) ed).setMessageRef(extractMessage(ed, toAddMessages, toAddItemDefinitions));
+                        ((MessageEventDefinition) ed).setMessageRef(getMessage(ed, toAddMessages, toAddItemDefinitions));
                     } else if (ed instanceof CompensateEventDefinition) {
                         Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute()
                                 .iterator();
@@ -1653,6 +1596,39 @@ public class Bpmn2JsonUnmarshaller {
             } else if(fe instanceof FlowElementsContainer) {
                 setThrowEventsInfo((FlowElementsContainer) fe, def, rootElements, toAddSignals, toAddErrors, toAddEscalations, toAddMessages, toAddItemDefinitions);
             }
+        }
+    }
+
+    private void getSignal(SignalEventDefinition sed, List<RootElement> rootElements, List<Signal> toAddSignals) {
+        if(sed.getSignalRef() != null && sed.getSignalRef().length() > 0) {
+            String signalRef = sed.getSignalRef();
+
+            boolean shouldAddSignal = true;
+            for(RootElement re : rootElements) {
+                if(re instanceof Signal) {
+                    if(((Signal)re).getName().equals(signalRef)) {
+                        shouldAddSignal = false;
+                        break;
+                    }
+                }
+            }
+
+            if(toAddSignals != null) {
+                for(Signal s : toAddSignals) {
+                    if(s.getName().equals(signalRef)) {
+                        shouldAddSignal = false;
+                        break;
+                    }
+                }
+            }
+
+            if(shouldAddSignal) {
+                Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
+                signal.setId(getIdForRootElement(signalRef));
+                signal.setName(signalRef);
+                toAddSignals.add(signal);
+            }
+
         }
     }
 
@@ -1954,29 +1930,12 @@ public class Bpmn2JsonUnmarshaller {
      * @param def Definitions
      */
     public void revisitSignalRef(Definitions def) {
-        revisitSignalIds(def);
         List<RootElement> rootElements =  def.getRootElements();
         for(RootElement root : rootElements) {
             if(root instanceof Process) {
                 setSignalRefForCatchEvents((Process) root, def);
                 setSignalRefForThrowEvents((Process) root, def);
                 setSignalRefForBoundaryEvents((Process) root, def);
-            }
-        }
-    }
-
-    public void revisitSignalIds(Definitions def) {
-        List<RootElement> rootElements = def.getRootElements();
-        for(RootElement re : rootElements) {
-            if(re instanceof Signal) {
-                Signal signal = (Signal) re;
-                if(signal.getName() != null) {
-                    try {
-                        signal.setId("_" + UUID.nameUUIDFromBytes(signal.getName().getBytes("UTF-8")));
-                    } catch(UnsupportedEncodingException e) {
-                        signal.setId("_" + UUID.nameUUIDFromBytes(signal.getName().getBytes()));
-                    }
-                }
             }
         }
     }
@@ -2103,37 +2062,7 @@ public class Bpmn2JsonUnmarshaller {
                         if(((CatchEvent)fe).getEventDefinitions().size() > 0) {
                             EventDefinition ed = ((CatchEvent)fe).getEventDefinitions().get(0);
                             if (ed instanceof SignalEventDefinition) {
-                                SignalEventDefinition sed = (SignalEventDefinition) ed;
-                                if(sed.getSignalRef() != null && sed.getSignalRef().length() > 0) {
-                                    String signalRef = sed.getSignalRef();
-
-                                    boolean shouldAddSignal = true;
-                                    List<RootElement> rootElements = def.getRootElements();
-                                    for(RootElement re : rootElements) {
-                                        if(re instanceof Signal) {
-                                            if(((Signal)re).getName().equals(signalRef)) {
-                                                shouldAddSignal = false;
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    if(toAddSignals != null) {
-                                        for(Signal s : toAddSignals) {
-                                            if(s.getName().equals(signalRef)) {
-                                                shouldAddSignal = false;
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    if(shouldAddSignal) {
-                                        Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-                                        signal.setName(signalRef);
-                                        toAddSignals.add(signal);
-                                    }
-
-                                }
+                                getSignal((SignalEventDefinition) ed, def.getRootElements(), toAddSignals);
                             } else if(ed instanceof ErrorEventDefinition) {
                                 Error err = getError(ed);
                                 toAddErrors.add(err);
@@ -2144,7 +2073,7 @@ public class Bpmn2JsonUnmarshaller {
                                 toAddEscalations.add(escalation);
                                 ((EscalationEventDefinition) ed).setEscalationRef(escalation);
                             } else if(ed instanceof MessageEventDefinition) {
-                                ((MessageEventDefinition) ed).setMessageRef(extractMessage(ed, toAddMessages, toAddItemDefinitions));
+                                ((MessageEventDefinition) ed).setMessageRef(getMessage(ed, toAddMessages, toAddItemDefinitions));
                             } else if(ed instanceof CompensateEventDefinition) {
                                 Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
                                 while(iter.hasNext()) {
@@ -2190,6 +2119,7 @@ public class Bpmn2JsonUnmarshaller {
         Escalation escalation = this._escalations.get(escalationCode);
         if (escalation == null){
             escalation = Bpmn2Factory.eINSTANCE.createEscalation();
+            escalation.setId(getIdForRootElement(escalationCode));
             escalation.setName(escalationCode);
             escalation.setEscalationCode(escalationCode);
             this._escalations.put(escalationCode, escalation);
@@ -2205,37 +2135,7 @@ public class Bpmn2JsonUnmarshaller {
                 if(((CatchEvent)fe).getEventDefinitions().size() > 0) {
                     EventDefinition ed = ((CatchEvent)fe).getEventDefinitions().get(0);
                     if (ed instanceof SignalEventDefinition) {
-                        SignalEventDefinition sed = (SignalEventDefinition) ed;
-                        if(sed.getSignalRef() != null && sed.getSignalRef().length() > 0) {
-                            String signalRef = sed.getSignalRef();
-
-                            boolean shouldAddSignal = true;
-                            List<RootElement> rootElements = def.getRootElements();
-                            for(RootElement re : rootElements) {
-                                if(re instanceof Signal) {
-                                    if(((Signal)re).getName().equals(signalRef)) {
-                                        shouldAddSignal = false;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if(toAddSignals != null) {
-                                for(Signal s : toAddSignals) {
-                                    if(s.getName().equals(signalRef)) {
-                                        shouldAddSignal = false;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if(shouldAddSignal) {
-                                Signal signal = Bpmn2Factory.eINSTANCE.createSignal();
-                                signal.setName(signalRef);
-                                toAddSignals.add(signal);
-                            }
-
-                        }
+                        getSignal((SignalEventDefinition) ed, def.getRootElements(), toAddSignals);
                     } else if(ed instanceof ErrorEventDefinition) {
                         Error err = getError(ed);
                         toAddErrors.add(err);
@@ -2246,7 +2146,7 @@ public class Bpmn2JsonUnmarshaller {
                         toAddEscalations.add(escalation);
                         ((EscalationEventDefinition) ed).setEscalationRef(escalation);
                     } else if(ed instanceof MessageEventDefinition) {
-                        ((MessageEventDefinition) ed).setMessageRef(extractMessage(ed, toAddMessages, toAddItemDefinitions));
+                        ((MessageEventDefinition) ed).setMessageRef(getMessage(ed, toAddMessages, toAddItemDefinitions));
                     } else if(ed instanceof CompensateEventDefinition) {
                         Iterator<FeatureMap.Entry> iter = ed.getAnyAttribute().iterator();
                         while(iter.hasNext()) {
@@ -6699,6 +6599,21 @@ public class Bpmn2JsonUnmarshaller {
         catch (UnsupportedEncodingException e) {
             return s;
         }
+    }
+
+    private String getIdForRootElement(String name) {
+        String id = null;
+        if ( name != null && !name.isEmpty() ) {
+            try {
+                id = "_" + UUID.nameUUIDFromBytes(name.getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException uee) {
+                id = "_" + UUID.nameUUIDFromBytes(name.getBytes());
+            }
+        } else {
+            id = "_" + UUID.randomUUID();
+        }
+
+        return Utils.toBPMNIdentifier(id);
     }
 
 }
