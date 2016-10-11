@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/bpmn20" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:drools="http://www.jboss.org/drools" id="_t86J8IyZEeap89mn3Cq9WA" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd" exporter="jBPM Designer" exporterVersion="6.2.0" expressionLanguage="http://www.mvel.org/2.0" targetNamespace="http://www.omg.org/bpmn20" typeLanguage="http://www.java.com/javaTypes">
+  <bpmn2:itemDefinition id="__4D926D04-43F1-41C0-BD34-C5CCF0604AB4_SkippableInputXItem" structureRef="Object"/>
+  <bpmn2:process id="cases.firstcase" drools:adHoc="true" drools:packageName="org.jbpm.demo.cases" drools:version="1.0" name="firstcase" isExecutable="true">
+    <bpmn2:extensionElements>
+      <drools:metaData name="customCaseIdPrefix">
+        <drools:metaValue><![CDATA[HR]]></drools:metaValue>
+      </drools:metaData>
+    </bpmn2:extensionElements>
+    <bpmn2:startEvent id="processStartEvent" drools:selectable="true" color:background-color="#9acd32" color:border-color="#000000" color:color="#000000" name="">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>_BE5690E9-E108-440F-B2DC-EFE6C5469831</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:userTask id="_4D926D04-43F1-41C0-BD34-C5CCF0604AB4" drools:selectable="true" drools:scriptFormat="http://www.java.com/java" color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" name="Task_1">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Task_1]]></drools:metaValue>
+        </drools:metaData>
+        <drools:metaData name="customAutoStart">
+          <drools:metaValue><![CDATA[true]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_BE5690E9-E108-440F-B2DC-EFE6C5469831</bpmn2:incoming>
+      <bpmn2:outgoing>_09902EAF-4794-4808-A480-0E9D10ED58E3</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="_t86J8YyZEeap89mn3Cq9WA">
+        <bpmn2:dataInput id="_4D926D04-43F1-41C0-BD34-C5CCF0604AB4_SkippableInputX" drools:dtype="Object" itemSubjectRef="__4D926D04-43F1-41C0-BD34-C5CCF0604AB4_SkippableInputXItem" name="Skippable"/>
+        <bpmn2:inputSet id="_t86xAIyZEeap89mn3Cq9WA">
+          <bpmn2:dataInputRefs>_4D926D04-43F1-41C0-BD34-C5CCF0604AB4_SkippableInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet id="_t86xAYyZEeap89mn3Cq9WA"/>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation id="_t86xAoyZEeap89mn3Cq9WA">
+        <bpmn2:targetRef>_4D926D04-43F1-41C0-BD34-C5CCF0604AB4_SkippableInputX</bpmn2:targetRef>
+        <bpmn2:assignment id="_t86xA4yZEeap89mn3Cq9WA">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="_t86xBIyZEeap89mn3Cq9WA">true</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="_t86xBYyZEeap89mn3Cq9WA">_4D926D04-43F1-41C0-BD34-C5CCF0604AB4_SkippableInputX</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:sequenceFlow id="_BE5690E9-E108-440F-B2DC-EFE6C5469831" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" sourceRef="processStartEvent" targetRef="_4D926D04-43F1-41C0-BD34-C5CCF0604AB4"/>
+    <bpmn2:endEvent id="_BC732577-437D-4FB8-B77C-E7A2F41C2181" drools:selectable="true" color:background-color="#ff6347" color:border-color="#000000" color:color="#000000" name="">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_09902EAF-4794-4808-A480-0E9D10ED58E3</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="_09902EAF-4794-4808-A480-0E9D10ED58E3" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" sourceRef="_4D926D04-43F1-41C0-BD34-C5CCF0604AB4" targetRef="_BC732577-437D-4FB8-B77C-E7A2F41C2181"/>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="_t86xBoyZEeap89mn3Cq9WA">
+    <bpmndi:BPMNPlane id="_t86xB4yZEeap89mn3Cq9WA" bpmnElement="cases.firstcase">
+      <bpmndi:BPMNShape id="_t86xCIyZEeap89mn3Cq9WA" bpmnElement="processStartEvent">
+        <dc:Bounds height="30.0" width="30.0" x="120.0" y="165.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_t86xCYyZEeap89mn3Cq9WA" bpmnElement="_4D926D04-43F1-41C0-BD34-C5CCF0604AB4">
+        <dc:Bounds height="80.0" width="100.0" x="210.0" y="140.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_t86xCoyZEeap89mn3Cq9WA" bpmnElement="_BC732577-437D-4FB8-B77C-E7A2F41C2181">
+        <dc:Bounds height="28.0" width="28.0" x="355.0" y="166.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="_t86xC4yZEeap89mn3Cq9WA" bpmnElement="_BE5690E9-E108-440F-B2DC-EFE6C5469831" sourceElement="_t86xCIyZEeap89mn3Cq9WA" targetElement="_t86xCYyZEeap89mn3Cq9WA">
+        <di:waypoint xsi:type="dc:Point" x="135.0" y="180.0"/>
+        <di:waypoint xsi:type="dc:Point" x="260.0" y="180.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_t86xDIyZEeap89mn3Cq9WA" bpmnElement="_09902EAF-4794-4808-A480-0E9D10ED58E3" sourceElement="_t86xCYyZEeap89mn3Cq9WA" targetElement="_t86xCoyZEeap89mn3Cq9WA">
+        <di:waypoint xsi:type="dc:Point" x="260.0" y="180.0"/>
+        <di:waypoint xsi:type="dc:Point" x="369.0" y="180.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>
