@@ -118,7 +118,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         // validate results
         Collection<Asset> globalAssets = repository.listAssets("/global");
         assertNotNull(globalAssets);
-        assertEquals(30, globalAssets.size());
+        assertEquals(31, globalAssets.size());
         repository.assetExists("/global/backboneformsinclude.fw");
         repository.assetExists("/global/backbonejsinclude.fw");
         repository.assetExists("/global/cancelbutton.fw");
@@ -145,6 +145,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         repository.assetExists("/global/textfield.fw");
         repository.assetExists("/global/themes.json");
         repository.assetExists("/global/unorderedlist.fw");
+        repository.assetExists("/global/defaultmilestoneicon.png");
         repository.assetExists("/global/defaultemailicon.gif");
         repository.assetExists("/global/defaultlogicon.gif");
         repository.assetExists("/global/patterns.json");
@@ -168,7 +169,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
 
         verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid", "/myprocesses/SwitchYardService.wid", "/myprocesses/Rewardsystem.wid"),
-                Arrays.asList("/myprocesses/defaultservicenodeicon.png"),
+                Arrays.asList("/myprocesses/defaultservicenodeicon.png", "/myprocesses/defaultmilestoneicon.png"),
                 Arrays.asList("/myprocesses/switchyard.gif", "/myprocesses/defaultemailicon.gif", "/myprocesses/defaultlogicon.gif"));
 
         Mockito.verify(workitemInstalledEvent, Mockito.times(2)).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -182,7 +183,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
 
         verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid"),
-                            Arrays.asList("/myprocesses/defaultservicenodeicon.png"),
+                            Arrays.asList("/myprocesses/defaultservicenodeicon.png", "/myprocesses/defaultmilestoneicon.png"),
                             Arrays.asList("/myprocesses/defaultemailicon.gif", "/myprocesses/defaultlogicon.gif"));
 
         Mockito.verify(workitemInstalledEvent, Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -196,7 +197,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
 
         verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid"),
-                            Arrays.asList("/myprocesses/defaultservicenodeicon.png"),
+                            Arrays.asList("/myprocesses/defaultservicenodeicon.png", "/myprocesses/defaultmilestoneicon.png"),
                             Arrays.asList("/myprocesses/defaultemailicon.gif", "/myprocesses/defaultlogicon.gif"));
 
         Mockito.verify(workitemInstalledEvent, Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -211,7 +212,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
 
         verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid"),
-                            Arrays.asList("/myprocesses/defaultservicenodeicon.png"),
+                            Arrays.asList("/myprocesses/defaultservicenodeicon.png", "/myprocesses/defaultmilestoneicon.png"),
                             Arrays.asList("/myprocesses/defaultemailicon.gif", "/myprocesses/defaultlogicon.gif"));
 
         Mockito.verify(workitemInstalledEvent, Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -227,7 +228,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         preprocessingUnitVFS.preprocess(new TestHttpServletRequest(params), null, new TestIDiagramProfile(repository), null, false, false, null, null);
 
         verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid","/myprocesses/MicrosoftAcademy.wid" ),
-                                Arrays.asList("/myprocesses/microsoftacademy.png", "/myprocesses/defaultservicenodeicon.png"),
+                                Arrays.asList("/myprocesses/microsoftacademy.png", "/myprocesses/defaultservicenodeicon.png", "/myprocesses/defaultmilestoneicon.png"),
                                 Arrays.asList("/myprocesses/defaultemailicon.gif", "/myprocesses/defaultlogicon.gif"));
 
         Mockito.verify(workitemInstalledEvent, Mockito.times(2)).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
