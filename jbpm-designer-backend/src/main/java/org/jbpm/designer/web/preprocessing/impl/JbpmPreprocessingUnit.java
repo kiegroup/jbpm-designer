@@ -104,6 +104,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String workitemSVGFilePath;
     private String origWorkitemSVGFile;
     private String default_emailicon;
+    private String default_milestoneicon;
     private String default_logicon;
     private String default_servicenodeicon;
     private String default_widconfigtemplate;
@@ -152,6 +153,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         workitemSVGFilePath = stencilPath  + "/bpmn2.0jbpm/view/activity/workitems/";
         origWorkitemSVGFile = workitemSVGFilePath + "workitem.orig";
         default_emailicon = servletContext.getRealPath(designer_path + "/defaults/defaultemailicon.gif");
+        default_milestoneicon = servletContext.getRealPath(designer_path + "/defaults/defaultmilestoneicon.png");
         default_logicon = servletContext.getRealPath(designer_path + "/defaults/defaultlogicon.gif");
         default_servicenodeicon = servletContext.getRealPath(designer_path + "/defaults/defaultservicenodeicon.png");
         default_widconfigtemplate = servletContext.getRealPath(designer_path + "/defaults/WorkDefinitions.wid.st");
@@ -669,6 +671,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             createAssetIfNotExisting(repository, location, "defaultemailicon", "gif",
                     getBytesFromFile(new File(default_emailicon)));
+
+            createAssetIfNotExisting(repository, location, "defaultmilestoneicon", "png",
+                    getBytesFromFile(new File(default_milestoneicon)));
 
             createAssetIfNotExisting(repository, location, "defaultlogicon", "gif",
                     getBytesFromFile(new File(default_logicon)));
