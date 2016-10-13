@@ -19,11 +19,10 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import com.google.gwt.core.client.Callback;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.project.model.Package;
-import org.gwtbootstrap3.client.ui.Label;
 import org.gwtbootstrap3.client.ui.TextBox;
-import org.gwtbootstrap3.client.ui.constants.LabelType;
 import org.gwtbootstrap3.client.ui.gwt.HTMLPanel;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
@@ -91,8 +90,27 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
                 final PlaceRequest place = new PathPlaceRequest( path );
                 placeManager.goTo( place );
             }
-        }, new DefaultErrorCallback() ).createCaseDefinition( pkg.getPackageMainResourcesPath(), buildFileName( baseFileName,
-                                                                                                         resourceType ), caseIdPrefix );
+        }, new DefaultErrorCallback()).createCaseDefinition(pkg.getPackageMainResourcesPath(), buildFileName(baseFileName,
+                resourceType ), caseIdPrefix );
+    }
+
+    @Override
+    public void acceptContext( final Callback<Boolean, Void> callback ) {
+        if ( context == null ) {
+            callback.onSuccess( false );
+        } else {
+            if( context.getActiveProject() != null ) {
+                designerAssetService.call( new RemoteCallback<Boolean>() {
+                    @Override
+                    public void callback( final Boolean isCaseProject ) {
+                        callback.onSuccess( isCaseProject );
+                    }
+                }, new DefaultErrorCallback() ).isCaseProject( context.getActiveProject().getRootPath() );
+
+            } else {
+                callback.onSuccess( false );
+            }
+        }
     }
 
 }

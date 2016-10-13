@@ -66,6 +66,8 @@ public class DefaultDesignerAssetService
 
     private static final String DEFAULT_CASE_ID_PREFIX = "CASE";
 
+    private static final String CASE_PROJECT_DOT_FILE = ".caseproject";
+
     @Inject
     private Repository repository;
     
@@ -252,7 +254,7 @@ public class DefaultDesignerAssetService
 
     protected Path create(Path path, String name, String location, String processContent) {
 
-        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder( name );
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(name);
         builder.location( location ).content( processContent ).uniqueId( path.toURI() );
         Asset<String> processAsset = builder.getAsset();
 
@@ -303,7 +305,16 @@ public class DefaultDesignerAssetService
         return new DesignerContent(overview);
     }
 
+    @Override
+    public boolean isCaseProject(Path rootProjectPath) {
+
+        org.uberfire.java.nio.file.DirectoryStream<org.uberfire.java.nio.file.Path> found = ioService.newDirectoryStream(Paths.convert(rootProjectPath), f -> f.endsWith(CASE_PROJECT_DOT_FILE));
+        return found.iterator().hasNext();
+    }
+
     public void setRepository(Repository repository) {
         this.repository = repository;
     }
+
+    public void setIoService(IOService ioService) { this.ioService = ioService; }
 }

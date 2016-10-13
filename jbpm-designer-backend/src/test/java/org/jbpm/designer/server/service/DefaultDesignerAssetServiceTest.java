@@ -17,6 +17,7 @@ package org.jbpm.designer.server.service;
 import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -43,10 +44,12 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.io.IOService;
+import org.uberfire.java.nio.file.DirectoryStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -111,7 +114,7 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         service.updateMetadata( path, metadata );
 
 
-        verify( ioService ).setAttributes( any( org.uberfire.java.nio.file.Path.class ),
+        verify( ioService ).setAttributes(any(org.uberfire.java.nio.file.Path.class),
                 eq(map));
     }
 
@@ -297,6 +300,28 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         String caseIdPrefixValue = metadataElement.getFirstChild().getNextSibling().getTextContent();
         assertNotNull(caseIdPrefixValue);
         assertEquals("CASE", caseIdPrefixValue);
+    }
+
+    @Test
+    public void testIsCaseProject() throws Exception {
+        DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
+        assetService.setRepository(repository);
+        assetService.setIoService(ioService);
+
+        final Path packagePath = mock( Path.class );
+        when( packagePath.toURI() ).thenReturn("default://p0/Evaluation/");
+
+
+        final Path pathSource = mock( Path.class );
+        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/.caseproject");
+        when( pathSource.getFileName() ).thenReturn(".caseproject");
+        assetService.createProcess(pathSource, ".caseproject");
+
+        DirectoryStream directoryStream = Mockito.mock(DirectoryStream.class);
+        when(ioService.newDirectoryStream(any(), any())).thenReturn((DirectoryStream<org.uberfire.java.nio.file.Path>) directoryStream);
+        when(directoryStream.iterator()).thenReturn(Arrays.asList(packagePath).iterator());
+
+        assertTrue(assetService.isCaseProject(packagePath));
     }
 
     private Element getProcessElementFromXml(String content) throws Exception {
