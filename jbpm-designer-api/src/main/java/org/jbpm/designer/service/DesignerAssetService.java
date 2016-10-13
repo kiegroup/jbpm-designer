@@ -44,4 +44,6 @@ public interface DesignerAssetService {
 
     public Path createCaseDefinition( final Path context,
             final String fileName, String caseIdPrefix );
+
+    public boolean isCaseProject(Path rootProjectPath);
 }
