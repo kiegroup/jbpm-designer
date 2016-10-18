@@ -4822,6 +4822,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
     readOnly: true,
     dtype : "",
     addCustomKPI : "",
+	addCaseFile : "",
     
     /**
      * If the trigger was clicked a dialog has to be opened
@@ -4864,6 +4865,10 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                         falseType.push("false");
                         falseType.push("false");
                         customKPIData.push(falseType);
+
+						var customCaseFileData = new Array();
+						customCaseFileData.push(trueType);
+						customCaseFileData.push(falseType);
 
                         var customTypeData = new Array();
 
@@ -4922,7 +4927,10 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                             name: 'ctype'
                         }, {
                             name: 'kpi'
-                        }]);
+                        }, {
+							name: 'casefile'
+						}
+						]);
 
                         var vardefsProxy = new Ext.data.MemoryProxy({
                             root: []
@@ -4964,21 +4972,35 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                         if(innerParts.length == 3) {
                                             ckpi = innerParts[2];
                                         }
+										var pname = innerParts[0];
+										var casefile = "false";
+										if(pname.startsWith("caseFile_")) {
+											pname = pname.substring(9, pname.length);
+											casefile = "true";
+										}
                                         vardefs.add(new VarDef({
-                                            name: innerParts[0],
+                                            name: pname,
                                             stype: innerParts[1],
                                             ctype: '',
-                                            kpi: ckpi
+                                            kpi: ckpi,
+											casefile: casefile
                                         }));
                                     } else {
                                         var ckpi = "false";
                                         //check if innerparts[1] is kpi or not
                                         if(innerParts[1] == "true" || innerParts[1] == "false") {
+											var pname = innerParts[0];
+											var casefile = "false";
+											if(pname.startsWith("caseFile_")) {
+												pname = pname.substring(9, pname.length);
+												casefile = "true";
+											}
                                             vardefs.add(new VarDef({
-                                                name: innerParts[0],
+                                                name: pname,
                                                 stype: '',
                                                 ctype: '',
-                                                kpi: innerParts[1]
+                                                kpi: innerParts[1],
+												casefile: casefile
                                             }));
                                         } else {
                                             var ckpi = "false";
@@ -4986,21 +5008,35 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                             if(innerParts.length == 3) {
                                                 ckpi = innerParts[2];
                                             }
+											var pname = innerParts[0];
+											var casefile = "false";
+											if(pname.startsWith("caseFile_")) {
+												pname = pname.substring(9, pname.length);
+												casefile = "true";
+											}
                                             vardefs.add(new VarDef({
-                                                name: innerParts[0],
+                                                name: pname,
                                                 stype: '',
                                                 ctype: innerParts[1],
-                                                kpi: ckpi
+                                                kpi: ckpi,
+												casefile: casefile
                                             }));
                                         }
 
                                     }
                                 } else {
+									var pname = nextPart;
+									var casefile = "false";
+									if(pname.startsWith("caseFile_")) {
+										pname = pname.substring(9, pname.length);
+										casefile = "true";
+									}
                                     vardefs.add(new VarDef({
-                                        name: nextPart,
+                                        name: pname,
                                         stype: '',
                                         ctype: '',
-                                        kpi: "false"
+                                        kpi: "false",
+										casefile: casefile
                                     }));
                                 }
                             }
@@ -5009,7 +5045,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
 
                         var itemDeleter = new Extensive.grid.ItemDeleter();
                         itemDeleter.setDType(this.dtype);
-						var dialogSize = ORYX.Utils.getDialogSize(300, 700);
+						var dialogSize = ORYX.Utils.getDialogSize(300, 900);
 						var smallColWidth = (dialogSize.width - 80) / 7;
 
                         var gridId = Ext.id();
@@ -5020,6 +5056,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                         };
 
                         var cckpi = this.addCustomKPI;
+						var ccf = this.addCaseFile;
                         var grid = new Ext.grid.EditorGridPanel({
                             autoScroll: true,
                             autoHeight: true,
@@ -5072,6 +5109,39 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                 editor: new Ext.form.TextField({ allowBlank: true }),
                                 renderer: Ext.util.Format.htmlEncode
                             }, {
+								id: 'casefile',
+								header: "Case File",
+								width: smallColWidth,
+								dataIndex: 'casefile',
+								disabled: (ccf != "true"),
+								editor: new Ext.form.ComboBox({
+									typeAhead: true,
+									anyMatch: true,
+									id: 'casefileConbo',
+									valueField:'value',
+									displayField:'name',
+									labelStyle:'display:none',
+									submitValue : true,
+									typeAhead: true,
+									queryMode: 'local',
+									mode: 'local',
+									disabled: (ccf != "true"),
+									triggerAction: 'all',
+									selectOnFocus:true,
+									hideTrigger: false,
+									forceSelection: false,
+									selectOnFocus:true,
+									autoSelect:false,
+									editable: true,
+									store: new Ext.data.SimpleStore({
+										fields: [
+											'name',
+											'value'
+										],
+										data: customCaseFileData
+									})
+								})
+							}, {
                                 id: 'kpi',
                                 header: "KPI",
                                 width: smallColWidth,
@@ -5123,7 +5193,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                             name: '',
                                             stype: '',
                                             ctype: '',
-                                            kpi: 'false'
+                                            kpi: 'false',
+											casefile : 'false'
                                         }));
                                         grid.fireEvent('cellclick', grid, vardefs.getCount()-1, 1, null);
                                     }
@@ -5166,30 +5237,47 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                     grid.stopEditing();
                                     grid.getView().refresh();
                                     var ckpi = this.addCustomKPI;
+									var ccf = this.addCaseFile;
                                     vardefs.data.each(function() {
                                         if(this.data['name'].length > 0) {
                                             if(this.data['stype'].length > 0) {
                                                 if(this.data['stype'] == "Object" && this.data['ctype'].length > 0) {
-                                                    outValue += this.data['name'] + ":" + this.data['ctype'];
+													if(ccf == "true" && this.data['casefile'] == "true") {
+														outValue += "caseFile_" + this.data['name'] + ":" + this.data['ctype'];
+													} else {
+														outValue += this.data['name'] + ":" + this.data['ctype'];
+													}
                                                     if(ckpi == "true") {
                                                         outValue +=  ":" + this.data['kpi'];
                                                     }
                                                     outValue += ",";
                                                 } else {
-                                                    outValue += this.data['name'] + ":" + this.data['stype'];
+													if(ccf == "true" && this.data['casefile'] == "true") {
+														outValue += "caseFile_" + this.data['name'] + ":" + this.data['stype'];
+													} else {
+														outValue += this.data['name'] + ":" + this.data['stype'];
+													}
                                                     if(ckpi == "true") {
                                                         outValue +=  ":" + this.data['kpi'];
                                                     }
                                                     outValue += ",";
                                                 }
                                             } else if(this.data['ctype'].length > 0) {
-                                                outValue += this.data['name'] + ":" + this.data['ctype'];
+												if(ccf == "true" && this.data['casefile'] == "true") {
+													outValue += "caseFile_" + this.data['name'] + ":" + this.data['ctype'];
+												} else {
+													outValue += this.data['name'] + ":" + this.data['ctype'];
+												}
                                                 if(ckpi == "true") {
                                                     outValue +=  ":" + this.data['kpi'];
                                                 }
                                                 outValue += ",";
                                             } else {
-                                                outValue += this.data['name'];
+												if(ccf == "true" && this.data['casefile'] == "true") {
+													outValue += "caseFile_" + this.data['name'];
+												} else {
+													outValue += this.data['name'];
+												}
                                                 if(ckpi == "true") {
                                                     outValue +=  ":" + this.data['kpi'];
                                                 }
@@ -5262,7 +5350,9 @@ Ext.form.ComplexVardefField = Ext.extend(Ext.form.NameTypeEditor,  {
      windowTitle : ORYX.I18N.PropertyWindow.editorForVariableDefinitions,
      addButtonLabel : ORYX.I18N.PropertyWindow.addVariable,
      dtype: ORYX.CONFIG.TYPE_DTYPE_VARDEF,
-     addCustomKPI : "true"
+     addCustomKPI : "true",
+	 addCaseFile : "true"
+
 });
 
 Ext.form.ComplexDataInputField = Ext.extend(Ext.form.NameTypeEditor,  {

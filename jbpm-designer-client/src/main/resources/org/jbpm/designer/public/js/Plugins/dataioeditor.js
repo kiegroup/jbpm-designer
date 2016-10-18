@@ -305,6 +305,8 @@ ORYX.DataIOEditorUtils = {
 
     getProcessVars: function (element) {
         var vars = "** " + ORYX.I18N.DataIOEditorPlugin.VariableDefinitions + " **,";
+        var caseFiles = "** " + ORYX.I18N.DataIOEditorPlugin.CaseFileDefinitions + " **,";
+        var retvars = "";
 
         if (element && element.parent) {
             var parentvars = this.getParentVars(element.parent);
@@ -314,19 +316,30 @@ ORYX.DataIOEditorUtils = {
         }
 
         var processvars = "";
+        var casefilevars = "";
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var vardefs = jsonPath(processJSON.evalJSON(), "$.properties.vardefs");
         if (vardefs) {
             vardefs.forEach(function (item) {
                 if (item.length > 0) {
-                    processvars = processvars + item + ',';
+                    var itemParts = item.split(",");
+                    for (var i = 0; i < itemParts.length; i++) {
+                        if(itemParts[i].startsWith("caseFile_")) {
+                            casefilevars += itemParts[i] + ',';
+                        } else {
+                            processvars += itemParts[i] + ',';
+                        }
+                    }
                 }
             });
         }
-        if (processvars && processvars.length > 0) {
-            vars = vars + processvars;
+        if (casefilevars && casefilevars.length > 0) {
+            retvars = retvars + caseFiles + casefilevars;
         }
-        return vars;
+        if (processvars && processvars.length > 0) {
+            retvars = retvars + vars + processvars;
+        }
+        return retvars;
     },
 
     getParentVars: function (thisNode) {
