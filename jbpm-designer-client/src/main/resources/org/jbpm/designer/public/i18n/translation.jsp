@@ -615,6 +615,7 @@ ORYX.I18N.ShapeMenuPlugin.Association_Unidirectional='<i18n:message key="ORYX.I1
 if(!ORYX.I18N.DataIOEditorPlugin) ORYX.I18N.DataIOEditorPlugin = {};
 
 ORYX.I18N.DataIOEditorPlugin.VariableDefinitions='<i18n:message key="ORYX.I18N.DataIOEditorPlugin.VariableDefinitions">Variable Definitions</i18n:message>';
+ORYX.I18N.DataIOEditorPlugin.CaseFileDefinitions='<i18n:message key="ORYX.I18N.DataIOEditorPlugin.CaseFileDefinitions">Case Files</i18n:message>';
 
 if(!ORYX.I18N.SimplePnmlexport) ORYX.I18N.SimplePnmlexport = {};
 
