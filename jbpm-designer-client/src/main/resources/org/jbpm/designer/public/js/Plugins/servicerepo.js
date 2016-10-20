@@ -115,7 +115,7 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             handler: function(){
                 var tosaveVal = "";
                 var repoURLsCookieValue = this._readCookie("designerservicerepos");
-                var serviceUrlField = Ext.getCmp('serviceurlfield').getRawValue();
+                var serviceUrlField = Ext.getCmp('serviceurlfield').getRawValue().replace(/</g,'&lt;').replace(/>/g,'&gt;');
                 if(repoURLsCookieValue != null) {
                     if(repoURLsCookieValue.indexOf(serviceUrlField) == -1) {
                         tosaveVal = repoURLsCookieValue + "," + serviceUrlField;

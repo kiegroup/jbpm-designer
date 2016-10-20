@@ -113,7 +113,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
                 }});
 			graphTypeChild = new Ext.tree.TreeNode({
 				id:"pgraph:processaverages",
-				text:processSimInfo[0].name + " (" + processSimInfo[0].id + ")",
+				text:processSimInfo[0].name.replace(/</g,"&lt;").replace(/>/g,"&gt;") + " (" + processSimInfo[0].id + ")",
 				allowDrag:false,
 	    		allowDrop:false,           
 	            expanded: true,
@@ -149,7 +149,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				var nextHt = htSimInfo[i];
 					graphTypeChild = new Ext.tree.TreeNode({
 						id:"htgraph:" + nextHt.id,
-						text:nextHt.name + " (" + nextHt.id + ")", 			
+						text:nextHt.name.replace(/</g,"&lt;").replace(/>/g,"&gt;") + " (" + nextHt.id + ")",
 						allowDrag:false,
 			    		allowDrop:false,           
 			            expanded: true,
@@ -167,7 +167,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
 				this.taskType = this.taskType.replace(/\s/g, "");
 			    graphTypeChild = new Ext.tree.TreeNode({
 					id:"tgraph:" + nextTask.id,
-					text:nextTask.name + " (" + nextTask.id + ")", 				
+					text:nextTask.name.replace(/</g,"&lt;").replace(/>/g,"&gt;") + " (" + nextTask.id + ")",
 					allowDrag:false,
 		    		allowDrop:false,           
 		            expanded: true,
@@ -315,7 +315,7 @@ ORYX.Plugins.SimulationResults = Clazz.extend({
         ORYX.EDITOR.simulationHTResourceData = htrobjarray;
 		ORYX.EDITOR.simulationChartTitle = ORYX.I18N.View.sim.resultsTitlesProcessSimResults;
 		ORYX.EDITOR.simulationChartId = jsonObj[0].id;
-		ORYX.EDITOR.simulationChartNodeName = jsonObj[0].name;
+		ORYX.EDITOR.simulationChartNodeName = jsonObj[0].name.replace(/</g,'&lt;').replace(/>/g,'&gt;');
 		Ext.getDom('simchartframe').src = ORYX.BASE_FILE_PATH + "simulation/processchart.jsp";
 
 	},
