@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -16,11 +16,13 @@
 package org.jbpm.designer.taskforms;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-/** 
+/**
  * Holds info for one task form.
- * 
+ *
  * @author Tihomir Surdilovic
  */
 public class TaskFormInfo {
@@ -36,14 +38,14 @@ public class TaskFormInfo {
     private String comment;
     private String priority;
     private String metaOutput;
-    private String modelerOutput;
+    private Map<String, String> modelerOutputs = new HashMap<>();
     private boolean processForm;
     private boolean userTaskForm;
     private List<String> taskOwners = new ArrayList<String>();
     private List<TaskFormInput> taskInputs = new ArrayList<TaskFormInput>();
     private List<TaskFormOutput> taskOutputs = new ArrayList<TaskFormOutput>();
-    
-    
+
+
     public String getId() {
         return id;
     }
@@ -98,12 +100,15 @@ public class TaskFormInfo {
     public void setMetaOutput(String metaOutput) {
         this.metaOutput = metaOutput;
     }
-    public String getModelerOutput() {
-        return this.modelerOutput;
+
+    public Map<String, String> getModelerOutputs() {
+        return modelerOutputs;
     }
-    public void setModelerOutput(String modelerOutput) {
-        this.modelerOutput = modelerOutput;
+
+    public void setModelerOutputs( Map<String, String> modelerOutputs ) {
+        this.modelerOutputs = modelerOutputs;
     }
+
     public List<String> getTaskOwners() {
         return taskOwners;
     }

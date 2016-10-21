@@ -1,0 +1,15 @@
+{
+  "id": "8a05fe13-bcf9-4ca9-8977-796745ffa22e",
+  "model": {
+    "processId": "project1.userTask",
+    "processName": "userTask",
+    "variables": [],
+    "formModelType": "org.kie.workbench.common.forms.jbpm.model.authoring.process.BusinessProcessFormModel"
+  },
+  "fields": [],
+  "layoutTemplate": {
+    "version": 1,
+    "layoutProperties": {},
+    "rows": []
+  }
+}

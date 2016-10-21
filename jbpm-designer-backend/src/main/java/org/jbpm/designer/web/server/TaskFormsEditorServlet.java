@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -16,7 +16,10 @@
 package org.jbpm.designer.web.server;
 
 import org.apache.commons.codec.binary.Base64;
+import org.eclipse.bpmn2.Definitions;
 import org.jbpm.designer.repository.UriUtils;
+import org.jbpm.designer.forms.BPMNFormBuilderService;
+import org.jbpm.designer.taskforms.BPMNFormBuilderManager;
 import org.jbpm.designer.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +29,6 @@ import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
 import org.json.JSONObject;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.java.nio.file.NoSuchFileException;
@@ -42,16 +44,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
-/** 
- * 
+/**
+ *
  * Interaction with task forms for inline editor.
- * 
+ *
  * @author Tihomir Surdilovic
  */
 public class TaskFormsEditorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger _logger = LoggerFactory.getLogger(TaskFormsEditorServlet.class);
-    private static final String FORMMODELER_FILE_EXTENSION = "form";
+    private static final String FORMMODELER_FILE_EXTENSION = "frm";
+    private static final String DEFAULT_FORM_EXTENSION = "ftl";
 	private static final String TASKFORM_NAME_EXTENSION = "-taskform";
 	protected static final String ACTION_LOAD = "load";
 	protected static final String ACTION_SAVE = "save";
@@ -69,7 +72,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
     private VFSService vfsServices;
 
     @Inject
-    private BPMNFormBuilderService formModelerService;
+    private BPMNFormBuilderManager formBuilderManager;
 
     @Inject
     private SessionInfo sessionInfo;
@@ -78,7 +81,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 	    super.init(config);
 	}
-	 
+
 	 @Override
 	 protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		 String action = req.getParameter("action");
@@ -120,7 +123,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
              pw.write("error: " + e.getMessage());
          }
 	 }
-	 
+
 	 private JSONObject storeTaskFormInRepository(String formType, String taskName, String packageName, String formValue, Repository repository) throws Exception{
 
         repository.deleteAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
@@ -150,12 +153,12 @@ public class TaskFormsEditorServlet extends HttpServlet {
 
         return retObj;
 	 }
-	 
+
 	 private String getTaskFormFromRepository(String formType, String taskName, String packageName, Repository repository) {
          try {
              Asset<String> formAsset = repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
 
-             if(formType.equals(FORMMODELER_FILE_EXTENSION)) {
+             if(!formType.equals(DEFAULT_FORM_EXTENSION)) {
                  String uniqueId = formAsset.getUniqueId();
                  if (Base64.isBase64(uniqueId)) {
                      byte[] decoded = Base64.decodeBase64(uniqueId);
@@ -172,8 +175,13 @@ public class TaskFormsEditorServlet extends HttpServlet {
          } catch (NoSuchFileException anfe) {
              try {
                  String formValue = "";
-                 if(formType.equals(FORMMODELER_FILE_EXTENSION)) {
-                    formValue = formModelerService.buildEmptyFormXML(taskName + TASKFORM_NAME_EXTENSION + "." + formType);
+                 if(!formType.equals(DEFAULT_FORM_EXTENSION)) {
+
+                     BPMNFormBuilderService<Definitions> builder = formBuilderManager.getBuilderByFormType( formType );
+
+                     if ( builder != null ) {
+                         formValue = builder.buildEmptyFormContent( taskName + TASKFORM_NAME_EXTENSION + "." + formType );
+                     }
                  }
 
                  AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
