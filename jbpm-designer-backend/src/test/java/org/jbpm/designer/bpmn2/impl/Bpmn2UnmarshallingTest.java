@@ -24,6 +24,8 @@ import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
 import org.eclipse.bpmn2.di.impl.BPMNEdgeImpl;
 import org.eclipse.bpmn2.di.BPMNShape;
+import org.eclipse.bpmn2.impl.DataInputImpl;
+import org.eclipse.bpmn2.impl.DataOutputImpl;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.dd.di.Edge;
@@ -1528,6 +1530,29 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("abcde", ((FormalExpression) lc.getCompletionCondition()).getBody());
         assertNotNull(lc.getInputDataItem());
         assertNotNull(lc.getOutputDataItem());
+    }
+
+    @Test
+    public void testMISubProcess() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("miSubProcess.json");
+        Process process = getRootProcess(definitions);
+        SubProcess miSubProcess = (SubProcess) getFlowElement(process.getFlowElements(), "miSubProcess");
+
+        assertEquals(1, miSubProcess.getIoSpecification().getDataInputs().size());
+        assertEquals(1, miSubProcess.getIoSpecification().getDataOutputs().size());
+        assertEquals(1, miSubProcess.getIoSpecification().getInputSets().size());
+        assertEquals(1, miSubProcess.getIoSpecification().getOutputSets().size());
+        assertEquals(1, miSubProcess.getIoSpecification().getInputSets().get(0).getDataInputRefs().size());
+        assertEquals(1, miSubProcess.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().size());
+
+        assertTrue(miSubProcess.getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics);
+        MultiInstanceLoopCharacteristics lc = (MultiInstanceLoopCharacteristics) miSubProcess.getLoopCharacteristics();
+        assertEquals(miSubProcess.getId() + "_input", lc.getLoopDataInputRef().getId());
+        assertEquals(miSubProcess.getId() + "_output", lc.getLoopDataOutputRef().getId());
+        assertEquals("variableOne", ((DataInputImpl) lc.getLoopDataInputRef()).getName());
+        assertEquals("variableTwo", ((DataOutputImpl) lc.getLoopDataOutputRef()).getName());
+        assertNotNull("defaultDataInput", lc.getInputDataItem().getId());
+        assertNotNull("defaultDataOutput", lc.getOutputDataItem().getId());
     }
 
     @Test
