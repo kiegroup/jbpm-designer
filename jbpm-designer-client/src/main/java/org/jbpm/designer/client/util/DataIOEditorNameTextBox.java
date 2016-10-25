@@ -20,7 +20,9 @@ import java.util.Set;
 
 import com.google.gwt.regexp.shared.RegExp;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
+import org.jbpm.designer.service.DesignerSpecific;
 
+@DesignerSpecific
 public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
 
     Set<String> invalidValues = null;

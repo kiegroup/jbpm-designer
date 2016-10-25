@@ -48,6 +48,7 @@ import org.jbpm.designer.client.util.ComboBox;
 import org.jbpm.designer.client.util.ComboBoxView;
 import org.jbpm.designer.client.util.DataIOEditorNameTextBox;
 import org.jbpm.designer.client.util.ListBoxValues;
+import org.jbpm.designer.service.DesignerSpecific;
 import org.uberfire.workbench.events.NotificationEvent;
 
 /**
@@ -75,6 +76,7 @@ public class AssignmentListItemWidgetViewImpl extends Composite implements Assig
     @Inject
     @Bound
     @DataField
+    @DesignerSpecific
     protected DataIOEditorNameTextBox name;
 
     private boolean allowDuplicateNames = true;
