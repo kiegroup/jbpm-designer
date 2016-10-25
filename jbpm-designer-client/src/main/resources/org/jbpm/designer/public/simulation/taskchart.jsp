@@ -27,7 +27,7 @@ function clearChart() {
 	<script>document.getElementById('hbarcharticonimg').title = parent.ORYX.I18N.View.sim.HorizontalBarChart;</script>
 	<div class="bcharticon"><a href="#" onclick="clearChart(); showBarChart(); return false;"><img id="barcharticonimg" src="<%=request.getContextPath()%>/org.jbpm.designer.jBPMDesigner/images/simulation/barcharticon.png" title="Bar Chart"/></a></div>
 	<script>document.getElementById('barcharticonimg').title = parent.ORYX.I18N.View.sim.BarChart;</script>
-	<div class="charttitle"><script>document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + parent.ORYX.EDITOR.simulationChartNodeName + ")");</script></div>
+	<div class="charttitle"><script>var nodename = parent.ORYX.EDITOR.simulationChartNodeName.replace(/</g,'&lt;').replace(/>/g,'&gt;'); document.write(parent.ORYX.EDITOR.simulationChartTitle +  " (" + nodename + ")");</script></div>
 </div><br/>
 <div class="outterchart">
     <h2><script>document.write(parent.ORYX.I18N.View.sim.chartsExecutionTimes);</script></h2>
