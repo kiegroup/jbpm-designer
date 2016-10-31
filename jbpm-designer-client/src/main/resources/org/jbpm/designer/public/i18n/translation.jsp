@@ -738,6 +738,7 @@ ORYX.I18N.View.sim.runSim = '<i18n:message key="ORYX.I18N.View.sim.runSim">Run P
 ORYX.I18N.View.sim.runningSim = '<i18n:message key="ORYX.I18N.View.sim.runningSim">Running Process Simulation...</i18n:message>';
 ORYX.I18N.View.sim.simNoResults = '<i18n:message key="ORYX.I18N.View.sim.simNoResults">Simulation engine did not return results: </i18n:message>';
 ORYX.I18N.View.sim.unableToPerform = '<i18n:message key="ORYX.I18N.View.sim.unableToPerform">Unable to perform simulation:</i18n:message>';
+ORYX.I18N.View.sim.unableToPerformMsg = '<i18n:message key="ORYX.I18N.View.sim.unableToPerformMsg">The process may have unstructured loops where one instance of a loop is not finished before another is started. Simulation currently does not support such processes.</i18n:message>';
 ORYX.I18N.View.sim.resultsInfo = '<i18n:message key="ORYX.I18N.View.sim.resultsInfo">Simulation Info</i18n:message>';
 ORYX.I18N.View.sim.resultsGraphs = '<i18n:message key="ORYX.I18N.View.sim.resultsGraphs">Simulation Graphs</i18n:message>';
 ORYX.I18N.View.sim.resultsProcessId = '<i18n:message key="ORYX.I18N.View.sim.resultsProcessId">Process id: </i18n:message>';
