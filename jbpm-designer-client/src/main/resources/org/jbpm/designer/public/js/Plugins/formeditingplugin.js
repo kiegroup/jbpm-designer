@@ -120,34 +120,44 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                         taskname =  taskname.replace(/\&/g, "");
                         taskname = taskname.replace(/\s/g, "");
 
-                        Ext.Ajax.request({
-                            url: ORYX.PATH + "taskforms",
-                            method: 'POST',
-                            success: function(request){
-                                this.facade.raiseEvent({
-                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                    ntype		: 'success',
-                                    msg         : ORYX.I18N.forms.successGenTask,
-                                    title       : ''
+                        if(/^\w+$/.test(taskname)) {
+                            Ext.Ajax.request({
+                                url: ORYX.PATH + "taskforms",
+                                method: 'POST',
+                                success: function(request){
+                                    this.facade.raiseEvent({
+                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                        ntype		: 'success',
+                                        msg         : ORYX.I18N.forms.successGenTask,
+                                        title       : ''
 
-                                });
-                            }.createDelegate(this),
-                            failure: function(){
-                                this.facade.raiseEvent({
-                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                    ntype		: 'error',
-                                    msg         : ORYX.I18N.forms.failGenTask,
-                                    title       : ''
-                                });
-                            }.createDelegate(this),
-                            params: {
-                                profile: ORYX.PROFILE,
-                                uuid :   window.btoa(encodeURI(ORYX.UUID)),
-                                json : ORYX.EDITOR.getSerializedJSON(),
-                                ppdata: ORYX.PREPROCESSING,
-                                taskid: currentShapes[0].resourceId
-                            }
-                        });
+                                    });
+                                }.createDelegate(this),
+                                failure: function(){
+                                    this.facade.raiseEvent({
+                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                        ntype		: 'error',
+                                        msg         : ORYX.I18N.forms.failGenTask,
+                                        title       : ''
+                                    });
+                                }.createDelegate(this),
+                                params: {
+                                    profile: ORYX.PROFILE,
+                                    uuid :   window.btoa(encodeURI(ORYX.UUID)),
+                                    json : ORYX.EDITOR.getSerializedJSON(),
+                                    ppdata: ORYX.PREPROCESSING,
+                                    taskid: currentShapes[0].resourceId
+                                }
+                            });
+                        } else {
+                            ORYX.Config.FACADE.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : ORYX.I18N.forms.failInvalidTaskName,
+                                title       : ''
+
+                            });
+                        }
 
                     } else {
                         ORYX.Config.FACADE.raiseEvent({
@@ -198,10 +208,21 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                     if(taskname && taskname.length > 0) {
                         taskname =  taskname.replace(/\&/g, "");
                         taskname = taskname.replace(/\s/g, "");
-                        ORYX.Config.FACADE.raiseEvent({
-                            type: ORYX.CONFIG.EVENT_TASKFORM_EDIT,
-                            tn: taskname
-                        });
+
+                        if(/^\w+$/.test(taskname)) {
+                            ORYX.Config.FACADE.raiseEvent({
+                                type: ORYX.CONFIG.EVENT_TASKFORM_EDIT,
+                                tn: taskname
+                            });
+                        } else {
+                            ORYX.Config.FACADE.raiseEvent({
+                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype		: 'error',
+                                msg         : ORYX.I18N.forms.failInvalidTaskName,
+                                title       : ''
+
+                            });
+                        }
                     } else {
                         ORYX.Config.FACADE.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
