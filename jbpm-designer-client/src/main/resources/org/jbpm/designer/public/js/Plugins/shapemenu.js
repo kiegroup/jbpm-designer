@@ -352,17 +352,26 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		if(taskname && taskname.length > 0) {
             taskname =  taskname.replace(/\&/g, "");
             taskname = taskname.replace(/\s/g, "");
-			this.facade.raiseEvent({
-	            type: ORYX.CONFIG.EVENT_TASKFORM_EDIT,
-	            tn: taskname
-	        });
+
+			if(/^\w+$/.test(taskname)) {
+				this.facade.raiseEvent({
+					type: ORYX.CONFIG.EVENT_TASKFORM_EDIT,
+					tn: taskname
+				});
+			} else {
+				this.facade.raiseEvent({
+					type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+					ntype		: 'error',
+					msg         : ORYX.I18N.forms.failInvalidTaskName,
+					title       : ''
+				});
+			}
 		} else {
             this.facade.raiseEvent({
                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                 ntype		: 'error',
                 msg         : ORYX.I18N.forms.failNoTaskName,
                 title       : ''
-
             });
 		}
 	},
