@@ -104,33 +104,33 @@ public class Bpmn2JsonMarshallerTest {
     public void testTextAnnotationEdges() throws Exception {
         List<SimpleEdge> expectedEdges = new ArrayList<SimpleEdge>();
         expectedEdges.add(createEdge("Start\nAnnotation")
-                .addPoint(15, 15)
-                .addPoint(1, 25)
+                        .addPoint(15, 15)
+                        .addPoint(1, 25)
         );
         expectedEdges.add(createEdge("Task\nIn\nLane\nAnnotation")
-                .addPoint(50, 40)
-                .addPoint(380, 184)
-                .addPoint(331, 184)
-                .addPoint(1, 25)
+                        .addPoint(50, 40)
+                        .addPoint(380, 184)
+                        .addPoint(331, 184)
+                        .addPoint(1, 25)
         );
         expectedEdges.add(createEdge("WID\nTask\nannotation")
-                .addPoint(50, 40)
-                .addPoint(690, 507)
-                .addPoint(1, 25)
+                        .addPoint(50, 40)
+                        .addPoint(690, 507)
+                        .addPoint(1, 25)
         );
         expectedEdges.add(createEdge("User\nTask\nAnnotation")
-                .addPoint(50, 40)
-                .addPoint(196, 646)
-                .addPoint(1, 25)
+                        .addPoint(50, 40)
+                        .addPoint(196, 646)
+                        .addPoint(1, 25)
         );
         expectedEdges.add(createEdge("Gateway\nin\nlane\nannotation")
-                .addPoint(20, 20)
-                .addPoint(1, 25)
+                        .addPoint(20, 20)
+                        .addPoint(1, 25)
         );
         expectedEdges.add(createEdge("End\nIn\nSwimlane")
-                .addPoint(14, 14)
-                .addPoint(915, 231)
-                .addPoint(1, 25)
+                        .addPoint(14, 14)
+                        .addPoint(915, 231)
+                        .addPoint(1, 25)
         );
         expectedEdges.add(createEdge("Subprocess's\nAnnotation")
                 .addPoint(100, 80)
@@ -138,9 +138,9 @@ public class Bpmn2JsonMarshallerTest {
                 .addPoint(1, 25)
         );
         expectedEdges.add(createEdge("Swimlane's\nAnnotation")
-                .addPoint(300, 125)
-                .addPoint(1066, 320)
-                .addPoint(1, 25)
+                        .addPoint(300, 125)
+                        .addPoint(1066, 320)
+                        .addPoint(1, 25)
         );
 
         JSONObject process = loader.loadProcessFromXml("textAnnotation.bpmn2");
@@ -507,6 +507,17 @@ public class Bpmn2JsonMarshallerTest {
 
         assertTrue(assignments.contains("[dout]Result->processVariable"));
         assertTrue(dataoutputset.contains("Result:java.lang.Object"));
+    }
+
+    @Test
+    public void testOnEntryOnExitActions() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("onEntryonExitActions.bpmn2");
+        JSONObject bcTask = getChildByName(process, "bc");
+        JSONObject properties = bcTask.getJSONObject("properties");
+
+        assertEquals("onExit1;\nonExit2;\n", properties.getString("onexitactions"));
+        assertEquals("onEntry1;\nonEntry2;\n", properties.getString("onentryactions"));
+
     }
 
 }

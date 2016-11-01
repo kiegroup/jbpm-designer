@@ -1114,7 +1114,7 @@ public class Bpmn2JsonMarshaller {
 
                 for(OnEntryScriptType onEntryScript : onEntryExtensions) {
                     onEntryStr += onEntryScript.getScript();
-                    onEntryStr += "|";
+                    onEntryStr += "\n";
 
                     if(onEntryScript.getScriptFormat() != null) {
                         String format = onEntryScript.getScriptFormat();
@@ -1134,7 +1134,7 @@ public class Bpmn2JsonMarshaller {
 
                 for(OnExitScriptType onExitScript : onExitExtensions) {
                     onExitStr += onExitScript.getScript();
-                    onExitStr += "|";
+                    onExitStr += "\n";
 
                     if(onExitScript.getScriptFormat() != null) {
                         String format = onExitScript.getScriptFormat();
@@ -1692,7 +1692,7 @@ public class Bpmn2JsonMarshaller {
 
                 for(OnEntryScriptType onEntryScript : onEntryExtensions) {
                     onEntryStr += onEntryScript.getScript();
-                    onEntryStr += "|";
+                    onEntryStr += "\n";
 
                     if(onEntryScript.getScriptFormat() != null) {
                         String format = onEntryScript.getScriptFormat();
@@ -1712,7 +1712,7 @@ public class Bpmn2JsonMarshaller {
 
                 for(OnExitScriptType onExitScript : onExitExtensions) {
                     onExitStr += onExitScript.getScript();
-                    onExitStr += "|";
+                    onExitStr += "\n";
 
                     if(onExitScript.getScriptFormat() != null) {
                         String format = onExitScript.getScriptFormat();
@@ -2169,7 +2169,7 @@ public class Bpmn2JsonMarshaller {
 
                 for(OnEntryScriptType onEntryScript : onEntryExtensions) {
                     onEntryStr += onEntryScript.getScript();
-                    onEntryStr += "|";
+                    onEntryStr += "\n";
 
                     if(onEntryScript.getScriptFormat() != null) {
                         String format = onEntryScript.getScriptFormat();
@@ -2189,7 +2189,7 @@ public class Bpmn2JsonMarshaller {
 
                 for(OnExitScriptType onExitScript : onExitExtensions) {
                     onExitStr += onExitScript.getScript();
-                    onExitStr += "|";
+                    onExitStr += "\n";
 
                     if(onExitScript.getScriptFormat() != null) {
                         String format = onExitScript.getScriptFormat();
