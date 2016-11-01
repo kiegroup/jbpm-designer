@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/bpmn20" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:drools="http://www.jboss.org/drools" id="_B-mwIKBCEeajid8Rau1dpQ" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd" exporter="jBPM Designer" exporterVersion="6.2.0" expressionLanguage="http://www.mvel.org/2.0" targetNamespace="http://www.omg.org/bpmn20" typeLanguage="http://www.java.com/javaTypes">
+    <bpmn2:process id="Evaluation.ccc" drools:packageName="org.jbpm" drools:version="1.0" name="ccc" isExecutable="true">
+        <bpmn2:businessRuleTask id="_BABE2F80-39DD-4A95-A7FF-A70FAE734538" drools:selectable="true" drools:scriptFormat="http://www.java.com/java" color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" name="bc">
+            <bpmn2:extensionElements>
+                <drools:metaData name="elementname">
+                    <drools:metaValue><![CDATA[bc]]></drools:metaValue>
+                </drools:metaData>
+                <drools:onEntry-script scriptFormat="http://www.java.com/java">
+                    <drools:script>onEntry1;</drools:script>
+                </drools:onEntry-script>
+                <drools:onEntry-script scriptFormat="http://www.java.com/java">
+                    <drools:script>onEntry2;</drools:script>
+                </drools:onEntry-script>
+
+                <drools:onExit-script scriptFormat="http://www.java.com/java">
+                    <drools:script>onExit1;</drools:script>
+                </drools:onExit-script>
+                <drools:onExit-script scriptFormat="http://www.java.com/java">
+                    <drools:script>onExit2;</drools:script>
+                </drools:onExit-script>
+            </bpmn2:extensionElements>
+        </bpmn2:businessRuleTask>
+    </bpmn2:process>
+    <bpmndi:BPMNDiagram id="_B-mwIaBCEeajid8Rau1dpQ">
+        <bpmndi:BPMNPlane id="_B-mwIqBCEeajid8Rau1dpQ" bpmnElement="Evaluation.ccc">
+            <bpmndi:BPMNShape id="_B-mwI6BCEeajid8Rau1dpQ" bpmnElement="_BABE2F80-39DD-4A95-A7FF-A70FAE734538">
+                <dc:Bounds height="80.0" width="100.0" x="225.0" y="159.0"/>
+            </bpmndi:BPMNShape>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+    <bpmn2:relationship id="_B-mwJKBCEeajid8Rau1dpQ" type="BPSimData">
+        <bpmn2:extensionElements>
+            <bpsim:BPSimData>
+                <bpsim:Scenario xsi:type="bpsim:Scenario" id="default" name="Simulationscenario">
+                    <bpsim:ScenarioParameters xsi:type="bpsim:ScenarioParameters" baseTimeUnit="min"/>
+                    <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_BABE2F80-39DD-4A95-A7FF-A70FAE734538" id="_B-mwJaBCEeajid8Rau1dpQ">
+                        <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+                            <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+                            </bpsim:ProcessingTime>
+                        </bpsim:TimeParameters>
+                        <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+                            <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                                <bpsim:FloatingParameter value="0.0"/>
+                            </bpsim:UnitCost>
+                        </bpsim:CostParameters>
+                    </bpsim:ElementParameters>
+                </bpsim:Scenario>
+            </bpsim:BPSimData>
+        </bpmn2:extensionElements>
+        <bpmn2:source>_B-mwIKBCEeajid8Rau1dpQ</bpmn2:source>
+        <bpmn2:target>_B-mwIKBCEeajid8Rau1dpQ</bpmn2:target>
+    </bpmn2:relationship>
+</bpmn2:definitions>
