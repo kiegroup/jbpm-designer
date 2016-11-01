@@ -538,23 +538,47 @@ ORYX.Plugins.Simulation = Clazz.extend({
                                            });
 				    	   			}
 				    	   		} catch(e) {
-                                       this.facade.raiseEvent({
-                                           type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                           ntype		: 'error',
-                                           msg         : ORYX.I18N.View.sim.unableToPerform + e,
-                                           title       : ''
+									var dialogSize = ORYX.Utils.getDialogSize(250, 400);
+									var cf = new Ext.form.TextArea({
+										id:"unabletorunsim",
+										fieldLabel:ORYX.I18N.View.sim.unableToPerform,
+										width:dialogSize.width,
+										height:dialogSize.height,
+										value:ORYX.I18N.View.sim.unableToPerformMsg
+									});
 
-                                       });
+									var win = new Ext.Window({
+										width:dialogSize.width,
+										id:'unabletorunsimwin',
+										height:dialogSize.height,
+										layout: 'fit',
+										autoScroll:true,
+										title:ORYX.I18N.View.sim.unableToPerform,
+										items: [cf]
+									});
+									win.show();
 				    	   		}
 				            }.bind(this),
 				            failure: function(response){
-                                this.facade.raiseEvent({
-                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                    ntype		: 'error',
-                                    msg         : ORYX.I18N.View.sim.unableToPerform + response.responseText,
-                                    title       : ''
+								var dialogSize = ORYX.Utils.getDialogSize(250, 400);
+								var cf = new Ext.form.TextArea({
+									id:"unabletorunsim",
+									fieldLabel:ORYX.I18N.View.sim.unableToPerform,
+									width:dialogSize.width,
+									height:dialogSize.height,
+									value:ORYX.I18N.View.sim.unableToPerformMsg
+								});
 
-                                });
+								var win = new Ext.Window({
+									width:dialogSize.width,
+									id:'unabletorunsimwin',
+									height:dialogSize.height,
+									layout: 'fit',
+									autoScroll:true,
+									title:ORYX.I18N.View.sim.unableToPerform,
+									items: [cf]
+								});
+								win.show();
 				            }.bind(this),
 				            params: {
 				            	action: 'runsimulation',
