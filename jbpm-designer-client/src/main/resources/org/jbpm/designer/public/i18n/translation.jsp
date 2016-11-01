@@ -1323,6 +1323,7 @@ ORYX.I18N.forms.invalidNumberNodes='<i18n:message key="ORYX.I18N.forms.invalidNu
 ORYX.I18N.forms.successGenTask='<i18n:message key="ORYX.I18N.forms.successGenTask">Successfully generated task form template.</i18n:message>';
 ORYX.I18N.forms.failGenTask='<i18n:message key="ORYX.I18N.forms.failGenTask"><p>Failed to generate task form template.</p></i18n:message>';
 ORYX.I18N.forms.failNoTaskName='<i18n:message key="ORYX.I18N.forms.failNoTaskName">Task Name not specified.</i18n:message>';
+ORYX.I18N.forms.failInvalidTaskName='<i18n:message key="ORYX.I18N.forms.failInvalidTaskName">Task Name not specified.</i18n:message>';
 ORYX.I18N.forms.failNoUserTask='<i18n:message key="ORYX.I18N.forms.failNoUserTask">Selected node is not User Task.</i18n:message>';
 ORYX.I18N.forms.failNoTaskSelected='<i18n:message key="ORYX.I18N.forms.failNoTaskSelected">No task selected.</i18n:message>';
 ORYX.I18N.forms.failProcIdUndef='<i18n:message key="ORYX.I18N.forms.failProcIdUndef">Process Id not specified.</i18n:message>';
