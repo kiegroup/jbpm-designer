@@ -6129,71 +6129,83 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             var keyVal = responseJson[key];
                             var containedRulesComboInfo = new Array();
                             // example:
-                            //"mygroup1||test1.drl^^default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl<<test2.drl^^default://master@jbpm-playground/Evaluation/src/main/resources/test2.drl"
-                            var keyValParts = keyVal.split("||");
+							//"abc||abc.drl^^default://master@aa/Evaluation/src/main/resources/abc.drl"
+							var keyValParts = keyVal.split("||");
                             var ruleFlowName = keyValParts[0];
                             var ruleFlowInfo = keyValParts[1];
 
-                            var ruleFlowInfoParts = ruleFlowInfo.split("<<");
                             var finalRepository = "";
                             var finalProject = "";
                             var finalBranch = "";
 
-                            for(var i = 0; i < ruleFlowInfoParts.length; i++) {
-                                var ruleFlowInfoInnerParts = ruleFlowInfoParts[i].split("^^");
-                                var ruleFlowInfoInnerArray = new Array();
-                                ruleFlowInfoInnerArray.push(ruleFlowInfoInnerParts[0]);
-                                ruleFlowInfoInnerArray.push(ruleFlowInfoInnerParts[1]);
-                                containedRulesComboInfo.push(ruleFlowInfoInnerArray);
+							if(ruleFlowInfo && ruleFlowInfo !== undefined) {
+								var ruleFlowInfoParts = ruleFlowInfo.split("<<");
+								if (ruleFlowInfoParts && ruleFlowInfoParts !== undefined) {
+									for (var i = 0; i < ruleFlowInfoParts.length; i++) {
+										var ruleFlowInfoInnerParts = ruleFlowInfoParts[i].split("^^");
 
-                                var firstInfoPart = ruleFlowInfoParts[i];
-                                // test1.drl^^default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl
-                                var firstInfoPartParts = firstInfoPart.split("^^");
-                                var firstInfoPartPath = firstInfoPartParts[1];
-                                // default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl
-                                var firstInfoPartPathParts = firstInfoPartPath.split("://");
-                                var finalInfo = firstInfoPartPathParts[1];
-                                // master@jbpm-playground/Evaluation/src/main/resources/test1.drl
-                                var finalInfoParts = finalInfo.split("@");
+										var ruleFlowInfoInnerArray = new Array();
+										ruleFlowInfoInnerArray.push(ruleFlowInfoInnerParts[0]);
+										ruleFlowInfoInnerArray.push(ruleFlowInfoInnerParts[1]);
+										containedRulesComboInfo.push(ruleFlowInfoInnerArray);
 
-                                if(finalBranch.indexOf(finalInfoParts[0]) < 0) {
-                                    finalBranch += finalInfoParts[0] + ",";
-                                }
+										var firstInfoPart = ruleFlowInfoParts[i];
+										// test1.drl^^default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl
+										var firstInfoPartParts = firstInfoPart.split("^^");
+
+										var firstInfoPartPath = firstInfoPartParts[1];
+										// default://master@jbpm-playground/Evaluation/src/main/resources/test1.drl
+										var firstInfoPartPathParts = firstInfoPartPath.split("://");
+
+										var finalInfo = firstInfoPartPathParts[1];
+										// master@jbpm-playground/Evaluation/src/main/resources/test1.drl
+										var finalInfoParts = finalInfo.split("@");
 
 
-                                var finalPathParts = finalInfoParts[1];
+										if (finalBranch.indexOf(finalInfoParts[0]) < 0) {
+											finalBranch += finalInfoParts[0] + ",";
+										}
 
-                                if(finalRepository.indexOf(finalPathParts.split("/")[0]) < 0) {
-                                    finalRepository += finalPathParts.split("/")[0] + ",";
-                                }
 
-                                if(finalProject.indexOf(finalPathParts.split("/")[1]) < 0) {
-                                    finalProject += finalPathParts.split("/")[1] + ",";
-                                }
+										var finalPathParts = finalInfoParts[1];
 
-                            }
-                            if (finalRepository.endsWith(",")) {
-                                finalRepository = finalRepository.substr(0, finalRepository.length - 1);
-                            }
-                            if (finalProject.endsWith(",")) {
-                                finalProject = finalProject.substr(0, finalProject.length - 1);
-                            }
-                            if (finalBranch.endsWith(",")) {
-                                finalBranch = finalBranch.substr(0, finalBranch.length - 1);
-                            }
+										if (finalRepository.indexOf(finalPathParts.split("/")[0]) < 0) {
+											finalRepository += finalPathParts.split("/")[0] + ",";
+										}
 
-                            ruleflowgroupsdefs.add(new RuleFlowGroupDef({
-                                name: ruleFlowName,
-                                rules : containedRulesComboInfo,
-                                repo : finalRepository,
-                                project : finalProject,
-                                branch : finalBranch,
-                                fullpath : firstInfoPartPath
-                            }));
+
+										if (finalProject.indexOf(finalPathParts.split("/")[1]) < 0) {
+											finalProject += finalPathParts.split("/")[1] + ",";
+										}
+
+									}
+								}
+
+								if (finalRepository.endsWith(",")) {
+									finalRepository = finalRepository.substr(0, finalRepository.length - 1);
+								}
+								if (finalProject.endsWith(",")) {
+									finalProject = finalProject.substr(0, finalProject.length - 1);
+								}
+								if (finalBranch.endsWith(",")) {
+									finalBranch = finalBranch.substr(0, finalBranch.length - 1);
+								}
+
+								ruleflowgroupsdefs.add(new RuleFlowGroupDef({
+									name: ruleFlowName,
+									rules : containedRulesComboInfo,
+									repo : finalRepository,
+									project : finalProject,
+									branch : finalBranch,
+									fullpath : firstInfoPartPath
+								}));
+
+							}
+
                         }
                         ruleflowgroupsdefs.commitChanges();
 
-						var dialogSize = ORYX.Utils.getDialogSize(350, 760);
+						var dialogSize = ORYX.Utils.getDialogSize(350, 860);
 						var smallColWidth = (dialogSize.width - 80) / 7;
 						var gridId = Ext.id();
                         var grid = new Ext.grid.EditorGridPanel({
@@ -6214,7 +6226,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
                             {
                                 id: 'rfrulenames',
                                 header: 'Rules',
-                                width: smallColWidth * 2,
+                                width: smallColWidth * 4,
                                 sortable: false,
                                 renderer: function(value, metaData, record, rowIndex, colIndex, store) {
 

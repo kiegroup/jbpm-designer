@@ -37,7 +37,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.jbpm.designer.query.DesignerFindDataTypesQuery;
-import org.jbpm.designer.query.FindRuleFlowNamesQuery;
+import org.jbpm.designer.query.DesignerFindRuleFlowNamesQuery;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
@@ -188,7 +188,7 @@ public class CalledElementServlet extends HttpServlet {
 
         // Query RuleFlowGroups for asset project and branch
         List<RefactoringPageRow> results = queryService.query(
-                FindRuleFlowNamesQuery.NAME,
+                DesignerFindRuleFlowNamesQuery.NAME,
                 new HashSet<ValueIndexTerm>() {{
                     add(new ValueSharedPartIndexTerm("*", PartType.RULEFLOW_GROUP, TermSearchType.WILDCARD));
                     add(new ValueProjectNameIndexTerm(projectAndBranch[0]));
@@ -205,7 +205,7 @@ public class CalledElementServlet extends HttpServlet {
 
         // Query RuleFlowGroups for all projects and branches
         results = queryService.query(
-                FindRuleFlowNamesQuery.NAME,
+                DesignerFindRuleFlowNamesQuery.NAME,
                 new HashSet<ValueIndexTerm>() {{
                     add(new ValueSharedPartIndexTerm("*", PartType.RULEFLOW_GROUP, TermSearchType.WILDCARD));
                 }});

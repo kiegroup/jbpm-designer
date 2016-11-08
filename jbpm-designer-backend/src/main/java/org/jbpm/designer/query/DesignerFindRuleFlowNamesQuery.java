@@ -32,7 +32,6 @@ import org.kie.workbench.common.services.refactoring.backend.server.query.respon
 import org.kie.workbench.common.services.refactoring.backend.server.query.standard.AbstractFindQuery;
 import org.kie.workbench.common.services.refactoring.model.index.terms.SharedPartIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValuePartReferenceIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueProjectNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueBranchNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueSharedPartIndexTerm;
@@ -49,9 +48,9 @@ import org.uberfire.io.IOService;
 import org.uberfire.paging.PageResponse;
 
 @ApplicationScoped
-public class FindRuleFlowNamesQuery extends AbstractFindQuery implements NamedQuery {
+public class DesignerFindRuleFlowNamesQuery extends AbstractFindQuery implements NamedQuery {
 
-    private static final Logger logger = LoggerFactory.getLogger(FindRuleFlowNamesQuery.class);
+    private static final Logger logger = LoggerFactory.getLogger(DesignerFindRuleFlowNamesQuery.class);
 
     @Inject
     @Named("ioStrategy")
@@ -59,7 +58,7 @@ public class FindRuleFlowNamesQuery extends AbstractFindQuery implements NamedQu
 
     private RuleFlowNamesResponseBuilder responseBuilder = new RuleFlowNamesResponseBuilder();
 
-    public static final String NAME = FindRuleFlowNamesQuery.class.getSimpleName();
+    public static final String NAME = DesignerFindRuleFlowNamesQuery.class.getSimpleName();
 
     @Override
     public String getName() {

@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jbpm.designer.query.DesignerFindDataTypesQuery;
-import org.jbpm.designer.query.FindRuleFlowNamesQuery;
+import org.jbpm.designer.query.DesignerFindRuleFlowNamesQuery;
 import org.junit.Test;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueResourceIndexTerm;
@@ -37,7 +37,7 @@ public class QueryValidateTermsTest {
 
     @Test
     public void findRuleFlowNamesQueryTermsTest() {
-       FindRuleFlowNamesQuery query = new FindRuleFlowNamesQuery();
+       DesignerFindRuleFlowNamesQuery query = new DesignerFindRuleFlowNamesQuery();
 
        Set<ValueIndexTerm> queryTerms = new HashSet<>();
        try {
