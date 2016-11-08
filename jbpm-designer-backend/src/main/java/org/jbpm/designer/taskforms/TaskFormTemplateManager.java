@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -30,13 +30,13 @@ import org.eclipse.bpmn2.*;
 import org.eclipse.bpmn2.Process;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
 import org.stringtemplate.v4.STRawGroupDir;
 import org.uberfire.backend.vfs.Path;
+import org.uberfire.backend.vfs.PathFactory;
 
-/** 
+/**
  * Manager for task form templates.
- * 
+ *
  * @author Tihomir Surdilovic
  */
 public class TaskFormTemplateManager {
@@ -53,12 +53,12 @@ public class TaskFormTemplateManager {
     private String taskId;
     private List<TaskFormInfo> taskFormInformationList = new ArrayList<TaskFormInfo>();
     private Path myPath;
-    private BPMNFormBuilderService formModelerService;
+    private BPMNFormBuilderManager formBuilderManager;
 
-    
-    public TaskFormTemplateManager(Path myPath, BPMNFormBuilderService formModelerService, IDiagramProfile profile, Asset processAsset, String templatesPath, Definitions def, String taskId) {
+
+    public TaskFormTemplateManager( Path myPath, BPMNFormBuilderManager formBuilderManager, IDiagramProfile profile, Asset processAsset, String templatesPath, Definitions def, String taskId) {
         this.myPath = myPath;
-        this.formModelerService = formModelerService;
+        this.formBuilderManager = formBuilderManager;
         this.profile = profile;
         this.packageName = processAsset.getAssetLocation();
         this.assetName = processAsset.getName();
@@ -67,7 +67,7 @@ public class TaskFormTemplateManager {
         this.def = def;
         this.taskId = taskId;
     }
-    
+
     public void processTemplates() {
         List<RootElement> rootElements = def.getRootElements();
         for(RootElement re : rootElements) {
@@ -108,7 +108,7 @@ public class TaskFormTemplateManager {
                         tfi.setUserTaskForm(false);
                         taskFormInformationList.add(tfi);
                     }
-                    
+
                     for(FlowElement fe : process.getFlowElements()) {
                         if(fe instanceof UserTask) {
                             getTaskInfoForUserTask((UserTask) fe, process, processProperties, taskId);
@@ -122,7 +122,7 @@ public class TaskFormTemplateManager {
                 }
             }
         }
-        
+
     }
 
     private void getTaskInfoForContainers(FlowElementsContainer container, Process process, List<Property> processProperties, String taskId) {
@@ -340,17 +340,17 @@ public class TaskFormTemplateManager {
             generateUserTaskForm(utask, process, processProperties);
         }
     }
-    
+
     private void mergeUserTaskForms(TaskFormInfo sourceForm, TaskFormInfo targetForm) {
         List<TaskFormInput> toMergeTaskInputs = new ArrayList<TaskFormInput>();
         List<TaskFormOutput> toMergeTaskOutputs = new ArrayList<TaskFormOutput>();
-        
+
         for(String sourceOwner : sourceForm.getTaskOwners()) {
             if(!targetForm.getTaskOwners().contains(sourceOwner)) {
                 targetForm.getTaskOwners().add(sourceOwner);
             }
         }
-        
+
         for(TaskFormInput sourceInput : sourceForm.getTaskInputs()) {
             boolean foundInput = false;
             for(TaskFormInput targetInput : targetForm.getTaskInputs()) {
@@ -362,7 +362,7 @@ public class TaskFormTemplateManager {
                 toMergeTaskInputs.add(sourceInput);
             }
         }
-        
+
         for(TaskFormOutput sourceOutput : sourceForm.getTaskOutputs()) {
             boolean foundOutput = false;
             for(TaskFormOutput targetOutput : targetForm.getTaskOutputs()) {
@@ -374,8 +374,8 @@ public class TaskFormTemplateManager {
                 toMergeTaskOutputs.add(sourceOutput);
             }
         }
-        
-        
+
+
         for(TaskFormInput input : toMergeTaskInputs) {
             targetForm.getTaskInputs().add(input);
         }
@@ -383,7 +383,7 @@ public class TaskFormTemplateManager {
             targetForm.getTaskOutputs().add(output);
         }
     }
-    
+
     private boolean isValidStructureRef(String structureRef) {
         // supported types are Float Integer String Object Boolean and Underfined
         if(structureRef != null && structureRef.length() > 0) {
@@ -393,7 +393,7 @@ public class TaskFormTemplateManager {
             return true;
         }
     }
-    
+
     public void generateTemplates() {
         for(TaskFormInfo tfi : taskFormInformationList) {
             if(tfi.isProcessForm()) {
@@ -401,9 +401,10 @@ public class TaskFormTemplateManager {
             } else {
                 generateUserTaskTemplate(tfi);
             }
+            generatePlatformForms( tfi );
         }
     }
-    
+
     private void generateProcessTemplate(TaskFormInfo tfi) {
         STRawGroupDir templates = new STRawGroupDir(templatesPath, '$', '$');
         ST processFormTemplate = templates.getInstanceOf("processtaskform");
@@ -412,20 +413,26 @@ public class TaskFormTemplateManager {
         processFormTemplate.add("bclose", "}");
         processFormTemplate.add("dollar", "$");
         tfi.setMetaOutput(processFormTemplate.render());
-
-        String modelerFileName = tfi.getId() + ".form";
-        String modelerURI = myPath.toURI();
-        modelerURI = modelerURI.substring(0, modelerURI.lastIndexOf("/"));
-        modelerURI = modelerURI + "/" + modelerFileName;
-
-        try {
-            tfi.setModelerOutput(formModelerService.buildFormXML(myPath, modelerFileName, modelerURI, def, tfi.getTaskId()));
-        } catch(Exception e) {
-            _logger.error(e.getMessage());
-            e.printStackTrace();
-        }
     }
-    
+
+    protected void generatePlatformForms( TaskFormInfo tfi ) {
+        formBuilderManager.getFormBuilders().forEach( formBuilder -> {
+            String formName = tfi.getId() + "." + formBuilder.getFormExtension();
+            String formURI = myPath.toURI();
+            formURI = formURI.substring(0, formURI.lastIndexOf("/"));
+            formURI = formURI + "/" + formName;
+
+            Path formPath = PathFactory.newPathBasedOn( formName, formURI, myPath );
+
+            try {
+                tfi.getModelerOutputs().put( formBuilder.getFormExtension(), formBuilder.buildFormContent( formPath, def, tfi.getTaskId() ) );
+            } catch(Exception e) {
+                _logger.error(e.getMessage());
+                e.printStackTrace();
+            }
+        } );
+    }
+
     private void generateUserTaskTemplate(TaskFormInfo tfi) {
         STRawGroupDir templates = new STRawGroupDir(templatesPath, '$', '$');
         ST usertaskFormTemplate = templates.getInstanceOf("usertaskform");
@@ -434,27 +441,14 @@ public class TaskFormTemplateManager {
         usertaskFormTemplate.add("bclose", "}");
         usertaskFormTemplate.add("dollar", "$");
         tfi.setMetaOutput(usertaskFormTemplate.render());
-
-        String modelerFileName = tfi.getId() + ".form";
-        String modelerURI = myPath.toURI();
-        modelerURI = modelerURI.substring(0, modelerURI.lastIndexOf("/"));
-        modelerURI = modelerURI + "/" + modelerFileName;
-
-        try {
-            tfi.setModelerOutput(formModelerService.buildFormXML(myPath, modelerFileName, modelerURI, def, tfi.getTaskId()));
-        } catch(Exception e) {
-            _logger.error(e.getMessage());
-            e.printStackTrace();
-        }
-
     }
-    
+
     public String readFile(String pathname) throws IOException {
         StringBuilder fileContents = new StringBuilder();
         Scanner scanner = new Scanner(new File(pathname));
         String lineSeparator = System.getProperty("line.separator");
         try {
-            while(scanner.hasNextLine()) {        
+            while(scanner.hasNextLine()) {
                 fileContents.append(scanner.nextLine() + lineSeparator);
             }
             return fileContents.toString();
@@ -462,7 +456,7 @@ public class TaskFormTemplateManager {
             scanner.close();
         }
     }
-    
+
     private String replaceInterpolations(String base) {
     	return base.replaceAll("\\#\\{", "\\$\\{");
     }
@@ -499,5 +493,5 @@ public class TaskFormTemplateManager {
     public void setPackageName(String packageName) {
         this.packageName = packageName;
     }
-    
+
 }

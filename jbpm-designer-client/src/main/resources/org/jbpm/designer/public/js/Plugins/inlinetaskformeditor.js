@@ -24,7 +24,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
             icon : Ext.MessageBox.QUESTION,
             fn : function(btn) {
                 if(btn == 'yes'){
-                    this.showTaskFormEditor("form", options);
+                    this.showTaskFormEditor("frm", options);
                 } else if(btn == 'no'){
                     this.showTaskFormEditor("ftl", options);
                 }
@@ -47,7 +47,7 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                             method: 'POST',
                             success: function(response) {
                                 try {
-                                    if(formType == "form") {
+                                    if(formType == "frm" || formType == "form") {
                                         var responseParts = response.responseText.split("|");
                                         parent.designeropenintab(responseParts[0], encodeURI(responseParts[1]));
                                     } else {

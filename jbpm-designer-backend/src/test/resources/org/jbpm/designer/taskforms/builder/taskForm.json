@@ -1,0 +1,16 @@
+{
+  "id": "f2b5f0bb-3736-4bc1-aaa1-ca1f4bea2708",
+  "model": {
+    "processId": "project1.userTask",
+    "taskId": "_E57BCFF4-0787-40FA-83AC-627F06BF8F36",
+    "taskName": "User Task One",
+    "variables": [],
+    "formModelType": "org.kie.workbench.common.forms.jbpm.model.authoring.task.TaskFormModel"
+  },
+  "fields": [],
+  "layoutTemplate": {
+    "version": 1,
+    "layoutProperties": {},
+    "rows": []
+  }
+}

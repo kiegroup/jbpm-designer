@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -15,11 +15,11 @@
 
 package org.jbpm.designer.web.server;
 
-import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -27,6 +27,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.inject.Instance;
+
+import org.eclipse.bpmn2.Definitions;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
 import org.jbpm.designer.helper.TestServletConfig;
@@ -35,12 +38,11 @@ import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.VFSRepository;
-import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
-import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
+import org.jbpm.designer.forms.BPMNFormBuilderService;
+import org.jbpm.designer.taskforms.BPMNFormBuilderManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,10 +67,13 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
     private VFSService vfsServices;
 
     @Mock
-    BPMNFormBuilderService formModelerService;
+    private BPMNFormBuilderService<Definitions> formBuilderService;
+
+    @Mock
+    private BPMNFormBuilderManager builderManager;
 
     @InjectMocks
-    TaskFormsServlet taskFormsServlet = new TaskFormsServlet();
+    TaskFormsServlet taskFormsServlet;
 
     @Before
     public void setup() {
@@ -82,6 +87,9 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
             }
         });
 
+        when( builderManager.getFormBuilders() ).thenReturn( Arrays.asList( formBuilderService ) );
+        when( builderManager.getBuilderByFormType( anyString() ) ).thenReturn( formBuilderService );
+
     }
 
     @After
@@ -91,7 +99,7 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
 
     @Test
     public void testTaskFormServlet() throws Exception {
-        when(formModelerService.buildFormXML(any(), any(), any(), any(), any())).thenReturn("dummyform");
+        when( formBuilderService.buildFormContent( any(), any(), any())).thenReturn( "dummyform");
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
@@ -127,7 +135,7 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
 
     @Test
     public void testTaskFormServletWithUserTask() throws Exception {
-        when(formModelerService.buildFormXML(any(), any(), any(), any(), any())).thenReturn("dummyform");
+        when( formBuilderService.buildFormContent( any(), any(), any())).thenReturn( "dummyform");
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);

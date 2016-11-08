@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -18,6 +18,7 @@ package org.jbpm.designer.web.server;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.function.BiConsumer;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -34,13 +35,13 @@ import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.taskforms.BPMNFormBuilderManager;
 import org.jbpm.designer.taskforms.TaskFormInfo;
 import org.jbpm.designer.taskforms.TaskFormTemplateManager;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
-import org.jbpm.formModeler.designer.integration.BPMNFormBuilderService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -48,10 +49,10 @@ import org.slf4j.LoggerFactory;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 
-/** 
- * 
+/**
+ *
  * Creates/updates task forms for a specific process.
- * 
+ *
  * @author Tihomir Surdilovic
  */
 public class TaskFormsServlet extends HttpServlet {
@@ -60,7 +61,7 @@ public class TaskFormsServlet extends HttpServlet {
             .getLogger(TaskFormsServlet.class);
     private static final String TASKFORMS_PATH = "taskforms";
     private static final String FORMTEMPLATE_FILE_EXTENSION = "ftl";
-    private static final String FORMMODELER_FILE_EXTENSION = "form";
+    private static final String FORMMODELER_FILE_EXTENSION = "frm";
     public static final String DESIGNER_PATH = ConfigurationProvider.getInstance().getDesignerContext();
 
     private IDiagramProfile profile;
@@ -73,7 +74,7 @@ public class TaskFormsServlet extends HttpServlet {
     private IDiagramProfileService _profileService = null;
 
     @Inject
-    private BPMNFormBuilderService formModelerService;
+    protected BPMNFormBuilderManager formBuilderManager;
 
     @Inject
     private VFSService vfsServices;
@@ -82,7 +83,7 @@ public class TaskFormsServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -111,7 +112,7 @@ public class TaskFormsServlet extends HttpServlet {
 
             Path myPath = vfsServices.get( uuid );
 
-            TaskFormTemplateManager templateManager = new TaskFormTemplateManager( myPath, formModelerService, profile, processAsset, getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH), def, taskId );
+            TaskFormTemplateManager templateManager = new TaskFormTemplateManager( myPath, formBuilderManager, profile, processAsset, getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH), def, taskId );
             templateManager.processTemplates();
 
             //storeInRepository(templateManager, processAsset.getAssetLocation(), repository);
@@ -125,7 +126,7 @@ public class TaskFormsServlet extends HttpServlet {
             resp.getWriter().write("fail");
         }
     }
-    
+
 //    public void displayResponse(TaskFormTemplateManager templateManager, HttpServletResponse resp, IDiagramProfile profile) {
 //        try {
 //            STGroup templates = new STGroup("resultsgroup", templateManager.getTemplatesPath());
@@ -144,7 +145,7 @@ public class TaskFormsServlet extends HttpServlet {
 //           _logger.error(e.getMessage());
 //        }
 //    }
-    
+
 //    public void displayErrorResponse(HttpServletResponse resp, String exceptionStr) {
 //        try {
 //            ServletOutputStream outstr = resp.getOutputStream();
@@ -156,7 +157,7 @@ public class TaskFormsServlet extends HttpServlet {
 //           _logger.error(e.getMessage());
 //        }
 //    }
-    
+
     public JSONArray storeInRepository(TaskFormTemplateManager templateManager, String location, Repository repository) throws Exception {
         JSONArray retArray = new JSONArray();
         List<TaskFormInfo> taskForms =  templateManager.getTaskFormInformationList();
@@ -166,7 +167,7 @@ public class TaskFormsServlet extends HttpServlet {
 
         return retArray;
     }
-    
+
     public JSONObject storeTaskForm(TaskFormInfo taskForm, String location, Repository repository) throws Exception {
         try {
             JSONObject retObj = new JSONObject();
@@ -195,29 +196,41 @@ public class TaskFormsServlet extends HttpServlet {
             }
             retObj.put("ftluri", uniqueId);
 
-            // create the modeler form asset
-            repository.deleteAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMMODELER_FILE_EXTENSION);
-            AssetBuilder modelerBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
-            modelerBuilder.name(taskForm.getId())
-                    .location(location)
-                    .type(FORMMODELER_FILE_EXTENSION)
-                    .content(taskForm.getModelerOutput().getBytes("UTF-8"));
+            // create the modeler form assets
 
-            repository.createAsset(modelerBuilder.getAsset());
+            taskForm.getModelerOutputs().forEach( new BiConsumer<String, String>() {
+                @Override
+                public void accept( String extension, String content ) {
+                    try {
+                        repository.deleteAssetFromPath( taskForm.getPkgName() + "/" + taskForm.getId() + "." + extension );
+                        AssetBuilder modelerBuilder = AssetBuilderFactory.getAssetBuilder( Asset.AssetType.Byte );
+                        modelerBuilder.name( taskForm.getId() )
+                                .location( location )
+                                .type( extension )
+                                .content( content.getBytes( "UTF-8" ) );
 
-            Asset newModelerFormAsset =  repository.loadAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMMODELER_FILE_EXTENSION);
+                        repository.createAsset( modelerBuilder.getAsset() );
 
-            String modelerUniqueId = newModelerFormAsset.getUniqueId();
-            if (Base64.isBase64(modelerUniqueId)) {
-                byte[] decoded = Base64.decodeBase64(modelerUniqueId);
-                try {
-                    modelerUniqueId =  new String(decoded, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                        Asset newModelerFormAsset = repository.loadAssetFromPath( taskForm.getPkgName() + "/" + taskForm.getId() + "." + extension );
+
+                        String modelerUniqueId = newModelerFormAsset.getUniqueId();
+                        if (Base64.isBase64(modelerUniqueId)) {
+                            byte[] decoded = Base64.decodeBase64(modelerUniqueId);
+                            try {
+                                modelerUniqueId =  new String(decoded, "UTF-8");
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        if ( extension.equals( FORMMODELER_FILE_EXTENSION ) ) {
+                            retObj.put( "formuri", modelerUniqueId );
+                        }
+                    } catch ( Exception ex ) {
+                        _logger.error( "Error creating form for: " +taskForm.getId() + "." + extension );
+                    }
                 }
-            }
-
-            retObj.put("formuri", modelerUniqueId);
+            } );
 
             return retObj;
 
