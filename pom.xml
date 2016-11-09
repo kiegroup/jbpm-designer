@@ -27,8 +27,10 @@
     <module>jbpm-designer-backend</module>
     <module>jbpm-designer-client</module>
     <module>jbpm-designer-utilities</module>
-    <module>jbpm-designer-standalone</module>
-    <module>jbpm-designer-distribution-wars</module>
+    <!-- Deactivating to fix build until dependency issues with jbpm-form-modeler can be resolved -->
+    <!-- The jbpm-designer build now runs before jbpm-form-modeler. Therefore, jbpm-designer cannot depend on jbpm-form-modeler -->
+    <!--module>jbpm-designer-standalone</module-->
+    <!--module>jbpm-designer-distribution-wars</module-->
   </modules>
 
   <properties>
