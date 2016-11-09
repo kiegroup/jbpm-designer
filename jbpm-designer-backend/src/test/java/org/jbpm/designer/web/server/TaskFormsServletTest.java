@@ -27,8 +27,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.enterprise.inject.Instance;
-
 import org.eclipse.bpmn2.Definitions;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
@@ -41,12 +39,12 @@ import org.jbpm.designer.repository.RepositoryBaseTest;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.VFSRepository;
-import org.jbpm.designer.forms.BPMNFormBuilderService;
 import org.jbpm.designer.taskforms.BPMNFormBuilderManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kie.workbench.common.forms.bpmn.BPMNFormBuilderService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;

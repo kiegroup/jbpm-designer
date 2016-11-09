@@ -70,6 +70,11 @@
     <!-- start forms integration -->
     <dependency>
       <groupId>org.kie.workbench.forms</groupId>
+      <artifactId>kie-wb-common-forms-bpmn-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.workbench.forms</groupId>
       <artifactId>kie-wb-common-forms-api</artifactId>
     </dependency>
 
