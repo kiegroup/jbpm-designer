@@ -3600,9 +3600,6 @@ public class Bpmn2JsonUnmarshaller {
             }
 
             sp.setLoopCharacteristics(loopCharacteristics);
-        } else {
-            MultiInstanceLoopCharacteristics loopCharacteristics = Bpmn2Factory.eINSTANCE.createMultiInstanceLoopCharacteristics();
-            sp.setLoopCharacteristics(loopCharacteristics);
         }
 
 
