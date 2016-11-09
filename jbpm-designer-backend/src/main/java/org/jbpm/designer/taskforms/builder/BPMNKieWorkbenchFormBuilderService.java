@@ -25,7 +25,7 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.bpmn2.Definitions;
-import org.jbpm.designer.forms.BPMNFormBuilderService;
+import org.kie.workbench.common.forms.bpmn.BPMNFormBuilderService;
 import org.kie.workbench.common.forms.commons.layout.FormLayoutTemplateGenerator;
 import org.kie.workbench.common.forms.jbpm.model.authoring.JBPMFormModel;
 import org.kie.workbench.common.forms.jbpm.server.service.BPMNFormModelGenerator;

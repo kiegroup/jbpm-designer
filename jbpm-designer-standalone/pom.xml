@@ -18,7 +18,7 @@
   </properties>
 
   <dependencies>
-    
+
     <!-- errai-cdi-jboss provides gwt-dev with the proper dependency exclusions and should be first on the classpath -->
     <dependency>
       <groupId>org.jboss.errai</groupId>
@@ -503,6 +503,11 @@
     <dependency>
       <groupId>org.kie.workbench.screens</groupId>
       <artifactId>kie-wb-common-workbench-backend</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.kie.workbench.forms</groupId>
+      <artifactId>kie-wb-common-forms-bpmn-api</artifactId>
     </dependency>
 
     <!-- formModeler dependencies -->

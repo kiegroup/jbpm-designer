@@ -25,7 +25,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.eclipse.bpmn2.Definitions;
-import org.jbpm.designer.forms.BPMNFormBuilderService;
+import org.kie.workbench.common.forms.bpmn.BPMNFormBuilderService;
 
 @Dependent
 public class BPMNFormBuilderManager {
