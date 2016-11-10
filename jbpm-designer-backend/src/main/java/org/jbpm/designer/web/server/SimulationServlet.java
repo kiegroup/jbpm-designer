@@ -526,6 +526,11 @@ public class SimulationServlet extends HttpServlet {
                 resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 PrintWriter pw = resp.getWriter();
                 pw.write(e.getMessage());
+			} catch (Throwable t) {
+				_logger.error("Error during simulation", t);
+				resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				PrintWriter pw = resp.getWriter();
+				pw.write("showinvalid");
 			}
 
         }
