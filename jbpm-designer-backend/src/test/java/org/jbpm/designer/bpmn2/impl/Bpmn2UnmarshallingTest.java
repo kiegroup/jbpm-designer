@@ -125,6 +125,7 @@ public class Bpmn2UnmarshallingTest {
         Lane lane = process.getLaneSets().get(0).getLanes().get(0);
         assertEquals(0, getDIElementOrder(lane, definitions));
         SubProcess subProcess = (SubProcess) getFlowElement(process.getFlowElements(), "subprocess");
+        assertNull(subProcess.getLoopCharacteristics());
         assertEquals(1, getDIElementOrder(subProcess, definitions));
         UserTask task = (UserTask) getFlowElement(subProcess.getFlowElements(), "task");
         assertEquals(2, getDIElementOrder(task, definitions));
@@ -809,6 +810,7 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("<![CDATA[my\ninner\nend]]>", getElementName(embeddedSubProcess, 2));
         assertEquals("<![CDATA[my\nflow\nin\nsubprocess]]>", getElementName(embeddedSubProcess, 3));
         assertEquals("<![CDATA[my\nescalation\nevent]]>", getElementName(embeddedSubProcess, 5));
+        assertNull(((SubProcess) embeddedSubProcess).getLoopCharacteristics());
 
         Lane lane = process.getLaneSets().get(0).getLanes().get(0);
         FlowElementsContainer adHocSubProcess = (FlowElementsContainer) lane.getFlowNodeRefs().get(0);
@@ -818,6 +820,7 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("<![CDATA[my\nmessage\nin\nsubprocess\nin\nlane]]>", getElementName(adHocSubProcess, 1));
         assertEquals("<![CDATA[my\nuser\ntask]]>", getMetaDataValue(lane.getFlowNodeRefs().get(1).getExtensionValues(), "elementname"));
         assertEquals("<![CDATA[my\nmessage]]>", getMetaDataValue(lane.getFlowNodeRefs().get(2).getExtensionValues(), "elementname"));
+        assertNull(((AdHocSubProcess) adHocSubProcess).getLoopCharacteristics());
     }
 
     private String getElementName(FlowElementsContainer container, int elementNumber) {
@@ -848,6 +851,8 @@ public class Bpmn2UnmarshallingTest {
         }
 
         SubProcess subProcessOne = (SubProcess) getFlowElement(process.getFlowElements(), "Subprocess1");
+        assertNull( subProcessOne.getLoopCharacteristics() );
+
         for(FlowElement element : subProcessOne.getFlowElements()) {
             if(element instanceof BoundaryEvent) {
                 BoundaryEvent be = (BoundaryEvent) element;
@@ -861,11 +866,14 @@ public class Bpmn2UnmarshallingTest {
         }
 
         SubProcess subProcessTwo = (SubProcess) getFlowElement(process.getFlowElements(), "Subprocess2");
+        assertNull( subProcessTwo.getLoopCharacteristics() );
+
         for(FlowElement element : subProcessTwo.getFlowElements()) {
             if(element instanceof BoundaryEvent) {
                 BoundaryEvent be = (BoundaryEvent) element;
                 if ("Timer2".equals(element.getName())) {
                     SubProcess sp = (SubProcess) unmarshaller.findContainerForBoundaryEvent(process, be);
+                    assertNull( sp.getLoopCharacteristics() );
                     assertEquals("Subprocess2", sp.getName());
                     verifyAttribute(be, "dockerinfo", "46.0^77.0|");
                     foundTimer2 = true;
@@ -917,6 +925,7 @@ public class Bpmn2UnmarshallingTest {
         assertFalse(containerContainsElement(subProcess, OUTTIMER_NAME));
         assertFalse(containerContainsElement(subProcess, SUBPROCESSMESSAGE_NAME));
         assertTrue(containerContainsElement(subProcess, SUBTIMER_NAME));
+        assertNull( subProcess.getLoopCharacteristics() );
     }
 
     @Test
@@ -938,6 +947,7 @@ public class Bpmn2UnmarshallingTest {
                 assertTrue(containerContainsElement(subProcess, TIMER_ONE));
                 assertFalse(containerContainsElement(subProcess, TIMER_TWO));
                 assertFalse(containerContainsElement(subProcess, TIMER_THREE));
+                assertNull( subProcess.getLoopCharacteristics() );
             }
 
             if ("Subprocess2".equals(flowElement.getName()) && (flowElement instanceof SubProcess)) {
@@ -945,6 +955,7 @@ public class Bpmn2UnmarshallingTest {
                 assertFalse(containerContainsElement(subProcess, TIMER_ONE));
                 assertTrue(containerContainsElement(subProcess, TIMER_TWO));
                 assertFalse(containerContainsElement(subProcess, TIMER_THREE));
+                assertNull( subProcess.getLoopCharacteristics() );
             }
         }
     }
@@ -1110,6 +1121,7 @@ public class Bpmn2UnmarshallingTest {
         assertTrue(activity instanceof CallActivity);
         CallActivity callActivity = (CallActivity) activity;
         InputOutputSpecification specification = callActivity.getIoSpecification();
+        assertNull( ((SubProcess)subProcess).getLoopCharacteristics() );
 
         DataInput dataInput = getDataInput(specification.getDataInputs(), "innerInput");
         verifyAttribute(dataInput, "dtype", "Integer");
@@ -1123,6 +1135,7 @@ public class Bpmn2UnmarshallingTest {
         Process process = getRootProcess(definitions);
         FlowElement subProcess = getFlowElement(process.getFlowElements(), "SubProcess");
         verifyBpmnShapePresent(subProcess, definitions);
+        assertNull( ((SubProcess)subProcess).getLoopCharacteristics() );
     }
 
     @Test
@@ -1265,6 +1278,7 @@ public class Bpmn2UnmarshallingTest {
         DataOutput iOutput = getDataOutput(specification.getDataOutputs(), "iOutput");
         verifyAttribute(sInput, "dtype", "String");
         verifyAttribute(iOutput, "dtype", "Integer");
+        assertNull( ((SubProcess) subprocess).getLoopCharacteristics() );
     }
 
     @Test
@@ -1281,6 +1295,7 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("intVar", associations.get(0).getSourceRef().get(0).getId());
         assertTrue(associations.get(0).getTargetRef().getId().contains("intSubInput"));
         verifyAttribute(associations.get(0).getTargetRef(), "dtype", "Integer");
+        assertNull( ((SubProcess) subprocess).getLoopCharacteristics() );
 
         element = getFlowElement((process).getFlowElements(), "End Event");
         assertTrue(element instanceof EndEvent);
@@ -1332,6 +1347,7 @@ public class Bpmn2UnmarshallingTest {
         Process process = getRootProcess(loader.loadProcessFromJson("defaultSubprocessInputOutputSets.json"));
         assertTrue(process.getFlowElements().get(1) instanceof SubProcess);
         SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
+        assertNotNull( subProcess.getLoopCharacteristics() );
         InputSet inputSet = subProcess.getIoSpecification().getInputSets().get(0);
         OutputSet outputSet = subProcess.getIoSpecification().getOutputSets().get(0);
         assertEquals(0, inputSet.getDataInputRefs().size());
@@ -1343,6 +1359,7 @@ public class Bpmn2UnmarshallingTest {
         Process process = getRootProcess(loader.loadProcessFromJson("subprocessDefaultOutputSet.json"));
         assertTrue(process.getFlowElements().get(1) instanceof SubProcess);
         SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
+        assertNotNull( subProcess.getLoopCharacteristics() );
         InputSet inputSet = subProcess.getIoSpecification().getInputSets().get(0);
         OutputSet outputSet = subProcess.getIoSpecification().getOutputSets().get(0);
         assertEquals(1, inputSet.getDataInputRefs().size());
@@ -1476,6 +1493,7 @@ public class Bpmn2UnmarshallingTest {
         Process process = getRootProcess(definitions);
 
         SubProcess miSubprocess = (SubProcess) process.getFlowElements().get(0);
+        assertNotNull( miSubprocess.getLoopCharacteristics() );
         assertNotNull(miSubprocess);
         assertEquals("MyMISubprocess", miSubprocess.getName());
 
