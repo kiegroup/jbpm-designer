@@ -15,6 +15,7 @@
 
 package org.jbpm.designer.server.indexing.bpmn2;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -54,7 +55,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DesignerProcessDataEventListener
     extends ResourceReferenceCollector
-    implements ProcessDataEventListener {
+    implements ProcessDataEventListener, Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(DesignerProcessDataEventListener.class);
 
@@ -71,8 +72,8 @@ public class DesignerProcessDataEventListener
     private Set<String> referencedClasses;
 
     private Set<String> unqualifiedClasses;
-
-    private Resource resource;
+    // can be transient as it's only used when building
+    private transient Resource resource;
 
 
     public Process getProcess() {
