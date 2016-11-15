@@ -5143,7 +5143,7 @@ public class Bpmn2JsonUnmarshaller {
 
             Assignment taskNameAssignment = Bpmn2Factory.eINSTANCE.createAssignment();
             FormalExpression fromExp = Bpmn2Factory.eINSTANCE.createFormalExpression();
-            fromExp.setBody(properties.get("taskname").replaceAll("&","").replaceAll(" ", ""));
+            fromExp.setBody(wrapInCDATABlock(properties.get("taskname").replaceAll("&","").replaceAll(" ", "")));
             taskNameAssignment.setFrom(fromExp);
             FormalExpression toExp = Bpmn2Factory.eINSTANCE.createFormalExpression();
             toExp.setBody(task.getId() + "_TaskNameInputX");
