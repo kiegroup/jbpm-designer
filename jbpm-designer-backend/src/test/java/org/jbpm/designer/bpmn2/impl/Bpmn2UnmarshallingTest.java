@@ -1533,6 +1533,14 @@ public class Bpmn2UnmarshallingTest {
     }
 
     @Test
+    public void testNoMIOnEmbeddedSubprocess() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("simpleEmbeddedSubprocess.json");
+        Process process = getRootProcess(definitions);
+        SubProcess subprocess = (SubProcess) getFlowElement(process.getFlowElements(), "abc");
+        assertNull(subprocess.getLoopCharacteristics().getId());
+    }
+
+    @Test
     public void testMISubProcess() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("miSubProcess.json");
         Process process = getRootProcess(definitions);
