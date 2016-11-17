@@ -163,7 +163,7 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         List<Asset> arrForms = sortAssets(forms);
         Iterator<Asset> assets = arrForms.iterator();
         Asset asset1 = assets.next();
-        assertEquals("evaluate-taskform", asset1.getName());
+        assertEquals("<![CDATA[evaluate]]>-taskform", asset1.getName());
         assertEquals("/defaultPackage", asset1.getAssetLocation());
 
         Asset asset2 = assets.next();

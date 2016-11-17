@@ -1173,7 +1173,7 @@ public class Bpmn2UnmarshallingTest {
                 for(Assignment assignment : association.getAssignment()) {
                     String from = ((FormalExpression)assignment.getFrom()).getBody();
                     String to = ((FormalExpression)assignment.getTo()).getBody();
-                    if(to.contains("TaskName") && from.equals("taskForAssignedActor")) {
+                    if(to.contains("TaskName") && from.equals("<![CDATA[taskForAssignedActor]]>")) {
                         foundTaskName = true;
                     }
                     if(to.contains("GroupId") && from.equals("<![CDATA[assignedGroup]]>")) {
@@ -1573,8 +1573,8 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(extensionAttributeValues);
         assertEquals(1, extensionAttributeValues.size());
 
-        assertEquals("<![CDATA[HR]]>",  getMetaDataValue(process.getExtensionValues(), "customCaseIdPrefix"));
-        assertEquals("<![CDATA[owner:1,participant:2]]>",  getMetaDataValue(process.getExtensionValues(), "customCaseRoles"));
+        assertEquals("<![CDATA[HR]]>", getMetaDataValue(process.getExtensionValues(), "customCaseIdPrefix"));
+        assertEquals("<![CDATA[owner:1,participant:2]]>", getMetaDataValue(process.getExtensionValues(), "customCaseRoles"));
     }
 
     @Test
@@ -1591,6 +1591,16 @@ public class Bpmn2UnmarshallingTest {
         assertEquals(1, extensionAttributeValues.size());
 
         assertEquals("<![CDATA[true]]>",  getMetaDataValue(task.getExtensionValues(), "customAutoStart"));
+    }
+
+    @Test
+    public void testUserTaskTaskNameProperty() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("userTaskTaskName.json");
+        Process process = getRootProcess(definitions);
+
+        UserTask task = (UserTask) process.getFlowElements().get(0);
+        assertNotNull(task);
+        assertEquals("<![CDATA[strangetaskname~`!@#$*%^()_+=-{}|\\][\":;'?><,./]]>", ((FormalExpression) task.getDataInputAssociations().get(0).getAssignment().get(0).getFrom()).getBody());
     }
 
     private void verifyBpmnShapePresent(BaseElement element, Definitions definitions) {
