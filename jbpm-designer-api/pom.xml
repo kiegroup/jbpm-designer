@@ -68,7 +68,6 @@
                     <include>**/DesignerConstants_ja.properties</include>
                     <include>**/DesignerConstants_pt_BR.properties</include>
                     <include>**/DesignerConstants_zh_CN.properties</include>
-                    <include>**/DesignerConstants_ru.properties</include>
                 </includes>
                 <excludes>
                     <exclude>**/ErraiApp.properties</exclude>
