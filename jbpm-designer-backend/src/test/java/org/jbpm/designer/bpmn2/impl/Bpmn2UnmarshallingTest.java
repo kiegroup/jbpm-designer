@@ -940,7 +940,7 @@ public class Bpmn2UnmarshallingTest {
         assertFalse(containerContainsElement(subProcess, OUTTIMER_NAME));
         assertFalse(containerContainsElement(subProcess, SUBPROCESSMESSAGE_NAME));
         assertTrue(containerContainsElement(subProcess, SUBTIMER_NAME));
-        assertNull( subProcess.getLoopCharacteristics() );
+        assertNull(subProcess.getLoopCharacteristics());
     }
 
     @Test
@@ -962,7 +962,7 @@ public class Bpmn2UnmarshallingTest {
                 assertTrue(containerContainsElement(subProcess, TIMER_ONE));
                 assertFalse(containerContainsElement(subProcess, TIMER_TWO));
                 assertFalse(containerContainsElement(subProcess, TIMER_THREE));
-                assertNull( subProcess.getLoopCharacteristics() );
+                assertNull(subProcess.getLoopCharacteristics());
             }
 
             if ("Subprocess2".equals(flowElement.getName()) && (flowElement instanceof SubProcess)) {
@@ -970,7 +970,7 @@ public class Bpmn2UnmarshallingTest {
                 assertFalse(containerContainsElement(subProcess, TIMER_ONE));
                 assertTrue(containerContainsElement(subProcess, TIMER_TWO));
                 assertFalse(containerContainsElement(subProcess, TIMER_THREE));
-                assertNull( subProcess.getLoopCharacteristics() );
+                assertNull(subProcess.getLoopCharacteristics());
             }
         }
     }
@@ -1146,7 +1146,7 @@ public class Bpmn2UnmarshallingTest {
         Process process = getRootProcess(definitions);
         FlowElement subProcess = getFlowElement(process.getFlowElements(), "SubProcess");
         verifyBpmnShapePresent(subProcess, definitions);
-        assertNull( ((SubProcess)subProcess).getLoopCharacteristics() );
+        assertNull(((SubProcess) subProcess).getLoopCharacteristics());
     }
 
     @Test
@@ -1272,7 +1272,7 @@ public class Bpmn2UnmarshallingTest {
         DataOutput iOutput = getDataOutput(specification.getDataOutputs(), "iOutput");
         verifyAttribute(sInput, "dtype", "String");
         verifyAttribute(iOutput, "dtype", "Integer");
-        assertNull( ((SubProcess) subprocess).getLoopCharacteristics() );
+        assertNull(((SubProcess) subprocess).getLoopCharacteristics());
     }
 
     @Test
@@ -1341,7 +1341,7 @@ public class Bpmn2UnmarshallingTest {
         Process process = getRootProcess(loader.loadProcessFromJson("defaultSubprocessInputOutputSets.json"));
         assertTrue(process.getFlowElements().get(1) instanceof SubProcess);
         SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
-        assertNotNull( subProcess.getLoopCharacteristics() );
+        assertNotNull(subProcess.getLoopCharacteristics());
         InputSet inputSet = subProcess.getIoSpecification().getInputSets().get(0);
         OutputSet outputSet = subProcess.getIoSpecification().getOutputSets().get(0);
         assertEquals(0, inputSet.getDataInputRefs().size());
@@ -1619,6 +1619,56 @@ public class Bpmn2UnmarshallingTest {
         UserTask task = (UserTask) process.getFlowElements().get(0);
         assertNotNull(task);
         assertEquals("<![CDATA[strangetaskname~`!@#$*%^()_+=-{}|\\][\":;'?><,./]]>", ((FormalExpression) task.getDataInputAssociations().get(0).getAssignment().get(0).getFrom()).getBody());
+    }
+
+    @Test
+    public void testUserTaskDataIOForForms() throws Exception {
+        List<String> excludeFromForms = Arrays.asList("TaskName", "GroupId", "Skippable", "Comment", "Description",
+                "Content", "Priority", "Locale", "CreatedBy", "NotCompletedReassign", "NotStartedReassign",
+                "NotCompletedNotify", "NotStartedNotify");
+
+        Definitions definitions = loader.loadProcessFromJson("userTaskDataIOForForms.json");
+        Process process = getRootProcess(definitions);
+
+        UserTask task = (UserTask) process.getFlowElements().get(1);
+        assertNotNull(task);
+
+        List<DataInputAssociation> inputAssociations = task.getDataInputAssociations();
+        List<DataOutputAssociation> outputAssociations = task.getDataOutputAssociations();
+        assertNotNull(inputAssociations);
+        assertNotNull(outputAssociations);
+
+        List<String> dataInputNamesForForms = new ArrayList<>();
+        List<String> dataOutputNamesForForm = new ArrayList<>();
+        Map<String, String> dataInputOutputTypes = new HashMap<>();
+
+        for(DataInputAssociation dataIn : inputAssociations) {
+            DataInput din = (DataInput) dataIn.getTargetRef();
+            if(!excludeFromForms.contains(din.getName())) {
+                dataInputNamesForForms.add(din.getName());
+                dataInputOutputTypes.put(din.getName(), din.getItemSubjectRef().getStructureRef());
+            }
+        }
+
+        for(DataOutputAssociation dataOut : outputAssociations) {
+            DataOutput dout = (DataOutput) dataOut.getSourceRef().get(0);
+            dataOutputNamesForForm.add(dout.getName());
+            dataInputOutputTypes.put(dout.getName(), dout.getItemSubjectRef().getStructureRef());
+        }
+
+        assertTrue(dataInputNamesForForms.size() == 3);
+        assertTrue(dataOutputNamesForForm.size() == 1);
+
+        assertTrue(dataInputNamesForForms.contains("reason"));
+        assertTrue(dataInputNamesForForms.contains("BusinessAdministratorId"));
+        assertTrue(dataInputNamesForForms.contains("test"));
+        assertEquals("String", dataInputOutputTypes.get("reason"));
+        assertEquals("String", dataInputOutputTypes.get("BusinessAdministratorId"));
+        assertEquals("String", dataInputOutputTypes.get("test"));
+
+        assertTrue(dataOutputNamesForForm.contains("performance"));
+        assertEquals("String", dataInputOutputTypes.get("performance"));
+
     }
 
     private void verifyBpmnShapePresent(BaseElement element, Definitions definitions) {
