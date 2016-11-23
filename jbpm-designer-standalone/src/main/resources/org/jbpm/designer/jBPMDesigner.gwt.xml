@@ -71,6 +71,8 @@
   <extend-property name="locale" values="ja"/>
   <set-property-fallback name="locale" value="en"/>
 
+  <collapse-property name="locale" values="*"/>
+
   <!-- Specify the paths for translatable code -->
   <source path='client'/>
 
