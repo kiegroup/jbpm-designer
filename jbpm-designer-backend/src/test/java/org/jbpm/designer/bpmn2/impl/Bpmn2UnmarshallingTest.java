@@ -511,12 +511,14 @@ public class Bpmn2UnmarshallingTest {
     @Test
     public void testEndSignalEventUnmarshalling() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("endSignalEvent.json");
-        assertTrue(definitions.getRootElements().size() == 1);
+        assertTrue(definitions.getRootElements().size() == 2);
         Process process = getRootProcess(definitions);
-        EndEvent g = (EndEvent) process.getFlowElements().get(0);
-        assertEquals("end signal event", g.getName());
-        assertTrue(g.getEventDefinitions().iterator().next() instanceof SignalEventDefinition);
-        definitions.eResource().save(System.out, Collections.emptyMap());
+        EndEvent g = (EndEvent) getFlowElement(process.getFlowElements(), "EndSignalEvent");
+        assertEquals("EndSignalEvent", g.getName());
+        SignalEventDefinition signalEventDefinition = (SignalEventDefinition) g.getEventDefinitions().iterator().next();
+        Signal signal = (Signal) definitions.getRootElements().get(1);
+        assertEquals(signal.getId(), signalEventDefinition.getSignalRef());
+        assertEquals("signalForTestPurposes", signal.getName());
     }
 
     @Test
