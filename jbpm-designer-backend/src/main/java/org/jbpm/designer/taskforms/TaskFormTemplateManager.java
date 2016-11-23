@@ -166,8 +166,9 @@ public class TaskFormTemplateManager {
                             if( ((FormalExpression)assignment.getTo()).getBody().equals(din.getId())) {
                                 String taskName = ((FormalExpression)assignment.getFrom()).getBody();
                                 if(taskName != null && taskName.length() > 0) {
-                                    usertfi.setId(taskName + "-taskform");
-                                    usertfi.setTaskName(taskName);
+                                    String unwrappedTaskName = taskName.replace("<![CDATA[", "").replace("]]>", "");
+                                    usertfi.setId(unwrappedTaskName + "-taskform");
+                                    usertfi.setTaskName(unwrappedTaskName);
                                     validTaskName = true;
                                 }
                             }
