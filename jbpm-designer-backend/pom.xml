@@ -143,15 +143,11 @@
       <artifactId>jbpm-bpmn2-emfextmodel</artifactId>
     </dependency>
 
-    <!-- jBPM Migration -->
+    <!-- jPDL to BPMN2 Migration -->
     <dependency>
-      <groupId>org.jbpm.jbpm5</groupId>
-      <artifactId>jbpmmigration</artifactId>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-jpdl-migration</artifactId>
       <exclusions>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
         <exclusion>
           <groupId>xml-apis</groupId>
           <artifactId>xml-apis</artifactId>
