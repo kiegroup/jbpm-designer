@@ -27,9 +27,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.stringtemplate.v4.ST;
 import static org.junit.Assert.*;
@@ -148,6 +146,113 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         // this is the process asset that was created for the test but let's check it anyway
         repository.assetExists("/myprocesses/process.bpmn2");
         repository.assetExists("/myprocesses/.gitignore");
+
+    }
+
+    @Test
+    public void testWorkitemParameterValues() throws Exception {
+        Repository repository = createRepository();
+        repository.createDirectory("/myprocesses");
+        repository.createDirectory("/global");
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("import org.drools.core.process.core.datatype.impl.type.StringDataType;\n" +
+                "import org.drools.core.process.core.datatype.impl.type.EnumDataType;\n" +
+                "[\n" +
+                "    [\n" +
+                "        \"name\" : \"TestServiceWithParamValues\",\n" +
+                "        \"description\" : \"TestServiceWithParamValues\",\n" +
+                "        \"parameters\" : [\n" +
+                "            \"param1\" : new StringDataType(),\n" +
+                "            \"param2\" : new StringDataType(),\n" +
+                "            \"param3\" : new StringDataType()\n" +
+                "        ],\n" +
+                "        \"parameterValues\" : [\n" +
+                "            \"param1\" : new EnumDataType(\"org.jbpm.designer.web.preprocessing.impl.CarsEnum\"),\n" +
+                "            \"param3\" : \"one,two,three\"\n" +
+                "        ],\n" +
+                "        \"results\" : [\n" +
+                "            \"result1\" : new StringDataType(),\n" +
+                "            \"result2\" : new StringDataType()\n" +
+                "        ],\n" +
+                "        \"displayName\" : \"TestServiceWithParamValues\",\n" +
+                "        \"icon\" : \"widicon.png\",\n" +
+                "        \"category\": \"MyTestServices\",\n" +
+                "\t    \"dependencies\" : [\n" +
+                "        ]\n" +
+                "    ]\n" +
+                "]\n")
+                .type("wid")
+                .name("processwid")
+                .location("/myprocesses");
+        String uniqueWidID = repository.createAsset(builder.getAsset());
+
+        AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+        builder2.content("".getBytes())
+                .type("png")
+                .name("widicon")
+                .location("/myprocesses");
+        String uniqueIconID = repository.createAsset(builder2.getAsset());
+
+        JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
+        preprocessingUnitVFS.init(new TestServletContext(), "/", null);
+        Asset<String> widAsset = repository.loadAsset(uniqueWidID);
+        Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+        preprocessingUnitVFS.evaluateWorkDefinitions(workDefinitions, widAsset, widAsset.getAssetLocation(), repository);
+
+        assertNotNull(workDefinitions);
+        assertEquals(1, workDefinitions.size());
+        assertTrue(workDefinitions.containsKey("TestServiceWithParamValues"));
+        assertNotNull(workDefinitions.get("TestServiceWithParamValues").getParameterValues());
+        assertEquals(2, workDefinitions.get("TestServiceWithParamValues").getParameterValues().size());
+        Map<String, Object> paramValues = (workDefinitions.get("TestServiceWithParamValues").getParameterValues());
+        assertTrue(paramValues.containsKey("param1"));
+        assertTrue(paramValues.containsKey("param3"));
+
+        assertEquals("TOYOTA,MAZDA,FORD,NISSAN,HONDA", paramValues.get("param1"));
+        assertEquals("one,two,three", paramValues.get("param3"));
+
+        Map<String, Map<String, List<String>>> customParams = new HashMap<>();
+        for(Map.Entry<String, WorkDefinitionImpl> widEntry : workDefinitions.entrySet()) {
+            WorkDefinitionImpl widImpl = widEntry.getValue();
+            if(widImpl.getParameterValues() != null) {
+                Map<String, Object> widImplParamValues = widImpl.getParameterValues();
+
+                Map<String, List<String>> customParamsValueMap = new HashMap<>();
+                for(Map.Entry<String, Object> widParamValueEntry : widImplParamValues.entrySet()) {
+                    if(widParamValueEntry.getValue() != null && widParamValueEntry.getValue() instanceof String) {
+                        customParamsValueMap.put(widParamValueEntry.getKey(), Arrays.asList(((String) widParamValueEntry.getValue()).split(",\\s*")));
+                    }
+                }
+                customParams.put(widEntry.getKey(), customParamsValueMap);
+            }
+        }
+
+        assertNotNull(customParams);
+        assertEquals(1, customParams.size());
+        assertTrue(customParams.containsKey("TestServiceWithParamValues"));
+        assertEquals(2, customParams.get("TestServiceWithParamValues").size());
+
+        // test stringtemplate evaluation of custom parameters
+        ST workItemTemplate = new ST("$workitemDefs:{k| $workitemDefs.(k).parameters:{k1| $if(customParams.(k).(k1))$ $k1.name$ $endif$ }$ }$", '$', '$');
+        workItemTemplate.add("workitemDefs", workDefinitions);
+        workItemTemplate.add("customParams", customParams);
+
+        // custom parameters available for param1 and param3
+        assertTrue(workItemTemplate.render().contains("param1"));
+        assertTrue(workItemTemplate.render().contains("param3"));
+        assertFalse(workItemTemplate.render().contains("param2"));
+
+
+        // test stringtemplate evaluation of custom parameters
+        ST workItemTemplate2 = new ST("$workitemDefs:{k| $workitemDefs.(k).parameters:{k1| $if(customParams.(k).(k1))$ $else$ $k1.name$ $endif$ }$ }$", '$', '$');
+        workItemTemplate2.add("workitemDefs", workDefinitions);
+        workItemTemplate2.add("customParams", customParams);
+
+        // no custom parameters available for param2
+        assertFalse(workItemTemplate2.render().contains("param1"));
+        assertFalse(workItemTemplate2.render().contains("param3"));
+        assertTrue(workItemTemplate2.render().contains("param2"));
 
     }
 
