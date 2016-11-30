@@ -96,6 +96,13 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                 .location("/myprocesses");
         uniqueId = repository.createAsset(builder.getAsset());
 
+        AssetBuilder widBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        widBuilder.content("wid content")
+                .type("wid")
+                .name("nonDefault")
+                .location("/myprocesses");
+        repository.createAsset(widBuilder.getAsset());
+
         // create instance of preprocessing unit
          preprocessingUnitVFS = new JbpmPreprocessingUnit(new TestServletContext(), "/", Mockito.mock(VFSService.class),
                                                             workitemInstalledEvent, notificationEvent,
@@ -155,8 +162,9 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
 
         Collection<Asset> defaultStuff = repository.listAssets("/myprocesses");
         assertNotNull(defaultStuff);
-        assertEquals(2, defaultStuff.size());
+        assertEquals(3, defaultStuff.size());
         repository.assetExists("/myprocesses/WorkDefinitions.wid");
+        repository.assetExists("/myprocesses/nonDefault.wid");
         // this is the process asset that was created for the test but let's check it anyway
         repository.assetExists("/myprocesses/process.bpmn2");
 
