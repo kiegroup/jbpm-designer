@@ -39,6 +39,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
+import org.drools.core.process.core.datatype.impl.type.EnumDataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
 import org.drools.core.util.MVELSafeHelper;
 import org.guvnor.common.services.project.model.Project;
@@ -197,6 +198,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 String readOnlyIconEncoded = "data:image/png;base64,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";
                 Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+                Map<String, Map<String, List<String>>> customParams = new HashMap<>();
                 WorkDefinitionImpl readOnlyImpl = new WorkDefinitionImpl();
                 readOnlyImpl.setName("ReadOnlyService");
                 readOnlyImpl.setDisplayName("ReadOnlyService");
@@ -206,6 +208,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 readOnlyImpl.setCustomEditor("");
                 workDefinitions.put("ReadOnlyService", readOnlyImpl);
                 workItemTemplate.add("workitemDefs", workDefinitions);
+                workItemTemplate.add("customParams", customParams);
                 Map<String, ThemeInfo> themeData = setupThemesForReadOnly(req);
                 workItemTemplate.add("colortheme", themeData);
                 deletefile(stencilFilePath);
@@ -269,6 +272,22 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             }
 
+            Map<String, Map<String, List<String>>> customParams = new HashMap<>();
+            for(Map.Entry<String, WorkDefinitionImpl> widEntry : workDefinitions.entrySet()) {
+                WorkDefinitionImpl widImpl = widEntry.getValue();
+                if(widImpl.getParameterValues() != null) {
+                    Map<String, Object> widImplParamValues = widImpl.getParameterValues();
+
+                    Map<String, List<String>> customParamsValueMap = new HashMap<>();
+                    for(Map.Entry<String, Object> widParamValueEntry : widImplParamValues.entrySet()) {
+                        if(widParamValueEntry.getValue() != null && widParamValueEntry.getValue() instanceof String) {
+                            customParamsValueMap.put(widParamValueEntry.getKey(), Arrays.asList(((String) widParamValueEntry.getValue()).split( ",\\s*" ) ));
+                        }
+                    }
+                    customParams.put(widEntry.getKey(), customParamsValueMap);
+                }
+            }
+
             // sort against display name
             WorkItemDisplayNameComparator wiComparator = new WorkItemDisplayNameComparator(workDefinitions);
             Map<String, WorkDefinitionImpl> workDefinitionsTree = new TreeMap<String, WorkDefinitionImpl>(wiComparator);
@@ -293,6 +312,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             workItemTemplate.add("bopen", "{");
             workItemTemplate.add("bclose", "}");
             workItemTemplate.add("workitemDefs", workDefinitionsTree);
+            workItemTemplate.add("customParams", customParams);
             workItemTemplate.add("patternData", patternInfoMap);
             workItemTemplate.add("includedo", includeDataObjects);
 
@@ -483,6 +503,36 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     }
                 }
                 workDefinition.setResults(results);
+
+                Map<String, Object> parameterValues = new HashMap<>();
+                if(workDefinitionMap.get("parameterValues") != null) {
+                    try {
+                        Map<String, Object> parameterValuesMap = (Map<String, Object>) workDefinitionMap.get("parameterValues");
+                        if(parameterValuesMap != null) {
+                            for (Map.Entry<String, Object> entry : parameterValuesMap.entrySet()) {
+
+                                Object paramValueObj = entry.getValue();
+                                if(paramValueObj != null) {
+                                    if(paramValueObj instanceof String) {
+                                        parameterValues.put(entry.getKey(), (String) entry.getValue());
+                                    } else if(paramValueObj instanceof EnumDataType) {
+                                        EnumDataType enumdt = (EnumDataType) entry.getValue();
+                                        if(enumdt != null) {
+                                            parameterValues.put(entry.getKey(), String.join(",", enumdt.getValueNames()));
+                                        }
+                                    } else {
+                                        _logger.warn("parameter value type not supported");
+                                    }
+                                }
+
+                            }
+                        }
+                    } catch(Exception e) {
+                        _logger.error("Error parsing parameter values: " + e.getMessage());
+                    }
+                }
+                workDefinition.setParameterValues(parameterValues);
+
 
                 if(workDefinitionMap.get("defaultHandler") != null) {
                     workDefinition.setDefaultHandler((String) workDefinitionMap.get("defaultHandler"));

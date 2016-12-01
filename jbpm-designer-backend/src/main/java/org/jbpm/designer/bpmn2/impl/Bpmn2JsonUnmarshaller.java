@@ -5229,8 +5229,13 @@ public class Bpmn2JsonUnmarshaller {
                     Assignment a = Bpmn2Factory.eINSTANCE.createAssignment();
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
-                    	String replacer = decodeAssociationValue(assignmentParts[1]);
-                        fromExpression.setBody(wrapInCDATABlock(replacer));
+                        // check if custom workitem property has been updated
+                        if(properties.get(fromPart.toLowerCase()) != null && properties.get(fromPart.toLowerCase()).length() > 0) {
+                            fromExpression.setBody(properties.get(fromPart.toLowerCase()));
+                        } else {
+                            String replacer = decodeAssociationValue(assignmentParts[1]);
+                            fromExpression.setBody(wrapInCDATABlock(replacer));
+                        }
                     } else {
                         // for custom workitem properties check individually for values
                         if(properties.get(fromPart.toLowerCase()) != null && properties.get(fromPart.toLowerCase()).length() > 0) {
