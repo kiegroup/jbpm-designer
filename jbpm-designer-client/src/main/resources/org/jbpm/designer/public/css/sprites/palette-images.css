@@ -597,3 +597,10 @@ These don't have a static icon
     background-repeat: no-repeat;
     background-image: url(../../images/dataio.png);  /** sprite-ref: palette-images-sprite; */
 }
+
+.images_editproperties {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-image: url(../../images/editproperties.png);  /** sprite-ref: palette-images-sprite; */
+}
