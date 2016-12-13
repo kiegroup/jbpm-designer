@@ -662,3 +662,11 @@ These don't have a static icon
   background-image: url('../../images/sprites/palette-images-sprite.png');
   background-position: left -1042px;
 }
+
+.images_editproperties {
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+  background-image: url('../../images/sprites/palette-images-sprite.png');
+  background-position: left -1058px;
+}

@@ -226,7 +226,28 @@ ORYX.Editor = {
 		}
 		
 		// Raise Loaded Event
-		this.handleEvents( {type:ORYX.CONFIG.EVENT_LOADED} );        
+		this.handleEvents( {type:ORYX.CONFIG.EVENT_LOADED} );
+		// register on props edit
+		this._getPluginFacade().registerOnEvent(ORYX.CONFIG.EVENT_EDIT_PROPS, this._handleEditProps.bind(this));
+
+	},
+
+	_handleEditProps: function() {
+		if(ORYX.CONFIG.PANEL_RIGHT_COLLAPSED_SWITCH == true) {
+			this.layout_regions.east.expand();
+		} else {
+			this.layout_regions.east.collapse();
+		}
+		ORYX.CONFIG.PANEL_RIGHT_COLLAPSED_SWITCH = !ORYX.CONFIG.PANEL_RIGHT_COLLAPSED_SWITCH;
+	},
+
+	_handleEditMenu: function() {
+		if(ORYX.CONFIG.PANEL_LEFT_COLLAPSED_SWITCH == true) {
+			this.layout_regions.west.expand();
+		} else {
+			this.layout_regions.west.collapse();
+		}
+		ORYX.CONFIG.PANEL_LEFT_COLLAPSED_SWITCH = !ORYX.CONFIG.PANEL_LEFT_COLLAPSED_SWITCH;
 	},
 	
 	_initEventListener: function(){

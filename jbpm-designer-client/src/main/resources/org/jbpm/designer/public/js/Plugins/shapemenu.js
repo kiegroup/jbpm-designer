@@ -59,12 +59,42 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_ADD_TASK, this.addNode.bind(this, "Task"));
 		this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_ADD_GATEWAY, this.addNode.bind(this, "Exclusive_Databased_Gateway"));
 		this.facade.registerOnEvent(ORYX.CONFIG.VOICE_COMMAND_ADD_END_EVENT, this.addNode.bind(this, "EndNoneEvent"));
+
+		if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
+			this.facade.offer({
+				keyCodes: [{
+					metaKeys: [ORYX.CONFIG.META_KEY_ALT],
+					keyCode: ORYX.CONFIG.KEY_CODE_P,
+					keyAction: ORYX.CONFIG.KEY_ACTION_DOWN
+				}
+				],
+				functionality: this.handleEditProps.bind(this)
+			});
+
+			this.facade.offer({
+				keyCodes: [{
+					metaKeys: [ORYX.CONFIG.META_KEY_ALT],
+					keyCode: ORYX.CONFIG.KEY_CODE_M,
+					keyAction: ORYX.CONFIG.KEY_ACTION_DOWN
+				}
+				],
+				functionality: this.handleEditMenu.bind(this)
+			});
+		}
 		
 
 		this.timer = null;
 		
 		this.resetElements = true;
 
+	},
+
+	handleEditProps : function() {
+		ORYX.EDITOR._handleEditProps();
+	},
+
+	handleEditMenu : function() {
+		ORYX.EDITOR._handleEditMenu();
 	},
 	
 	addNode: function(nodeName) {
@@ -108,6 +138,9 @@ ORYX.Plugins.ShapeMenuPlugin = {
 
 					// Show the Stencil Buttons
 					this.showStencilButtons(this.currentShapes);
+
+					// Show the props edit Button
+					this.showPropseditButton();
 
 					// Show the ShapeMenu
 					this.shapeMenu.show(this.currentShapes);
@@ -272,17 +305,28 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			msg:			ORYX.I18N.ShapeMenuPlugin.editDataIO
 		});
 
-		this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_BOTTOM, 2);
-		//this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_TOP, 2)
+		var propseditbutton = new ORYX.Plugins.ShapeMenuButton({
+			callback:		this.editShapeProps.bind(this),
+			icon: 			ORYX.BASE_FILE_PATH + 'images/editproperties.png',
+			align: 			ORYX.CONFIG.SHAPEMENU_TOP,
+			group:			5,
+			msg:			ORYX.I18N.ShapeMenuPlugin.editProps
+		});
+
+		this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_BOTTOM, 6);
+		this.shapeMenu.setNumberOfButtonsPerLevel(ORYX.CONFIG.SHAPEMENU_TOP, 6);
 		this.shapeMenu.addButton(button);
 		this.shapeMenu.addButton(docbutton);
 		this.shapeMenu.addButton(dbutton);
 		this.shapeMenu.addButton(utfbutton);
 		this.shapeMenu.addButton(swbutton);
 		this.shapeMenu.addButton(diobutton);
+		this.shapeMenu.addButton(propseditbutton);
 		this.morphMenu.getEl().appendTo(button.node);
+
 		this.morphButton = button;
 		this.documentationButton = docbutton;
+		this.propseditButton = propseditbutton;
 		this.dictionaryButton = dbutton;
 		this.taskFormButton = utfbutton;
 		this.sourceViewButton = swbutton;
@@ -345,6 +389,23 @@ ORYX.Plugins.ShapeMenuPlugin = {
 
 			});
 		}
+	},
+
+	editShapeProps: function() {
+		if(this.currentShapes.length==1) {
+			this.facade.raiseEvent({
+				type: ORYX.CONFIG.EVENT_EDIT_PROPS
+			});
+		} else {
+			this.facade.raiseEvent({
+				type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+				ntype		: 'info',
+				msg         : ORYX.I18N.ShapeMenuPlugin.cannotEditPropsOnMultiSelection,
+				title       : ''
+
+			});
+		}
+
 	},
 	
 	editTaskForm: function() {
@@ -467,6 +528,18 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		this.documentationButton.prepareToShow();
 	},
 
+	showPropseditButton: function() {
+		// reset group number
+		this.propseditButton.group = 5;
+		if(this.currentShapes && this.currentShapes[0] && this.currentShapes[0].properties && this.currentShapes[0].properties['oryx-tasktype'] &&
+			this.currentShapes[0].properties['oryx-tasktype'] == "User") {
+			this.propseditButton.prepareToShow();
+		} else {
+			this.propseditButton.group = this.propseditButton.group - 1;
+			this.propseditButton.prepareToShow();
+		}
+	},
+
 	showTaskFormButton : function() {
 		if(this.currentShapes && this.currentShapes[0] && this.currentShapes[0].properties && this.currentShapes[0].properties['oryx-tasktype'] && 
 				this.currentShapes[0].properties['oryx-tasktype'] == "User" && ORYX.PRESET_PERSPECTIVE != "ruleflow") {
@@ -476,7 +549,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 	
 	showSourceViewButton : function() {
 		// reset group number
-		this.sourceViewButton.group = 2;
+		this.sourceViewButton.group = 3;
 		if(this.currentShapes && this.currentShapes[0] && this.currentShapes[0].properties && this.currentShapes[0].properties['oryx-tasktype'] && 
 				this.currentShapes[0].properties['oryx-tasktype'] == "User") {
 			this.sourceViewButton.prepareToShow();
@@ -499,7 +572,7 @@ ORYX.Plugins.ShapeMenuPlugin = {
 		}
 
 		// reset group number
-		this.dataIOEditorButton.group = 3;
+		this.dataIOEditorButton.group = 4;
 		if(this.currentShapes && this.currentShapes[0] && this.currentShapes[0].properties && this.currentShapes[0].properties['oryx-tasktype'] &&
 				this.currentShapes[0].properties['oryx-tasktype'] == "User") {
 			this.dataIOEditorButton.prepareToShow();
