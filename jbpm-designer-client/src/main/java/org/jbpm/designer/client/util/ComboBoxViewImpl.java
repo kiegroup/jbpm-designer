@@ -22,6 +22,8 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import org.gwtbootstrap3.client.ui.TextBox;
@@ -36,6 +38,8 @@ public class ComboBoxViewImpl implements ComboBoxView {
     protected ComboBoxView.ModelPresenter modelPresenter;
     protected ValueListBox<String> listBox;
     protected TextBox textBox;
+
+    protected boolean listBoxHasFocus = false;
 
     @Override
     public void init(final ComboBoxView.ComboBoxPresenter presenter,
@@ -55,11 +59,23 @@ public class ComboBoxViewImpl implements ComboBoxView {
             }
         });
 
-        listBox.addDomHandler(new FocusHandler() {
-            @Override public void onFocus(FocusEvent focusEvent) {
-                listBoxGotFocus();
+        // call  listBoxGotFocus in MouseDownHandler because IE11 doesn't handle FocusHandler correctly
+        // this works for all browsers
+        listBox.addDomHandler( new MouseDownHandler() {
+            @Override
+            public void onMouseDown( MouseDownEvent mouseDownEvent ) {
+                if (! listBoxHasFocus) {
+                    listBoxHasFocus = true;
+                    listBoxGotFocus();
+                }
             }
-        }, FocusEvent.getType());
+        }, MouseDownEvent.getType() );
+
+        listBox.addDomHandler(new BlurHandler() {
+            @Override public void onBlur(BlurEvent blurEvent) {
+                listBoxHasFocus = false;
+            }
+        }, BlurEvent.getType());
 
         textBox.addFocusHandler(new FocusHandler() {
             @Override public void onFocus(FocusEvent focusEvent) {
