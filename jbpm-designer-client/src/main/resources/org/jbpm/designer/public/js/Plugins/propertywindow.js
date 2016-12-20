@@ -1313,9 +1313,10 @@ ORYX.Plugins.PropertyWindow = {
 
 
 						// Register Event to enable KeyDown
-						editorGrid.on('beforehide', this.facade.enableEvent.bind(this, ORYX.CONFIG.EVENT_KEYDOWN));
-						editorGrid.on('specialkey', this.specialKeyDown.bind(this));
-
+						if(editorGrid !== undefined) {
+							editorGrid.on('beforehide', this.facade.enableEvent.bind(this, ORYX.CONFIG.EVENT_KEYDOWN));
+							editorGrid.on('specialkey', this.specialKeyDown.bind(this));
+						}
 					} else if(pair.type() === ORYX.CONFIG.TYPE_URL || pair.type() === ORYX.CONFIG.TYPE_DIAGRAM_LINK){
 						attribute = String(attribute).search("http") !== 0 ? ("http://" + attribute) : attribute;
 						attribute = "<a href='" + attribute + "' target='_blank'>" + attribute.split("://")[1] + "</a>"
