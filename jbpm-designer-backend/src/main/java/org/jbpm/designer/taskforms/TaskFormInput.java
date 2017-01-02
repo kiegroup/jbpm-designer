@@ -17,8 +17,6 @@ package org.jbpm.designer.taskforms;
 
 /** 
  * Holds info for one task form input.
- * 
- * @author Tihomir Surdilovic
  */
 public class TaskFormInput {
     private String name;

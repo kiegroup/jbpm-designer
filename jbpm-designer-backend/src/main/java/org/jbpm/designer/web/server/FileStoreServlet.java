@@ -40,8 +40,6 @@ import javax.servlet.http.HttpServletResponse;
 /** 
  * 
  * Used to store sources to local file system.
- * 
- * @author Tihomir Surdilovic
  */
 public class FileStoreServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

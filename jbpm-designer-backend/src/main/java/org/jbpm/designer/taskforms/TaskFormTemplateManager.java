@@ -36,8 +36,6 @@ import org.uberfire.backend.vfs.PathFactory;
 
 /**
  * Manager for task form templates.
- *
- * @author Tihomir Surdilovic
  */
 public class TaskFormTemplateManager {
     private static final Logger _logger = LoggerFactory.getLogger(TaskFormTemplateManager.class);

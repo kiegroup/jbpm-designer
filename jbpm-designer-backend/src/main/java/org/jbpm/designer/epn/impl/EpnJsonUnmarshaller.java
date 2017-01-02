@@ -32,10 +32,7 @@ import org.osgi.framework.ServiceReference;
 
 
 /**
- * @author Tihomir Surdilovic
- * 
  *         an unmarshaller to transform JSON into EPN elements.
- * 
  */
 public class EpnJsonUnmarshaller {
     private Map<Object, String> _objMap = new HashMap<Object, String>();

@@ -52,8 +52,6 @@ import org.uberfire.backend.vfs.VFSService;
 /**
  *
  * Creates/updates task forms for a specific process.
- *
- * @author Tihomir Surdilovic
  */
 public class TaskFormsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;

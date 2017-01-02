@@ -47,8 +47,6 @@ import java.io.UnsupportedEncodingException;
 /**
  *
  * Interaction with task forms for inline editor.
- *
- * @author Tihomir Surdilovic
  */
 public class TaskFormsEditorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

@@ -16,10 +16,6 @@
 
 package org.jbpm.designer.service;
 
-/**
- *
- * @author salaboy
- */
 public interface BPMN2DataServices {
     String getProcessSources(String deploymentId, String processId);
     

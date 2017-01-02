@@ -33,8 +33,6 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 /** 
  * 
  * Check syntax of a BPMN2 process.
- * 
- * @author Tihomir Surdilovic
  */
 public class SyntaxCheckerServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

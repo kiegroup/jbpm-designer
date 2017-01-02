@@ -53,7 +53,6 @@ import java.util.Map.Entry;
 
 /**
  * Servlet for interaction with the jbpm service repository.
- * @author tsurdilo
  */
 public class JbpmServiceRepositoryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
