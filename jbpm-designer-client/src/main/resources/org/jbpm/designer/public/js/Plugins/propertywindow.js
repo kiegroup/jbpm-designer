@@ -5191,7 +5191,8 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
         if (!isJavaCondition) {
             contentPanel = new Ext.Panel({
                 border:false,
-                items: [scriptEditor]
+                items: [scriptEditor],
+				autoScroll  : true
             });
 
         } else {
@@ -5695,9 +5696,9 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
             }
         }
 
-		var dialogSize = ORYX.Utils.getDialogSize(430, 680);
+		var dialogSize = ORYX.Utils.getDialogSize(430, 800);
         var dialog = new Ext.Window({
-            layout		: 'anchor',
+            layout		: 'fit',
             autoCreate	: true,
             height		: dialogSize.height,
             width		: dialogSize.width,
@@ -5707,7 +5708,7 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
             shadow		: true,
             resizable   : true,
             proxyDrag	: true,
-            autoScroll  : true,
+            autoScroll  : false,
             keys:[{
                 key	: 27,
                 fn	: function(){
