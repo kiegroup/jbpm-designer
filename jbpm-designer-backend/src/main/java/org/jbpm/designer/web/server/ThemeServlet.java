@@ -37,8 +37,6 @@ import org.json.JSONObject;
 
 /**
  * Sevlet for color themes.
- * 
- * @author Tihomir Surdilovic
  */
 public class ThemeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

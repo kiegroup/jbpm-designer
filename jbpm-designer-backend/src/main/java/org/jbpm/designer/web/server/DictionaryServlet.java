@@ -37,7 +37,6 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 
 /** 
  * Dictionary Servlet.
- * @author Tihomir Surdilovic
  */
 public class DictionaryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

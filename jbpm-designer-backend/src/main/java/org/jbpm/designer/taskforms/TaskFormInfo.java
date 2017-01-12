@@ -23,8 +23,8 @@ import java.util.Map;
 /**
  * Holds info for one task form.
  *
- * @author Tihomir Surdilovic
  */
+
 public class TaskFormInfo {
     private String id;
     private String processName;

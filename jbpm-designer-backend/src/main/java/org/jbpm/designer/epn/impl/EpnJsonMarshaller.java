@@ -27,10 +27,7 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 
 
 /**
- * @author Tihomir Surdilovic
- * 
  * a marshaller to transform EPN elements into JSON format.
- *
  */
 public class EpnJsonMarshaller {
     private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();

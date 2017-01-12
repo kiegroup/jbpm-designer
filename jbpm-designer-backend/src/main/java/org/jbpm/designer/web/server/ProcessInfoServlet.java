@@ -44,8 +44,6 @@ import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 /** 
  * 
  * Queries repository to get the process information.
- * 
- * @author Tihomir Surdilovic
  */
 public class ProcessInfoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

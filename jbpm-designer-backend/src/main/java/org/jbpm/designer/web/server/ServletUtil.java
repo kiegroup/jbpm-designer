@@ -39,9 +39,6 @@ import java.util.List;
 
 /**
  * Utility class for web servlets.
- * 
- * @author Tihomir Surdilovic
- *
  */
 public class ServletUtil {
 	private static final Logger _logger = LoggerFactory.getLogger(ServletUtil.class);

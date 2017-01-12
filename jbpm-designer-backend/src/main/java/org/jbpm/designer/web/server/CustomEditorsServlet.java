@@ -37,8 +37,8 @@ import java.io.PrintWriter;
 /**
  * Sevlet for custom editors.
  * 
- * @author Tihomir Surdilovic
  */
+
 public class CustomEditorsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger _logger = LoggerFactory.getLogger(CustomEditorsServlet.class);

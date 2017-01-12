@@ -84,9 +84,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Servlet for simulation actions.
- * 
- * @author Tihomir Surdilovic
- */
+*/
+
 public class SimulationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger _logger = LoggerFactory.getLogger(SimulationServlet.class);

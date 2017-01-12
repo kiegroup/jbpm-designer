@@ -35,8 +35,6 @@ import java.io.PrintWriter;
 /**
  *
  * Deals with stencil patterns data.
- *
- * @author Tihomir Surdilovic
  */
 public class StencilPatternsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
