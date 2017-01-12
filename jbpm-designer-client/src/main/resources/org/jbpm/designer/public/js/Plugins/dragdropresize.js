@@ -1505,7 +1505,7 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 		// Moves by the offset
 		this.move( this.offset, this.newLocation, this.doLayout);
 		// Addes to the new parents
-		this.addShapeToParent( this.newParents ); 
+		this.addShapeToParent( this.newParents );
 		// Set the selection to the current selection
 		this.selectCurrentShapes();
 		if(this.plugin) {
@@ -1533,7 +1533,7 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 		if(!this.plugin) { return; }
 		// Move all Shapes by these offset
 		for(var i=0; i<this.moveShapes.length ;i++){
-			var value = this.moveShapes[i];		
+			var value = this.moveShapes[i];
 			if (offset) {
 				value.bounds.moveBy(offset);
 			} else {

@@ -205,7 +205,8 @@ public class VFSRepository implements Repository {
                 @Override
                 public FileVisitResult visitFile(Path currentFile, BasicFileAttributes basicFileAttributes) throws IOException {
 
-                    if (!currentFile.endsWith(".gitignore")) {
+                    // .gitkeep for empty directories (UF-456)
+                    if (!currentFile.endsWith(".gitignore") && !currentFile.endsWith(".gitkeep")) {
                         Path destinationPath = fileSystem.provider().getPath(URI.create(destinationPathRoot +
                                 fileSystem.getSeparator() + sourcePath.relativize(currentFile)));
                         createIfNotExists(destinationPath);
