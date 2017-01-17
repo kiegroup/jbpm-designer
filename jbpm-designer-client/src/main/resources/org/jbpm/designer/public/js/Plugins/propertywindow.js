@@ -1377,6 +1377,10 @@ ORYX.Plugins.PropertyWindow = {
 							pair.setSimulation();
 						}
 
+						if (pair.boundaryonly()) {
+							pair.setBoundaryonly();
+						}
+
                         if(pair.customassignment()) {
                             pair.setCustomassignment();
                         }
@@ -1390,8 +1394,8 @@ ORYX.Plugins.PropertyWindow = {
                         }
 
                         if(pair.customassignment()) {
-                            var propid = (ORYX.I18N.propertyNames[pair.id()] && ORYX.I18N.propertyNames[pair.id()].length > 0) ? ORYX.I18N.propertyNames[pair.id()] : name;
-                            this.properties.push(["Assignments",  propid, attribute, icons, {
+							var propid = (ORYX.I18N.propertyNames[pair.id()] && ORYX.I18N.propertyNames[pair.id()].length > 0) ? ORYX.I18N.propertyNames[pair.id()] : name;
+							this.properties.push(["Assignments",  propid, attribute, icons, {
                                 editor: editorGrid,
                                 propId: key,
                                 type: pair.type(),
@@ -1410,8 +1414,13 @@ ORYX.Plugins.PropertyWindow = {
                                 labelProvider: this.getLabelProvider(pair)
                             }]);
                         } else if(pair.simulation()) {
-                            var propid = (ORYX.I18N.propertyNames[pair.id()] && ORYX.I18N.propertyNames[pair.id()].length > 0) ?  ORYX.I18N.propertyNames[pair.id()] : name;
-							this.simulationProperties.push([ORYX.I18N.PropertyWindow.simulationProps,  propid, attribute, icons, {
+							var propid;
+							if(pair.boundaryonly()) {
+								propid = (ORYX.I18N.propertyNames[pair.id()+"_boundaryonly"] && ORYX.I18N.propertyNames[pair.id()+"_boundaryonly"].length > 0) ? ORYX.I18N.propertyNames[pair.id()+"_boundaryonly"] : name;
+							} else {
+								propid = (ORYX.I18N.propertyNames[pair.id()] && ORYX.I18N.propertyNames[pair.id()].length > 0) ? ORYX.I18N.propertyNames[pair.id()] : name;
+							}
+                            this.simulationProperties.push([ORYX.I18N.PropertyWindow.simulationProps,  propid, attribute, icons, {
 								editor: editorGrid,
 								propId: key,
 								type: pair.type(),

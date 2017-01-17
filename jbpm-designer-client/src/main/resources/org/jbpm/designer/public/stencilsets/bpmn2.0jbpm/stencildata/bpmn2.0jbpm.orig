@@ -441,22 +441,47 @@
                             "value": "poisson"
                         }
                     ]
-                },
-                {
-                    "id":"probability",
-                    "type":"Integer",
-                    "title":"Probability (Boundary Event only)",
-                    "value":"100",
-                    "description":"Probability",
-                    "description_ja":"Probability",
-                    "readonly":false,
-                    "optional":true,
-                    "simulation" : true,
-                    "min" : "0",
-                    "max" : "100"
                 }
  			]
  		},
+ 		{
+ 			"name":"probabilityAttributes",
+ 			"properties":[
+				{
+					"id":"probability",
+					"type":"Integer",
+					"title":"Probability",
+					"value":"100",
+					"description":"Probability",
+					"description_ja":"Probability",
+					"readonly":false,
+					"optional":true,
+					"simulation" : true,
+					"boundaryonly" : false,
+					"min" : "0",
+					"max" : "100"
+				}
+ 			]
+ 		},
+		{
+			"name":"probabilityBoundaryAttributes",
+			"properties":[
+				{
+					"id":"probability",
+					"type":"Integer",
+					"title":"Probability",
+					"value":"100",
+					"description":"Probability",
+					"description_ja":"Probability",
+					"readonly":false,
+					"optional":true,
+					"simulation" : true,
+					"boundaryonly" : true,
+					"min" : "0",
+					"max" : "100"
+				}
+			]
+		},
  		{
  			"name":"throwEventAttributes",
  			"properties":[
@@ -7166,6 +7191,7 @@
 			"propertyPackages":	[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityAttributes",
                 "interrupting",
 				"bgColor"
 			],
@@ -7256,6 +7282,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityAttributes",
 				"interrupting",
 				"bgColor"
 			],
@@ -7357,6 +7384,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityAttributes",
 				"interrupting",
 				"bgColor"
 			],
@@ -7501,6 +7529,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityAttributes",
 				"interrupting",
 				"bgColor"
 			],
@@ -7602,6 +7631,7 @@
 			"propertyPackages": [
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityAttributes",
 				"interrupting",
 				"condition",
 				"bgColor"
@@ -7724,6 +7754,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityAttributes",
 				"interrupting",
 				"bgColor"
 			],
@@ -7825,6 +7856,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityAttributes",
 				"interrupting",
 				"bgColor"
 			],
@@ -7915,6 +7947,7 @@
 			"propertyPackages": [
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityAttributes",
 				"interrupting",
 				"bgColor"
 			],
@@ -8016,6 +8049,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityBoundaryAttributes",
 				"boundaryevent",
 				"bgColor"
 			],
@@ -8145,6 +8179,7 @@
 			"icon":"catching/timer.png",
 			"propertyPackages":[
 				"baseAttributes",
+				"probabilityBoundaryAttributes",
 				"boundaryevent",
 				"bgColor"
 			],
@@ -8314,19 +8349,6 @@
                     "optional":true,
                     "simulation" : true,
                     "min" : "0"
-                },
-                {
-                    "id":"probability",
-                    "type":"Integer",
-                    "title":"Probability (Boundary Event only)",
-                    "value":"100",
-                    "description":"Probability",
-                    "description_ja":"Probability",
-                    "readonly":false,
-                    "optional":true,
-                    "simulation" : true,
-                    "min" : "0",
-                    "max" : "100"
                 }
 			]
 		},
@@ -8343,6 +8365,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityBoundaryAttributes",
 				"boundaryevent",
 				"bgColor"
 			],
@@ -8471,6 +8494,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityBoundaryAttributes",
 				"boundaryevent",
 				"condition",
 				"bgColor"
@@ -8622,6 +8646,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityBoundaryAttributes",
 				"boundaryevent",
 				"bgColor"
 			],
@@ -8747,6 +8772,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityBoundaryAttributes",
 				"boundaryevent",
 				"bgColor"
 			],
@@ -8859,6 +8885,7 @@
 			"propertyPackages":[
 				"baseAttributes",
 				"catchEventAttributes",
+				"probabilityBoundaryAttributes",
 				"boundaryevent",
 				"bgColor"
 			],
