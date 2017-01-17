@@ -1651,8 +1651,9 @@ ORYX.I18N.propertyNames['dataoutputassociations'] = '<i18n:message key="ORYX.I18
 ORYX.I18N.propertyNames['dataoutputassociations_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_dataoutputassociations_desc">The Data Associations of the catch Event.</i18n:message>';
 ORYX.I18N.propertyNames['dataoutput'] = '<i18n:message key="ORYX.I18N.propertyNames_dataoutput">DataOutput</i18n:message>';
 ORYX.I18N.propertyNames['dataoutput_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_dataoutput_desc">The Data Associations of the catch Event.</i18n:message>';
-ORYX.I18N.propertyNames['probability'] = '<i18n:message key="ORYX.I18N.propertyNames_probability">Probability (Boundary Event only)</i18n:message>';
+ORYX.I18N.propertyNames['probability'] = '<i18n:message key="ORYX.I18N.propertyNames_probability">Probability</i18n:message>';
 ORYX.I18N.propertyNames['probability_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_probability_desc">Probability</i18n:message>';
+ORYX.I18N.propertyNames['probability_boundaryonly'] = '<i18n:message key="ORYX.I18N.propertyNames_probability_boundaryonly">Probability (Boundary Event only)</i18n:message>';
 ORYX.I18N.propertyNames['eventdefinitions'] = '<i18n:message key="ORYX.I18N.propertyNames_eventdefinitions">EventDefinitions</i18n:message>';
 ORYX.I18N.propertyNames['eventdefinitions_desc'] = '<i18n:message key="ORYX.I18N.propertyNames_eventdefinitions_desc">EventDefinitions (EventDefinition) is an attribute that defines the type of contained triggers expected for a catch Event.</i18n:message>';
 ORYX.I18N.propertyNames['datainputassociations'] = '<i18n:message key="ORYX.I18N.propertyNames_datainputassociations">DataInputAssociations</i18n:message>';
