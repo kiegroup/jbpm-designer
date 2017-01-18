@@ -306,6 +306,7 @@ ORYX.CONFIG.EVENT_SIMULATION_SHOW_ANNOTATED_PROCESS = "simulation.showannotatedp
 ORYX.CONFIG.EVENT_NOTIFICATION_SHOW = "notification.show";
 ORYX.CONFIG.EVENT_DEF_DELETED = "notification.def.deleted";
 ORYX.CONFIG.EVENT_UPDATE_TASK_TYPE = "updatetaskevent";
+ORYX.CONFIG.EVENT_PASTE_NOTEMPTY_END = "paste.notempty.end";
 ORYX.CONFIG.EVENT_PASTE_END = "paste.end";
 ORYX.CONFIG.EVENT_DOCELEMENT_TO_MODEL = "docelementtomodelevent";
 ORYX.CONFIG.EVENT_INSTALL_WORKITEM = "workitem.install";

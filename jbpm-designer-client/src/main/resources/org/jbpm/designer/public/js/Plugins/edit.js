@@ -304,6 +304,10 @@ ORYX.Plugins.Edit = Clazz.extend({
                 this.facade.importJSON(localStorage.getObject("designerclipboard"));
 
                 this.facade.raiseEvent({
+                    type: ORYX.CONFIG.EVENT_PASTE_NOTEMPTY_END
+                });
+
+                this.facade.raiseEvent({
                     type: ORYX.CONFIG.EVENT_PASTE_END
                 });
 
@@ -451,6 +455,13 @@ ORYX.Plugins.Edit = Clazz.extend({
             }
         } else {
             this.facade.importJSON(canvas);
+
+
+            if(this.clipboard.shapesAsJson.length > 0) {
+                this.facade.raiseEvent({
+                    type: ORYX.CONFIG.EVENT_PASTE_NOTEMPTY_END
+                });
+            }
 
             this.facade.raiseEvent({
                 type: ORYX.CONFIG.EVENT_PASTE_END

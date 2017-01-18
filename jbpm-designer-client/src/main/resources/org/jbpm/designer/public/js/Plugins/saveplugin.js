@@ -157,7 +157,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DOCKERDRAG, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DOCKER_EVENT, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UPDATE_TASK_TYPE, this.setUnsaved.bind(this));
-        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_PASTE_END, this.setUnsaved.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_PASTE_NOTEMPTY_END, this.setUnsaved.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_KEYBIND_MOVE_FINISHED, this.setUnsaved.bind(this));
 
 
