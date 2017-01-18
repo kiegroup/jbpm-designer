@@ -7171,9 +7171,6 @@
 			],
 			"roles" : 			[
 				"all",
-				"from_task_event",
-				"to_task_event",
-				"fromtoall",
 				"DataObjectMorph"
 			]
 		},
