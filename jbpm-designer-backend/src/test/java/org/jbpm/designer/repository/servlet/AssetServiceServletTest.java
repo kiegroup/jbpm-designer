@@ -77,6 +77,40 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
     }
 
     @Test
+    public void testMultiByteCommitMessageOnAssetUpdate() throws Exception {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("custom editors content")
+                .type("bpmn2")
+                .name("testprocess")
+                .location("/defaultPackage");
+        String id = repository.createAsset(builder.getAsset());
+
+        // setup parameters
+        Map<String, String> params = new HashMap<String, String>();
+
+        params.put("profile", "jbpm");
+        params.put("action", "updateasset");
+        params.put("assetid", id);
+        params.put("assetcontent", "testprocess");
+        params.put("commitmessage", "こんにちは世界");
+
+        boolean processAssetExists = repository.assetExists("/defaultPackage/testprocess.bpmn2");
+        assertTrue(processAssetExists);
+
+        AssetServiceServlet assetServiceServlet = new AssetServiceServlet();
+        assetServiceServlet.setProfile(profile);
+
+        assetServiceServlet.init(new TestServletConfig(new TestServletContext(repository)));
+        TestHttpServletResponse response = new  TestHttpServletResponse();
+        assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
+
+        assertEquals("こんにちは世界", assetServiceServlet.getCommitMessage());
+    }
+
+    @Test
     public void testUpdateAsset() throws Exception {
 
         Repository repository = new VFSRepository(producer.getIoService());
