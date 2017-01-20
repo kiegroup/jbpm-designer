@@ -107,81 +107,136 @@ public class DesignerWidgetView
     }
 
     public native void setProcessSaved( String editorID ) /*-{
-        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
-            $wnd.document.getElementById(editorID).contentWindow.ORYX.PROCESS_SAVED = true;
+        try {
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
+                $wnd.document.getElementById(editorID).contentWindow.ORYX.PROCESS_SAVED = true;
+            }
+        }catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI setProcessSaved error", ex);
         }
     }-*/;
 
     public native boolean getIsReadOnly( String editorID ) /*-{
-        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
-            return $wnd.document.getElementById(editorID).contentWindow.ORYX.READONLY;
+        try {
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
+                return $wnd.document.getElementById(editorID).contentWindow.ORYX.READONLY;
+            }
+        }catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI getIsReadOnly error", ex);
         }
     }-*/;
 
     public native boolean getIsViewLocked( String editorID ) /*-{
-        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
-            return $wnd.document.getElementById(editorID).contentWindow.ORYX.VIEWLOCKED;
+        try{
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
+                return $wnd.document.getElementById(editorID).contentWindow.ORYX.VIEWLOCKED;
+            }
+        }catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI getIsViewLocked error", ex);
         }
     }-*/;
 
     public native void setProcessUnSaved( String editorID ) /*-{
-        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
-            $wnd.document.getElementById(editorID).contentWindow.ORYX.PROCESS_SAVED = false;
+        try {
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
+                $wnd.document.getElementById(editorID).contentWindow.ORYX.PROCESS_SAVED = false;
+            }
+        }catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI setProcessUnSaved error", ex);
         }
     }-*/;
 
     public native boolean canSaveDesignerModel( String editorID ) /*-{
-        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
-            return $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved();
+        try {
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+                return $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved();
+            }
+            return true;
+        }catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI canSaveDesignerModel error", ex);
         }
-        return true;
     }-*/;
 
     public native void raiseEventSave( String editorID ) /*-{
-        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
-            $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
-                type: "designereventdosave"
-            });
+        try {
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+                $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                    type: "designereventdosave"
+                });
+            }
+        }catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI raiseEventSave error", ex);
         }
     }-*/;
 
 
     public native void raiseEventCheckSave( String editorID, String pathURI ) /*-{
-        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
-            $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
-                type: "designereventdochecksave",
-                pathuri: pathURI
-            });
+        try {
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+                $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                    type: "designereventdochecksave",
+                    pathuri: pathURI
+                });
+            }
+        }catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI raiseEventCheckSave error", ex);
         }
     }-*/;
 
     public native void raiseAskOpenInXMLEditor( String editorID ) /*-{
-        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor ) {
-            $wnd.document.getElementById(editorID).contentWindow.ORYX.LOADING_ERRORS = true;
+        try {
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor) {
+                $wnd.document.getElementById(editorID).contentWindow.ORYX.LOADING_ERRORS = true;
+            }
+        }catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI raiseAskOpenInXMLEditor error", ex);
         }
     }-*/;
 
     public native void raiseEventSaveCancel( String editorID ) /*-{
-        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
-            $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
-                type: "designereventcancelsave"
-            });
+        try {
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+                $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                    type: "designereventcancelsave"
+                });
+            }
+        }catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI raiseEventSaveCancel error", ex);
         }
     }-*/;
 
     public native void raiseEventUpdateLock( String editorID ) /*-{
-        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
-            $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
-                type: "designerupdatelock"
-            });
+        try {
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+                $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                    type: "designerupdatelock"
+                });
+            }
+        }catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI raiseEventUpdateLock error", ex);
         }
     }-*/;
 
     public native void raiseEventReload( String editorID ) /*-{
-        if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
-            $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
-                type: "designereventreloads"
-            });
+        try {
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+                $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                    type: "designereventreloads"
+                });
+            }
+        }catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI raiseEventReload error", ex);
         }
     }-*/;
 
