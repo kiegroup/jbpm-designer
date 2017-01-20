@@ -173,6 +173,18 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-social-activities-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-social-activities-client</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!-- UberFire -->
     <dependency>
       <groupId>org.uberfire</groupId>
@@ -800,8 +812,9 @@
             <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-library-client</compileSourcesArtifact>
             <compileSourcesArtifact>org.kie.workbench.screens:kie-wb-common-library-api</compileSourcesArtifact>
 
-            <!-- KIE UberFire extensions -->
-            <compileSourcesArtifact>org.kie.uberfire:kie-uberfire-social-activities-api</compileSourcesArtifact>
+            <!-- UberFire extensions -->
+            <compileSourcesArtifact>org.uberfire:uberfire-social-activities-api</compileSourcesArtifact>
+            <compileSourcesArtifact>org.uberfire:uberfire-social-activities-client</compileSourcesArtifact>
 
             <!-- UberFire Extensions -->
             <compileSourcesArtifact>org.uberfire:uberfire-commons-editor-api</compileSourcesArtifact>
