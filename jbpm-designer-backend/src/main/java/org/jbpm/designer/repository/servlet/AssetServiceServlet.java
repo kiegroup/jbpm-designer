@@ -56,6 +56,7 @@ public class AssetServiceServlet extends HttpServlet {
     private static final String OPTION_BY_PATH = "optionbypath";
     private static final String OPTION_BY_ID = "optionbyid";
     private static final String TRANSFORMATION_JSON_TO_BPMN2 = "jsontobpmn2";
+    private String commitMessage;
 
     private IDiagramProfile profile;
     // this is here just for unit testing purpose
@@ -74,6 +75,8 @@ public class AssetServiceServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+
+        req.setCharacterEncoding("UTF-8");
         String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String action = req.getParameter("action");
         String preprocessingData = req.getParameter("pp");
@@ -84,7 +87,7 @@ public class AssetServiceServlet extends HttpServlet {
         String assetContentTransform = req.getParameter("assetcontenttransform");
         String assetLocation = req.getParameter("assetlocation");
         String loadoption = req.getParameter("loadoption");
-        String commitMessage = req.getParameter("commitmessage");
+        commitMessage = req.getParameter("commitmessage");
         String sessionId = req.getParameter( "sessionid" );
         String pathURI = req.getParameter("latestpath");
         JSONObject returnObj = new JSONObject();
@@ -328,6 +331,10 @@ public class AssetServiceServlet extends HttpServlet {
         resp.setContentType(type);
         resp.setCharacterEncoding("UTF-8");
         pw.write(content);
+    }
+
+    public String getCommitMessage() {
+        return commitMessage;
     }
 
 }
