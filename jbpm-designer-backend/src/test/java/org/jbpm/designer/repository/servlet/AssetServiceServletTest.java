@@ -22,6 +22,7 @@ import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.*;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.VFSRepository;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -107,7 +108,12 @@ public class AssetServiceServletTest extends RepositoryBaseTest {
         TestHttpServletResponse response = new  TestHttpServletResponse();
         assetServiceServlet.doPost(new TestHttpServletRequest(params), response);
 
-        assertEquals("こんにちは世界", assetServiceServlet.getCommitMessage());
+        String jsonResponse = new String(response.getContent());
+        assertNotNull(jsonResponse);
+        JSONObject jsonObject = new JSONObject(jsonResponse);
+        assertNotNull(jsonObject);
+        assertEquals("こんにちは世界", jsonObject.getString("commitMessage"));
+
     }
 
     @Test
