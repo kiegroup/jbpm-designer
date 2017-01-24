@@ -176,8 +176,7 @@
     <dependency>
       <groupId>org.uberfire</groupId>
       <artifactId>uberfire-social-activities-api</artifactId>
-      <scope>provided</scope>
-    </dependency>
+      </dependency>
 
     <dependency>
       <groupId>org.uberfire</groupId>
