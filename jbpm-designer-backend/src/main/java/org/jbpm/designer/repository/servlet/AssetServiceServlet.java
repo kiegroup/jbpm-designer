@@ -56,7 +56,6 @@ public class AssetServiceServlet extends HttpServlet {
     private static final String OPTION_BY_PATH = "optionbypath";
     private static final String OPTION_BY_ID = "optionbyid";
     private static final String TRANSFORMATION_JSON_TO_BPMN2 = "jsontobpmn2";
-    private String commitMessage;
 
     private IDiagramProfile profile;
     // this is here just for unit testing purpose
@@ -87,7 +86,7 @@ public class AssetServiceServlet extends HttpServlet {
         String assetContentTransform = req.getParameter("assetcontenttransform");
         String assetLocation = req.getParameter("assetlocation");
         String loadoption = req.getParameter("loadoption");
-        commitMessage = req.getParameter("commitmessage");
+        String commitMessage = req.getParameter("commitmessage");
         String sessionId = req.getParameter( "sessionid" );
         String pathURI = req.getParameter("latestpath");
         JSONObject returnObj = new JSONObject();
@@ -143,7 +142,7 @@ public class AssetServiceServlet extends HttpServlet {
                     _logger.error("Error storing asset: " + e.getMessage());
                     addError(errorsArray, "Error storing asset: " + e.getMessage());
                 }
-                jsonResponse(returnObj, errorsArray, resp);
+                jsonResponse(returnObj, commitMessage, errorsArray, resp);
             } else if(action != null && action.equals(ACTION_DELETE_ASSET)) {
                 try {
                     Boolean ret = repository.deleteAsset(assetId);
@@ -319,7 +318,14 @@ public class AssetServiceServlet extends HttpServlet {
     }
 
     private void jsonResponse(JSONObject returnObj, JSONArray errorsArray, HttpServletResponse resp) throws Exception {
+        jsonResponse(returnObj, null, errorsArray, resp);
+    }
+
+    private void jsonResponse(JSONObject returnObj, String commitMessage, JSONArray errorsArray, HttpServletResponse resp) throws Exception {
         returnObj.put("errors", errorsArray);
+        if(commitMessage != null) {
+            returnObj.put("commitMessage", commitMessage);
+        }
         PrintWriter pw = resp.getWriter();
         resp.setContentType("text/json");
         resp.setCharacterEncoding("UTF-8");
@@ -331,10 +337,6 @@ public class AssetServiceServlet extends HttpServlet {
         resp.setContentType(type);
         resp.setCharacterEncoding("UTF-8");
         pw.write(content);
-    }
-
-    public String getCommitMessage() {
-        return commitMessage;
     }
 
 }
