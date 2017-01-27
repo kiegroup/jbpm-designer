@@ -25,26 +25,34 @@ import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
-import org.uberfire.ext.widgets.common.client.callbacks.DefaultErrorCallback;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
+import org.kie.workbench.common.widgets.client.handlers.NewResourceSuccessEvent;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.mvp.PlaceManager;
-import org.uberfire.mvp.PlaceRequest;
-import org.uberfire.mvp.impl.PathPlaceRequest;
+import org.uberfire.ext.widgets.common.client.callbacks.DefaultErrorCallback;
 import org.uberfire.workbench.type.ResourceTypeDefinition;
 
 @ApplicationScoped
 public class NewProcessHandler extends DefaultNewResourceHandler {
 
-    @Inject
     private Caller<DesignerAssetService> designerAssetService;
 
-    @Inject
     private PlaceManager placeManager;
 
-    @Inject
     private Bpmn2Type resourceType;
+
+    public NewProcessHandler() {
+    }
+
+    @Inject
+    public NewProcessHandler( final Caller<DesignerAssetService> designerAssetService,
+                              final PlaceManager placeManager,
+                              final Bpmn2Type resourceType ) {
+        this.designerAssetService = designerAssetService;
+        this.placeManager = placeManager;
+        this.resourceType = resourceType;
+    }
 
     @Override
     public String getDescription() {
@@ -70,8 +78,8 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
             public void callback( final Path path ) {
                 presenter.complete();
                 notifySuccess();
-                final PlaceRequest place = new PathPlaceRequest( path );
-                placeManager.goTo( place );
+                newResourceSuccessEvent.fire( new NewResourceSuccessEvent( path ) );
+                placeManager.goTo( path );
             }
         }, new DefaultErrorCallback() ).createProcess( pkg.getPackageMainResourcesPath(), buildFileName( baseFileName,
                                                                                                          resourceType ) );

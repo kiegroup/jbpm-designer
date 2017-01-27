@@ -31,27 +31,35 @@ import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
+import org.kie.workbench.common.widgets.client.handlers.NewResourceSuccessEvent;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.commons.data.Pair;
 import org.uberfire.ext.widgets.common.client.callbacks.DefaultErrorCallback;
-import org.uberfire.mvp.PlaceRequest;
-import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.workbench.type.ResourceTypeDefinition;
 
 @ApplicationScoped
 public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
 
-    @Inject
     private Caller<DesignerAssetService> designerAssetService;
 
-    @Inject
     private PlaceManager placeManager;
 
-    @Inject
     private Bpmn2Type resourceType;
 
     private TextBox caseIdPrefixTextBox = new TextBox();
+
+    public NewCaseDefinitionHandler() {
+    }
+
+    @Inject
+    public NewCaseDefinitionHandler( final Caller<DesignerAssetService> designerAssetService,
+                                     final PlaceManager placeManager,
+                                     final Bpmn2Type resourceType ) {
+        this.designerAssetService = designerAssetService;
+        this.placeManager = placeManager;
+        this.resourceType = resourceType;
+    }
 
     @Override
     public String getDescription() {
@@ -87,8 +95,8 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
                 presenter.complete();
 
                 notifySuccess();
-                final PlaceRequest place = new PathPlaceRequest( path );
-                placeManager.goTo( place );
+                newResourceSuccessEvent.fire( new NewResourceSuccessEvent( path ) );
+                placeManager.goTo( path );
             }
         }, new DefaultErrorCallback()).createCaseDefinition(pkg.getPackageMainResourcesPath(), buildFileName(baseFileName,
                 resourceType ), caseIdPrefix );
