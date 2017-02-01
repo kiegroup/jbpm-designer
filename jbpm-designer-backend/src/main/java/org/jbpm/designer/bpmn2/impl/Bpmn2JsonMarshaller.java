@@ -1689,6 +1689,8 @@ public class Bpmn2JsonMarshaller {
             return "mvel";
         } else if(fullQualifiedFormat.equals("http://www.javascript.com/javascript")) {
             return "javascript";
+        } else if(fullQualifiedFormat.equals("http://www.jboss.org/drools/rule")) {
+            return "drools";
         } else {
             return "java";
         }
@@ -2058,7 +2060,16 @@ public class Bpmn2JsonMarshaller {
 				properties.put("adhocordering", "Parallel");
 			}
 			if(ahsp.getCompletionCondition() != null) {
-				properties.put("adhoccompletioncondition", ((FormalExpression) ahsp.getCompletionCondition()).getBody().replaceAll("\n", "\\\\n"));
+                FormalExpression completionExpression = (FormalExpression) ahsp.getCompletionCondition();
+                if(completionExpression != null) {
+                    properties.put("adhoccompletioncondition", completionExpression.getBody().replaceAll("\n", "\\\\n"));
+                    if(completionExpression.getLanguage() != null) {
+                        String completionLanguage = getScriptLanguageFormat(completionExpression.getLanguage());
+                        properties.put("script_language", completionLanguage);
+                    }
+                }
+
+
 			}
 		}
 
