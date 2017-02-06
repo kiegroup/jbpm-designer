@@ -1671,6 +1671,21 @@ public class Bpmn2UnmarshallingTest {
 
     }
 
+    @Test
+    public void testAdHocSubprocessDroolsCompletionCondition() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("adHocSubprocessCompletionCondition.json");
+        Process process = getRootProcess(definitions);
+
+        AdHocSubProcess adHocSubProcess = (AdHocSubProcess) process.getFlowElements().get(0);
+        assertNotNull(adHocSubProcess);
+        assertNotNull(adHocSubProcess.getCompletionCondition());
+        assertTrue(adHocSubProcess.getCompletionCondition() instanceof FormalExpression);
+
+        FormalExpression expression = (FormalExpression) adHocSubProcess.getCompletionCondition();
+        assertEquals("<![CDATA[org.kie.api.runtime.process.CaseData(data.get(\"claimReportDone\") == true)]]>", expression.getBody());
+        assertEquals("http://www.jboss.org/drools/rule", expression.getLanguage());
+    }
+
     private void verifyBpmnShapePresent(BaseElement element, Definitions definitions) {
         boolean diagramElementPresent = false;
         for(DiagramElement diagramElement : definitions.getDiagrams().get(0).getPlane().getPlaneElement()) {

@@ -3738,6 +3738,8 @@ public class Bpmn2JsonUnmarshaller {
                 scriptLanguage = "http://www.mvel.org/2.0";
             } else if(properties.get("script_language").equals("javascript")) {
                 scriptLanguage = "http://www.javascript.com/javascript";
+            } else if (properties.get("script_language").equals("drools")) {
+                scriptLanguage = "http://www.jboss.org/drools/rule";
             }
         }
 
@@ -3858,6 +3860,10 @@ public class Bpmn2JsonUnmarshaller {
     	if(properties.get("adhoccompletioncondition") != null) {
     		FormalExpression completionConditionExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
     		completionConditionExpression.setBody(wrapInCDATABlock(properties.get("adhoccompletioncondition")));
+            if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
+                String scriptLanguage = getScriptLanguageFormat(properties);
+                completionConditionExpression.setLanguage(scriptLanguage);
+            }
     		ahsp.setCompletionCondition(completionConditionExpression);
     	}
     }

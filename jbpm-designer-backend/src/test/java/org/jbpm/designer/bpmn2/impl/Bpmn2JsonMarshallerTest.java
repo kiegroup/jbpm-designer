@@ -553,4 +553,17 @@ public class Bpmn2JsonMarshallerTest {
 
     }
 
+    @Test
+    public void testAdHocSubprocessDroolsCompletionCondition() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("adHocSubprocessCompletionCondition.bpmn2");
+        JSONObject adHocSubprocess = getChildByName(process, "abcde");
+        JSONObject properties = adHocSubprocess.getJSONObject("properties");
+
+        String completionCondition = properties.getString("adhoccompletioncondition");
+        String scriptLanguage = properties.getString("script_language");
+
+        assertEquals("org.kie.api.runtime.process.CaseData(data.get(\"claimReportDone\") == true)", completionCondition);
+        assertEquals("drools", scriptLanguage);
+    }
+
 }
