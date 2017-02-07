@@ -1686,6 +1686,27 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("http://www.jboss.org/drools/rule", expression.getLanguage());
     }
 
+    public void testInputOutputSetsOfIoSpecification() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("taskIoSpecification.json");
+        Process process = getRootProcess(definitions);
+
+        UserTask task = (UserTask) process.getFlowElements().get(0);
+        assertNotNull(task);
+        SubProcess subProcess = (SubProcess) process.getFlowElements().get(1);
+        assertNotNull(subProcess);
+        UserTask task2 = (UserTask) subProcess.getFlowElements().get(0);
+        assertNotNull(task2);
+
+        assertNotNull(task.getIoSpecification());
+        assertNotNull(task.getIoSpecification().getInputSets());
+        assertNotNull(task.getIoSpecification().getOutputSets());
+
+        assertNotNull(task2.getIoSpecification());
+        assertNotNull(task2.getIoSpecification().getInputSets());
+        assertNotNull(task2.getIoSpecification().getOutputSets());
+
+    }
+
     private void verifyBpmnShapePresent(BaseElement element, Definitions definitions) {
         boolean diagramElementPresent = false;
         for(DiagramElement diagramElement : definitions.getDiagrams().get(0).getPlane().getPlaneElement()) {

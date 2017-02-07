@@ -205,6 +205,7 @@ public class Bpmn2JsonUnmarshaller {
             revisitArtifacts(def);
             revisitGroups(def);
             revisitTaskAssociations(def);
+            revisitTaskIoSpecification(def);
             revisitSendReceiveTasks(def);
             reconnectFlows();
             revisitGateways(def);
@@ -1204,6 +1205,39 @@ public class Bpmn2JsonUnmarshaller {
 	            	}
 	            }
 	        }
+        }
+    }
+
+    public void revisitTaskIoSpecification(Definitions def) {
+        List<RootElement> rootElements =  def.getRootElements();
+        for(RootElement root : rootElements) {
+            if(root instanceof Process) {
+                revisitTaskIoSpecificationInfo((Process) root);
+            }
+        }
+    }
+
+    public void revisitTaskIoSpecificationInfo(FlowElementsContainer container) {
+        List<FlowElement> flowElements = container.getFlowElements();
+        for(FlowElement fe : flowElements) {
+            if(fe instanceof Task) {
+                Task t = (Task) fe;
+                if(t.getIoSpecification() != null) {
+                    InputOutputSpecification ios = t.getIoSpecification();
+
+                    if(ios.getInputSets() == null || ios.getInputSets().size() < 1) {
+                        InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                        ios.getInputSets().add(inset);
+                    }
+
+                    if(ios.getOutputSets() == null || ios.getOutputSets().size() < 1) {
+                        OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
+                        ios.getOutputSets().add(outset);
+                    }
+                }
+            } else if(fe instanceof FlowElementsContainer) {
+                revisitTaskIoSpecificationInfo((FlowElementsContainer) fe);
+            }
         }
     }
 
