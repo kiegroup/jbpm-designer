@@ -162,7 +162,7 @@ public class Bpmn2UnmarshallingTest {
         assertEquals(task, flow.getSourceRef());
         assertEquals(task2, flow.getTargetRef());
         definitions.eResource().save(System.out, Collections.emptyMap());
-        verifyBpmnEdgePresent(flow, definitions);
+        assertEquals(1, getBpmnEdges(flow, definitions).size());
     }
 
     @Test
@@ -771,7 +771,7 @@ public class Bpmn2UnmarshallingTest {
         assertEquals(g, association.getSourceRef());
         assertEquals(textA, association.getTargetRef());
         assertEquals(AssociationDirection.NONE, association.getAssociationDirection());
-        verifyBpmnEdgePresent(association, definitions);
+        assertEquals(1, getBpmnEdges(association, definitions).size());
         definitions.eResource().save(System.out, Collections.emptyMap());
     }
 
@@ -941,6 +941,12 @@ public class Bpmn2UnmarshallingTest {
         assertFalse(containerContainsElement(subProcess, SUBPROCESSMESSAGE_NAME));
         assertTrue(containerContainsElement(subProcess, SUBTIMER_NAME));
         assertNull(subProcess.getLoopCharacteristics());
+
+        // There are not BPMNEdges for boundary events
+        BoundaryEvent outTimer = (BoundaryEvent) getFlowElement(process.getFlowElements(), "OutTimer");
+        BoundaryEvent subProcessMessage = (BoundaryEvent) getFlowElement(process.getFlowElements(), "SubProcessMessage");
+        assertEquals(0, getBpmnEdges(outTimer, definitions).size());
+        assertEquals(0, getBpmnEdges(subProcessMessage, definitions).size());
     }
 
     @Test
@@ -1717,17 +1723,15 @@ public class Bpmn2UnmarshallingTest {
         assertTrue(diagramElementPresent);
     }
 
-    private void verifyBpmnEdgePresent(BaseElement element, Definitions definitions) {
-        boolean diagramElementPresent = false;
-        for(DiagramElement diagramElement : definitions.getDiagrams().get(0).getPlane().getPlaneElement()) {
-            if(diagramElement instanceof BPMNEdge && ((BPMNEdge) diagramElement).getBpmnElement() == element) {
-                diagramElementPresent = true;
+    private List<BPMNEdge> getBpmnEdges(BaseElement element, Definitions definitions) {
+        List<BPMNEdge> edges = new ArrayList<>();
+        for (DiagramElement diagramElement : definitions.getDiagrams().get(0).getPlane().getPlaneElement()) {
+            if (diagramElement instanceof BPMNEdge && ((BPMNEdge) diagramElement).getBpmnElement().equals(element)) {
+                edges.add((BPMNEdge) diagramElement);
             }
         }
-        assertTrue(diagramElementPresent);
+        return edges;
     }
-
-
 
     private int getDIElementOrder(BaseElement element, Definitions definitions) {
         int counter = 0;
