@@ -32,7 +32,7 @@
         <configuration>
           <finalName>jbpm-designer-standalone</finalName>
           <descriptors>
-             <descriptor>src/main/assembly/assembly-standalone-tomcat-7_0.xml</descriptor>
+             <descriptor>src/main/assembly/assembly-standalone-tomcat-8.xml</descriptor>
              <descriptor>src/main/assembly/assembly-standalone-wildfly-10.xml</descriptor>
           </descriptors>
           <archive>
