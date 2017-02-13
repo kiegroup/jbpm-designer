@@ -26,7 +26,9 @@ import bpsim.*;
 import bpsim.impl.BpsimPackageImpl;
 import org.eclipse.emf.common.util.EList;
 import org.jboss.drools.*;
+import org.jbpm.designer.bpmn2.BpmnMarshallerHelper;
 import org.jbpm.designer.util.Utils;
+import org.jbpm.workflow.core.node.RuleSetNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.codehaus.jackson.JsonEncoding;
@@ -1124,6 +1126,14 @@ public class Bpmn2JsonMarshaller {
                     properties.put("ruleflowgroup", entry.getValue());
                 }
             }
+            String ruleLanguage = ((BusinessRuleTask) task).getImplementation();
+            if (RuleSetNode.DMN_LANG.equals(ruleLanguage)) {
+                ruleLanguage = BpmnMarshallerHelper.RULE_LANG_DMN;
+            } else {
+                ruleLanguage = BpmnMarshallerHelper.RULE_LANG_DRL;
+            }
+            properties.put("rulelanguage", ruleLanguage);
+
     	} else if (task instanceof ScriptTask) {
     		ScriptTask scriptTask = (ScriptTask) task;
     		properties.put("script", scriptTask.getScript() != null ? scriptTask.getScript().replace("\\", "\\\\").replace("\n", "\\n") : "");

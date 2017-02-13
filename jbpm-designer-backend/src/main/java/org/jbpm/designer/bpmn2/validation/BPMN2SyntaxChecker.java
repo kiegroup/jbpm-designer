@@ -35,9 +35,11 @@ import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.bpmn2.xml.BPMNDISemanticModule;
 import org.jbpm.bpmn2.xml.BPMNSemanticModule;
 import org.jbpm.compiler.xml.XmlProcessReader;
+import org.jbpm.designer.bpmn2.BpmnMarshallerHelper;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.process.core.validation.ProcessValidationError;
 import org.jbpm.ruleflow.core.validation.RuleFlowProcessValidator;
+import org.jbpm.workflow.core.node.RuleSetNode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -322,20 +324,52 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 	}
 
 	private void checkBusinessRuleTask(BusinessRuleTask businessRuleTask) {
-		Iterator<FeatureMap.Entry> biter = businessRuleTask.getAnyAttribute().iterator();
-		boolean foundRuleflowGroup = false;
-		while(biter.hasNext()) {
-			FeatureMap.Entry entry = biter.next();
-			if(entry.getEStructuralFeature().getName().equals("ruleFlowGroup")) {
-				foundRuleflowGroup = true;
-				String ruleflowGroup = (String) entry.getValue();
-				if(isEmpty(ruleflowGroup)) {
-					addError(businessRuleTask, new ValidationSyntaxError(businessRuleTask, BPMN2_TYPE, SyntaxCheckerErrors.BUSINESS_RULE_TASK_NO_RULEFLOW_GROUP));
+		String ruleLanguage = businessRuleTask.getImplementation();
+		if (RuleSetNode.DMN_LANG.equals(ruleLanguage)) {
+			ruleLanguage = BpmnMarshallerHelper.RULE_LANG_DMN;
+		} else {
+			ruleLanguage = BpmnMarshallerHelper.RULE_LANG_DRL;
+		}
+		if (ruleLanguage.equals(BpmnMarshallerHelper.RULE_LANG_DRL)) {
+			Iterator<FeatureMap.Entry> biter = businessRuleTask.getAnyAttribute().iterator();
+			boolean foundRuleflowGroup = false;
+			while (biter.hasNext()) {
+				FeatureMap.Entry entry = biter.next();
+				if (entry.getEStructuralFeature().getName().equals("ruleFlowGroup")) {
+					foundRuleflowGroup = true;
+					String ruleflowGroup = (String) entry.getValue();
+					if (isEmpty(ruleflowGroup)) {
+						addError(businessRuleTask, new ValidationSyntaxError(businessRuleTask, BPMN2_TYPE, SyntaxCheckerErrors.BUSINESS_RULE_TASK_NO_RULEFLOW_GROUP));
+					}
 				}
 			}
-		}
-		if(!foundRuleflowGroup) {
-			addError(businessRuleTask, new ValidationSyntaxError(businessRuleTask, BPMN2_TYPE, SyntaxCheckerErrors.BUSINESS_RULE_TASK_NO_RULEFLOW_GROUP));
+			if (!foundRuleflowGroup) {
+				addError(businessRuleTask, new ValidationSyntaxError(businessRuleTask, BPMN2_TYPE, SyntaxCheckerErrors.BUSINESS_RULE_TASK_NO_RULEFLOW_GROUP));
+			}
+		} else if (ruleLanguage.equals(BpmnMarshallerHelper.RULE_LANG_DMN)) {
+			boolean missingNamespace = true;
+			boolean missingModel = true;
+			if (businessRuleTask.getIoSpecification() != null) {
+				List<DataInput> dataInputs = businessRuleTask.getIoSpecification().getDataInputs();
+
+				if (dataInputs != null) {
+					for (DataInput di : dataInputs) {
+						if ("namespace".equals(di.getName())) {
+							missingNamespace = false;
+						} else if ("model".equals(di.getName())) {
+							missingModel = false;
+						}
+
+					}
+				}
+			}
+			if (missingNamespace) {
+				addError(businessRuleTask, new ValidationSyntaxError(businessRuleTask, BPMN2_TYPE, SyntaxCheckerErrors.DMN_BUSINESS_RULE_TASK_NO_NAMESPACE));
+			}
+			if (missingModel) {
+				addError(businessRuleTask, new ValidationSyntaxError(businessRuleTask, BPMN2_TYPE, SyntaxCheckerErrors.DMN_BUSINESS_RULE_TASK_NO_MODEL));
+			}
+
 		}
 	}
 

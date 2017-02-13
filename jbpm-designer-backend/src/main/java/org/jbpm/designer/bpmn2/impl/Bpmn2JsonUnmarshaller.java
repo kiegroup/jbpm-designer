@@ -74,6 +74,7 @@ import org.jbpm.designer.bpmn2.BpmnMarshallerHelper;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.util.DIZorderComparator;
 import org.jbpm.designer.util.Utils;
+import org.jbpm.workflow.core.node.RuleSetNode;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.InvalidSyntaxException;
@@ -4786,6 +4787,17 @@ public class Bpmn2JsonUnmarshaller {
             SimpleFeatureMapEntry extensionEntry = new SimpleFeatureMapEntry(scriptLanguageElement,
                     scriptLanguage);
             task.getAnyAttribute().add(extensionEntry);
+        }
+
+        if(properties.get("rulelanguage") != null &&  properties.get("rulelanguage").length() > 0) {
+            String ruleLanguage = properties.get("rulelanguage");
+            if (BpmnMarshallerHelper.RULE_LANG_DMN.equals(ruleLanguage)) {
+                task.setImplementation(RuleSetNode.DMN_LANG);
+            } else {
+                task.setImplementation(RuleSetNode.DRL_LANG);
+            }
+        } else {
+            task.setImplementation(RuleSetNode.DRL_LANG);
         }
     }
 

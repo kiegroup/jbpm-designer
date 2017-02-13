@@ -26,6 +26,9 @@ import org.eclipse.bpmn2.BaseElement;
  *
  */
 public interface BpmnMarshallerHelper {
+
+    public static final String RULE_LANG_DRL = "DRL";
+    public static final String RULE_LANG_DMN = "DMN";
     
     /**
      * Applies the set of properties from the json model to the BPMN 2 element.

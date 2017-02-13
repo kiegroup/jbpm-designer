@@ -306,6 +306,23 @@ public class BPMN2SyntaxCheckerTest {
         verifyErrorsOfElement(syntaxChecker, subProcess, Arrays.asList(SyntaxCheckerErrors.MULTIPLE_START_EVENTS));
     }
 
+    @Test
+    public void testEmptyDMNBusinessRule() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("emptyDmnBusinessRule.bpmn2", BPMN2SyntaxCheckerTest.class);
+        JSONObject ruleTask = loader.getChildByName(process, "test");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        verifyErrorsOfElement(syntaxChecker, ruleTask, Arrays.asList(SyntaxCheckerErrors.DMN_BUSINESS_RULE_TASK_NO_NAMESPACE, SyntaxCheckerErrors.DMN_BUSINESS_RULE_TASK_NO_MODEL));
+    }
+
+    @Test
+    public void testDMNBusinessRule() throws Exception {
+        loader.loadProcessFromXml("dmnBusinessRule.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        verifyNoErrors(syntaxChecker);
+    }
+
     private void verifyNoErrors(SyntaxChecker syntaxChecker) throws Exception {
         syntaxChecker.checkSyntax();
         assertFalse(syntaxChecker.errorsFound());
