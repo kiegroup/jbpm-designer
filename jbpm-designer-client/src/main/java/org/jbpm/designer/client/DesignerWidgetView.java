@@ -62,29 +62,17 @@ public class DesignerWidgetView
     public void setEditorID( final String editorID ) {
         this.editorID = editorID;
         inlineFrame.getElement().setId(editorID);
-        inlineFrame.getElement().setAttribute("name", editorID);
+        inlineFrame.getElement().setAttribute("name",
+                                              editorID);
     }
 
     @Override
     public void setEditorParamters( final Map<String, String> editorParameters ) {
         this.editorParameters = editorParameters;
-        // fix locale if needed (for "default")
         String locale = LocaleInfo.getCurrentLocale().getLocaleName();
-/*        if(locale == null) {
+        if(locale == null || locale.equals("default")) {
             locale = "en";
-        } else {
-            if(locale.equals("default")) {
-                locale = "en";
-            }
-            if(locale.indexOf("_") > 0) {
-                locale = locale.split("_")[0]; // just use the language (ommit country and variant)
-            }
-            if(!(locale.equalsIgnoreCase("en") || locale.equalsIgnoreCase("ja"))) {
-                // we currently only support english and japanese. default to english
-                locale = "en";
-            }
         }
-*/
         String paramsStr = "";
         Iterator<String> paramsIter = this.editorParameters.keySet().iterator();
         while ( paramsIter.hasNext() ) {
@@ -93,7 +81,8 @@ public class DesignerWidgetView
         }
         // add timestamp to end of url for caching
         paramsStr += "&ms=" + System.currentTimeMillis();
-        inlineFrame.getElement().setAttribute( "src", GWT.getModuleBaseURL() + "inlineeditor.jsp?locale=" + locale + paramsStr );
+        inlineFrame.getElement().setAttribute("src",
+                                              GWT.getModuleBaseURL() + "inlineeditor.jsp?locale=" + locale + paramsStr );
     }
 
     @Override
