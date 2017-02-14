@@ -1,19 +1,13 @@
 <%@ page import="java.util.Locale" %>
+<%@ page import="org.apache.commons.lang3.LocaleUtils" %>
 <%@ taglib uri="http://jakarta.apache.org/taglibs/i18n-1.0" prefix="i18n" %>
 <%
-    Locale locale= request.getLocale();
-    try{
-        String localeStr=request.getParameter("locale");
-        if(localeStr!= null && localeStr.length()==2){
-            locale = new Locale(request.getParameter("locale"));
-        }else if(localeStr!= null && localeStr.length()==5){
-
-            locale = new Locale(localeStr.substring(0,2),localeStr.substring(3));
-        }
-
-    } catch(Exception e){
-
-    }
+  Locale locale= null;
+  try{
+    locale = LocaleUtils.toLocale( request.getParameter( "locale" ) );
+  } catch(Exception e){
+    locale= request.getLocale();
+  }
 %>
 <i18n:bundle id="bundle" baseName="org.jbpm.designer.resources.i18n.DesignerConstants"
              locale='<%= locale%>' />

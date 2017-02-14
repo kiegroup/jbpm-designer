@@ -43,6 +43,26 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>com.coderplus.maven.plugins</groupId>
+        <artifactId>copy-rename-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-zanata-files</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <fileSets>
+                <fileSet>
+                  <sourceFile>src/main/resources/org/jbpm/designer/resources/i18n/DesignerConstants.properties</sourceFile>
+                  <destinationFile>src/main/resources/org/jbpm/designer/resources/i18n/DesignerConstants_en.properties</destinationFile>
+                </fileSet>
+              </fileSets>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -62,6 +82,7 @@
             <configuration>
                 <includes>
                     <include>**/DesignerConstants.properties</include>
+                    <include>**/DesignerConstants_en.properties</include>
                     <include>**/DesignerConstants_de.properties</include>
                     <include>**/DesignerConstants_es.properties</include>
                     <include>**/DesignerConstants_fr.properties</include>
