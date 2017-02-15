@@ -363,6 +363,7 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject callActivity = getChildByName(process, "callActivity");
         JSONObject properties = callActivity.getJSONObject("properties");
         assertEquals("abc.noCalledElementCallActivity", properties.getString("calledelement"));
+        assertEquals(true, properties.getBoolean("isabortparent"));
     }
 
     @Test
@@ -574,6 +575,14 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject ruleTask = getChildByName(process, "test");
         JSONObject properties = ruleTask.getJSONObject("properties");
         assertEquals(BpmnMarshallerHelper.RULE_LANG_DMN, properties.getString("rulelanguage"));
+    }
+
+    @Test
+    public void testCallActivityAbortParent() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("callActivityAbortParent.bpmn2");
+        JSONObject callActivity = getChildByName(process, "callActivity");
+        JSONObject properties = callActivity.getJSONObject("properties");
+        assertEquals(false, properties.getBoolean("isabortparent"));
     }
 
 }

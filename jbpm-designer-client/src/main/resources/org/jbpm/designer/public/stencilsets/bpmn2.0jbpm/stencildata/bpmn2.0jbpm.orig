@@ -4267,30 +4267,54 @@
 					"readonly":false,
 					"optional":true
 				},
-				 {
-                                        "id":"isasync",
-                                        "type":"Choice",
-                                        "title":"Is Async",
-                                        "value":"false",
-                                        "default": "false",
-                                        "description":"Determines if activity should be executed asynchronously",
-                                        "description_ja":"",
-                                        "readonly":false,
-                                        "optional":true,
-                                        "extra":true,
-                                        "items":[
-                                                {
-                                                        "id":"c1",
-                                                        "title":"true",
-                                                        "value":"true"
-                                                },
-                                                {
-                                                        "id":"c2",
-                                                        "title":"false",
-                                                        "value":"false"
-                                                }
-                                                ]
-                                },
+				{
+					"id":"isasync",
+					"type":"Choice",
+					"title":"Is Async",
+					"value":"false",
+					"default": "false",
+					"description":"Determines if activity should be executed asynchronously",
+					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"extra":true,
+					"items":[
+						{
+								"id":"c1",
+								"title":"true",
+								"value":"true"
+						},
+						{
+								"id":"c2",
+								"title":"false",
+								"value":"false"
+						}
+						]
+				},
+				{
+					"id":"isabortparent",
+					"type":"Choice",
+					"title":"Abort parent",
+					"value":"true",
+					"default": "true",
+					"description":"Determines if parent process (one that contains reusable subprocess activity) should be aborted when subprocess is aborted",
+					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"extra":true,
+					"items":[
+						{
+								"id":"c1",
+								"title":"true",
+								"value":"true"
+						},
+						{
+								"id":"c2",
+								"title":"false",
+								"value":"false"
+						}
+						]
+				},
 				{
 					"id":"customautostart",
 					"type":"Choice",

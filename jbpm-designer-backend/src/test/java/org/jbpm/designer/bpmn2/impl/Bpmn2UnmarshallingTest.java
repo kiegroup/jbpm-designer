@@ -1704,6 +1704,22 @@ public class Bpmn2UnmarshallingTest {
         assertEquals(RuleSetNode.DMN_LANG, ruleTask.getImplementation());
     }
 
+    @Test
+    public void testCallActivityAbortParent() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("callActivityAbortParent.json");
+        Process process = getRootProcess(definitions);
+        CallActivity callActivity = null;
+        for (FlowElement flowElement : process.getFlowElements()) {
+            if (flowElement instanceof CallActivity) {
+                callActivity = (CallActivity) flowElement;
+                break;
+            }
+        }
+        assertNotNull(callActivity);
+        assertEquals("callActivity", callActivity.getName());
+        assertEquals("<![CDATA[false]]>",  getMetaDataValue(callActivity.getExtensionValues(), "customAbortParent"));
+    }
+
     public void testInputOutputSetsOfIoSpecification() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("taskIoSpecification.json");
         Process process = getRootProcess(definitions);
