@@ -2708,6 +2708,29 @@
 					"fortasktypes":"None|Business Rule"
 				},
 				{
+				  	"id":"rulelanguage",
+					"type":"Choice",
+					"title":"Rule Language",
+					"value":"DRL",
+					"description":"Defines the rule language.",
+					"description_ja":"",
+					"readonly":false,
+					"optional":true,
+					"fortasktypes":"None|Business Rule",
+					"items": [
+					  {
+						"id": "c1",
+						"title":"DRL",
+						"value":"DRL"
+					  },
+					  {
+						"id": "c2",
+						"title": "DMN",
+						"value": "DMN"
+					  }
+					]
+				},
+				{
 					"id":"onEntryActions",
 					"type":"Expression",
 					"title":"On Entry Actions",

@@ -35,6 +35,7 @@ import org.jboss.drools.*;
 import org.jboss.drools.impl.MetaDataTypeImpl;
 import org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
+import org.jbpm.workflow.core.node.RuleSetNode;
 import org.junit.Test;
 
 import static org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge.*;
@@ -205,6 +206,7 @@ public class Bpmn2UnmarshallingTest {
         BusinessRuleTask ruleTask = (BusinessRuleTask) task;
         verifyAttribute(ruleTask, "ruleFlowGroup", "simpleGroup");
         assertEquals("<![CDATA[true]]>", getMetaDataValue(task.getExtensionValues(), "customAsync"));
+        assertEquals(RuleSetNode.DRL_LANG, ruleTask.getImplementation());
     }
 
     @Test
@@ -1690,6 +1692,16 @@ public class Bpmn2UnmarshallingTest {
         FormalExpression expression = (FormalExpression) adHocSubProcess.getCompletionCondition();
         assertEquals("<![CDATA[org.kie.api.runtime.process.CaseData(data.get(\"claimReportDone\") == true)]]>", expression.getBody());
         assertEquals("http://www.jboss.org/drools/rule", expression.getLanguage());
+    }
+
+    @Test
+    public void testDMNBusinessRuleTask() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("dmnBusinessRule.json");
+        Process process = getRootProcess(definitions);
+        FlowElement task = getFlowElement(process.getFlowElements(), "test");
+        assertTrue(task instanceof BusinessRuleTask);
+        BusinessRuleTask ruleTask = (BusinessRuleTask) task;
+        assertEquals(RuleSetNode.DMN_LANG, ruleTask.getImplementation());
     }
 
     public void testInputOutputSetsOfIoSpecification() throws Exception {

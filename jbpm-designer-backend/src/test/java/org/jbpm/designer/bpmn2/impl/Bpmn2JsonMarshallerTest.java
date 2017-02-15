@@ -3,6 +3,7 @@ package org.jbpm.designer.bpmn2.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jbpm.designer.bpmn2.BpmnMarshallerHelper;
 import org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxCheckerTest;
@@ -446,6 +447,7 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject properties = ruleTask.getJSONObject("properties");
         assertEquals("simpleGroup", properties.getString("ruleflowgroup"));
         assertEquals(true, properties.getBoolean("isasync"));
+        assertEquals(BpmnMarshallerHelper.RULE_LANG_DRL, properties.getString("rulelanguage"));
     }
 
     @Test
@@ -564,6 +566,14 @@ public class Bpmn2JsonMarshallerTest {
 
         assertEquals("org.kie.api.runtime.process.CaseData(data.get(\"claimReportDone\") == true)", completionCondition);
         assertEquals("drools", scriptLanguage);
+    }
+
+    @Test
+    public void testDMNBusinessRuleTask() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("dmnBusinessRule.bpmn2");
+        JSONObject ruleTask = getChildByName(process, "test");
+        JSONObject properties = ruleTask.getJSONObject("properties");
+        assertEquals(BpmnMarshallerHelper.RULE_LANG_DMN, properties.getString("rulelanguage"));
     }
 
 }
