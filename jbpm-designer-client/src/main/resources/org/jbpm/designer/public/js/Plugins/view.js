@@ -2180,8 +2180,7 @@ ORYX.Plugins.View = {
                this.facade.setSelection([]);
            }
 
-           //this.facade.getCanvas().update();
-           //this.facade.updateSelection();
+           this.reapplyLockedNodesProperties();
 
         }
     },
@@ -2235,6 +2234,17 @@ ORYX.Plugins.View = {
             }).bind(this));
         }
         return foundShape;
+    },
+
+    reapplyLockedNodesProperties: function() {
+        ORYX.EDITOR._canvas.getChildren().each((function(child) {
+            if(child instanceof ORYX.Core.Node || child instanceof ORYX.Core.Edge) {
+                if(child.properties["oryx-isselectable"] !== undefined && child.properties["oryx-isselectable"] == "false") {
+                    child.setSelectable(false);
+                    child.setMovable(false);
+                }
+            }
+        }).bind(this));
     }
 };
 
