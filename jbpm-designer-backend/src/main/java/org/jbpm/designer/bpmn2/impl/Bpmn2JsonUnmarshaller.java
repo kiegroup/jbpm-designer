@@ -4913,6 +4913,10 @@ public class Bpmn2JsonUnmarshaller {
         if(properties.get("isasync") != null && properties.get("isasync").length() > 0 && properties.get("isasync").equals("true")) {
             Utils.setMetaDataExtensionValue(callActivity, "customAsync", wrapInCDATABlock(properties.get("isasync")));
         }
+        // abortParent metadata
+        if(properties.get("isabortparent") != null && properties.get("isabortparent").length() > 0 && properties.get("isabortparent").equals("false")) {
+            Utils.setMetaDataExtensionValue(callActivity, "customAbortParent", wrapInCDATABlock(properties.get("isabortparent")));
+        }
 
     	//callActivity data input set
         applyDataInputProperties(callActivity, properties, new HashMap<String, DataInput>());

@@ -1085,6 +1085,11 @@ public class Bpmn2JsonMarshaller {
         String customAsync = (customAsyncMetaData != null && customAsyncMetaData.length() > 0) ? customAsyncMetaData : "false";
         properties.put("isasync", customAsync);
 
+        // custom abortParent
+        String customAbortParentMetaData = Utils.getMetaDataValue(callActivity.getExtensionValues(), "customAbortParent");
+        String customAbortParent = (customAbortParentMetaData != null && customAbortParentMetaData.length() > 0) ? customAbortParentMetaData : "true";
+        properties.put("isabortparent", customAbortParent);
+
         // data inputs
         marshallDataInputSet(callActivity, properties);
 
