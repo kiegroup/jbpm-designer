@@ -90,15 +90,16 @@ public class VFSRepository implements Repository {
     public Collection<Directory> listDirectories(String startAt) {
         startAt = UriUtils.encode(startAt);
         Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + startAt));
-        DirectoryStream<Path> directories = ioService.newDirectoryStream(path, new DirectoryStream.Filter<Path>() {
+        DirectoryStream<Path> directories = ioService.newDirectoryStream(path,
+                                                                         new DirectoryStream.Filter<Path>() {
 
-            public boolean accept( final Path entry ) throws IOException {
-                if ( Files.isDirectory( entry ) ) {
-                    return true;
-                }
-                return false;
-            }
-        });
+                                                                             public boolean accept(final Path entry) throws IOException {
+                                                                                 if (Files.isDirectory(entry)) {
+                                                                                     return true;
+                                                                                 }
+                                                                                 return false;
+                                                                             }
+                                                                         });
         Collection<Directory> foundDirectories = new ArrayList<Directory>();
         Iterator<Path> it = directories.iterator();
         while (it.hasNext()) {
@@ -309,13 +310,14 @@ public class VFSRepository implements Repository {
     public Collection<Asset> listAssets(String location, final Filter filter) {
         location = UriUtils.encode(location);
         Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + location));
-        DirectoryStream<Path> directories = ioService.newDirectoryStream(path, new DirectoryStream.Filter<Path>() {
+        DirectoryStream<Path> directories = ioService.newDirectoryStream(path,
+                                                                         new DirectoryStream.Filter<Path>() {
 
-            public boolean accept( final Path entry ) throws IOException {
+                                                                             public boolean accept(final Path entry) throws IOException {
 
-                return filter.accept(entry);
-            }
-        });
+                                                                                 return filter.accept(entry);
+                                                                             }
+                                                                         });
         Collection<Asset> foundDirectories = new ArrayList<Asset>();
         Iterator<Path> it = directories.iterator();
         while (it.hasNext()) {
@@ -330,7 +332,8 @@ public class VFSRepository implements Repository {
         String uniqueId = decodeUniqueId(assetUniqueId);
         Path assetPath = getFileSystem(uniqueId).provider().getPath(URI.create(uniqueId));
 
-        Asset asset = buildAsset(assetPath, true);
+        Asset asset = buildAsset(assetPath,
+                                 true);
 
         return asset;
     }
@@ -370,7 +373,11 @@ public class VFSRepository implements Repository {
             if(((AbstractAsset)asset).acceptBytes()) {
                 outputStream.write(((Asset<byte[]>)asset).getAssetContent());
             } else {
-                outputStream.write(asset.getAssetContent().toString().getBytes());
+                try {
+                    outputStream.write(asset.getAssetContent().toString().getBytes("UTF-8"));
+                } catch( UnsupportedEncodingException e ) {
+                    outputStream.write(asset.getAssetContent().toString().getBytes());
+                }
             }
             outputStream.close();
         } catch (java.io.IOException e) {
@@ -393,7 +400,17 @@ public class VFSRepository implements Repository {
         if(((AbstractAsset)asset).acceptBytes()) {
             ioService.write(filePath, ((Asset<byte[]>)asset).getAssetContent(), StandardOpenOption.TRUNCATE_EXISTING, commentedOption);
         } else {
-            ioService.write(filePath, asset.getAssetContent().toString().getBytes(), StandardOpenOption.TRUNCATE_EXISTING, commentedOption);
+            try {
+                ioService.write(filePath,
+                                asset.getAssetContent().toString().getBytes("UTF-8"),
+                                StandardOpenOption.TRUNCATE_EXISTING,
+                                commentedOption);
+            } catch( UnsupportedEncodingException e ) {
+                ioService.write(filePath,
+                                asset.getAssetContent().toString().getBytes(),
+                                StandardOpenOption.TRUNCATE_EXISTING,
+                                commentedOption);
+            }
         }
 
         return asset.getUniqueId();

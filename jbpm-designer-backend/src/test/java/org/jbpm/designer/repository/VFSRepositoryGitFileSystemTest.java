@@ -68,10 +68,13 @@ public class VFSRepositoryGitFileSystemTest {
     public static void prepare() {
 
         env.put( "username", USERNAME );
-        env.put( "password", PASSWORD );
-        env.put( "origin", ORIGIN_URL );
+        env.put("password",
+                PASSWORD);
+        env.put("origin",
+                ORIGIN_URL);
         env.put( "fetch.cmd", FETCH_COMMAND );
-        System.setProperty("org.kie.nio.git.dir", gitLocalClone);
+        System.setProperty("org.kie.nio.git.dir",
+                           gitLocalClone);
 
     }
 
@@ -84,8 +87,10 @@ public class VFSRepositoryGitFileSystemTest {
     public void setup() {
         profile = new JbpmProfileImpl();
         producer = new VFSFileSystemProducer();
-        env.put("repository.root", VFS_REPOSITORY_ROOT + counter);
-        env.put("repository.globaldir", "/global");
+        env.put("repository.root",
+                VFS_REPOSITORY_ROOT + counter);
+        env.put("repository.globaldir",
+                "/global");
         descriptor = producer.produceFileSystem(env);
     }
 
@@ -123,11 +128,13 @@ public class VFSRepositoryGitFileSystemTest {
 
         Collection<Directory> directories = repository.listDirectories("/");
         assertNotNull(directories);
-        assertEquals(3, directories.size());
+        assertEquals(3,
+                     directories.size());
 
         directories = repository.listDirectories("/processes");
         assertNotNull(directories);
-        assertEquals(1, directories.size());
+        assertEquals(1,
+                     directories.size());
     }
 
     @Test
@@ -140,7 +147,8 @@ public class VFSRepositoryGitFileSystemTest {
 
         Directory directoryId = repository.createDirectory("/test");
         assertNotNull(directoryId);
-        assertEquals("test", directoryId.getName());
+        assertEquals("test",
+                     directoryId.getName());
         assertEquals("/", directoryId.getLocation());
         assertNotNull(directoryId.getUniqueId());
 
@@ -157,8 +165,10 @@ public class VFSRepositoryGitFileSystemTest {
 
         Directory directoryId = repository.createDirectory("/test");
         assertNotNull(directoryId);
-        assertEquals("test", directoryId.getName());
-        assertEquals("/", directoryId.getLocation());
+        assertEquals("test",
+                     directoryId.getName());
+        assertEquals("/",
+                     directoryId.getLocation());
         assertNotNull(directoryId.getUniqueId());
 
         rootFolderExists = repository.directoryExists("/test");
@@ -191,7 +201,8 @@ public class VFSRepositoryGitFileSystemTest {
         rootFolderExists = repository.directoryExists("/test");
         assertTrue(rootFolderExists);
 
-        boolean deleted = repository.deleteDirectory("/test", true);
+        boolean deleted = repository.deleteDirectory("/test",
+                                                     true);
         assertTrue(deleted);
 
         rootFolderExists = repository.directoryExists("/test");
@@ -233,7 +244,8 @@ public class VFSRepositoryGitFileSystemTest {
 
         Collection<Asset> assets = repository.listAssets("/processes");
         assertNotNull(assets);
-        assertEquals(2, assets.size());
+        assertEquals(2,
+                     assets.size());
     }
 
     @Test
@@ -246,12 +258,15 @@ public class VFSRepositoryGitFileSystemTest {
 
         Collection<Asset> assets = repository.listAssets("/processes");
         assertNotNull(assets);
-        assertEquals(2, assets.size());
+        assertEquals(2,
+                     assets.size());
         Asset<String> asset = assets.iterator().next();
 
         assertEquals("bpmn2", asset.getAssetType());
-        assertEquals("BPMN2-ScriptTask.bpmn2", asset.getFullName());
-        assertEquals("BPMN2-ScriptTask", asset.getName());
+        assertEquals("BPMN2-ScriptTask.bpmn2",
+                     asset.getFullName());
+        assertEquals("BPMN2-ScriptTask",
+                     asset.getName());
         assertEquals("/processes", asset.getAssetLocation());
     }
 
@@ -268,9 +283,11 @@ public class VFSRepositoryGitFileSystemTest {
         assertEquals(1, assets.size());
         Asset<String> asset = assets.iterator().next();
 
-        assertEquals("png", asset.getAssetType());
+        assertEquals("png",
+                     asset.getAssetType());
         assertEquals("release-process.png", asset.getFullName());
-        assertEquals("release-process", asset.getName());
+        assertEquals("release-process",
+                     asset.getName());
         assertEquals("/images", asset.getAssetLocation());
     }
 
@@ -288,9 +305,12 @@ public class VFSRepositoryGitFileSystemTest {
         Asset<String> asset = assets.iterator().next();
 
         assertEquals("bpmn2", asset.getAssetType());
-        assertEquals("BPMN2-UserTask.bpmn2", asset.getFullName());
-        assertEquals("BPMN2-UserTask", asset.getName());
-        assertEquals("/processes/nested", asset.getAssetLocation());
+        assertEquals("BPMN2-UserTask.bpmn2",
+                     asset.getFullName());
+        assertEquals("BPMN2-UserTask",
+                     asset.getName());
+        assertEquals("/processes/nested",
+                     asset.getAssetLocation());
     }
 
     @Test
@@ -300,10 +320,13 @@ public class VFSRepositoryGitFileSystemTest {
         ((VFSRepository)repository).setDescriptor(descriptor);
         Asset<String> asset = repository.loadAssetFromPath("/processes/BPMN2-ScriptTask.bpmn2");
 
-        assertEquals("bpmn2", asset.getAssetType());
-        assertEquals("BPMN2-ScriptTask", asset.getName());
+        assertEquals("bpmn2",
+                     asset.getAssetType());
+        assertEquals("BPMN2-ScriptTask",
+                     asset.getName());
         assertEquals("BPMN2-ScriptTask.bpmn2", asset.getFullName());
-        assertEquals("/processes", asset.getAssetLocation());
+        assertEquals("/processes",
+                     asset.getAssetLocation());
         assertNotNull(asset.getAssetContent());
         System.out.print(asset.getUniqueId());
     }
@@ -315,7 +338,8 @@ public class VFSRepositoryGitFileSystemTest {
         ((VFSRepository)repository).setDescriptor(descriptor);
         Collection<Asset> assets = repository.listAssets("/");
         assertNotNull(assets);
-        assertEquals(0, assets.size());
+        assertEquals(0,
+                     assets.size());
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
         builder.content("simple content".getBytes())
@@ -329,10 +353,13 @@ public class VFSRepositoryGitFileSystemTest {
 
         Asset<byte[]> asset = repository.loadAsset(id);
 
-        assertEquals("png", asset.getAssetType());
+        assertEquals("png",
+                     asset.getAssetType());
         assertEquals("test", asset.getName());
-        assertEquals("test.png", asset.getFullName());
-        assertEquals("/", asset.getAssetLocation());
+        assertEquals("test.png",
+                     asset.getFullName());
+        assertEquals("/",
+                     asset.getAssetLocation());
         assertFalse(asset.getAssetContent().length == 0);
     }
 
@@ -343,7 +370,8 @@ public class VFSRepositoryGitFileSystemTest {
         ((VFSRepository)repository).setDescriptor(descriptor);
         Collection<Asset> assets = repository.listAssets("/");
         assertNotNull(assets);
-        assertEquals(0, assets.size());
+        assertEquals(0,
+                     assets.size());
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
         builder.content("simple content".getBytes())
@@ -358,7 +386,8 @@ public class VFSRepositoryGitFileSystemTest {
         Asset<byte[]> asset = repository.loadAsset(id);
 
         assertEquals("png", asset.getAssetType());
-        assertEquals("test asset", asset.getName());
+        assertEquals("test asset",
+                     asset.getName());
         assertEquals("test asset.png", asset.getFullName());
         assertEquals("/", asset.getAssetLocation());
         assertFalse(asset.getAssetContent().length == 0);
@@ -371,7 +400,8 @@ public class VFSRepositoryGitFileSystemTest {
         ((VFSRepository)repository).setDescriptor(descriptor);
         Collection<Asset> assets = repository.listAssets("/");
         assertNotNull(assets);
-        assertEquals(0, assets.size());
+        assertEquals(0,
+                     assets.size());
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
@@ -386,10 +416,43 @@ public class VFSRepositoryGitFileSystemTest {
         Asset<String> asset = repository.loadAsset(id);
 
         assertEquals("txt", asset.getAssetType());
-        assertEquals("test", asset.getName());
+        assertEquals("test",
+                     asset.getName());
         assertEquals("test.txt", asset.getFullName());
         assertEquals("/", asset.getAssetLocation());
-        assertEquals("simple content", asset.getAssetContent());
+        assertEquals("simple content",
+                     asset.getAssetContent());
+    }
+
+    @Test
+    public void testStoreSingleUnicodeTextAsset() throws NoSuchFileException {
+
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
+        Collection<Asset> assets = repository.listAssets("/");
+        assertNotNull(assets);
+        assertEquals(0,
+                     assets.size());
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("精算 精算 精算")
+                .type("txt")
+                .name("test")
+                .location("/");
+
+        String id = repository.createAsset(builder.getAsset());
+
+        assertNotNull(id);
+
+        Asset<String> asset = repository.loadAsset(id);
+
+        assertEquals("txt", asset.getAssetType());
+        assertEquals("test",
+                     asset.getName());
+        assertEquals("test.txt", asset.getFullName());
+        assertEquals("/", asset.getAssetLocation());
+        assertEquals("精算 精算 精算",
+                     asset.getAssetContent());
     }
 
     @Test
@@ -402,7 +465,8 @@ public class VFSRepositoryGitFileSystemTest {
         for (Asset aset : assets) {
             logger.debug(aset.getAssetLocation() + " " + aset.getFullName());
         }
-        assertEquals(0, assets.size());
+        assertEquals(0,
+                     assets.size());
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
@@ -457,7 +521,8 @@ public class VFSRepositoryGitFileSystemTest {
 
         id = repository.updateAsset(builder.getAsset(), "", "");
 
-        foundAsset = repository.listAssetsRecursively("/", new FilterByFileName("process.bpmn2"));
+        foundAsset = repository.listAssetsRecursively("/",
+                                                      new FilterByFileName("process.bpmn2"));
 
         assertNotNull(foundAsset);
         assertEquals(1, foundAsset.size());
@@ -465,6 +530,38 @@ public class VFSRepositoryGitFileSystemTest {
         String content = ((Asset<String>)repository.loadAsset(id)).getAssetContent();
         assertNotNull(content);
         assertEquals("updated content", content);
+    }
+
+    @Test
+    public void testUpdateUnicodeTextAsset() throws NoSuchFileException {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("精算 精算 精算")
+                .type("txt")
+                .name("test")
+                .location("/");
+
+        String id = repository.createAsset(builder.getAsset());
+
+        Collection<Asset> foundAsset = repository.listAssets("/", new FilterByExtension("txt"));
+
+        assertNotNull(foundAsset);
+        assertEquals(1, foundAsset.size());
+
+        builder.content("精算 精算 精算 精算 精算 精算").uniqueId(id);
+
+        id = repository.updateAsset(builder.getAsset(), "", "");
+
+        foundAsset = repository.listAssetsRecursively("/",
+                                                      new FilterByFileName("test.txt"));
+
+        assertNotNull(foundAsset);
+        assertEquals(1, foundAsset.size());
+
+        String content = ((Asset<String>)repository.loadAsset(id)).getAssetContent();
+        assertNotNull(content);
+        assertEquals("精算 精算 精算 精算 精算 精算", content);
     }
 
     @Test
