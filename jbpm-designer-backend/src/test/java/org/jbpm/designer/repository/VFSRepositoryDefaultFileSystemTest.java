@@ -359,6 +359,36 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
     }
 
     @Test
+    public void testStoreSingleUnicodeTextAsset() throws NoSuchFileException {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
+        boolean rootFolderExists = repository.directoryExists("/");
+        assertTrue(rootFolderExists);
+
+        Collection<Asset> assets = repository.listAssets("/");
+        assertNotNull(assets);
+        assertEquals(0, assets.size());
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("精算 精算 精算")
+                .type("txt")
+                .name("test")
+                .location("/");
+
+        String id = repository.createAsset(builder.getAsset());
+
+        assertNotNull(id);
+
+        Asset<String> asset = repository.loadAsset(id);
+
+        assertEquals("txt", asset.getAssetType());
+        assertEquals("test", asset.getName());
+        assertEquals("test.txt", asset.getFullName());
+        assertEquals("/", asset.getAssetLocation());
+        assertEquals("精算 精算 精算", asset.getAssetContent());
+    }
+
+    @Test
     public void testAssetExists() throws NoSuchFileException{
 
         Repository repository = new VFSRepository(producer.getIoService());
@@ -432,6 +462,37 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
         String content = ((Asset<String>)repository.loadAsset(id)).getAssetContent();
         assertNotNull(content);
         assertEquals("updated content", content);
+    }
+
+    @Test
+    public void testUpdateUnicodeTextAsset() throws NoSuchFileException {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("精算 精算 精算")
+                .type("txt")
+                .name("test")
+                .location("/");
+
+        String id = repository.createAsset(builder.getAsset());
+
+        Collection<Asset> foundAsset = repository.listAssets("/", new FilterByExtension("txt"));
+
+        assertNotNull(foundAsset);
+        assertEquals(1, foundAsset.size());
+
+        builder.content("精算 精算 精算 精算 精算 精算").uniqueId(id);
+
+        id = repository.updateAsset(builder.getAsset(), "", "");
+
+        foundAsset = repository.listAssetsRecursively("/", new FilterByExtension("txt"));
+
+        assertNotNull(foundAsset);
+        assertEquals(1, foundAsset.size());
+
+        String content = ((Asset<String>)repository.loadAsset(id)).getAssetContent();
+        assertNotNull(content);
+        assertEquals("精算 精算 精算 精算 精算 精算", content);
     }
 
     @Test
