@@ -22,6 +22,11 @@
     <url>https://github.com/droolsjbpm/jbpm-designer</url>
   </scm>
 
+  <properties>
+    <port>8888</port>
+    <enforcer.failOnDuplicatedClasses>true</enforcer.failOnDuplicatedClasses>
+  </properties>
+
   <modules>
     <module>jbpm-designer-api</module>
     <module>jbpm-designer-backend</module>
@@ -77,10 +82,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <properties>
-    <port>8888</port>
-  </properties>
 
   <build>
     <plugins>
