@@ -24,7 +24,6 @@
 
   <properties>
     <port>8888</port>
-    <enforcer.failOnDuplicatedClasses>true</enforcer.failOnDuplicatedClasses>
   </properties>
 
   <modules>
