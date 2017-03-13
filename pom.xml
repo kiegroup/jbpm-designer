@@ -14,12 +14,12 @@
 
   <name>jBPM Designer</name>
   <description>jBPM Designer - web-based BPMN2 modeller</description>
-  <url>https://github.com/droolsjbpm/jbpm-designer</url>
+  <url>https://github.com/kiegroup/jbpm-designer</url>
 
   <scm>
-    <connection>scm:git:git@github.com:droolsjbpm/jbpm-designer.git</connection>
-    <developerConnection>scm:git:git@github.com:droolsjbpm/jbpm-designer.git</developerConnection>
-    <url>https://github.com/droolsjbpm/jbpm-designer</url>
+    <connection>scm:git:git@github.com:kiegroup/jbpm-designer.git</connection>
+    <developerConnection>scm:git:git@github.com:kiegroup/jbpm-designer.git</developerConnection>
+    <url>https://github.com/kiegroup/jbpm-designer</url>
   </scm>
 
   <properties>

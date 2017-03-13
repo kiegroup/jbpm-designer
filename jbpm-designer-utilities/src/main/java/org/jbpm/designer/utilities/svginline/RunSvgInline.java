@@ -18,7 +18,7 @@ package org.jbpm.designer.utilities.svginline;
 
 public class RunSvgInline {
 
-    public static final String SS_IN_FILE = "/home/jeremy/Documents/gitRepositories/droolsjbpm/jbpm-designer/jbpm-designer-client/src/main/resources/org/jbpm/designer/public/stencilsets/bpmn2.0jbpm/stencildata/bpmn2.0jbpm.orig";
+    public static final String SS_IN_FILE = "/home/jeremy/Documents/gitRepositories/kiegroup/jbpm-designer/jbpm-designer-client/src/main/resources/org/jbpm/designer/public/stencilsets/bpmn2.0jbpm/stencildata/bpmn2.0jbpm.orig";
     public static final String SS_OUT_FILE = "/home/jeremy/Temp/bpmn2.0jbpm.orig.svginline";
 
     public static void main(String... args) {
