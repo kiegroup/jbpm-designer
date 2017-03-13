@@ -56,6 +56,15 @@ import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
     ],
     "displayName" : "REST",
     "icon" : "defaultservicenodeicon.png"
+  ],
+
+  [
+    "name" : "Milestone",
+    "parameters" : [
+      "Condition" : new StringDataType()
+    ],
+    "displayName" : "Milestone",
+    "icon" : "defaultmilestoneicon.png"
   ]
 
 ]
