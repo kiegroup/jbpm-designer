@@ -46,9 +46,9 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
     }
 
     @Inject
-    public NewProcessHandler( final Caller<DesignerAssetService> designerAssetService,
-                              final PlaceManager placeManager,
-                              final Bpmn2Type resourceType ) {
+    public NewProcessHandler(final Caller<DesignerAssetService> designerAssetService,
+                             final PlaceManager placeManager,
+                             final Bpmn2Type resourceType) {
         this.designerAssetService = designerAssetService;
         this.placeManager = placeManager;
         this.resourceType = resourceType;
@@ -70,19 +70,25 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
     }
 
     @Override
-    public void create( final Package pkg,
-                        final String baseFileName,
-                        final NewResourcePresenter presenter ) {
-        designerAssetService.call( new RemoteCallback<Path>() {
-            @Override
-            public void callback( final Path path ) {
-                presenter.complete();
-                notifySuccess();
-                newResourceSuccessEvent.fire( new NewResourceSuccessEvent( path ) );
-                placeManager.goTo( path );
-            }
-        }, new DefaultErrorCallback() ).createProcess( pkg.getPackageMainResourcesPath(), buildFileName( baseFileName,
-                                                                                                         resourceType ) );
+    public void create(final Package pkg,
+                       final String baseFileName,
+                       final NewResourcePresenter presenter) {
+        designerAssetService.call(new RemoteCallback<Path>() {
+                                      @Override
+                                      public void callback(final Path path) {
+                                          presenter.complete();
+                                          notifySuccess();
+                                          newResourceSuccessEvent.fire(new NewResourceSuccessEvent(path));
+                                          placeManager.goTo(path);
+                                      }
+                                  },
+                                  new DefaultErrorCallback()).createProcess(pkg.getPackageMainResourcesPath(),
+                                                                            buildFileName(baseFileName,
+                                                                                          resourceType));
     }
 
+    @Override
+    public int order() {
+        return -30;
+    }
 }
