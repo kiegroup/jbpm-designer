@@ -55,6 +55,7 @@ import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.server.EditorHandler;
+import org.jbpm.designer.server.service.DefaultDesignerAssetService;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
@@ -64,6 +65,8 @@ import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.kie.workbench.common.services.shared.project.KieProject;
+import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
@@ -133,6 +136,12 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
     @Inject
     private MetadataService metadataService;
+
+    @Inject
+    private DefaultDesignerAssetService defaultDesignerAssetService;
+
+    @Inject
+    KieProjectService kieProjectService;
 
     public JbpmPreprocessingUnit() {}
 
@@ -211,6 +220,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 workItemTemplate.add("customParams", customParams);
                 Map<String, ThemeInfo> themeData = setupThemesForReadOnly(req);
                 workItemTemplate.add("colortheme", themeData);
+                workItemTemplate.add("caseproject", false);
                 deletefile(stencilFilePath);
                 createAndWriteToFile(stencilFilePath, workItemTemplate.render());
                 createAndParseViewSVGForReadOnly(workDefinitions, readOnlyIconEncoded);
@@ -315,6 +325,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             workItemTemplate.add("customParams", customParams);
             workItemTemplate.add("patternData", patternInfoMap);
             workItemTemplate.add("includedo", includeDataObjects);
+
+            KieProject kieProject = kieProjectService.resolveProject(vfsService.get(uuid));
+            if(kieProject != null && kieProject.getRootPath() != null && defaultDesignerAssetService.isCaseProject(kieProject.getRootPath())) {
+                workItemTemplate.add("caseproject", true);
+            } else {
+                workItemTemplate.add("caseproject", false);
+            }
 
             String processPackage = asset.getAssetLocation();
             if(processPackage.startsWith("/")) {
