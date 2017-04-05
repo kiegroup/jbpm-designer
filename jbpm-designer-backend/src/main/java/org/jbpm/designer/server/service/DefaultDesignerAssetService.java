@@ -108,21 +108,57 @@ public class DefaultDesignerAssetService
     "   </bpmndi:BPMNDiagram> \n" +
     "</bpmn2:definitions>";
 
+    public static final String CASE_DEF_STUB_MILESTONE = "<bpmn2:task id=\"_milestoneTask\" drools:selectable=\"true\" drools:taskName=\"Milestone\" color:background-color=\"#fafad2\" color:border-color=\"#000000\" color:color=\"#000000\" name=\"Milestone\">\n" +
+            "      <bpmn2:extensionElements>\n" +
+            "        <drools:metaData name=\"elementname\">\n" +
+            "          <drools:metaValue><![CDATA[Milestone]]></drools:metaValue>\n" +
+            "        </drools:metaData>\n" +
+            "        <drools:metaData name=\"customAutoStart\">\n" +
+            "          <drools:metaValue><![CDATA[true]]></drools:metaValue>\n" +
+            "        </drools:metaData>\n" +
+            "      </bpmn2:extensionElements>\n" +
+            "      <bpmn2:ioSpecification id=\"_milestoneIoSpecification\">\n" +
+            "        <bpmn2:dataInput id=\"_milestone_TaskNameInputX\" drools:dtype=\"String\" itemSubjectRef=\"_milestone_TaskNameInputXItem\" name=\"TaskName\"/>\n" +
+            "        <bpmn2:dataInput id=\"_milestone_ConditionInputX\" drools:dtype=\"String\" itemSubjectRef=\"_milestone_ConditionInputXItem\" name=\"Condition\"/>\n" +
+            "        <bpmn2:inputSet id=\"_milestoneInputSet\">\n" +
+            "          <bpmn2:dataInputRefs>_milestone_ConditionInputX</bpmn2:dataInputRefs>\n" +
+            "          <bpmn2:dataInputRefs>_milestone_TaskNameInputX</bpmn2:dataInputRefs>\n" +
+            "        </bpmn2:inputSet>\n" +
+            "        <bpmn2:outputSet id=\"_milestoneOutputSet\"/>\n" +
+            "      </bpmn2:ioSpecification>\n" +
+            "      <bpmn2:dataInputAssociation id=\"_milestoneDataInputAssociation\">\n" +
+            "        <bpmn2:targetRef>_milestone_TaskNameInputX</bpmn2:targetRef>\n" +
+            "        <bpmn2:assignment id=\"_milestoneAssignment\">\n" +
+            "          <bpmn2:from xsi:type=\"bpmn2:tFormalExpression\" id=\"_milestoneExpressionFrom\"><![CDATA[Milestone]]></bpmn2:from>\n" +
+            "          <bpmn2:to xsi:type=\"bpmn2:tFormalExpression\" id=\"_milestoneExpressionTo\">_milestone_TaskNameInputX</bpmn2:to>\n" +
+            "        </bpmn2:assignment>\n" +
+            "      </bpmn2:dataInputAssociation>\n" +
+            "      <bpmn2:dataInputAssociation id=\"_milestoneDataInputAssociation2\">\n" +
+            "        <bpmn2:targetRef>_milestone_ConditionInputX</bpmn2:targetRef>\n" +
+            "        <bpmn2:assignment id=\"_milestoneAssignment2\">\n" +
+            "          <bpmn2:from xsi:type=\"bpmn2:tFormalExpression\" id=\"_milestoneExpressionFrom2\"><![CDATA[]]></bpmn2:from>\n" +
+            "          <bpmn2:to xsi:type=\"bpmn2:tFormalExpression\" id=\"_milestoneExpressionTo2\">_milestone_ConditionInputX</bpmn2:to>\n" +
+            "        </bpmn2:assignment>\n" +
+            "      </bpmn2:dataInputAssociation>\n" +
+            "    </bpmn2:task>\n";
+
     public static final String CASE_DEF_STUB = "<?xml version=\"1.0\" encoding=\"UTF-8\"?> \n" +
-    "<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:bpsim=\"http://www.bpsim.org/schemas/1.0\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:drools=\"http://www.jboss.org/drools\" \n" +
+    "<bpmn2:definitions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://www.omg.org/bpmn20\" xmlns:bpmn2=\"http://www.omg.org/spec/BPMN/20100524/MODEL\" xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\" xmlns:bpsim=\"http://www.bpsim.org/schemas/1.0\" xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\" xmlns:drools=\"http://www.jboss.org/drools\" xmlns:color=\"http://www.omg.org/spec/BPMN/non-normative/color\"  \n" +
     "id=\"Definition\" xsi:schemaLocation=\"http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd\" expressionLanguage=\"http://www.mvel.org/2.0\" targetNamespace=\"http://www.omg.org/bpmn20\" typeLanguage=\"http://www.java.com/javaTypes\"> \n" +
+    "   <bpmn2:itemDefinition id=\"_milestone_TaskNameInputXItem\" structureRef=\"String\"/>\n" +
+    "   <bpmn2:itemDefinition id=\"_milestone_ConditionInputXItem\" structureRef=\"Object\"/>\n" +
     "   <bpmn2:process id=\"${processid}\" drools:packageName=\"${packageName}\" drools:version=\"1.0\" drools:adHoc=\"true\" name=\"\" isExecutable=\"true\"> \n" +
     "     <bpmn2:extensionElements>\n" +
     "       <drools:metaData name=\"customCaseIdPrefix\">\n" +
     "         <drools:metaValue>${caseidprefix}</drools:metaValue>\n" +
     "      </drools:metaData>\n" +
     "     </bpmn2:extensionElements>" +
-    "     <bpmn2:startEvent id=\"processStartEvent\" drools:bgcolor=\"#9acd32\" drools:selectable=\"true\" name=\"\"/> \n" +
+            CASE_DEF_STUB_MILESTONE +
     "   </bpmn2:process> \n" +
     "   <bpmndi:BPMNDiagram> \n" +
     "      <bpmndi:BPMNPlane bpmnElement=\"${processid}\"> \n" +
-    "         <bpmndi:BPMNShape bpmnElement=\"processStartEvent\"> \n" +
-    "            <dc:Bounds height=\"30.0\" width=\"30.0\" x=\"120.0\" y=\"165.0\"/> \n" +
+    "         <bpmndi:BPMNShape bpmnElement=\"_milestoneTask\"> \n" +
+    "            <dc:Bounds height=\"80.0\" width=\"100.0\" x=\"90.0\" y=\"90.0\"/> \n" +
     "         </bpmndi:BPMNShape> \n" +
     "      </bpmndi:BPMNPlane> \n" +
     "   </bpmndi:BPMNDiagram> \n" +

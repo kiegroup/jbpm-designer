@@ -318,4 +318,55 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         assertFalse(workItemTemplate2.render().contains("CEnotdefined"));
 
     }
+
+    @Test
+    public void testCaseProjectSetting() throws Exception {
+        Repository repository = createRepository();
+        //prepare folders that will be used
+        repository.createDirectory("/myprocesses");
+        repository.createDirectory("/global");
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("import org.drools.core.process.core.datatype.impl.type.StringDataType;\n" +
+                "\n" +
+                "[\n" +
+                "\n" +
+                "  [\n" +
+                "    \"name\" : \"MyCustomWorkitem\",\n" +
+                "    \"description\" : \"\",\n" +
+                "    \"displayName\" : \"MyCustomWorkitem\",\n" +
+                "    \"defaultHandler\": \"mvel: com.rewardsystem.MyCustomHandler()\",\n" +
+                "    \"category\" : \"Custom\",\n" +
+                "    \"customEditor\" : \"\",\n" +
+                "    \"icon\" : \"widicon.png\",\n" +
+                "  ]\n" +
+                "\n" +
+                "]")
+                .type("wid")
+                .name("processwid")
+                .location("/myprocesses");
+        String uniqueWidID = repository.createAsset(builder.getAsset());
+
+        AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+        builder2.content("".getBytes())
+                .type("png")
+                .name("widicon")
+                .location("/myprocesses");
+        String uniqueIconID = repository.createAsset(builder2.getAsset());
+
+        JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
+        preprocessingUnitVFS.init(new TestServletContext(), "/", null);
+        Asset<String> widAsset = repository.loadAsset(uniqueWidID);
+        Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+        preprocessingUnitVFS.evaluateWorkDefinitions(workDefinitions, widAsset, widAsset.getAssetLocation(), repository);
+
+        assertNotNull(workDefinitions);
+        assertEquals(1, workDefinitions.size());
+        assertTrue(workDefinitions.containsKey("MyCustomWorkitem"));
+
+        ST workItemTemplate = new ST("$if(caseproject)$CaseProjectTrue$else$CaseProjectFalse$endif$", '$', '$');
+        workItemTemplate.add("workitemDefs", workDefinitions);
+        assertFalse(workItemTemplate.render().contains("CaseProjectTrue"));
+        assertTrue(workItemTemplate.render().contains("CaseProjectFalse"));
+    }
 }
