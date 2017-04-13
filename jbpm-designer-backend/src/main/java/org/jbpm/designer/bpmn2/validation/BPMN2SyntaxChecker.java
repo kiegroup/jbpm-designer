@@ -90,22 +90,14 @@ public class BPMN2SyntaxChecker implements SyntaxChecker {
 
                     String pname;
                     Iterator<FeatureMap.Entry> iter = process.getAnyAttribute().iterator();
-                    boolean foundPackageName = false;
                     while(iter.hasNext()) {
                         FeatureMap.Entry entry = iter.next();
                         if(entry.getEStructuralFeature().getName().equals("packageName")) {
-                            foundPackageName = true;
                             pname = (String) entry.getValue();
-                            if(isEmpty(pname)) {
-                                addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, SyntaxCheckerErrors.PROCESS_HAS_NO_PACKAGE_NAME));
-                            }
-                            if(!isValidPackageName(pname)) {
-                                addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  "Package name contains invalid characters."));
+                            if(!isEmpty(pname) && !isValidPackageName(pname)) {
+                                addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE,  SyntaxCheckerErrors.PACKAGE_NAME_CONTAINS_INVALID_CHARACTERS));
                             }
                         }
-                    }
-                    if(!foundPackageName) {
-                        addError(defaultResourceId, new ValidationSyntaxError(process, BPMN2_TYPE, SyntaxCheckerErrors.PROCESS_HAS_NO_PACKAGE_NAME));
                     }
 
                     if(isEmpty(process.getName())) {
