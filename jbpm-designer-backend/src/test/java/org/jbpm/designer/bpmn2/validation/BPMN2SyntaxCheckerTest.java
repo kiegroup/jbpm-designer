@@ -323,6 +323,29 @@ public class BPMN2SyntaxCheckerTest {
         verifyNoErrors(syntaxChecker);
     }
 
+    @Test
+    public void testEmptyPackageName() throws Exception {
+        loader.loadProcessFromXml("emptyPackageName.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        verifyNoErrors(syntaxChecker);
+    }
+
+    @Test
+    public void testInvalidPackageName() throws Exception {
+        loader.loadProcessFromXml("invalidPackageName.bpmn2");
+        String processJson = loader.getProcessJson();
+        BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson, "", loader.getProfile());
+        syntaxChecker.checkSyntax();
+        Map<String, List<BPMN2SyntaxChecker.ValidationSyntaxError>> errors = syntaxChecker.getErrors();
+        assertEquals(1, errors.size());
+
+        assertEquals(1, errors.get("emptypackagename").size());
+        BPMN2SyntaxChecker.ValidationSyntaxError packageError = errors.get("emptypackagename").get(0);
+
+        assertEquals(SyntaxCheckerErrors.PACKAGE_NAME_CONTAINS_INVALID_CHARACTERS, packageError.getError());
+    }
+
     private void verifyNoErrors(SyntaxChecker syntaxChecker) throws Exception {
         syntaxChecker.checkSyntax();
         assertFalse(syntaxChecker.errorsFound());
