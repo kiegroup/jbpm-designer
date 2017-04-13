@@ -5618,7 +5618,7 @@
 					"id":"script_language",
 					"type":"Choice",
 					"title":"Script Language",
-					"value":"java",
+					"value":"mvel",
 					"description":"Defines the script language.",
 					"description_ja":"スクリプト言語を定義します。",
 					"readonly":false,
@@ -5626,23 +5626,13 @@
 					"items": [
 						{
 							"id": "c1",
-							"title":"java",
-							"value":"java"
+							"title": "mvel",
+							"value": "mvel"
 						},
 						{
 							"id": "c2",
 							"title":"drools",
 							"value":"drools"
-						},
-						{
-							"id": "c3",
-							"title":"javascript",
-							"value":"javascript"
-						},
-						{
-							"id": "c4",
-							"title": "mvel",
-							"value": "mvel"
 						}
 					]                                        
 				},
