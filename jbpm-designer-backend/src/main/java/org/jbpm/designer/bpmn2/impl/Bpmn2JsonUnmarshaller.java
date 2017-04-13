@@ -3892,15 +3892,18 @@ public class Bpmn2JsonUnmarshaller {
     			ahsp.setOrdering(AdHocOrdering.SEQUENTIAL);
     		}
     	}
-    	if(properties.get("adhoccompletioncondition") != null) {
-    		FormalExpression completionConditionExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
-    		completionConditionExpression.setBody(wrapInCDATABlock(properties.get("adhoccompletioncondition")));
-            if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
-                String scriptLanguage = getScriptLanguageFormat(properties);
-                completionConditionExpression.setLanguage(scriptLanguage);
-            }
-    		ahsp.setCompletionCondition(completionConditionExpression);
-    	}
+
+    	String completionExpression = "autocomplete";
+        if(properties.get("adhoccompletioncondition") != null && properties.get("adhoccompletioncondition").trim().length() > 0) {
+            completionExpression = properties.get("adhoccompletioncondition");
+        }
+        FormalExpression completionConditionExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
+        completionConditionExpression.setBody(wrapInCDATABlock(completionExpression));
+        if(properties.get("script_language") != null && properties.get("script_language").length() > 0) {
+            String scriptLanguage = getScriptLanguageFormat(properties);
+            completionConditionExpression.setLanguage(scriptLanguage);
+        }
+        ahsp.setCompletionCondition(completionConditionExpression);
     }
 
     protected void applyEndEventProperties(EndEvent ee, Map<String, String> properties) {
