@@ -1720,6 +1720,24 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("<![CDATA[false]]>",  getMetaDataValue(callActivity.getExtensionValues(), "customAbortParent"));
     }
 
+    @Test
+    public void testAdHocSubprocessCompletionCondition() throws Exception {
+        Definitions definitionsOne = loader.loadProcessFromJson("adhocSubprocessSetCompletionCondition.json");
+        Definitions definitionsTwo = loader.loadProcessFromJson("adhocSubprocessEmptyCompletionCondition.json");
+
+        Process processOne = getRootProcess(definitionsOne);
+        Process processTwo = getRootProcess(definitionsTwo);
+
+        AdHocSubProcess subprocessWithSetCompletionCondition = (AdHocSubProcess) processOne.getFlowElements().get(0);
+        AdHocSubProcess subprocessWithEmptyCompletionCondition = (AdHocSubProcess) processTwo.getFlowElements().get(0);
+
+        assertNotNull(subprocessWithSetCompletionCondition);
+        assertNotNull(subprocessWithEmptyCompletionCondition);
+
+        assertEquals("<![CDATA[autocomplete]]>", ((FormalExpression) subprocessWithSetCompletionCondition.getCompletionCondition()).getBody());
+        assertEquals("<![CDATA[autocomplete]]>", ((FormalExpression) subprocessWithEmptyCompletionCondition.getCompletionCondition()).getBody());
+    }
+
     public void testInputOutputSetsOfIoSpecification() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("taskIoSpecification.json");
         Process process = getRootProcess(definitions);
