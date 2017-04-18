@@ -97,6 +97,11 @@
       <groupId>org.kie.workbench.forms</groupId>
       <artifactId>kie-wb-common-forms-jbpm-integration-backend</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.kie.workbench.forms</groupId>
+      <artifactId>kie-wb-common-forms-editor-api</artifactId>
+    </dependency>
     <!-- end forms integration -->
     <dependency>
       <groupId>org.uberfire</groupId>

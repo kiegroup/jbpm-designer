@@ -16,8 +16,6 @@
 
 package org.jbpm.designer.taskforms.builder;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.UUID;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -27,15 +25,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.bpmn2.Definitions;
 import org.kie.workbench.common.forms.bpmn.BPMNFormBuilderService;
 import org.kie.workbench.common.forms.commons.layout.FormLayoutTemplateGenerator;
+import org.kie.workbench.common.forms.editor.service.backend.FormModelHandlerManager;
 import org.kie.workbench.common.forms.jbpm.model.authoring.JBPMFormModel;
 import org.kie.workbench.common.forms.jbpm.server.service.BPMNFormModelGenerator;
-import org.kie.workbench.common.forms.model.FieldDefinition;
+import org.kie.workbench.common.forms.jbpm.server.service.formGeneration.BPMNFormGeneratorService;
+import org.kie.workbench.common.forms.jbpm.server.service.formGeneration.impl.authoring.Authoring;
 import org.kie.workbench.common.forms.model.FormDefinition;
-import org.kie.workbench.common.forms.model.FormModel;
 import org.kie.workbench.common.forms.serialization.FormDefinitionSerializer;
-import org.kie.workbench.common.forms.service.FormModelHandler;
-import org.kie.workbench.common.forms.service.FormModelHandlerManager;
-import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.io.IOService;
 
@@ -52,114 +48,64 @@ public class BPMNKieWorkbenchFormBuilderService implements BPMNFormBuilderServic
 
     protected FormLayoutTemplateGenerator layoutTemplateGenerator;
 
+    protected BPMNFormGeneratorService<Path> bpmnFormGeneratorService;
+
     @Inject
     public BPMNKieWorkbenchFormBuilderService(
-            @Named( "ioStrategy" ) IOService ioService,
+            @Named("ioStrategy") IOService ioService,
             FormModelHandlerManager formModelHandlerManager,
             BPMNFormModelGenerator generator,
             FormDefinitionSerializer serializer,
-            FormLayoutTemplateGenerator layoutTemplateGenerator) {
+            FormLayoutTemplateGenerator layoutTemplateGenerator,
+            @Authoring BPMNFormGeneratorService<Path> bpmnFormGeneratorService) {
         this.ioService = ioService;
         this.formModelHandlerManager = formModelHandlerManager;
         this.generator = generator;
         this.serializer = serializer;
         this.layoutTemplateGenerator = layoutTemplateGenerator;
+        this.bpmnFormGeneratorService = bpmnFormGeneratorService;
     }
 
     @Override
-    public String buildFormContent( Path formPath,
-                                    Definitions definition,
-                                    String taskId ) throws Exception {
+    public String buildFormContent(Path formPath,
+                                   Definitions definition,
+                                   String taskId) throws Exception {
 
         JBPMFormModel model;
 
-        if ( StringUtils.isEmpty( taskId ) ) {
-            model = generator.generateProcessFormModel( definition );
+        if (StringUtils.isEmpty(taskId)) {
+            model = generator.generateProcessFormModel(definition);
         } else {
-            model = generator.generateTaskFormModel( definition, taskId );
+            model = generator.generateTaskFormModel(definition,
+                                                    taskId);
         }
 
-        if ( model == null ) {
-            throw new IllegalArgumentException( "Unable to generate form '" + formPath.getFileName() + "'" );
+        if (model == null) {
+            throw new IllegalArgumentException("Unable to generate form '" + formPath.getFileName() + "'");
         }
 
-        FormDefinition form = generateFormForModel( model, formPath );
+        FormDefinition form = bpmnFormGeneratorService.generateForms(model,
+                                                                     formPath).getRootForm();
 
-        return serializer.serialize( form );
-    }
-
-
-    protected FormDefinition generateFormForModel( FormModel model, Path formPath ) {
-
-        org.uberfire.java.nio.file.Path kiePath = Paths.convert( formPath );
-
-        FormModelHandler modelHandler = formModelHandlerManager.getFormModelHandler( model.getClass() );
-
-        modelHandler.init( model, formPath );
-
-        List<FieldDefinition> modelFields = modelHandler.getAllFormModelFields();
-
-        FormDefinition form;
-
-        if ( ioService.exists( kiePath ) ) {
-            form = serializer.deserialize( ioService.readAllString( kiePath ) );
-
-            form.getFields().forEach( originalField -> {
-
-                boolean found = false;
-
-                for ( Iterator<FieldDefinition> it = modelFields.iterator(); it.hasNext() && !found; ) {
-
-                    FieldDefinition modelField = it.next();
-
-                    if ( modelField.getBinding().equals( originalField.getBinding() ) ) {
-                        found = true;
-                        originalField.setName( modelField.getName() );
-                        originalField.setStandaloneClassName( modelField.getStandaloneClassName() );
-                        it.remove();
-                    }
-                }
-
-                if ( !found ) {
-                    originalField.setBinding( null );
-                }
-            } );
-
-            form.getFields().addAll( modelFields );
-
-            layoutTemplateGenerator.updateLayoutTemplate( form, modelFields );
-
-        } else {
-            form = getNewFormInstance();
-
-            form.setName( formPath.getFileName() );
-
-            form.getFields().addAll( modelFields );
-
-            layoutTemplateGenerator.generateLayoutTemplate( form );
-        }
-
-        form.setModel( model );
-
-        return form;
+        return serializer.serialize(form);
     }
 
     @Override
-    public String buildEmptyFormContent( String fileName ) throws Exception {
+    public String buildEmptyFormContent(String fileName) throws Exception {
 
         FormDefinition form = getNewFormInstance();
 
-        form.setName( fileName );
+        form.setName(fileName);
 
-        return serializer.serialize( form );
+        return serializer.serialize(form);
     }
 
     protected FormDefinition getNewFormInstance() {
         FormDefinition form = new FormDefinition();
 
-        form.setId( UUID.randomUUID().toString() );
+        form.setId(UUID.randomUUID().toString());
 
-        layoutTemplateGenerator.generateLayoutTemplate( form );
+        layoutTemplateGenerator.generateLayoutTemplate(form);
 
         return form;
     }
