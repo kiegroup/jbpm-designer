@@ -61,7 +61,7 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
 
     @Override
     public IsWidget getIcon() {
-        return null;
+        return resourceType.getIcon();
     }
 
     @Override
