@@ -68,7 +68,7 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
 
     @Override
     public IsWidget getIcon() {
-        return null;
+        return resourceType.getIcon();
     }
 
     @Override
