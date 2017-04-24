@@ -150,13 +150,13 @@ ORYX.Plugins.View = {
         this.facade.offer({
             'name':ORYX.I18N.view.showFullScreen,
             'functionality': function(context) {
-                var docEle = parent.document.getElementById(ORYX.EDITORID);
-                if(docEle.requestFullScreen) {
-                    docEle.requestFullScreen();
-                } else if(docEle.mozRequestFullScreen) {
-                    docEle.mozRequestFullScreen();
-                } else if(docEle.webkitRequestFullScreen) {
-                    docEle.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+                var parentBody = parent.document.getElementsByTagName("body")[0];
+                if(parentBody.requestFullScreen) {
+                    parentBody.requestFullScreen();
+                } else if(parentBody.mozRequestFullScreen) {
+                    parentBody.mozRequestFullScreen();
+                } else if(parentBody.webkitRequestFullScreen) {
+                    parentBody.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
                 } else {
                     ORYX.EDITOR._pluginFacade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
