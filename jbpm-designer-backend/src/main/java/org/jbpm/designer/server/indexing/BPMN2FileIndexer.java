@@ -18,7 +18,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -56,13 +55,14 @@ import org.uberfire.java.nio.file.Path;
 @ApplicationScoped
 public class BPMN2FileIndexer extends AbstractFileIndexer {
 
-    private static final Logger logger = LoggerFactory.getLogger( BPMN2FileIndexer.class );
+    private static final Logger logger = LoggerFactory.getLogger(BPMN2FileIndexer.class);
 
     private static final SemanticModules modules = new SemanticModules();
+
     static {
-        modules.addSemanticModule( new BPMNSemanticModule() );
-        modules.addSemanticModule( new BPMNDISemanticModule() );
-        modules.addSemanticModule( new BPMNExtensionsSemanticModule() );
+        modules.addSemanticModule(new BPMNSemanticModule());
+        modules.addSemanticModule(new BPMNDISemanticModule());
+        modules.addSemanticModule(new BPMNExtensionsSemanticModule());
     }
 
     @Inject
@@ -72,8 +72,8 @@ public class BPMN2FileIndexer extends AbstractFileIndexer {
     protected ProjectClassLoaderHelper classLoaderHelper;
 
     @Override
-    public boolean supportsPath( Path path ) {
-        return bpmn2TypeDefinition.accept( Paths.convert( path ) );
+    public boolean supportsPath(Path path) {
+        return bpmn2TypeDefinition.accept(Paths.convert(path));
     }
 
     /* (non-Javadoc)
@@ -81,28 +81,32 @@ public class BPMN2FileIndexer extends AbstractFileIndexer {
      */
     @Override
     protected DefaultIndexBuilder fillIndexBuilder(Path path) throws Exception {
-        final KieProject project = projectService.resolveProject( Paths.convert( path ) );
-        if ( project == null ) {
-            logger.error( "Unable to index " + path.toUri().toString() + ": project could not be resolved." );
+        final KieProject project = projectService.resolveProject(Paths.convert(path));
+        if (project == null) {
+            logger.error("Unable to index " + path.toUri().toString() + ": project could not be resolved.");
             return null;
         }
 
         // responsible for basic index info: project name, branch, etc
-        final DefaultIndexBuilder builder = getIndexBuilder(path, project);
-        String bpmnStr = ioService.readAllString( path );
+        final DefaultIndexBuilder builder = getIndexBuilder(path,
+                                                            project);
+        String bpmnStr = ioService.readAllString(path);
         ClassLoader projectClassLoader = getProjectClassLoader(project);
 
         try {
-            List<DesignerProcessDataEventListener> procesDataList = buildProcessDefinition(bpmnStr, path, projectClassLoader);
-            if( procesDataList != null ) {
-                for( DesignerProcessDataEventListener processData : procesDataList ) {
-                    addReferencedResourcesToIndexBuilder(builder, processData);
+            List<DesignerProcessDataEventListener> procesDataList = buildProcessDefinition(bpmnStr,
+                                                                                           path,
+                                                                                           projectClassLoader);
+            if (procesDataList != null) {
+                for (DesignerProcessDataEventListener processData : procesDataList) {
+                    addReferencedResourcesToIndexBuilder(builder,
+                                                         processData);
                     builder.setPackageName(processData.getProcess().getPackageName());
                 }
             }
-        } catch( Exception e ) {
+        } catch (Exception e) {
             // log and ignore
-            logger.info("Indexing hampered because BPMN2 compilation failed [" + path.toString() + "]: " + e.getMessage() );
+            logger.info("Indexing hampered because BPMN2 compilation failed [" + path.toString() + "]: " + e.getMessage());
         }
 
         /**
@@ -131,51 +135,55 @@ public class BPMN2FileIndexer extends AbstractFileIndexer {
          */
 
         // parse process definitions
-        XmlProcessReader processReader = new XmlProcessReader( modules, projectClassLoader );
+        XmlProcessReader processReader = new XmlProcessReader(modules,
+                                                              projectClassLoader);
         List<Process> processes = Collections.emptyList();
         try {
-            processes = processReader.read( new StringReader(bpmnStr) );
-        } catch( Exception e ) {
-            logger.info("Unable to index because BPMN2 parsing failed [" + path.toString() + "]: " + e.getMessage() );
+            processes = processReader.read(new StringReader(bpmnStr));
+        } catch (Exception e) {
+            logger.info("Unable to index because BPMN2 parsing failed [" + path.toString() + "]: " + e.getMessage());
         }
 
         // complete process definition processing
-        if( processes != null ) {
-            for( Process process : processes ) {
-                Resource resource = new ReaderResource( new StringReader( bpmnStr ) );
+        if (processes != null) {
+            for (Process process : processes) {
+                Resource resource = new ReaderResource(new StringReader(bpmnStr));
                 ProcessValidationError[] errors;
 
-                ProcessValidator validator = ProcessValidatorRegistry.getInstance().getValidator( process, resource );
-                errors = validator.validateProcess( process );
-                if ( errors.length > 0 ) {
-                    logger.error( "Trying to finish indexing process '" + process.getId() + "/" + process.getName() + "' despite " + errors.length + " validation errors." );
+                ProcessValidator validator = ProcessValidatorRegistry.getInstance().getValidator(process,
+                                                                                                 resource);
+                errors = validator.validateProcess(process);
+                if (errors.length > 0) {
+                    logger.error("Trying to finish indexing process '" + process.getId() + "/" + process.getName() + "' despite " + errors.length + " validation errors.");
                 }
                 processReader.getProcessBuildData().onBuildComplete(process);
 
                 DesignerProcessDataEventListener helper = (DesignerProcessDataEventListener) process.getMetaData().get(DesignerProcessDataEventListener.NAME);
-                addReferencedResourcesToIndexBuilder(builder, helper);
+                addReferencedResourcesToIndexBuilder(builder,
+                                                     helper);
             }
         } else {
-            logger.warn( "No process was found in file: " + path.toUri() );
+            logger.warn("No process was found in file: " + path.toUri());
         }
 
         return builder;
     }
 
     // Protected method for testing
-    protected ClassLoader getProjectClassLoader( final KieProject project ) {
-        return classLoaderHelper.getProjectClassLoader( project );
+    protected ClassLoader getProjectClassLoader(final KieProject project) {
+        return classLoaderHelper.getProjectClassLoader(project);
     }
 
-
-    private List<DesignerProcessDataEventListener> buildProcessDefinition(String bpmn2Content, Path path, ClassLoader projectClassLoader) throws IllegalArgumentException {
+    private List<DesignerProcessDataEventListener> buildProcessDefinition(String bpmn2Content,
+                                                                          Path path,
+                                                                          ClassLoader projectClassLoader) throws IllegalArgumentException {
         if (StringUtils.isEmpty(bpmn2Content)) {
             return null;
         }
 
         // Set class loader
         KnowledgeBuilder kbuilder = null;
-        if (projectClassLoader != null ) {
+        if (projectClassLoader != null) {
             KnowledgeBuilderConfigurationImpl pconf = new KnowledgeBuilderConfigurationImpl(projectClassLoader);
             kbuilder = KnowledgeBuilderFactory.newKnowledgeBuilder(pconf);
         } else {
@@ -183,36 +191,43 @@ public class BPMN2FileIndexer extends AbstractFileIndexer {
         }
 
         // Build
-        kbuilder.add(new ByteArrayResource(bpmn2Content.getBytes()), ResourceType.BPMN2);
+        kbuilder.add(new ByteArrayResource(bpmn2Content.getBytes()),
+                     ResourceType.BPMN2);
         if (kbuilder.hasErrors()) {
-            for(KnowledgeBuilderError error: kbuilder.getErrors()){
-                logger.error("Error: {}", error.getMessage());
+            for (KnowledgeBuilderError error : kbuilder.getErrors()) {
+                logger.error("Error: {}",
+                             error.getMessage());
             }
-            logger.debug("Process Cannot be Parsed! \n {} \n", bpmn2Content);
+            logger.debug("Process Cannot be Parsed! \n {} \n",
+                         bpmn2Content);
             return null;
         }
 
         // Retrieve ProcessInfoHolder
         List<DesignerProcessDataEventListener> processDataList = new ArrayList<>();
         kbuilder.getKnowledgePackages().forEach(
-                pkg -> { pkg.getProcesses().forEach(
-                        p -> { DesignerProcessDataEventListener processData
-                                = (DesignerProcessDataEventListener) p.getMetaData().get(DesignerProcessDataEventListener.NAME);
+                pkg -> {
+                    pkg.getProcesses().forEach(
+                            p -> {
+                                DesignerProcessDataEventListener processData
+                                        = (DesignerProcessDataEventListener) p.getMetaData().get(DesignerProcessDataEventListener.NAME);
                                 processDataList.add(processData);
-                        });
+                            });
                 });
         return processDataList;
     }
 
-
-    protected DefaultIndexBuilder getIndexBuilder(Path path, Project project) {
-        final Package pkg = projectService.resolvePackage( Paths.convert( path ) );
-        if ( pkg == null ) {
-            logger.error( "Unable to index " + path.toUri().toString() + ": package could not be resolved." );
+    protected DefaultIndexBuilder getIndexBuilder(Path path,
+                                                  Project project) {
+        final Package pkg = projectService.resolvePackage(Paths.convert(path));
+        if (pkg == null) {
+            logger.error("Unable to index " + path.toUri().toString() + ": package could not be resolved.");
             return null;
         }
 
         // responsible for basic index info: project name, branch, etc
-        return new DefaultIndexBuilder(project, pkg);
+        return new DefaultIndexBuilder(Paths.convert(path).getFileName(),
+                                       project,
+                                       pkg);
     }
 }
