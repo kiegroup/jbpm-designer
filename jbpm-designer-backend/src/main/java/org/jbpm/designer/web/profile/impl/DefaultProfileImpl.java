@@ -61,24 +61,25 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 @ApplicationScoped
 public class DefaultProfileImpl implements IDiagramProfile {
     
-    private static Logger _logger = LoggerFactory.getLogger(DefaultProfileImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(DefaultProfileImpl.class);
     
 
-    private Map<String, IDiagramPlugin> _plugins = new LinkedHashMap<String, IDiagramPlugin>();
+    private Map<String, IDiagramPlugin> plugins = new LinkedHashMap<String, IDiagramPlugin>();
 
 
-    private String _stencilSet;
-    private String _localHistoryEnabled;
-    private String _localHistoryTimeout;
-    private String _repositoryId;
-    private String _repositoryRoot;
-    private String _repositoryName;
-    private String _repositoryHost;
-    private String _repositoryProtocol;
-    private String _repositorySubdomain;
-    private String _repositoryUsr;
-    private String _repositoryPwd;
-    private String _repositoryGlobalDir;
+    private String stencilSet;
+    private String localHistoryEnabled;
+    private String localHistoryTimeout;
+    private String repositoryId;
+    private String repositoryRoot;
+    private String repositoryName;
+    private String repositoryHost;
+    private String repositoryProtocol;
+    private String repositorySubdomain;
+    private String repositoryUsr;
+    private String repositoryPwd;
+    private String repositoryGlobalDir;
+    private String bpsimDisplay;
 
     public DefaultProfileImpl() {
 
@@ -99,7 +100,7 @@ public class DefaultProfileImpl implements IDiagramProfile {
     }
 
     public String getStencilSet() {
-        return _stencilSet;
+        return stencilSet;
     }
 
     public Collection<String> getStencilSetExtensions() {
@@ -107,7 +108,7 @@ public class DefaultProfileImpl implements IDiagramProfile {
     }
 
     public Collection<String> getPlugins() {
-        return Collections.unmodifiableCollection(_plugins.keySet());
+        return Collections.unmodifiableCollection(plugins.keySet());
     }
     
     private void initializeLocalPlugins(ServletContext context) {
@@ -128,7 +129,7 @@ public class DefaultProfileImpl implements IDiagramProfile {
                     if ("profile".equals(reader.getLocalName())) {
                         for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
                             if ("stencilset".equals(reader.getAttributeLocalName(i))) {
-                                _stencilSet = reader.getAttributeValue(i);
+                                stencilSet = reader.getAttributeValue(i);
                             }
                         }
                     } else if ("plugin".equals(reader.getLocalName())) {
@@ -138,12 +139,12 @@ public class DefaultProfileImpl implements IDiagramProfile {
                                 name = reader.getAttributeValue(i);
                             }
                         }
-                        _plugins.put(name, registry.get(name));
+                        plugins.put(name, registry.get(name));
                     }
                 }
             }
         } catch (XMLStreamException e) {
-            _logger.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new RuntimeException(e); // stop initialization
         } finally {
             if (fileStream != null) { try { fileStream.close(); } catch(IOException e) {}};
@@ -159,57 +160,60 @@ public class DefaultProfileImpl implements IDiagramProfile {
     }
 
     public String getRepositoryId() {
-        return _repositoryId;
+        return repositoryId;
     }
 
     public String getRepositoryRoot() {
-        return _repositoryRoot;
+        return repositoryRoot;
     }
 
     public String getRepositoryName() {
-        return _repositoryName;
+        return repositoryName;
     }
 
     public String getRepositoryHost() {
-        return _repositoryHost;
+        return repositoryHost;
     }
 
     public String getRepositoryProtocol() {
-        return _repositoryProtocol;
+        return repositoryProtocol;
     }
 
     public String getRepositorySubdomain() {
-        return _repositorySubdomain;
+        return repositorySubdomain;
     }
 
     public String getRepositoryUsr() {
-        return _repositoryUsr;
+        return repositoryUsr;
     }
 
     public String getRepositoryPwd() {
-        return _repositoryPwd;
+        return repositoryPwd;
     }
 
     public String getRepositoryGlobalDir() {
-        return _repositoryGlobalDir;
+        return repositoryGlobalDir;
     }
 
     public String getRepositoryGlobalDir(String uuid) {
-        return _repositoryGlobalDir;
+        return repositoryGlobalDir;
     }
 
     public String getLocalHistoryEnabled() {
-        return _localHistoryEnabled;
+        return localHistoryEnabled;
     }
 
     public String getLocalHistoryTimeout() {
-        return _localHistoryTimeout;
+        return localHistoryTimeout;
     }
 
     @Override
     public String getStoreSVGonSaveOption() {
         return "false";
     }
+
+    @Override
+    public String getBpsimDisplay() { return bpsimDisplay; }
 
     public Repository getRepository() {
         return null;
@@ -236,9 +240,9 @@ public class DefaultProfileImpl implements IDiagramProfile {
                     res.save(outputStream, saveMap);
                     return outputStream.toString();
                 } catch (JsonParseException e) {
-                    _logger.error(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 } catch (IOException e) {
-                    _logger.error(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 }
 
                 return "";
@@ -251,9 +255,9 @@ public class DefaultProfileImpl implements IDiagramProfile {
 					JBPMBpmn2ResourceImpl res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
 					return (Definitions) res.getContents().get(0);
 				} catch (JsonParseException e) {
-					_logger.error(e.getMessage(), e);
+					logger.error(e.getMessage(), e);
 				} catch (IOException e) {
-					_logger.error(e.getMessage(), e);
+					logger.error(e.getMessage(), e);
 				}
 				return null;
 			}
@@ -263,9 +267,9 @@ public class DefaultProfileImpl implements IDiagramProfile {
 					Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
 					return (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
 				} catch (JsonParseException e) {
-					_logger.error(e.getMessage(), e);
+					logger.error(e.getMessage(), e);
 				} catch (IOException e) {
-					_logger.error(e.getMessage(), e);
+					logger.error(e.getMessage(), e);
 				}
 				return null;
 			}
@@ -280,7 +284,7 @@ public class DefaultProfileImpl implements IDiagramProfile {
                 try {
                     return marshaller.marshall(getDefinitions(xmlModel), preProcessingData);
                 } catch (Exception e) {
-                    _logger.error(e.getMessage(), e);
+                    logger.error(e.getMessage(), e);
                 }
                 return "";
             }

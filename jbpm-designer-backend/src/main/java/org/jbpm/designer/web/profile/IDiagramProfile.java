@@ -104,6 +104,11 @@ public interface IDiagramProfile {
     public String getStoreSVGonSaveOption();
 
     /**
+     * @return the bpsim display option.
+     */
+    public String getBpsimDisplay();
+
+    /**
      * @return the repository.
      */
     public Repository getRepository();

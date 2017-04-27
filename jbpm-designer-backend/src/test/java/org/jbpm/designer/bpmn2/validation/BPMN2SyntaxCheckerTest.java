@@ -21,6 +21,7 @@ import org.eclipse.bpmn2.TextAnnotation;
 import org.jbpm.designer.bpmn2.impl.Bpmn2JsonMarshallerTest;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -36,6 +37,11 @@ public class BPMN2SyntaxCheckerTest {
     private Bpmn2Loader loader = new Bpmn2Loader(BPMN2SyntaxCheckerTest.class);
 
     private Map<String, List<BPMN2SyntaxChecker.ValidationSyntaxError>> errors;
+
+    @Before
+    public void setup() {
+        loader.getProfile().setBpsimDisplay("true");
+    }
 
     @Test
     public void testUserTaskWithTaskName() throws Exception {

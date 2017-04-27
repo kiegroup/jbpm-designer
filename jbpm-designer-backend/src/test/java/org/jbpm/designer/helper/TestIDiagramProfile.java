@@ -129,6 +129,8 @@ public class TestIDiagramProfile implements IDiagramProfile {
         return "true";
     }
 
+    public String getBpsimDisplay() { return "true"; }
+
     @Override
     public void init(ServletContext context) {
 

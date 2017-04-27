@@ -501,6 +501,10 @@ ORYX.Editor = {
 			Ext.getCmp('maintabs').remove("processdoctab");
         }
 
+        if(ORYX.BPSIMDISPLAY != true) {
+            Ext.getCmp('maintabs').remove("simulationtab");
+		}
+
 		// DEFINITION OF THE VIEWPORT AREAS
         var eastWidth = ORYX.CONFIG.PANEL_LEFT_WIDTH || 400;
         if(ORYX.READONLY == true) {

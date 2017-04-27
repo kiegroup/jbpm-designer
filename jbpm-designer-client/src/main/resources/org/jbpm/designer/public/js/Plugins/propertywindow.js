@@ -1483,7 +1483,7 @@ ORYX.Plugins.PropertyWindow = {
 
 	setProperties: function() {
 		var partProps = this.popularProperties.concat(this.properties);
-		var partPropsOther = partProps.concat(this.simulationProperties);
+		var partPropsOther = ORYX.BPSIMDISPLAY == true ? partProps.concat(this.simulationProperties) : partProps;
         var partPropThird = partPropsOther.concat(this.customAssignmentsProperties);
         var props = partPropThird.concat(this.displayProperties);
 		this.dataSource.loadData(props);
