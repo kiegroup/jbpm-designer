@@ -153,10 +153,13 @@ ORYX.Plugins.View = {
                 var parentBody = parent.document.getElementsByTagName("body")[0];
                 if(parentBody.requestFullScreen) {
                     parentBody.requestFullScreen();
+                    setTimeout(function(){ parent.designercallonresize(); }, 2000);
                 } else if(parentBody.mozRequestFullScreen) {
                     parentBody.mozRequestFullScreen();
+                    setTimeout(function(){ parent.designercallonresize(); }, 2000);
                 } else if(parentBody.webkitRequestFullScreen) {
                     parentBody.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+                    setTimeout(function(){ parent.designercallonresize(); }, 2000);
                 } else {
                     ORYX.EDITOR._pluginFacade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
