@@ -20,14 +20,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //				profileParamName = "profile";
-    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //		        regexa = new RegExp( regexSa );
-    //		        profileParams = regexa.exec( window.location.href );
-    //		        profileParamValue = profileParams[1];
-    //				return profileParamValue == "jbpm";
+                    return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true) && ORYX.BPSIMDISPLAY == true;
                 }.bind(this)
             });
 
@@ -42,14 +35,7 @@ ORYX.Plugins.Simulation = Clazz.extend({
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
-                    return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //				profileParamName = "profile";
-    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //		        regexa = new RegExp( regexSa );
-    //		        profileParams = regexa.exec( window.location.href );
-    //		        profileParamValue = profileParams[1];
-    //				return profileParamValue == "jbpm";
+                    return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true) && ORYX.BPSIMDISPLAY == true;
                 }.bind(this)
             });
         }

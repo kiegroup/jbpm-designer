@@ -27,17 +27,26 @@ import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
 import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class SimulationServletTest {
 
+    private JbpmProfileImpl profile;
+
+    @Before
+    public void setup() {
+        profile = new JbpmProfileImpl();
+        profile.setBpsimDisplay("true");
+    }
+
     @Test
     public void testRunSimulationLocalizedNames() throws Exception {
 
         SimulationServlet simulationServlet = new SimulationServlet();
-        simulationServlet.setProfile(new JbpmProfileImpl());
+        simulationServlet.setProfile(profile);
 
         // Request json is encoded
         String rawJson = readFile("BPSim_i18nNames.json");
@@ -70,7 +79,7 @@ public class SimulationServletTest {
     public void testGetPathInfoLocalizedNames() throws Exception {
 
         SimulationServlet simulationServlet = new SimulationServlet();
-        simulationServlet.setProfile(new JbpmProfileImpl());
+        simulationServlet.setProfile(profile);
 
         // Request json is encoded
         String rawJson = readFile("BPSim_i18nNames.json");
@@ -102,7 +111,7 @@ public class SimulationServletTest {
     public void testLocalizedStartEndTime() throws Exception {
 
         SimulationServlet simulationServlet = new SimulationServlet();
-        simulationServlet.setProfile(new JbpmProfileImpl());
+        simulationServlet.setProfile(profile);
 
         // Request json is encoded
         String rawJson = readFile("BPSim_i18nNames.json");
@@ -138,7 +147,7 @@ public class SimulationServletTest {
     @Test
     public void testNotAbleToFindPathsInProcess() throws Exception {
         SimulationServlet simulationServlet = new SimulationServlet();
-        simulationServlet.setProfile(new JbpmProfileImpl());
+        simulationServlet.setProfile(profile);
 
         // Request json is encoded
         String rawJson = readFile("BPSim_pathfindererror.json");

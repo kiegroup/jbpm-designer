@@ -37,6 +37,7 @@ import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import org.jbpm.designer.notification.DesignerNotificationEvent;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.UriUtils;
+import org.jbpm.designer.server.EditorHandler;
 import org.jbpm.designer.server.service.DefaultDesignerAssetService;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
@@ -70,12 +71,13 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     private Map<String, IDiagramPlugin> _plugins = new LinkedHashMap<String, IDiagramPlugin>();
 
-    private String _stencilSet;
-    private String _localHistoryEnabled;
-    private String _localHistoryTimeout;
+    private String stencilSet;
+    private String localHistoryEnabled;
+    private String localHistoryTimeout;
     private boolean initializeLocalPlugins;
-    private String _storeSVGonSaveOption;
+    private String storeSVGonSaveOption;
     private String zOrder;
+    private String bpsimDisplay;
 
     @Inject
     private Repository repository;
@@ -108,7 +110,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
     }
 
     public String getStencilSet() {
-        return _stencilSet;
+        return stencilSet;
     }
 
     public Collection<String> getStencilSetExtensions() {
@@ -134,21 +136,21 @@ public class JbpmProfileImpl implements IDiagramProfile {
             while(reader.hasNext()) {
                 if (reader.next() == XMLStreamReader.START_ELEMENT) {
                     if ("profile".equals(reader.getLocalName())) {
-                        _stencilSet = readAttribute(reader, "stencilset");
+                        stencilSet = readAttribute(reader, "stencilset");
                     } else if ("plugin".equals(reader.getLocalName())) {
                         String name = readAttribute(reader, "name");
                         _plugins.put(name, registry.get(name));
                     }  else if("localhistory".equals(reader.getLocalName())) {
-                        String localHistoryEnabled = readAttribute(reader, "enabled");
-                        if(!isEmpty(localHistoryEnabled)) {
-                            _localHistoryEnabled = localHistoryEnabled;
+                        String localHistoryEnabledVal = readAttribute(reader, "enabled");
+                        if(!isEmpty(localHistoryEnabledVal)) {
+                            this.localHistoryEnabled = localHistoryEnabledVal;
                         } else {
                             _logger.info("Invalid local history enabled");
                         }
 
-                        String localHistoryTimeout = readAttribute(reader, "timeout");
-                        if(!isEmpty(localHistoryTimeout)) {
-                            _localHistoryTimeout = localHistoryTimeout;
+                        String localHistoryTimeoutVal = readAttribute(reader, "timeout");
+                        if(!isEmpty(localHistoryTimeoutVal)) {
+                            localHistoryTimeout = localHistoryTimeoutVal;
                         } else {
                             _logger.info("Invalid local history timeout");
                         }
@@ -156,7 +158,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                     } else if("storesvgonsave".equals(reader.getLocalName())) {
                         String storesvgonsaveenabled = readAttribute(reader, "enabled");
                         if(!isEmpty(storesvgonsaveenabled)) {
-                            _storeSVGonSaveOption = storesvgonsaveenabled;
+                            storeSVGonSaveOption = storesvgonsaveenabled;
                         } else {
                             _logger.info("Invalid store svg on save enabled");
                         }
@@ -168,6 +170,14 @@ public class JbpmProfileImpl implements IDiagramProfile {
                         } else {
                             _logger.warn("Invalid zorder enabled");
                         }
+                    } else if("bpsimdisplay".equals(reader.getLocalName())) {
+                        String bpsimDisplayEnabled = readAttribute(reader, "enabled");
+                        if(!isEmpty(bpsimDisplayEnabled)) {
+                            bpsimDisplay = bpsimDisplayEnabled;
+                        } else {
+                            _logger.info("Invalid bpsim diaply enabled.");
+                        }
+
                     }
                 }
             }
@@ -200,16 +210,16 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
 
     public String getLocalHistoryEnabled() {
-        return _localHistoryEnabled;
+        return localHistoryEnabled;
     }
 
     public String getLocalHistoryTimeout() {
-        return _localHistoryTimeout;
+        return localHistoryTimeout;
     }
 
     @Override
     public String getStoreSVGonSaveOption() {
-        return _storeSVGonSaveOption;
+        return storeSVGonSaveOption;
     }
 
     public Repository getRepository() {
@@ -235,6 +245,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 BpsimFactoryImpl.init();
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 unmarshaller.setZOrderEnabled(zOrder != null && "true".equals(zOrder));
+                unmarshaller.setBpsimDisplay(getBpsimDisplay() != null && "true".equals(getBpsimDisplay()));
                 JBPMBpmn2ResourceImpl res;
                 res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -247,6 +258,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 try {
                     Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                     unmarshaller.setZOrderEnabled(zOrder != null && "true".equals(zOrder));
+                    unmarshaller.setBpsimDisplay(getBpsimDisplay() != null && "true".equals(getBpsimDisplay()));
                     JBPMBpmn2ResourceImpl res = (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
                     return (Definitions) res.getContents().get(0);
                 } catch (JsonParseException e) {
@@ -259,6 +271,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
             public Resource getResource(String jsonModel, String preProcessingData) throws Exception {
                 Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
                 unmarshaller.setZOrderEnabled(zOrder != null && "true".equals(zOrder));
+                unmarshaller.setBpsimDisplay(getBpsimDisplay() != null && "true".equals(getBpsimDisplay()));
                 return (JBPMBpmn2ResourceImpl) unmarshaller.unmarshall(jsonModel, preProcessingData);
             }
         };
@@ -370,6 +383,11 @@ public class JbpmProfileImpl implements IDiagramProfile {
         return "http://oryx-editor.org/stencilsets/extensions/bpmncosts-2.0#";
     }
 
+    @Override
+    public String getBpsimDisplay() {
+        return System.getProperty(EditorHandler.BPSIM_DISPLAY) == null ? bpsimDisplay : System.getProperty(EditorHandler.BPSIM_DISPLAY);
+    }
+
     /**
      * For test purposes
      *
@@ -378,6 +396,13 @@ public class JbpmProfileImpl implements IDiagramProfile {
     public void setZOrder(String zOrderEnabled) {
         zOrder = zOrderEnabled;
     }
+
+    /**
+     * For test purposes
+     *
+     * @param bpsimDisplayEnabled
+     */
+    public void setBpsimDisplay(String bpsimDisplayEnabled) { bpsimDisplay = bpsimDisplayEnabled; }
 
     private boolean isEmpty(final CharSequence str) {
         if ( str == null || str.length() == 0 ) {

@@ -91,6 +91,8 @@ public class EditorHandler extends HttpServlet {
 
     public static final String PRESET_PERSPECTIVE = "org.jbpm.designer.perspective";
 
+    public static final String BPSIM_DISPLAY = "org.jbpm.designer.bpsimdisplay";
+
     /**
      * The designer PREPROCESS flag looked up from system properties.
      */
@@ -370,6 +372,7 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("storesvgonsave", profile.getStoreSVGonSaveOption());
         editorTemplate.add("defaultSkin", designer_path + "css/theme-default.css");
         editorTemplate.add("presetperspective", System.getProperty(PRESET_PERSPECTIVE) == null ? "" : System.getProperty(PRESET_PERSPECTIVE));
+        editorTemplate.add("bpsimdisplay", System.getProperty(BPSIM_DISPLAY) == null ? profile.getBpsimDisplay() : System.getProperty(BPSIM_DISPLAY));
 
         String overlaySkin = "";
         if (_skin != null && !_skin.equals("default")) {

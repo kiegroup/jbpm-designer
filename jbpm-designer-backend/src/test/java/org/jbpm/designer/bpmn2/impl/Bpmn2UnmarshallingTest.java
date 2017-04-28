@@ -35,6 +35,7 @@ import org.jboss.drools.*;
 import org.jboss.drools.impl.MetaDataTypeImpl;
 import org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
+import org.jbpm.designer.server.EditorHandler;
 import org.jbpm.workflow.core.node.RuleSetNode;
 import org.junit.Test;
 
@@ -102,7 +103,7 @@ public class Bpmn2UnmarshallingTest {
 
     @Test
     public void testLaneUnmarshallingOrdering() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("lane.json", "true");
+        Definitions definitions = loader.loadProcessFromJson("lane.json", "true", "true");
         assertTrue(definitions.getRootElements().size() == 1);
         assertTrue(definitions.getRootElements().get(0) instanceof Process);
         Process process = getRootProcess(definitions);
@@ -121,7 +122,7 @@ public class Bpmn2UnmarshallingTest {
 
     @Test
     public void testLaneUnmarshallingWithoutOrdering() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("lane.json", "false");
+        Definitions definitions = loader.loadProcessFromJson("lane.json", "false", "true");
         Process process = getRootProcess(definitions);
         Lane lane = process.getLaneSets().get(0).getLanes().get(0);
         verifyBpmnShapePresent(lane, definitions);
@@ -134,7 +135,7 @@ public class Bpmn2UnmarshallingTest {
 
     @Test
     public void testNestedElementsOrdering() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("nestedElements.json", "true");
+        Definitions definitions = loader.loadProcessFromJson("nestedElements.json", "true", "true");
         Process process = getRootProcess(definitions);
         Lane lane = process.getLaneSets().get(0).getLanes().get(0);
         assertEquals(0, getDIElementOrder(lane, definitions));
@@ -1757,6 +1758,36 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(task2.getIoSpecification().getInputSets());
         assertNotNull(task2.getIoSpecification().getOutputSets());
 
+    }
+
+    @Test
+    public void testDisableBpsimDisplayViaProfileSetting() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("userTask.json", "false", "false");
+        assertEquals(0, definitions.getRelationships().size());
+    }
+
+    @Test
+    public void testDisableBpsimDisplayViaSystemProperty() throws Exception {
+        System.setProperty(EditorHandler.BPSIM_DISPLAY, "false");
+        Definitions definitions = loader.loadProcessFromJson("userTask.json", "false", "true");
+        // should still be 0 even tho "true" is passed for bpsimDisplay
+        assertEquals(0, definitions.getRelationships().size());
+        System.clearProperty(EditorHandler.BPSIM_DISPLAY);
+    }
+
+    @Test
+    public void testEnableBpsimDisplayViaSystemProperty() throws Exception {
+        System.setProperty(EditorHandler.BPSIM_DISPLAY, "true");
+        Definitions definitions = loader.loadProcessFromJson("userTask.json", "false", "false");
+        // should still be 1 even tho "false" is passed for bpsimDisplay
+        assertEquals(1, definitions.getRelationships().size());
+        System.clearProperty(EditorHandler.BPSIM_DISPLAY);
+    }
+
+    @Test
+    public void testBpsimDisplayEnabledByDefault() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("userTask.json");
+        assertEquals(1, definitions.getRelationships().size());
     }
 
     private void verifyBpmnShapePresent(BaseElement element, Definitions definitions) {

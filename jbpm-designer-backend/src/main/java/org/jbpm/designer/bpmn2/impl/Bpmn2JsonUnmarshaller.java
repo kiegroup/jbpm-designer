@@ -133,6 +133,7 @@ public class Bpmn2JsonUnmarshaller {
     private ScenarioParameters _simulationScenarioParameters = BpsimFactory.eINSTANCE.createScenarioParameters();
 
     private boolean zOrderEnabled;
+    private boolean bpsimDisplay;
 
     private static final Logger _logger = LoggerFactory.getLogger(Bpmn2JsonUnmarshaller.class);
 
@@ -168,6 +169,10 @@ public class Bpmn2JsonUnmarshaller {
 
     public void setZOrderEnabled(boolean zOrderEnabled) {
         this.zOrderEnabled = zOrderEnabled;
+    }
+
+    public void setBpsimDisplay(boolean bpsimDisplay) {
+        this.bpsimDisplay = bpsimDisplay;
     }
 
     /**
@@ -909,47 +914,49 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     public void addSimulation(Definitions def) {
-		Relationship relationship = Bpmn2Factory.eINSTANCE.createRelationship();
-		relationship.getSources().add(def);
-		relationship.getTargets().add(def);
-        relationship.setType(defaultRelationshipType);
-		BPSimDataType simDataType = BpsimFactory.eINSTANCE.createBPSimDataType();
-		// currently support single scenario
-		Scenario defaultScenario = BpsimFactory.eINSTANCE.createScenario();
-		defaultScenario.setId("default"); // single scenario suppoert
-		defaultScenario.setName("Simulationscenario"); // single scenario support
-		defaultScenario.setScenarioParameters(_simulationScenarioParameters);
+        if(bpsimDisplay) {
+            Relationship relationship = Bpmn2Factory.eINSTANCE.createRelationship();
+            relationship.getSources().add(def);
+            relationship.getTargets().add(def);
+            relationship.setType(defaultRelationshipType);
+            BPSimDataType simDataType = BpsimFactory.eINSTANCE.createBPSimDataType();
+            // currently support single scenario
+            Scenario defaultScenario = BpsimFactory.eINSTANCE.createScenario();
+            defaultScenario.setId("default"); // single scenario suppoert
+            defaultScenario.setName("Simulationscenario"); // single scenario support
+            defaultScenario.setScenarioParameters(_simulationScenarioParameters);
 
-		if(_simulationElementParameters.size() > 0) {
-    		Iterator<String> iter = _simulationElementParameters.keySet().iterator();
-    		while(iter.hasNext()) {
-    			String key = iter.next();
-    			ElementParameters etype = BpsimFactory.eINSTANCE.createElementParameters();
-    			etype.setElementRef(key);
-    			List<EObject> params = _simulationElementParameters.get(key);
-    			for(EObject np : params) {
-    				if(np instanceof ControlParameters) {
-    					etype.setControlParameters((ControlParameters) np);
-    				} else if(np instanceof CostParameters) {
-    					etype.setCostParameters((CostParameters) np);
-    				} else if(np instanceof PriorityParameters) {
-    					etype.setPriorityParameters((PriorityParameters) np);
-    				} else if(np instanceof ResourceParameters) {
-    					etype.setResourceParameters((ResourceParameters) np);
-    				} else if(np instanceof TimeParameters) {
-    					etype.setTimeParameters((TimeParameters) np);
-    				}
-    			}
-    			defaultScenario.getElementParameters().add(etype);
-    		}
-		}
-        simDataType.getScenario().add(defaultScenario);
-		ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
-		relationship.getExtensionValues().add(extensionElement);
-        FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
-                (Internal) BpsimPackage.Literals.DOCUMENT_ROOT__BP_SIM_DATA, simDataType);
-        relationship.getExtensionValues().get(0).getValue().add(extensionElementEntry);
-        def.getRelationships().add(relationship);
+            if (_simulationElementParameters.size() > 0) {
+                Iterator<String> iter = _simulationElementParameters.keySet().iterator();
+                while (iter.hasNext()) {
+                    String key = iter.next();
+                    ElementParameters etype = BpsimFactory.eINSTANCE.createElementParameters();
+                    etype.setElementRef(key);
+                    List<EObject> params = _simulationElementParameters.get(key);
+                    for (EObject np : params) {
+                        if (np instanceof ControlParameters) {
+                            etype.setControlParameters((ControlParameters) np);
+                        } else if (np instanceof CostParameters) {
+                            etype.setCostParameters((CostParameters) np);
+                        } else if (np instanceof PriorityParameters) {
+                            etype.setPriorityParameters((PriorityParameters) np);
+                        } else if (np instanceof ResourceParameters) {
+                            etype.setResourceParameters((ResourceParameters) np);
+                        } else if (np instanceof TimeParameters) {
+                            etype.setTimeParameters((TimeParameters) np);
+                        }
+                    }
+                    defaultScenario.getElementParameters().add(etype);
+                }
+            }
+            simDataType.getScenario().add(defaultScenario);
+            ExtensionAttributeValue extensionElement = Bpmn2Factory.eINSTANCE.createExtensionAttributeValue();
+            relationship.getExtensionValues().add(extensionElement);
+            FeatureMap.Entry extensionElementEntry = new SimpleFeatureMapEntry(
+                    (Internal) BpsimPackage.Literals.DOCUMENT_ROOT__BP_SIM_DATA, simDataType);
+            relationship.getExtensionValues().get(0).getValue().add(extensionElementEntry);
+            def.getRelationships().add(relationship);
+        }
     }
 
     public void revisitDataObjects(Definitions def) {

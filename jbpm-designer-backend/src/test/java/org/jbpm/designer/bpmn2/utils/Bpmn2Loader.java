@@ -30,9 +30,10 @@ public class Bpmn2Loader {
         this.testClass = testClass;
     }
 
-    public Definitions loadProcessFromJson(String fileName, String zOrderEnabled) throws Exception {
+    public Definitions loadProcessFromJson(String fileName, String zOrderEnabled, String bpsimDisplay) throws Exception {
 
         profile.setZOrder(zOrderEnabled);
+        profile.setBpsimDisplay(bpsimDisplay);
 
         // It is by design (Unmarshaller = marshaller and vice versa)
         IDiagramProfile.IDiagramMarshaller unmarshaller = profile.createMarshaller();
@@ -44,7 +45,7 @@ public class Bpmn2Loader {
     }
 
     public Definitions loadProcessFromJson(String fileName) throws Exception {
-        return loadProcessFromJson(fileName, "false");
+        return loadProcessFromJson(fileName, "false", "true");
     }
 
     public JSONObject loadProcessFromXml(String fileName, Class nonDefaultTestClass) throws Exception {

@@ -67,10 +67,6 @@ public class ProfileServiceImpl implements IDiagramProfileService {
      * @param context the servlet context to initialize the profile.
      */
     public void init(ServletContext context) {
-//        _registry.put("default", new DefaultProfileImpl(context));
-//        _registry.put("jbpm", new JbpmProfileImpl(context));
-//        _registry.put("drools", new JbpmProfileImpl(context));
-//        _registry.put("epn", new EpnProfileImpl(context));
         if (profiles != null) {
             for (IDiagramProfile profile : profiles) {
                 profile.init(context);
