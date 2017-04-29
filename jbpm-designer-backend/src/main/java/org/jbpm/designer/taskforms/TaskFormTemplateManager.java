@@ -22,7 +22,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
+import org.kie.workbench.common.forms.bpmn.BPMNFormBuilderService;
 import org.stringtemplate.v4.ST;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +54,9 @@ public class TaskFormTemplateManager {
     private List<TaskFormInfo> taskFormInformationList = new ArrayList<TaskFormInfo>();
     private Path myPath;
     private BPMNFormBuilderManager formBuilderManager;
+    private String formType;
 
-
-    public TaskFormTemplateManager( Path myPath, BPMNFormBuilderManager formBuilderManager, IDiagramProfile profile, Asset processAsset, String templatesPath, Definitions def, String taskId) {
+    public TaskFormTemplateManager( Path myPath, BPMNFormBuilderManager formBuilderManager, IDiagramProfile profile, Asset processAsset, String templatesPath, Definitions def, String taskId, String formType) {
         this.myPath = myPath;
         this.formBuilderManager = formBuilderManager;
         this.profile = profile;
@@ -64,6 +66,7 @@ public class TaskFormTemplateManager {
         this.templatesPath = templatesPath;
         this.def = def;
         this.taskId = taskId;
+        this.formType = formType;
     }
 
     public void processTemplates() {
@@ -415,7 +418,9 @@ public class TaskFormTemplateManager {
     }
 
     protected void generatePlatformForms( TaskFormInfo tfi ) {
-        formBuilderManager.getFormBuilders().forEach( formBuilder -> {
+
+        BPMNFormBuilderService<Definitions> formBuilder = formBuilderManager.getBuilderByFormType(formType);
+        if(formBuilder != null && formBuilder.getFormExtension() != null) {
             String formName = tfi.getId() + "." + formBuilder.getFormExtension();
             String formURI = myPath.toURI();
             formURI = formURI.substring(0, formURI.lastIndexOf("/"));
@@ -429,7 +434,9 @@ public class TaskFormTemplateManager {
                 _logger.error(e.getMessage());
                 e.printStackTrace();
             }
-        } );
+        } else {
+            _logger.error("Unable to find form builder service for type: " + formType);
+        }
     }
 
     private void generateUserTaskTemplate(TaskFormInfo tfi) {

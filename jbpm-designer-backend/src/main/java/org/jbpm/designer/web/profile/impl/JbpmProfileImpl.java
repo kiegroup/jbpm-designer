@@ -78,6 +78,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
     private String storeSVGonSaveOption;
     private String zOrder;
     private String bpsimDisplay;
+    private String formsType;
 
     @Inject
     private Repository repository;
@@ -177,7 +178,9 @@ public class JbpmProfileImpl implements IDiagramProfile {
                         } else {
                             _logger.info("Invalid bpsim diaply enabled.");
                         }
-
+                    } else if("forms".equals(reader.getLocalName())) {
+                        String formsTypeOption = readAttribute(reader, "type");
+                        formsType = formsTypeOption == null ? "" : formsTypeOption;
                     }
                 }
             }
@@ -388,6 +391,11 @@ public class JbpmProfileImpl implements IDiagramProfile {
         return System.getProperty(EditorHandler.BPSIM_DISPLAY) == null ? bpsimDisplay : System.getProperty(EditorHandler.BPSIM_DISPLAY);
     }
 
+    @Override
+    public String getFormsType() {
+        return System.getProperty(EditorHandler.FORMS_TYPE) == null ? formsType : System.getProperty(EditorHandler.FORMS_TYPE);
+    }
+
     /**
      * For test purposes
      *
@@ -403,6 +411,13 @@ public class JbpmProfileImpl implements IDiagramProfile {
      * @param bpsimDisplayEnabled
      */
     public void setBpsimDisplay(String bpsimDisplayEnabled) { bpsimDisplay = bpsimDisplayEnabled; }
+
+    /**
+     * For test purposes
+     *
+     * @param formsTypeOption
+     */
+    public void setFormsType(String formsTypeOption) { formsType = formsTypeOption; }
 
     private boolean isEmpty(final CharSequence str) {
         if ( str == null || str.length() == 0 ) {

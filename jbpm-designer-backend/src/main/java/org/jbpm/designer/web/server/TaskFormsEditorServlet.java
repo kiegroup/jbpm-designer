@@ -51,13 +51,16 @@ import java.io.UnsupportedEncodingException;
 public class TaskFormsEditorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger _logger = LoggerFactory.getLogger(TaskFormsEditorServlet.class);
-    private static final String FORMMODELER_FILE_EXTENSION = "frm";
-    private static final String DEFAULT_FORM_EXTENSION = "ftl";
+    private static final String FORMMODELER_FILE_EXTENSION = "form";
+    private static final String FORMMODELER_PREVIEW_FILE_EXTENSION = "frm";
 	private static final String TASKFORM_NAME_EXTENSION = "-taskform";
 	protected static final String ACTION_LOAD = "load";
 	protected static final String ACTION_SAVE = "save";
 
     private IDiagramProfile profile;
+
+    BPMNFormBuilderService<Definitions> formBuilder;
+
     // this is here just for unit testing purpose
     public void setProfile(IDiagramProfile profile) {
         this.profile = profile;
@@ -112,7 +115,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
                  try {
                     pw.write(storeTaskFormInRepository(formType, taskName, processAsset.getAssetLocation(), taskFormValue, repository).toString());
                 } catch (Exception e) {
-                     e.printStackTrace();
+                     _logger.error("Exception during saving form: " + e.getMessage());
                      pw.write(new JSONObject().toString());
                 }
              }
@@ -123,94 +126,98 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	 }
 
 	 private JSONObject storeTaskFormInRepository(String formType, String taskName, String packageName, String formValue, Repository repository) throws Exception{
+         if(formType.equals(FORMMODELER_FILE_EXTENSION) || formType.equals(FORMMODELER_PREVIEW_FILE_EXTENSION)) {
+             repository.deleteAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
 
-        repository.deleteAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
+             AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+             builder.location(packageName)
+                     .name(taskName + TASKFORM_NAME_EXTENSION)
+                     .type(formType)
+                     .content(formValue.getBytes("UTF-8"));
 
-        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
-        builder.location(packageName)
-                .name(taskName + TASKFORM_NAME_EXTENSION)
-                .type(formType)
-                .content(formValue.getBytes("UTF-8"));
+             repository.createAsset(builder.getAsset());
 
-        repository.createAsset(builder.getAsset());
+             Asset newFormAsset = repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
 
-        Asset newFormAsset =  repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
+             JSONObject retObj = new JSONObject();
+             try {
+                 retObj.put("formid", getDecodedId(newFormAsset.getUniqueId()));
+             } catch( UnsupportedEncodingException e ) {
+                 retObj.put("formid", "false");
+             }
 
-        String uniqueId = newFormAsset.getUniqueId();
-        if (Base64.isBase64(uniqueId)) {
-            byte[] decoded = Base64.decodeBase64(uniqueId);
-            try {
-                uniqueId =  new String(decoded, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-
-        JSONObject retObj = new JSONObject();
-        retObj.put("formid", uniqueId);
-
-        return retObj;
+             return retObj;
+         } else {
+             return new JSONObject();
+         }
 	 }
 
 	 private String getTaskFormFromRepository(String formType, String taskName, String packageName, Repository repository) {
          try {
              Asset<String> formAsset = repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
-
-             if(!formType.equals(DEFAULT_FORM_EXTENSION)) {
-                 String uniqueId = formAsset.getUniqueId();
-                 if (Base64.isBase64(uniqueId)) {
-                     byte[] decoded = Base64.decodeBase64(uniqueId);
-                     try {
-                         uniqueId =  new String(decoded, "UTF-8");
-                     } catch (UnsupportedEncodingException e) {
-                         e.printStackTrace();
-                     }
+             if(formType.equals(FORMMODELER_FILE_EXTENSION) || formType.equals(FORMMODELER_PREVIEW_FILE_EXTENSION)) {
+                 try {
+                    return getAssetInfo( formAsset );
+                 } catch (UnsupportedEncodingException e) {
+                     _logger.error("Error loading form: " + e.getMessage());
                  }
-                 return formAsset.getName() + "." + formAsset.getAssetType() + "|" + uniqueId;
              } else {
-                 return formAsset.getAssetContent();
+                 _logger.error("Cannot load existing form for invalid form type: " + formType);
              }
          } catch (NoSuchFileException anfe) {
              try {
                  String formValue = "";
-                 if(!formType.equals(DEFAULT_FORM_EXTENSION)) {
-
-                     BPMNFormBuilderService<Definitions> builder = formBuilderManager.getBuilderByFormType( formType );
-
-                     if ( builder != null ) {
-                         formValue = builder.buildEmptyFormContent( taskName + TASKFORM_NAME_EXTENSION + "." + formType );
+                 if(formType.equals(FORMMODELER_FILE_EXTENSION) || formType.equals(FORMMODELER_PREVIEW_FILE_EXTENSION)) {
+                     formBuilder = getFormBuilder(formType);
+                     if ( formBuilder != null ) {
+                         formValue = formBuilder.buildEmptyFormContent( taskName + TASKFORM_NAME_EXTENSION + "." + formType );
+                     } else {
+                         _logger.warn("Unable to find form builder for form type: " + formType);
                      }
-                 }
 
-                 AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
-                 builder.location(packageName)
-                         .name(taskName + TASKFORM_NAME_EXTENSION)
-                         .type(formType)
-                         .content(formValue.getBytes("UTF-8"));
-                 repository.createAsset(builder.getAsset());
+                     AssetBuilder assetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+                     assetBuilder.location(packageName)
+                             .name(taskName + TASKFORM_NAME_EXTENSION)
+                             .type(formType)
+                             .content(formValue.getBytes("UTF-8"));
+                     repository.createAsset(assetBuilder.getAsset());
 
-                 Asset<String> newFormAsset = repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
+                     Asset<String> newFormAsset = repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
 
-                 String uniqueId = newFormAsset.getUniqueId();
-                 if (Base64.isBase64(uniqueId)) {
-                     byte[] decoded = Base64.decodeBase64(uniqueId);
-                     try {
-                         uniqueId =  new String(decoded, "UTF-8");
-                     } catch (UnsupportedEncodingException e) {
-                         e.printStackTrace();
-                     }
-                 }
-
-                 if(formType.equals(FORMMODELER_FILE_EXTENSION)) {
-                     return newFormAsset.getName() + "." + newFormAsset.getAssetType() + "|" + uniqueId;
+                     return getAssetInfo( newFormAsset );
                  } else {
-                    return formValue;
+                     _logger.error("Cannot create new form for invalid form type: " + formType);
                  }
+
              } catch(Exception e) {
-                 e.printStackTrace();
                  _logger.error(e.getMessage());
              }
          }
          return "false";
+     }
+
+     public BPMNFormBuilderService<Definitions> getFormBuilder() {
+        return formBuilder;
+     }
+
+     public BPMNFormBuilderService<Definitions> getFormBuilder(String formType) {
+         return formBuilderManager.getBuilderByFormType( formType );
+     }
+
+     private String getAssetInfo(Asset<String> asset) throws UnsupportedEncodingException {
+        return asset.getName() + "." + asset.getAssetType() + "|" + getDecodedId( asset.getUniqueId() );
+     }
+
+     private String getDecodedId(String id) throws UnsupportedEncodingException {
+         if (Base64.isBase64(id)) {
+             byte[] decodedId = Base64.decodeBase64(id);
+             return new String(decodedId, "UTF-8");
+         } else {
+             return id;
+         }
+     }
+
+     public void setFormBuilder(BPMNFormBuilderService<Definitions> formBuilder) {
+        this.formBuilder = formBuilder;
      }
 }

@@ -13,78 +13,191 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 
     construct: function(facade){
         this.facade = facade;
-        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_TASKFORM_EDIT, this.chooseFormEditor.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_TASKFORM_EDIT, this.chooseFormEditorLoad.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_TASKFORM_GENERATE, this.chooseFormEditorStore.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_TASKFORM_GENERATE_ALL, this.chooseFormEditorStoreAll.bind(this));
     },
 
-    chooseFormEditor: function(options) {
-        Ext.Msg.show({
-            title : ORYX.I18N.inlineTaskFormEditor.formEditor,
-            msg : ORYX.I18N.inlineTaskFormEditor.selectForm,
-            buttons : {yes : ORYX.I18N.inlineTaskFormEditor.graphicalModeler, no : ORYX.I18N.inlineTaskFormEditor.markupEditor, cancel : ORYX.I18N.Dictionary.cancel},
-            icon : Ext.MessageBox.QUESTION,
-            fn : function(btn) {
-                if(btn == 'yes'){
-                    this.showTaskFormEditor("frm", options);
-                } else if(btn == 'no'){
-                    this.showTaskFormEditor("ftl", options);
+    chooseFormEditorLoad : function(options) {
+        this.chooseFormEditor(options, "load");
+    },
+
+    chooseFormEditorStore : function(options) {
+        this.chooseFormEditor(options, "store");
+    },
+
+    chooseFormEditorStoreAll : function(options) {
+        this.chooseFormEditor(options, "storeall");
+    },
+
+    chooseFormEditor: function(options, action) {
+        var editorAction = action;
+
+        if(ORYX.FORMSTYPE && (ORYX.FORMSTYPE == "form" || ORYX.FORMSTYPE == "frm")) {
+            if(action == "load") {
+                this.showTaskFormEditor(ORYX.FORMSTYPE, options);
+            } else if(action == "store") {
+                this.generateTaskForm(ORYX.FORMSTYPE, options);
+            } else if(action == "storeall") {
+                this.generateAllTaskForms(ORYX.FORMSTYPE, options);
+            } else {
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor+'.',
+                    title       : ''
+                });
+            }
+        } else {
+            Ext.Msg.show({
+                title : ORYX.I18N.inlineTaskFormEditor.formEditor,
+                msg : ORYX.I18N.inlineTaskFormEditor.selectForm,
+                buttons : {yes : ORYX.I18N.inlineTaskFormEditor.graphicalModeler, no : ORYX.I18N.inlineTaskFormEditor.graphicalModelerPreview, cancel : ORYX.I18N.Dictionary.cancel},
+                icon : Ext.MessageBox.QUESTION,
+                fn : function(btn) {
+                    var formType = btn == 'yes' ? "form" : "frm";
+                    if(action == "load") {
+                        this.showTaskFormEditor(formType, options);
+                    } else if(action == "store") {
+                        this.generateTaskForm(formType, options);
+                    } else if(action == "storeall") {
+                        this.generateAllTaskForms(formType, options);
+                    } else {
+                        this.facade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor+'.',
+                            title       : ''
+                        });
+                    }
+                }.bind(this)
+            });
+        }
+    },
+
+    generateTaskForm: function(formType, options) {
+        if(options && options.tn && options.taskid) {
+            var taskname = options.tn;
+            if (taskname && taskname.length > 0) {
+                taskname = taskname.replace(/\&/g, "");
+                taskname = taskname.replace(/\s/g, "");
+
+                if (/^\w+$/.test(taskname)) {
+                    Ext.Ajax.request({
+                        url: ORYX.PATH + "taskforms",
+                        method: 'POST',
+                        success: function (request) {
+                            this.facade.raiseEvent({
+                                type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype: 'success',
+                                msg: ORYX.I18N.forms.successGenTask,
+                                title: ''
+
+                            });
+                        }.createDelegate(this),
+                        failure: function () {
+                            this.facade.raiseEvent({
+                                type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype: 'error',
+                                msg: ORYX.I18N.forms.failGenTask,
+                                title: ''
+                            });
+                        }.createDelegate(this),
+                        params: {
+                            profile: ORYX.PROFILE,
+                            uuid: window.btoa(encodeURI(ORYX.UUID)),
+                            json: ORYX.EDITOR.getSerializedJSON(),
+                            ppdata: ORYX.PREPROCESSING,
+                            taskid: options.taskid,
+                            formtype: formType
+                        }
+                    });
+                } else {
+                    ORYX.Config.FACADE.raiseEvent({
+                        type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype: 'error',
+                        msg: ORYX.I18N.forms.failInvalidTaskName,
+                        title: ''
+
+                    });
                 }
-            }.bind(this)
+
+            } else {
+                ORYX.Config.FACADE.raiseEvent({
+                    type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype: 'error',
+                    msg: ORYX.I18N.forms.failNoTaskName,
+                    title: ''
+
+                });
+            }
+        } else {
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : ORYX.I18N.inlineTaskFormEditor.taskNameNotSpecified,
+                title       : ''
+
+            });
+        }
+    },
+
+    generateAllTaskForms: function(formType, options) {
+        Ext.Ajax.request({
+            url: ORYX.PATH + "taskforms",
+            method: 'POST',
+            success: function(request){
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'success',
+                    msg         : ORYX.I18N.forms.successGenProcAndTask,
+                    title       : ''
+
+                });
+            }.createDelegate(this),
+            failure: function(){
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : ORYX.I18N.forms.failGenProcAndTask,
+                    title       : ''
+                });
+            }.createDelegate(this),
+            params: {
+                profile: ORYX.PROFILE,
+                uuid :  window.btoa(encodeURI(ORYX.UUID)),
+                json : ORYX.EDITOR.getSerializedJSON(),
+                ppdata: ORYX.PREPROCESSING,
+                formtype: formType
+            }
         });
+
+
+        ORYX.CONFIG.TASKFORMS_URL = function(uuid, profile) {
+            if (uuid === undefined) {
+                uuid = ORYX.UUID;
+            }
+            if (profile === undefined) {
+                profile = ORYX.PROFILE;
+            }
+            return ORYX.PATH + "taskforms?uuid="+  window.btoa(encodeURI(uuid)) + "&profile=" + profile;
+        };
     },
 
     showTaskFormEditor: function(formType, options) {
         if(options && options.tn) {
-            // load form widgets first
             Ext.Ajax.request({
-                url: ORYX.PATH + 'formwidget',
+                url: ORYX.PATH + 'taskformseditor',
                 method: 'POST',
                 success: function(response) {
                     try {
-                        var widgetJson = response.responseText.evalJSON();
-                        // now the form editor
-                        Ext.Ajax.request({
-                            url: ORYX.PATH + 'taskformseditor',
-                            method: 'POST',
-                            success: function(response) {
-                                try {
-                                    if(formType == "frm" || formType == "form") {
-                                        var responseParts = response.responseText.split("|");
-                                        parent.designeropenintab(responseParts[0], encodeURI(responseParts[1]));
-                                    } else {
-                                        this._buildandshow(formType, options.tn, response.responseText, widgetJson);
-                                    }
-                                } catch(e) {
-                                    this.facade.raiseEvent({
-                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                        ntype		: 'error',
-                                        msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor + ': ' + e,
-                                        title       : ''
-
-                                    });
-                                }
-                            }.bind(this),
-                            failure: function(){
-                                this.facade.raiseEvent({
-                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                    ntype		: 'error',
-                                    msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor+'.',
-                                    title       : ''
-
-                                });
-                            },
-                            params: {
-                                formtype: formType,
-                                action: 'load',
-                                taskname: window.btoa(encodeURI(options.tn)),
-                                profile: ORYX.PROFILE,
-                                uuid :  window.btoa(encodeURI(ORYX.UUID))
-                            }
-                        });
+                        var responseParts = response.responseText.split("|");
+                        parent.designeropenintab(responseParts[0], encodeURI(responseParts[1]));
                     } catch(e) {
                         this.facade.raiseEvent({
                             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                             ntype		: 'error',
-                            msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingWidgets+': ' + e,
+                            msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor + ': ' + e,
                             title       : ''
 
                         });
@@ -94,15 +207,16 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                     this.facade.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                         ntype		: 'error',
-                        msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingWidgets+'.',
+                        msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor+'.',
                         title       : ''
-
                     });
                 },
                 params: {
-                    action: 'getwidgets',
+                    formtype: formType,
+                    action: 'load',
+                    taskname: window.btoa(encodeURI(options.tn)),
                     profile: ORYX.PROFILE,
-                    uuid:  window.btoa(encodeURI(ORYX.UUID))
+                    uuid :  window.btoa(encodeURI(ORYX.UUID))
                 }
             });
         } else {
@@ -114,258 +228,5 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
 
             });
         }
-    },
-    _buildandshow: function(formType, tn, defaultsrc, widgetJson) {
-        var formvalue = "";
-        if(defaultsrc && defaultsrc != "false") {
-            formvalue = defaultsrc;
-        }
-
-        var widgetKeys = [];
-        for (var key in widgetJson) {
-            if (widgetJson.hasOwnProperty(key)) {
-                widgetKeys.push(key);
-            }
-        }
-        widgetKeys.sort();
-        var displayWidgetKeys = [];
-        for (var i = 0; i < widgetKeys.length; i++) {
-            displayWidgetKeys[i] = [widgetKeys[i] + ""];
-        }
-
-        var widgetStore = new Ext.data.SimpleStore({
-            fields: ["name"],
-            data : displayWidgetKeys
-        });
-
-        var widgetCombo = new Ext.form.ComboBox({
-            fieldLabel: ORYX.I18N.inlineTaskFormEditor.insertFormWidget,
-            labelStyle: 'width:240px',
-            hiddenName: 'widget_name',
-            emptyText: ORYX.I18N.inlineTaskFormEditor.insertFormWidget+'...',
-            store: widgetStore,
-            displayField: 'name',
-            valueField: 'name',
-            mode: 'local',
-            typeAhead: true,
-            triggerAction: 'all',
-            listeners:
-            {
-                select: {
-                    fn:function(combo, value) {
-                        if(this.taskformcolorsourceeditor) {
-                            Ext.Ajax.request({
-                                url: ORYX.PATH + 'formwidget',
-                                method: 'POST',
-                                success: function(response) {
-                                    try {
-                                        this.taskformcolorsourceeditor.replaceSelection(response.responseText, "end");
-                                    } catch(e) {
-                                        this.facade.raiseEvent({
-                                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                            ntype		: 'error',
-                                            msg         : ORYX.I18N.inlineTaskFormEditor.errorInsertingFormWidget+': ' + e,
-                                            title       : ''
-
-                                        });
-                                    }
-                                }.bind(this),
-                                failure: function(){
-                                    this.facade.raiseEvent({
-                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                        ntype		: 'error',
-                                        msg         : ORYX.I18N.inlineTaskFormEditor.errorInsertingFormWidget+'.',
-                                        title       : ''
-
-                                    });
-                                },
-                                params: {
-                                    action: 'getwidgetsource',
-                                    profile: ORYX.PROFILE,
-                                    widgetname: combo.getValue(),
-                                    uuid:  window.btoa(encodeURI(ORYX.UUID))
-                                }
-                            });
-                        } else {
-                            this.facade.raiseEvent({
-                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                ntype		: 'error',
-                                msg         : ORYX.I18N.inlineTaskFormEditor.widgetInsertionSourceMode,
-                                title       : ''
-
-                            });
-                        }
-                    }.bind(this)
-                }
-            }
-        });
-
-        var sourceeditorid = Ext.id();
-        this.taskformsourceeditor = new Ext.form.TextArea({
-            id: sourceeditorid,
-            anchor: '100%',
-            autoScroll: true,
-            value: formvalue
-        });
-
-        var outterPanel = new Ext.Panel({
-            header: false,
-            anchor: '100%',
-            layout:'column',
-            autoScroll:true,
-            border : false,
-            layoutConfig: {
-                columns: 2,
-                pack:'center',
-                align:'middle'
-            },
-            items: [
-                {
-                    columnWidth: .5,
-                    items: this.taskformsourceeditor
-                },{
-                    columnWidth: .5,
-                    items: [
-                        {
-                            xtype : "component",
-                            id    : 'livepreviewpanel',
-                            anchor: '100%',
-                            autoScroll: true,
-                            autoEl : {
-                                tag : "iframe",
-                                width: "100%",
-                                height: "570",
-                                frameborder: "0",
-                                scrolling: "auto"
-                            }
-                        }]
-                }
-            ]
-        });
-
-        var itfe = new Ext.Window({
-            id          : 'maineditorwindow',
-            layout		: 'fit',
-            autoCreate	: true,
-            title		: ORYX.I18N.inlineTaskFormEditor.editingForm + tn + ' - '+ORYX.I18N.inlineTaskFormEditor.completionInst,
-            height		: 570,
-            width		: 930,
-            modal		: true,
-            collapsible	: false,
-            fixedcenter	: true,
-            shadow		: true,
-            resizable   : true,
-            proxyDrag	: true,
-            keys:[{
-                fn	: function(){
-                    itfe.close();
-                    itfe = null;
-                }.bind(this)
-            }],
-            items		:[outterPanel],
-            listeners	:{
-                hide: function(){
-                    itfe = null;
-                }.bind(this)
-            },
-            buttons		: [{
-                text: ORYX.I18N.Dictionary.Save,
-                handler: function(){
-                    this.facade.raiseEvent({
-                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                        ntype		: 'info',
-                        msg         : ORYX.I18N.inlineTaskFormEditor.storingForm,
-                        title       : ''
-
-                    });
-
-                    var tosaveValue = "";
-                    tosaveValue = this.taskformcolorsourceeditor.getValue();
-
-                    Ext.Ajax.request({
-                        url: ORYX.PATH + 'taskformseditor',
-                        method: 'POST',
-                        success: function(request) {
-                            try {
-                                // no longer needed
-//                                var generatedForm = request.responseText.evalJSON();
-//                                parent.designersignalassetadded(generatedForm.formid);
-//                                parent.designersignalassetupdate(generatedForm.formid);
-
-                                itfe.close();
-                                itfe = null;
-                            } catch(e) {
-                                this.facade.raiseEvent({
-                                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                    ntype		: 'error',
-                                    msg         : ORYX.I18N.inlineTaskFormEditor.errorSavingForm + ': ' + e,
-                                    title       : ''
-
-                                });
-                            }
-                        }.createDelegate(this),
-                        failure: function(){
-                            this.facade.raiseEvent({
-                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                ntype		: 'error',
-                                msg         : ORYX.I18N.inlineTaskFormEditor.errorSavingForm+'.',
-                                title       : ''
-
-                            });
-                        },
-                        params: {
-                            formtype: formType,
-                            action: 'save',
-                            taskname: tn,
-                            profile: ORYX.PROFILE,
-                            uuid :  window.btoa(encodeURI(ORYX.UUID)),
-                            tfvalue: tosaveValue
-                        }
-                    });
-                }.bind(this)
-            },
-                {
-                    text: ORYX.I18N.Dictionary.cancel,
-                    handler: function(){
-                        itfe.close();
-                        itfe = null;
-                    }.bind(this)
-                }],
-            tbar: [
-                widgetCombo
-            ]
-        });
-        itfe.show();
-        this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.tagRangeFinder);
-        var delay;
-        this.taskformcolorsourceeditor = CodeMirror.fromTextArea(document.getElementById(sourceeditorid), {
-            mode: "text/html",
-            lineNumbers: true,
-            lineWrapping: true,
-            onGutterClick: this.foldFunc,
-            extraKeys: {
-                "'>'": function(cm) { cm.closeTag(cm, '>'); },
-                "'/'": function(cm) { cm.closeTag(cm, '/'); },
-                "Ctrl-Z": function(cm) {CodeMirror.hint(cm, CodeMirror.formsHint, outterPanel);}
-            },
-            onCursorActivity: function() {
-                this.taskformcolorsourceeditor.setLineClass(this.hlLine, null, null);
-                this.hlLine = this.taskformcolorsourceeditor.setLineClass(this.taskformcolorsourceeditor.getCursor().line, null, "activeline");
-            }.bind(this),
-            onChange: function() {
-                clearTimeout(delay);
-                delay = setTimeout(this.updatePreview.bind(this), 300);
-            }.bind(this)
-        });
-        this.hlLine = this.taskformcolorsourceeditor.setLineClass(0, "activeline");
-        setTimeout(this.updatePreview.bind(this), 300);
-    },
-    updatePreview: function() {
-        var previewFrame = document.getElementById('livepreviewpanel');
-        var preview =  previewFrame.contentDocument ||  previewFrame.contentWindow.document;
-        preview.open();
-        preview.write(this.taskformcolorsourceeditor.getValue());
-        preview.close();
     }
-
 });

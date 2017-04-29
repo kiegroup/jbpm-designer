@@ -39,6 +39,7 @@
         ORYX.PROCESSDOC_RESOURCEID = "";
 
         ORYX.BPSIMDISPLAY = $bpsimdisplay$;
+        ORYX.FORMSTYPE = "$formstype$";
 
         ORYX.SERVICE_REPO = "$servicerepo$";
         ORYX.SERVICE_REPO_TASKS = {
