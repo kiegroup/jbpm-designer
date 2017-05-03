@@ -86,16 +86,8 @@ public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
 
         Collection<Asset> forms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
         assertNotNull(forms);
-        assertEquals(1, forms.size());
-        Iterator<Asset> assets = forms.iterator();
-
-        Asset asset1 = assets.next();
-        assertEquals("evaluate-taskform", asset1.getName());
-        assertEquals("/defaultPackage", asset1.getAssetLocation());
-
-        Asset<String> form1 = repository.loadAsset(asset1.getUniqueId());
-        assertNotNull(form1.getAssetContent());
-        assertEquals("this is simple task content", form1.getAssetContent());
+        // ftl forms are retired. Should not get generated
+        assertEquals(0, forms.size());
 
     }
 
@@ -136,7 +128,9 @@ public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
 
         String formData =      new String(response.getContent());
         logger.debug(formData);
-        assertEquals("this is simple task content", formData);
+        // "false" is response to UI when no form is generated
+        // ftl forms are retired now
+        assertEquals("false", formData);
     }
 
 
@@ -172,9 +166,7 @@ public class TaskFormsEditorServletTest  extends RepositoryBaseTest {
 
         Collection<Asset> forms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
         assertNotNull(forms);
-        assertEquals(1, forms.size());
-        Iterator<Asset> assets = forms.iterator();
-        Asset asset1 = assets.next();
-        assertEquals(taskName + "-taskform", asset1.getName());
+        // ftl forms are retired. Should not get generated
+        assertEquals(0, forms.size());
     }
 }

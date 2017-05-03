@@ -109,6 +109,11 @@ public interface IDiagramProfile {
     public String getBpsimDisplay();
 
     /**
+     * @return the forms type
+     */
+    public String getFormsType();
+
+    /**
      * @return the repository.
      */
     public Repository getRepository();

@@ -898,7 +898,7 @@ public class VFSRepositoryGitFileSystemTest {
 
         Collection<Asset> foundFormTemplates = repository.listAssets("/mytestproject/global", new FilterByExtension("fw"));
         assertNotNull(foundFormTemplates);
-        assertEquals(25, foundFormTemplates.size());
+        assertEquals(0, foundFormTemplates.size());
 
         Collection<Asset> foundJSONAssets = repository.listAssets("/mytestproject/global", new FilterByExtension("json"));
         assertNotNull(foundJSONAssets);
@@ -917,7 +917,7 @@ public class VFSRepositoryGitFileSystemTest {
         // no new files or copies were added
         Collection<Asset> foundFormTemplatesAfterSecondCall = repository.listAssets("/mytestproject/global", new FilterByExtension("fw"));
         assertNotNull(foundFormTemplatesAfterSecondCall);
-        assertEquals(25, foundFormTemplatesAfterSecondCall.size());
+        assertEquals(0, foundFormTemplatesAfterSecondCall.size());
 
         Collection<Asset> foundJSONAssetsAfterSecondCall = repository.listAssets("/mytestproject/global", new FilterByExtension("json"));
         assertNotNull(foundJSONAssetsAfterSecondCall);

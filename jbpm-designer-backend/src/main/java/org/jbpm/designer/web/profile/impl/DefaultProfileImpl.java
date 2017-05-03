@@ -80,6 +80,7 @@ public class DefaultProfileImpl implements IDiagramProfile {
     private String repositoryPwd;
     private String repositoryGlobalDir;
     private String bpsimDisplay;
+    private String formsType;
 
     public DefaultProfileImpl() {
 
@@ -214,6 +215,9 @@ public class DefaultProfileImpl implements IDiagramProfile {
 
     @Override
     public String getBpsimDisplay() { return bpsimDisplay; }
+
+    @Override
+    public String getFormsType() { return formsType; }
 
     public Repository getRepository() {
         return null;
