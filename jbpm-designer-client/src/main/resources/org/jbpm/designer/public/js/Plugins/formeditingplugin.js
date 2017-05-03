@@ -22,13 +22,6 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                     'maxShape': 0,
                     'isEnabled': function(){
                         return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-        //                profileParamName = "profile";
-        //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-        //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-        //                regexa = new RegExp( regexSa );
-        //                profileParams = regexa.exec( window.location.href );
-        //                profileParamValue = profileParams[1];
-        //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
                     }.bind(this)
                 });
 
@@ -44,13 +37,6 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                     'maxShape': 1,
                     'isEnabled': function(){
                         return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-        //                profileParamName = "profile";
-        //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-        //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-        //                regexa = new RegExp( regexSa );
-        //                profileParams = regexa.exec( window.location.href );
-        //                profileParamValue = profileParams[1];
-        //                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
                     }.bind(this)
                 });
 
@@ -66,13 +52,6 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                     'maxShape': 1,
                     'isEnabled': function(){
                         return !(ORYX.READONLY == true || ORYX.VIEWLOCKED);
-                        //                profileParamName = "profile";
-                        //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-                        //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-                        //                regexa = new RegExp( regexSa );
-                        //                profileParams = regexa.exec( window.location.href );
-                        //                profileParamValue = profileParams[1];
-                        //                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
                     }.bind(this)
                 });
 
@@ -88,13 +67,6 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                     'maxShape': 0,
                     'isEnabled': function(){
                         return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-        //                profileParamName = "profile";
-        //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-        //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-        //                regexa = new RegExp( regexSa );
-        //                profileParams = regexa.exec( window.location.href );
-        //                profileParamValue = profileParams[1];
-        //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
                     }.bind(this)
                 });
             }
@@ -116,58 +88,11 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                 var tasktype = currentShapes[0].properties['oryx-tasktype'];
                 if(tasktype && tasktype == "User") {
                     var taskname = currentShapes[0].properties['oryx-taskname'];
-                    if(taskname && taskname.length > 0) {
-                        taskname =  taskname.replace(/\&/g, "");
-                        taskname = taskname.replace(/\s/g, "");
-
-                        if(/^\w+$/.test(taskname)) {
-                            Ext.Ajax.request({
-                                url: ORYX.PATH + "taskforms",
-                                method: 'POST',
-                                success: function(request){
-                                    this.facade.raiseEvent({
-                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                        ntype		: 'success',
-                                        msg         : ORYX.I18N.forms.successGenTask,
-                                        title       : ''
-
-                                    });
-                                }.createDelegate(this),
-                                failure: function(){
-                                    this.facade.raiseEvent({
-                                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                        ntype		: 'error',
-                                        msg         : ORYX.I18N.forms.failGenTask,
-                                        title       : ''
-                                    });
-                                }.createDelegate(this),
-                                params: {
-                                    profile: ORYX.PROFILE,
-                                    uuid :   window.btoa(encodeURI(ORYX.UUID)),
-                                    json : ORYX.EDITOR.getSerializedJSON(),
-                                    ppdata: ORYX.PREPROCESSING,
-                                    taskid: currentShapes[0].resourceId
-                                }
-                            });
-                        } else {
-                            ORYX.Config.FACADE.raiseEvent({
-                                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                ntype		: 'error',
-                                msg         : ORYX.I18N.forms.failInvalidTaskName,
-                                title       : ''
-
-                            });
-                        }
-
-                    } else {
-                        ORYX.Config.FACADE.raiseEvent({
-                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                            ntype		: 'error',
-                            msg         : ORYX.I18N.forms.failNoTaskName,
-                            title       : ''
-
-                        });
-                    }
+                    ORYX.Config.FACADE.raiseEvent({
+                        type: ORYX.CONFIG.EVENT_TASKFORM_GENERATE,
+                        tn: taskname,
+                        taskid: currentShapes[0].resourceId
+                    });
                 } else {
                     ORYX.Config.FACADE.raiseEvent({
                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -272,53 +197,9 @@ ORYX.Plugins.FormEditing = Clazz.extend({
         }
     },
     generateTaskForms : function() {
-        Ext.Ajax.request({
-            url: ORYX.PATH + "taskforms",
-            method: 'POST',
-            success: function(request){
-                this.facade.raiseEvent({
-                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                    ntype		: 'success',
-                    msg         : ORYX.I18N.forms.successGenProcAndTask,
-                    title       : ''
-
-                });
-                // no longer needed
-//                var generatedForms = request.responseText.evalJSON();
-//                for(var newform in generatedForms) {
-//                    parent.designersignalassetadded(generatedForms[newform].ftluri);
-//                    parent.designersignalassetadded(generatedForms[newform].formuri);
-//
-//                    parent.designersignalassetupdate(generatedForms[newform].ftluri);
-//                    parent.designersignalassetupdate(generatedForms[newform].formuri);
-//                }
-            }.createDelegate(this),
-            failure: function(){
-                this.facade.raiseEvent({
-                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                    ntype		: 'error',
-                    msg         : ORYX.I18N.forms.failGenProcAndTask,
-                    title       : ''
-                });
-            }.createDelegate(this),
-            params: {
-                profile: ORYX.PROFILE,
-                uuid :  window.btoa(encodeURI(ORYX.UUID)),
-                json : ORYX.EDITOR.getSerializedJSON(),
-                ppdata: ORYX.PREPROCESSING
-            }
+        ORYX.Config.FACADE.raiseEvent({
+            type: ORYX.CONFIG.EVENT_TASKFORM_GENERATE_ALL
         });
-
-
-        ORYX.CONFIG.TASKFORMS_URL = function(uuid, profile) {
-            if (uuid === undefined) {
-                uuid = ORYX.UUID;
-            }
-            if (profile === undefined) {
-                profile = ORYX.PROFILE;
-            }
-            return ORYX.PATH + "taskforms?uuid="+  window.btoa(encodeURI(uuid)) + "&profile=" + profile;
-        };
     }
 
 });

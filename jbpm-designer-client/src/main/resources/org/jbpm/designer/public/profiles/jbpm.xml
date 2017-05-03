@@ -54,34 +54,9 @@
         <localhistory enabled="false" timeout="60000"/>
         <storesvgonsave enabled="true"/>
         <zorder enabled="true"/>
-        <!--<repository id="vfs">-->
-            <!-- acceptable attributes for parameter
-                name - name of the property
-                value - value of the property
-                system-property - (optional) if set tu true property will be set as JVM system property
-            -->
-            <!-- simple file system based vfs configuration
-            <parameter name="root" value="default:///tmp/designer-repo" />
-            <parameter name="globaldir" value="/global" /> -->
-            <!--<parameter name="name" value="Designer Repository"/>-->
-
-            <!-- git based cfs configuration-->
-            <!--<parameter name="root" value="git://uf-playground" />-->
-            <!--<parameter name="globaldir" value="/global" />-->
-            <!--<parameter name="username" value="guvnorngtestuser1" />-->
-            <!--<parameter name="password" value="test1234" />-->
-            <!--<parameter name="origin" value="https://github.com/guvnorngtestuser1/guvnorng-playground.git" />-->
-            <!--<parameter name="fetch.cmd" value="?fetch" />-->
-            <!--<parameter name="org.kie.nio.git.dir" value="/tmp/designer-git-repo" system-property="true"/>    &ndash;&gt;-->
-        <!--</repository>-->
-	<!--
-        <repository id="guvnor">
-            <property name="protocol" value="http" />
-            <property name="host" value="localhost:8080" />
-            <property name="subdomain" value="drools-guvnor/org.drools.guvnor.Guvnor/oryxeditor" />
-            <property name="usr" value="admin" />
-            <property name="pwd" value="admin" />
-        </repository>
-        -->
+        <!-- options are "form" and "frm" for the preview forms editor -->
+        <!-- default empty type means users chose when generating forms-->
+        <!-- can be overwritten by system prop: org.jbpm.designer.formstype-->
+        <forms type=""/>
     </profile>
 </profiles>

@@ -73,6 +73,8 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
         repository = new VFSRepository(producer.getIoService());
         ((VFSRepository)repository).setDescriptor(descriptor);
         profile.setRepository(repository);
+
+        when(editorHandler.getProfile()).thenReturn(profile);
     }
 
     @After
@@ -81,6 +83,7 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
         System.clearProperty(EditorHandler.SHOW_PDF_DOC);
         System.clearProperty(EditorHandler.SERVICE_REPO);
         System.clearProperty(EditorHandler.SERVICE_REPO_TASKS);
+        System.clearProperty(EditorHandler.FORMS_TYPE);
     }
 
     @Test
@@ -132,6 +135,21 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
             // exception thrown due to mocked request and response
         }
         verify(profileService, times(1)).findProfile(request, "jbpm");
+    }
+
+    @Test
+    public void testFormsTypeViaSystemProp() {
+        System.setProperty(EditorHandler.FORMS_TYPE, "form");
+        assertEquals("form", editorHandler.getProfile().getFormsType());
+
+        System.setProperty(EditorHandler.FORMS_TYPE, "frm");
+        assertEquals("frm", editorHandler.getProfile().getFormsType());
+
+        System.setProperty(EditorHandler.FORMS_TYPE, "");
+        assertEquals("", editorHandler.getProfile().getFormsType());
+
+        System.clearProperty(EditorHandler.FORMS_TYPE);
+        assertNull( editorHandler.getProfile().getFormsType());
     }
 
     @Test

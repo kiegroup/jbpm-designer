@@ -66,19 +66,19 @@ public class DefaultProfileImpl implements IDiagramProfile {
 
     private Map<String, IDiagramPlugin> _plugins = new LinkedHashMap<String, IDiagramPlugin>();
 
-
-    private String _stencilSet;
-    private String _localHistoryEnabled;
-    private String _localHistoryTimeout;
-    private String _repositoryId;
-    private String _repositoryRoot;
-    private String _repositoryName;
-    private String _repositoryHost;
-    private String _repositoryProtocol;
-    private String _repositorySubdomain;
-    private String _repositoryUsr;
-    private String _repositoryPwd;
-    private String _repositoryGlobalDir;
+    private String stencilSet;
+    private String localHistoryEnabled;
+    private String localHistoryTimeout;
+    private String repositoryId;
+    private String repositoryRoot;
+    private String repositoryName;
+    private String repositoryHost;
+    private String repositoryProtocol;
+    private String repositorySubdomain;
+    private String repositoryUsr;
+    private String repositoryPwd;
+    private String repositoryGlobalDir;
+    private String formsType;
 
     public DefaultProfileImpl() {
 
@@ -99,7 +99,7 @@ public class DefaultProfileImpl implements IDiagramProfile {
     }
 
     public String getStencilSet() {
-        return _stencilSet;
+        return stencilSet;
     }
 
     public Collection<String> getStencilSetExtensions() {
@@ -128,7 +128,7 @@ public class DefaultProfileImpl implements IDiagramProfile {
                     if ("profile".equals(reader.getLocalName())) {
                         for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
                             if ("stencilset".equals(reader.getAttributeLocalName(i))) {
-                                _stencilSet = reader.getAttributeValue(i);
+                                stencilSet = reader.getAttributeValue(i);
                             }
                         }
                     } else if ("plugin".equals(reader.getLocalName())) {
@@ -159,57 +159,60 @@ public class DefaultProfileImpl implements IDiagramProfile {
     }
 
     public String getRepositoryId() {
-        return _repositoryId;
+        return repositoryId;
     }
 
     public String getRepositoryRoot() {
-        return _repositoryRoot;
+        return repositoryRoot;
     }
 
     public String getRepositoryName() {
-        return _repositoryName;
+        return repositoryName;
     }
 
     public String getRepositoryHost() {
-        return _repositoryHost;
+        return repositoryHost;
     }
 
     public String getRepositoryProtocol() {
-        return _repositoryProtocol;
+        return repositoryProtocol;
     }
 
     public String getRepositorySubdomain() {
-        return _repositorySubdomain;
+        return repositorySubdomain;
     }
 
     public String getRepositoryUsr() {
-        return _repositoryUsr;
+        return repositoryUsr;
     }
 
     public String getRepositoryPwd() {
-        return _repositoryPwd;
+        return repositoryPwd;
     }
 
     public String getRepositoryGlobalDir() {
-        return _repositoryGlobalDir;
+        return repositoryGlobalDir;
     }
 
     public String getRepositoryGlobalDir(String uuid) {
-        return _repositoryGlobalDir;
+        return repositoryGlobalDir;
     }
 
     public String getLocalHistoryEnabled() {
-        return _localHistoryEnabled;
+        return localHistoryEnabled;
     }
 
     public String getLocalHistoryTimeout() {
-        return _localHistoryTimeout;
+        return localHistoryTimeout;
     }
 
     @Override
     public String getStoreSVGonSaveOption() {
         return "false";
     }
+
+    @Override
+    public String getFormsType() { return formsType; }
 
     public Repository getRepository() {
         return null;

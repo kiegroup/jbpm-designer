@@ -1470,6 +1470,7 @@ if(!ORYX.I18N.inlineTaskFormEditor) ORYX.I18N.inlineTaskFormEditor = {}
 ORYX.I18N.inlineTaskFormEditor.formEditor='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.formEditor">Form Editor</i18n:message>';
 ORYX.I18N.inlineTaskFormEditor.selectForm='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.selectForm">Select which Form Editor to use:</i18n:message>';
 ORYX.I18N.inlineTaskFormEditor.graphicalModeler='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.graphicalModeler">Graphical Modeler</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.graphicalModelerPreview='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.graphicalModelerPreview">Graphical Modeler (Preview)</i18n:message>';
 ORYX.I18N.inlineTaskFormEditor.markupEditor='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.markupEditor">Markup Editor</i18n:message>';
 ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor">Error initiating Form Editor</i18n:message>';
 ORYX.I18N.inlineTaskFormEditor.errorInitiatingWidgets='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.errorInitiatingWidgets">Error initiating Form Widgets</i18n:message>';

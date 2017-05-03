@@ -58,8 +58,8 @@ public class TaskFormsServlet extends HttpServlet {
     private static final Logger _logger = LoggerFactory
             .getLogger(TaskFormsServlet.class);
     private static final String TASKFORMS_PATH = "taskforms";
-    private static final String FORMTEMPLATE_FILE_EXTENSION = "ftl";
     private static final String FORMMODELER_FILE_EXTENSION = "frm";
+    private static final String FORMMODELER_PREVIEW_FILE_EXTENSION = "form";
     public static final String DESIGNER_PATH = ConfigurationProvider.getInstance().getDesignerContext();
 
     private IDiagramProfile profile;
@@ -91,6 +91,7 @@ public class TaskFormsServlet extends HttpServlet {
         String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String preprocessingData = req.getParameter("ppdata");
         String taskId = req.getParameter("taskid");
+        String formType = req.getParameter("formtype");
 
         if (profile == null) {
             profile = _profileService.findProfile(req, profileName);
@@ -110,7 +111,7 @@ public class TaskFormsServlet extends HttpServlet {
 
             Path myPath = vfsServices.get( uuid );
 
-            TaskFormTemplateManager templateManager = new TaskFormTemplateManager( myPath, formBuilderManager, profile, processAsset, getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH), def, taskId );
+            TaskFormTemplateManager templateManager = new TaskFormTemplateManager( myPath, formBuilderManager, profile, processAsset, getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH), def, taskId, formType);
             templateManager.processTemplates();
 
             //storeInRepository(templateManager, processAsset.getAssetLocation(), repository);
@@ -125,37 +126,6 @@ public class TaskFormsServlet extends HttpServlet {
         }
     }
 
-//    public void displayResponse(TaskFormTemplateManager templateManager, HttpServletResponse resp, IDiagramProfile profile) {
-//        try {
-//            STGroup templates = new STGroup("resultsgroup", templateManager.getTemplatesPath());
-//            ST resultsForm = templates.getInstanceOf("resultsform");
-////            resultsForm.add("manager", templateManager);
-////            resultsForm.add("profile", RepositoryInfo.getRepositoryProtocol(profile));
-////            resultsForm.add("host", RepositoryInfo.getRepositoryHost(profile));
-////            resultsForm.add("subdomain", RepositoryInfo.getRepositorySubdomain(profile).substring(0,
-////                RepositoryInfo.getRepositorySubdomain(profile).indexOf("/")));
-//            ServletOutputStream outstr = resp.getOutputStream();
-//            resp.setContentType("text/html");
-//            outstr.write(resultsForm.toString().getBytes("UTF-8"));
-//            outstr.flush();
-//            outstr.close();
-//        } catch (IOException e) {
-//           _logger.error(e.getMessage());
-//        }
-//    }
-
-//    public void displayErrorResponse(HttpServletResponse resp, String exceptionStr) {
-//        try {
-//            ServletOutputStream outstr = resp.getOutputStream();
-//            resp.setContentType("text/html");
-//            outstr.write(exceptionStr.getBytes("ASCII"));
-//            outstr.flush();
-//            outstr.close();
-//        } catch (IOException e) {
-//           _logger.error(e.getMessage());
-//        }
-//    }
-
     public JSONArray storeInRepository(TaskFormTemplateManager templateManager, String location, Repository repository) throws Exception {
         JSONArray retArray = new JSONArray();
         List<TaskFormInfo> taskForms =  templateManager.getTaskFormInformationList();
@@ -169,30 +139,6 @@ public class TaskFormsServlet extends HttpServlet {
     public JSONObject storeTaskForm(TaskFormInfo taskForm, String location, Repository repository) throws Exception {
         try {
             JSONObject retObj = new JSONObject();
-
-            repository.deleteAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMTEMPLATE_FILE_EXTENSION);
-
-            // create the form meta form asset
-            AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
-            builder.name(taskForm.getId())
-                   .location(location)
-                    .type(FORMTEMPLATE_FILE_EXTENSION)
-                    .content(taskForm.getMetaOutput().getBytes("UTF-8"));
-
-            repository.createAsset(builder.getAsset());
-
-            Asset newFormAsset =  repository.loadAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId()+"." + FORMTEMPLATE_FILE_EXTENSION);
-
-            String uniqueId = newFormAsset.getUniqueId();
-            if (Base64.isBase64(uniqueId)) {
-                byte[] decoded = Base64.decodeBase64(uniqueId);
-                try {
-                    uniqueId =  new String(decoded, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-            }
-            retObj.put("ftluri", uniqueId);
 
             // create the modeler form assets
 
@@ -221,7 +167,7 @@ public class TaskFormsServlet extends HttpServlet {
                             }
                         }
 
-                        if ( extension.equals( FORMMODELER_FILE_EXTENSION ) ) {
+                        if ( extension.equals( FORMMODELER_FILE_EXTENSION) || extension.equals( FORMMODELER_PREVIEW_FILE_EXTENSION) ) {
                             retObj.put( "formuri", modelerUniqueId );
                         }
                     } catch ( Exception ex ) {

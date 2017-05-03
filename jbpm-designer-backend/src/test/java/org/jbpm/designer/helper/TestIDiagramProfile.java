@@ -29,46 +29,57 @@ public class TestIDiagramProfile implements IDiagramProfile {
         this.repository = repository;
     }
 
+    @Override
     public String getName() {
         return null;
     }
 
+    @Override
     public String getTitle() {
         return null;
     }
 
+    @Override
     public String getStencilSet() {
         return null;
     }
 
+    @Override
     public Collection<String> getStencilSetExtensions() {
         return null;
     }
 
+    @Override
     public String getSerializedModelExtension() {
         return null;
     }
 
+    @Override
     public String getStencilSetURL() {
         return null;
     }
 
+    @Override
     public String getStencilSetNamespaceURL() {
         return null;
     }
 
+    @Override
     public String getStencilSetExtensionURL() {
         return null;
     }
 
+    @Override
     public Collection<String> getPlugins() {
         return null;
     }
 
+    @Override
     public IDiagramMarshaller createMarshaller() {
         return null;
     }
 
+    @Override
     public IDiagramUnmarshaller createUnmarshaller() {
         return null;
     }
@@ -105,29 +116,38 @@ public class TestIDiagramProfile implements IDiagramProfile {
         return null;
     }
 
+    @Override
     public String getRepositoryGlobalDir() {
         return "/global";
     }
 
+    @Override
     public String getRepositoryGlobalDir(String uuid) {
         return "/global";
     }
 
+    @Override
     public String getLocalHistoryEnabled() {
         return null;
     }
 
+    @Override
     public String getLocalHistoryTimeout() {
         return null;
     }
 
+    @Override
     public Repository getRepository() {
         return this.repository;
     }
 
+    @Override
     public String getStoreSVGonSaveOption() {
         return "true";
     }
+
+    @Override
+    public String getFormsType() { return ""; }
 
     @Override
     public void init(ServletContext context) {

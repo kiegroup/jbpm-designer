@@ -605,33 +605,6 @@ public class VFSRepository implements Repository {
         if ( !ioService.exists( globalDirVFSPath)) {
             ioService.createDirectory(globalDirVFSPath);
 
-            // dummy form templates
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "backboneformsinclude.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "backbonejsinclude.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "cancelbutton.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "checkbox.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "div.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "dropdownmenu.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "fieldset.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "form.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "handlebarsinclude.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "htmlbasepage.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "image.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "jqueryinclude.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "jquerymobileinclude.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "link.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "mobilebasepage.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "orderedlist.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "passwordfield.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "radiobutton.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "script.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "submitbutton.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "table.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "textarea.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "textfield.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "themes.fw")), "");
-            ioService.write(ioService.get(URI.create(globalDirPath + separator + "unorderedlist.fw")), "");
-
             // custom editors default
             ioService.write(ioService.get(URI.create(globalDirPath + separator + "customeditors.json")), "{ \"editors\":{\n" +
                     "            \"Actors\" : \"/designer/customeditors/sampleactorseditor.html\"\n" +

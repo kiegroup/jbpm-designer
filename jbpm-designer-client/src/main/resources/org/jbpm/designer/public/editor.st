@@ -38,7 +38,9 @@
         ORYX.PRESET_PERSPECTIVE = "$presetperspective$";
         ORYX.PROCESSDOC_RESOURCEID = "";
 
+
         ORYX.FULLSCREEN_MODE = false;
+        ORYX.FORMSTYPE = "$formstype$";
 
         ORYX.SERVICE_REPO = "$servicerepo$";
         ORYX.SERVICE_REPO_TASKS = {
