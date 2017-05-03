@@ -1738,6 +1738,29 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("<![CDATA[autocomplete]]>", ((FormalExpression) subprocessWithEmptyCompletionCondition.getCompletionCondition()).getBody());
     }
 
+    @Test
+    public void testUserTaskSimpleAssignment() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("userTaskSimpleAssignment.json");
+        Process process = getRootProcess(definitions);
+        FlowElement userTaskFlowElement = getFlowElement(process.getFlowElements(), "SimpleUserTask");
+        assertTrue(userTaskFlowElement instanceof UserTask);
+        UserTask userTask = (UserTask) userTaskFlowElement;
+        boolean foundTestAssignment = false;
+        for(DataInputAssociation association : userTask.getDataInputAssociations()) {
+            if(association.getAssignment() != null) {
+                for(Assignment assignment : association.getAssignment()) {
+                    String from = ((FormalExpression)assignment.getFrom()).getBody();
+                    String to = ((FormalExpression)assignment.getTo()).getBody();
+                    if(to.contains("_TestInputX")) {
+                        assertEquals("<![CDATA[Second Value]]>", from);
+                        foundTestAssignment = true;
+                    }
+                }
+            }
+        }
+        assertTrue(foundTestAssignment);
+    }
+
     public void testInputOutputSetsOfIoSpecification() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("taskIoSpecification.json");
         Process process = getRootProcess(definitions);
