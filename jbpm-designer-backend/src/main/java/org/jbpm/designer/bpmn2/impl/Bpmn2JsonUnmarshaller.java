@@ -5289,7 +5289,8 @@ public class Bpmn2JsonUnmarshaller {
                     FormalExpression fromExpression = Bpmn2Factory.eINSTANCE.createFormalExpression();
                     if(assignmentParts.length > 1) {
                         // check if custom workitem property has been updated
-                        if(properties.get(fromPart.toLowerCase()) != null && properties.get(fromPart.toLowerCase()).length() > 0) {
+                        if( isCustomElement(properties.get("tasktype"), preProcessingData) &&
+                                (properties.get(fromPart.toLowerCase()) != null && properties.get(fromPart.toLowerCase()).length() > 0) ) {
                             fromExpression.setBody(properties.get(fromPart.toLowerCase()));
                         } else {
                             String replacer = decodeAssociationValue(assignmentParts[1]);
@@ -5297,7 +5298,8 @@ public class Bpmn2JsonUnmarshaller {
                         }
                     } else {
                         // for custom workitem properties check individually for values
-                        if(properties.get(fromPart.toLowerCase()) != null && properties.get(fromPart.toLowerCase()).length() > 0) {
+                        if( isCustomElement(properties.get("tasktype"), preProcessingData) &&
+                                (properties.get(fromPart.toLowerCase()) != null && properties.get(fromPart.toLowerCase()).length() > 0) ) {
                             fromExpression.setBody(properties.get(fromPart.toLowerCase()));
                         } else {
                             fromExpression.setBody("");
