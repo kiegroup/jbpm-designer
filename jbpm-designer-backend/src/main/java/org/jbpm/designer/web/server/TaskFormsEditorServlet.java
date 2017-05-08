@@ -15,8 +15,11 @@
 
 package org.jbpm.designer.web.server;
 
+import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.codec.binary.Base64;
 import org.eclipse.bpmn2.Definitions;
+import org.jboss.drools.impl.DroolsFactoryImpl;
+import org.jbpm.designer.bpmn2.impl.Bpmn2JsonUnmarshaller;
 import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.taskforms.BPMNFormBuilderManager;
 import org.jbpm.designer.util.Utils;
@@ -30,6 +33,9 @@ import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.json.JSONObject;
+import org.uberfire.backend.server.util.Paths;
+import org.uberfire.backend.vfs.Path;
+import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.java.nio.file.NoSuchFileException;
 import org.uberfire.rpc.SessionInfo;
@@ -91,6 +97,9 @@ public class TaskFormsEditorServlet extends HttpServlet {
 	     String taskName = UriUtils.decode(Utils.getEncodedParam(req, "taskname"));
 	     String taskFormValue = req.getParameter("tfvalue");
          String formType = req.getParameter("formtype");
+         String json = req.getParameter("json");
+         String preprocessingData = req.getParameter("ppdata");
+         String taskId = req.getParameter("taskid");
 
          if (profile == null) {
 	        profile = _profileService.findProfile(req, profileName);
@@ -106,7 +115,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
                  resp.setContentType("text/html");
                  resp.setCharacterEncoding("UTF-8");
                  PrintWriter pw = resp.getWriter();
-                 String taskResponse = getTaskFormFromRepository(formType, taskName, processAsset.getAssetLocation(), repository);
+                 String taskResponse = getTaskFormFromRepository(formType, taskName, processAsset.getAssetLocation(), repository, json, preprocessingData, uuid, taskId);
                  pw.write(taskResponse);
              } else if(action != null && action.equals(ACTION_SAVE)) {
                  resp.setContentType("application/json");
@@ -152,7 +161,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
          }
 	 }
 
-	 private String getTaskFormFromRepository(String formType, String taskName, String packageName, Repository repository) {
+	 private String getTaskFormFromRepository(String formType, String taskName, String packageName, Repository repository, String json, String preprocessingData, String uuid, String taskId) {
          try {
              Asset<String> formAsset = repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
              if(formType.equals(FORMMODELER_FILE_EXTENSION) || formType.equals(FORMMODELER_PREVIEW_FILE_EXTENSION)) {
@@ -170,7 +179,17 @@ public class TaskFormsEditorServlet extends HttpServlet {
                  if(formType.equals(FORMMODELER_FILE_EXTENSION) || formType.equals(FORMMODELER_PREVIEW_FILE_EXTENSION)) {
                      formBuilder = getFormBuilder(formType);
                      if ( formBuilder != null ) {
-                         formValue = formBuilder.buildEmptyFormContent( taskName + TASKFORM_NAME_EXTENSION + "." + formType );
+                         DroolsFactoryImpl.init();
+                         BpsimFactoryImpl.init();
+                         Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+                         Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
+
+                         Path myPath = vfsServices.get( uuid );
+
+                         org.uberfire.java.nio.file.Path kiePath = Paths.convert( myPath );
+                         Path formPath = Paths.convert(kiePath.getParent().resolve(taskName + TASKFORM_NAME_EXTENSION  + "." + formType));
+
+                         formValue = formBuilder.buildFormContent(formPath, def, taskId);
                      } else {
                          _logger.warn("Unable to find form builder for form type: " + formType);
                      }

@@ -417,7 +417,8 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			if(/^\w+$/.test(taskname)) {
 				this.facade.raiseEvent({
 					type: ORYX.CONFIG.EVENT_TASKFORM_EDIT,
-					tn: taskname
+					tn: taskname,
+                    taskid : this.currentShapes[0].resourceId
 				});
 			} else {
 				this.facade.raiseEvent({
