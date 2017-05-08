@@ -103,6 +103,11 @@ public interface IDiagramProfile {
      */
     public String getStoreSVGonSaveOption();
 
+   /**
+     * @return the forms type
+     */
+    public String getFormsType();
+
     /**
      * @return the repository.
      */

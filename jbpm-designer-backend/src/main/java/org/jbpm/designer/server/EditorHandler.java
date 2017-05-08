@@ -15,11 +15,8 @@
  */
 package org.jbpm.designer.server;
 
-import javax.enterprise.event.Event;
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -35,12 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import bpsim.impl.BpsimFactoryImpl;
 import org.apache.commons.io.IOUtils;
-import org.guvnor.common.services.project.model.Project;
-import org.guvnor.common.services.project.service.POMService;
-import org.guvnor.common.services.project.service.ProjectService;
-import org.guvnor.common.services.shared.metadata.MetadataService;
 import org.jboss.drools.impl.DroolsFactoryImpl;
-import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.jbpm.designer.util.Utils;
@@ -49,7 +41,6 @@ import org.jbpm.designer.web.plugin.IDiagramPluginService;
 import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingService;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
-import org.jbpm.designer.web.preprocessing.impl.PreprocessingServiceImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.RepositoryInfo;
@@ -59,7 +50,6 @@ import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.io.IOService;
-import org.uberfire.workbench.events.NotificationEvent;
 
 /**
  * Servlet to load plugin and Oryx stencilset
@@ -90,6 +80,8 @@ public class EditorHandler extends HttpServlet {
     public static final String SHOW_PDF_DOC = "designer.showpdfdoc";
 
     public static final String PRESET_PERSPECTIVE = "org.jbpm.designer.perspective";
+
+    public static final String FORMS_TYPE = "org.jbpm.designer.formstype";
 
     /**
      * The designer PREPROCESS flag looked up from system properties.
@@ -370,6 +362,7 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("storesvgonsave", profile.getStoreSVGonSaveOption());
         editorTemplate.add("defaultSkin", designer_path + "css/theme-default.css");
         editorTemplate.add("presetperspective", System.getProperty(PRESET_PERSPECTIVE) == null ? "" : System.getProperty(PRESET_PERSPECTIVE));
+        editorTemplate.add("formstype", profile.getFormsType());
 
         String overlaySkin = "";
         if (_skin != null && !_skin.equals("default")) {
@@ -468,5 +461,7 @@ public class EditorHandler extends HttpServlet {
     public void setProfile(IDiagramProfile profile) {
         this.profile = profile;
     }
+
+    public IDiagramProfile getProfile() { return profile; };
 
 }
