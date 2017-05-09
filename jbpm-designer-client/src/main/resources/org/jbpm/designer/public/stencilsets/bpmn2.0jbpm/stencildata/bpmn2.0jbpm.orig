@@ -22,7 +22,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Documentation",
 					"value":"",
 					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
@@ -59,7 +59,7 @@
 				},
 				{
                                         "id":"invisid",
-                                        "type":"Text",
+                                        "type":"TextExpression",
                                         "title":"invisid",
                                         "value":"",
                                         "description":"",
@@ -78,7 +78,7 @@
             "properties": [
                 {
                     "id":"documentation",
-                    "type":"Text",
+                    "type":"TextExpression",
                     "title":"Documentation",
                     "value":"",
                     "description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
@@ -741,15 +741,15 @@
 					"optional":true
 				},
 				{
-                                          "id":"customdescription",
-                                          "type":"Expression",
-                                          "title":"Process Instance Description",
-                                          "value":"",
-                                          "description":"Process Instance Description",
-                                          "description_ja":"",
-                                          "readonly":false,
-                                          "optional":true
-                                },
+                          "id":"customdescription",
+                          "type":"TextExpression",
+                          "title":"Process Instance Description",
+                          "value":"",
+                          "description":"Process Instance Description",
+                          "description_ja":"",
+                          "readonly":false,
+                          "optional":true
+                },
 				{
 						  "id":"customcaseidprefix",
 						  "type":"String",
@@ -2358,7 +2358,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Documentation",
 					"value":"",
 					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
@@ -2883,7 +2883,7 @@
 				},
 				{
                                         "id":"subject",
-                                        "type":"Text",
+                                        "type":"TextExpression",
                                         "title":"Subject",
                                         "value":"",
                                         "description":"Subject",
@@ -3621,7 +3621,7 @@
 				$bclose$,
 				$bopen$
 					"id":"documentation",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Documentation",
 					"value":"$workitemDefs.(k).documentation$",
 					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
@@ -3634,7 +3634,7 @@
 				$bclose$,
 				$bopen$
 					"id":"category",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Category",
 					"value":"$workitemDefs.(k).category$",
 					"description":"Category.",
@@ -3648,7 +3648,7 @@
                 $if(workitemDefs.(k).dependencies)$
 					$bopen$
 						"id":"dependencies",
-						"type":"Text",
+						"type":"TextExpression",
 						"title":"Dependencies",
 						"value":"$workitemDefs.(k).dependencies:{k1| $k1$}; separator=","$",
 						"description":"Dependencies.",
@@ -3663,7 +3663,7 @@
 				$if(workitemDefs.(k).mavendependencies)$
 					$bopen$
 						"id":"mavendependencies",
-						"type":"Text",
+						"type":"TextExpression",
 						"title":"Maven Dependencies",
 						"value":"$workitemDefs.(k).mavenDependencies:{k1| $k1$}; separator=","$",
 						"description":"Maven Dependencies.",
@@ -3677,7 +3677,7 @@
 				$endif$
                 $bopen$
 					"id":"defaulthandler",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Default Handler",
 					"value":"$workitemDefs.(k).defaultHandler$",
 					"description":"Default Handler.",
@@ -3690,7 +3690,7 @@
                 $bclose$,
                 $bopen$
 					"id":"description",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Description",
 					"value":"$workitemDefs.(k).description$",
 					"description":"Description",
@@ -3703,7 +3703,7 @@
                 $bclose$,
                 $bopen$
 					"id":"version",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Version",
 					"value":"$workitemDefs.(k).version$",
 					"description":"Version",
@@ -7517,7 +7517,7 @@
 				},
 				{
 					"id":"timeduration",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Time Duration",
 					"value":"",
 					"description":"",
@@ -7528,7 +7528,7 @@
 				},
 				{
 					"id":"timecycle",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Time Cycle",
 					"value":"",
 					"description":"",
@@ -7776,7 +7776,7 @@
 				},
 				{
 					"id":"conditionexpression",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Expression",
 					"value":"",
 					"description":"",
@@ -7876,7 +7876,7 @@
 				},
 				{
 					"id":"errorref",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"ErrorRef",
 					"value":"",
 					"description":"",
@@ -8341,7 +8341,7 @@
 				},
 				{
 					"id":"timeduration",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Time Duration",
 					"value":"",
 					"description":"",
@@ -8352,7 +8352,7 @@
 				},
 				{
 					"id":"timecycle",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Time Cycle",
 					"value":"",
 					"description":"",
@@ -8668,7 +8668,7 @@
 				},
 				{
 					"id":"conditionexpression",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"Expression",
 					"value":"",
 					"description":"",
@@ -8792,7 +8792,7 @@
 				},
 				{
 					"id":"errorref",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"ErrorRef",
 					"value":"",
 					"description":"",
@@ -9842,7 +9842,7 @@
 				},
 				{
 					"id":"errorref",
-					"type":"Text",
+					"type":"TextExpression",
 					"title":"ErrorRef",
 					"value":"",
 					"description":"",
