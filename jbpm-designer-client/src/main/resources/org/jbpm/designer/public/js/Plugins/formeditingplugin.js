@@ -137,7 +137,8 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                         if(/^\w+$/.test(taskname)) {
                             ORYX.Config.FACADE.raiseEvent({
                                 type: ORYX.CONFIG.EVENT_TASKFORM_EDIT,
-                                tn: taskname
+                                tn: taskname,
+                                taskid : currentShapes[0].resourceId
                             });
                         } else {
                             ORYX.Config.FACADE.raiseEvent({
