@@ -107,11 +107,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String outData = "";
     private String workitemSVGFilePath;
     private String origWorkitemSVGFile;
-    private String default_emailicon;
-    private String default_milestoneicon;
-    private String default_logicon;
-    private String default_servicenodeicon;
-    private String default_widconfigtemplate;
+    private String defaultEmailIcon;
+    private String defaultMilestoneIcon;
+    private String defaultLogIcon;
+    private String defaultServiceNodeIcon;
+    private String defaultBusinessRulesIcon;
+    private String defaultDecisionIcon;
+    private String defaultWidConfigTemplate;
     private String defaultClasspathWid = "META-INF/WorkDefinitions.wid";
     private String themeInfo;
     private String formWidgetsDir;
@@ -162,11 +164,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         stencilFilePath = stencilPath + "/bpmn2.0jbpm/" + "bpmn2.0jbpm.json";
         workitemSVGFilePath = stencilPath  + "/bpmn2.0jbpm/view/activity/workitems/";
         origWorkitemSVGFile = workitemSVGFilePath + "workitem.orig";
-        default_emailicon = servletContext.getRealPath(designer_path + "/defaults/defaultemailicon.gif");
-        default_milestoneicon = servletContext.getRealPath(designer_path + "/defaults/defaultmilestoneicon.png");
-        default_logicon = servletContext.getRealPath(designer_path + "/defaults/defaultlogicon.gif");
-        default_servicenodeicon = servletContext.getRealPath(designer_path + "/defaults/defaultservicenodeicon.png");
-        default_widconfigtemplate = servletContext.getRealPath(designer_path + "/defaults/WorkDefinitions.wid.st");
+        defaultEmailIcon = servletContext.getRealPath(designer_path + "/defaults/defaultemailicon.gif");
+        defaultMilestoneIcon = servletContext.getRealPath(designer_path + "/defaults/defaultmilestoneicon.png");
+        defaultLogIcon = servletContext.getRealPath(designer_path + "/defaults/defaultlogicon.gif");
+        defaultServiceNodeIcon = servletContext.getRealPath(designer_path + "/defaults/defaultservicenodeicon.png");
+        defaultBusinessRulesIcon = servletContext.getRealPath(designer_path + "/defaults/defaultbusinessrulesicon.png");
+        defaultDecisionIcon = servletContext.getRealPath(designer_path + "/defaults/defaultdecisionicon.png");
+        defaultWidConfigTemplate = servletContext.getRealPath(designer_path + "/defaults/WorkDefinitions.wid.st");
         themeInfo = servletContext.getRealPath(designer_path + "/defaults/themes.json");
         formWidgetsDir = servletContext.getRealPath(designer_path + "/defaults/formwidgets");
         customEditorsInfo = servletContext.getRealPath(designer_path + "/defaults/customeditors.json");
@@ -244,7 +248,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             outData = "";
             Map<String, ThemeInfo> themeData = setupThemes(req, repository, profile);
             setupCustomEditors(repository, profile);
-            setupFormWidgets(repository, profile);
             setupDefaultIcons(globalDir, repository);
             setupDefaultWorkflowPatterns(globalDir, repository);
 
@@ -737,16 +740,22 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         try {
 
             createAssetIfNotExisting(repository, location, "defaultemailicon", "gif",
-                    getBytesFromFile(new File(default_emailicon)));
+                    getBytesFromFile(new File(defaultEmailIcon)));
 
             createAssetIfNotExisting(repository, location, "defaultmilestoneicon", "png",
-                    getBytesFromFile(new File(default_milestoneicon)));
+                    getBytesFromFile(new File(defaultMilestoneIcon)));
 
             createAssetIfNotExisting(repository, location, "defaultlogicon", "gif",
-                    getBytesFromFile(new File(default_logicon)));
+                    getBytesFromFile(new File(defaultLogIcon)));
 
             createAssetIfNotExisting(repository, location, "defaultservicenodeicon", "png",
-                    getBytesFromFile(new File(default_servicenodeicon)));
+                    getBytesFromFile(new File(defaultServiceNodeIcon)));
+
+            createAssetIfNotExisting(repository, location, "defaultbusinessrulesicon", "png",
+                    getBytesFromFile(new File(defaultBusinessRulesIcon)));
+
+            createAssetIfNotExisting(repository, location, "defaultdecisionicon", "png",
+                    getBytesFromFile(new File(defaultDecisionIcon)));
 
         } catch (Exception e) {
             _logger.error(e.getMessage());
@@ -813,7 +822,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             if(widIn != null) {
                 createdUUID = createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid", IOUtils.toByteArray(widIn));
             } else {
-                ST widConfigTemplate = new ST(readFile(default_widconfigtemplate), '$', '$');
+                ST widConfigTemplate = new ST(readFile(defaultWidConfigTemplate), '$', '$');
                 createdUUID = createAssetIfNotExisting(repository, location, "WorkDefinitions", "wid",
                         widConfigTemplate.render().getBytes("UTF-8"));
 

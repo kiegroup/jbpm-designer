@@ -56,6 +56,31 @@ import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
     ],
     "displayName" : "REST",
     "icon" : "defaultservicenodeicon.png"
-  ]
+  ],
+
+  [
+     "name" : "BusinessRuleTask",
+     "parameters" : [
+       "Language" : new StringDataType(),
+       "KieSessionName" : new StringDataType(),
+       "KieSessionType" : new StringDataType()
+     ],
+     "displayName" : "Business Rule Task",
+     "icon" : "defaultbusinessrulesicon.png",
+     "category" : "Decision tasks"
+   ],
+
+   [
+     "name" : "DecisionTask",
+     "parameters" : [
+       "Language" : new StringDataType(),
+       "Namespace" : new StringDataType(),
+       "Model" : new StringDataType(),
+       "Decision" : new StringDataType()
+     ],
+     "displayName" : "Decision Task",
+     "icon" : "defaultdecisionicon.png",
+     "category" : "Decision tasks"
+   ]
 
 ]
