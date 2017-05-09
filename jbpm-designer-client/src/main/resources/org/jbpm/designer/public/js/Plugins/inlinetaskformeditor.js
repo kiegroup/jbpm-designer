@@ -216,7 +216,10 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                     action: 'load',
                     taskname: window.btoa(encodeURI(options.tn)),
                     profile: ORYX.PROFILE,
-                    uuid :  window.btoa(encodeURI(ORYX.UUID))
+                    uuid :  window.btoa(encodeURI(ORYX.UUID)),
+                    json : ORYX.EDITOR.getSerializedJSON(),
+                    ppdata: ORYX.PREPROCESSING,
+                    taskid : options.taskid
                 }
             });
         } else {
