@@ -259,6 +259,13 @@ ORYX.I18N.Edit.copy = '<i18n:message key="ORYX.I18N.Edit.copy">Copy</i18n:messag
 ORYX.I18N.Edit.copyDesc = '<i18n:message key="ORYX.I18N.Edit.copyDesc">Copy the selection into an Designer clipboard</i18n:message>';
 ORYX.I18N.Edit.paste = '<i18n:message key="ORYX.I18N.Edit.paste">Paste</i18n:message>';
 ORYX.I18N.Edit.pasteDesc = '<i18n:message key="ORYX.I18N.Edit.pasteDesc">Paste the Designer clipboard to the canvas</i18n:message>';
+
+ORYX.I18N.Edit.pasteClipboard = '<i18n:message key="ORYX.I18N.Edit.pasteClipboard">Paste from Clipboard</i18n:message>';
+ORYX.I18N.Edit.pasteClipboardDesc = '<i18n:message key="ORYX.I18N.Edit.pasteClipboardDesc">Paste the Designer clipboard to the canvas</i18n:message>';
+
+ORYX.I18N.Edit.pasteLocalStorage = '<i18n:message key="ORYX.I18N.Edit.pasteLocalStorage">Paste from Local Storage</i18n:message>';
+ORYX.I18N.Edit.pasteLocalStorageDesc = '<i18n:message key="ORYX.I18N.Edit.pasteLocalStorageDesc">Paste from Designer Local Storage to the canvas</i18n:message>';
+
 ORYX.I18N.Edit.del = '<i18n:message key="ORYX.I18N.Edit.del">Delete</i18n:message>';
 ORYX.I18N.Edit.delDesc = '<i18n:message key="ORYX.I18N.Edit.delDesc">Delete all selected shapes</i18n:message>';
 

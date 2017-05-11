@@ -76,14 +76,15 @@ ORYX.Plugins.Edit = Clazz.extend({
              });
 
             this.facade.offer({
-             name: ORYX.I18N.Edit.paste,
-             description: ORYX.I18N.Edit.pasteDesc,
+             name: ORYX.I18N.Edit.pasteClipboard,
+             description: ORYX.I18N.Edit.pasteClipboardDesc,
              icon: ORYX.BASE_FILE_PATH + "images/page_paste.png",
+             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/page_paste.png",
              keyCodes: [{
-                    metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
-                    keyCode: 86,
-                    keyAction: ORYX.CONFIG.KEY_ACTION_DOWN
-                }
+                 metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
+                 keyCode: 86,
+                 keyAction: ORYX.CONFIG.KEY_ACTION_DOWN
+             }
              ],
              functionality: this.callEdit.bind(this, this.editPaste),
              group: ORYX.I18N.Edit.group,
@@ -91,6 +92,21 @@ ORYX.Plugins.Edit = Clazz.extend({
              minShape: 0,
              maxShape: 0
              });
+
+            this.facade.offer({
+                name: ORYX.I18N.Edit.pasteLocalStorage,
+                description: ORYX.I18N.Edit.pasteLocalStorageDesc,
+                icon: ORYX.BASE_FILE_PATH + "images/page_paste.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/page_paste.png",
+                functionality: this.callEdit.bind(this, this.editPasteLocalStore),
+                group: ORYX.I18N.Edit.group,
+                index: 3,
+                minShape: 0,
+                maxShape: 0,
+                'isEnabled': function(){
+                    return typeof(Storage) !== "undefined" && localStorage.getObject("designerclipboard") != null;
+                }.bind(this)
+            });
 
             this.facade.offer({
                 name: ORYX.I18N.Edit.del,
@@ -291,6 +307,12 @@ ORYX.Plugins.Edit = Clazz.extend({
 
         if( will_update ) this.facade.updateSelection();
     },
+
+    editPasteLocalStore: function() {
+        // clear the local clipboard
+        this.clipboard.shapesAsJson = [];
+        this.editPaste();
+    },
     
     /**
      * Performs the paste operation.
@@ -447,6 +469,7 @@ ORYX.Plugins.Edit = Clazz.extend({
 
         if(storeCanvas && storeCanvas == true) {
             if (typeof(Storage) !== "undefined") {
+                localStorage.removeItem("designerclipboard");
                 localStorage.setObject("designerclipboard", canvas);
             }
         } else {
