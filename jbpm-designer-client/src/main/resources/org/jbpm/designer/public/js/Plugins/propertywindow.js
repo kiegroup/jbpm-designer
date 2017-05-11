@@ -1089,6 +1089,19 @@ ORYX.Plugins.PropertyWindow = {
 							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});							
 							editorGrid = new Ext.Editor(cf);
 							break;
+
+						case ORYX.CONFIG.TYPE_TEXT_EXPRESSION:
+							var cf = new Ext.form.ConditionExpressionEditorTextField({
+								allowBlank: pair.optional(),
+								dataSource:this.dataSource,
+								grid:this.grid,
+								row:index,
+								facade:this.facade
+							});
+
+							cf.on('dialogClosed', this.dialogClosed, {scope:this, row:index, col:1,field:cf});
+							editorGrid = new Ext.Editor(cf);
+							break;
 							
 						case ORYX.CONFIG.TYPE_CALLEDELEMENT:
 							var cf = new Ext.form.ComplexCalledElementField({
@@ -5400,6 +5413,12 @@ Ext.form.ComplexGlobalsField = Ext.extend(Ext.form.NameTypeEditor,  {
 Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
     editable: false,
     readOnly: true,
+    typemode : "text/x-java",
+    showLineNumbers : true,
+    doLineWrapping : true,
+    doMatchBrackets : true,
+    editorTitle : ORYX.I18N.ConditionExpressionEditorField.simpleTitle,
+
     onTriggerClick: function(){
         if(this.disabled){
             return;
@@ -6037,13 +6056,13 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
             }]
         });
 
-        function initCodeEditor() {
+        function initCodeEditor(myTypeMode, myShowLineNumbers, myDoLineWrapping, myDoMatchBrackets) {
             this.foldFunc = CodeMirror.newFoldFunction(CodeMirror.braceRangeFinder);
             sourceEditor = CodeMirror.fromTextArea(document.getElementById(scriptEditor.getId()), {
-                mode: "text/x-java",
-                lineNumbers: true,
-                lineWrapping: true,
-                matchBrackets: true,
+                mode: myTypeMode,
+                lineNumbers: myShowLineNumbers,
+                lineWrapping: myDoLineWrapping,
+                matchBrackets: myDoMatchBrackets,
                 onGutterClick: this.foldFunc,
                 extraKeys: {"Ctrl-Z": function(cm) {CodeMirror.hint(cm, CodeMirror.jbpmHint, dialog);}},
                 onCursorActivity: function() {
@@ -6062,16 +6081,27 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
                 initScreen = false;
             }
         } else {
-            dialog.setTitle(ORYX.I18N.ConditionExpressionEditorField.simpleTitle);
+            dialog.setTitle(this.editorTitle);
         }
 
         dialog.show();
 
         contentPanel.setHeight(dialog.getInnerHeight())
-        if (!isJavaCondition) initCodeEditor();
+        if (!isJavaCondition) {
+            initCodeEditor(this.typemode, this.showLineNumbers, this.doLineWrapping, this.doMatchBrackets);
+        }
 
         this.grid.stopEditing();
     }
+});
+
+
+Ext.form.ConditionExpressionEditorTextField = Ext.extend(Ext.form.ConditionExpressionEditorField,  {
+    typemode : "text",
+    showLineNumbers : false,
+    doLineWrapping : false,
+    doMatchBrackets : false,
+    editorTitle : ORYX.I18N.PropertyWindow.text,
 });
 
 Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField,  {
