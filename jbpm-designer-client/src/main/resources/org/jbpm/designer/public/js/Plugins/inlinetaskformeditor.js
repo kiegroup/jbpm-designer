@@ -55,20 +55,22 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 buttons : {yes : ORYX.I18N.inlineTaskFormEditor.graphicalModeler, no : ORYX.I18N.inlineTaskFormEditor.graphicalModelerPreview, cancel : ORYX.I18N.Dictionary.cancel},
                 icon : Ext.MessageBox.QUESTION,
                 fn : function(btn) {
-                    var formType = btn == 'yes' ? "form" : "frm";
-                    if(action == "load") {
-                        this.showTaskFormEditor(formType, options);
-                    } else if(action == "store") {
-                        this.generateTaskForm(formType, options);
-                    } else if(action == "storeall") {
-                        this.generateAllTaskForms(formType, options);
-                    } else {
-                        this.facade.raiseEvent({
-                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                            ntype		: 'error',
-                            msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor+'.',
-                            title       : ''
-                        });
+                    if(btn != 'cancel') {
+                        var formType = btn == 'yes' ? "form" : "frm";
+                        if (action == "load") {
+                            this.showTaskFormEditor(formType, options);
+                        } else if (action == "store") {
+                            this.generateTaskForm(formType, options);
+                        } else if (action == "storeall") {
+                            this.generateAllTaskForms(formType, options);
+                        } else {
+                            this.facade.raiseEvent({
+                                type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                ntype: 'error',
+                                msg: ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor + '.',
+                                title: ''
+                            });
+                        }
                     }
                 }.bind(this)
             });
