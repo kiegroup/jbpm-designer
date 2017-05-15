@@ -223,7 +223,7 @@
            }
        }
 
-    function startit() {
-        startEditorInstance();
-        Kickstart.load();
-    }
+       function startit() {
+           startEditorInstance();
+           Kickstart.load();
+       }

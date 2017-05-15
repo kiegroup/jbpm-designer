@@ -34,6 +34,7 @@ public class DesignerViewImpl
     public DesignerViewImpl(DesignerWidgetView view) {
         this.designerWidget = new DesignerWidgetPresenter(view);
         initWidget(designerWidget.getView().asWidget());
+        this.publishCallOnReisize(this);
     }
 
     @Override
@@ -86,6 +87,12 @@ public class DesignerViewImpl
         designerWidget.setProcessUnSaved(designerWidget.getEditorID());
     }
 
+    private native void publishCallOnReisize( DesignerViewImpl dvi )/*-{
+        $wnd.designercallonresize = function () {
+            dvi.@org.jbpm.designer.client.DesignerViewImpl::onResize()();
+        }
+    }-*/;
+
     @Override
     public boolean canClose() {
         if (!designerWidget.canSaveDesignerModel(designerWidget.getEditorID())) {
@@ -104,7 +111,6 @@ public class DesignerViewImpl
 
     @Override
     public void onResize() {
-
         int height = getParent().getOffsetHeight();
         int width = getParent().getOffsetWidth();
 
