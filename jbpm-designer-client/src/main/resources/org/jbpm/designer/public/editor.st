@@ -42,6 +42,7 @@
         ORYX.FORMSTYPE = "$formstype$";
 
         ORYX.SERVICE_REPO = "$servicerepo$";
+
         ORYX.SERVICE_REPO_TASKS = {
             "repotasks": [
                 $servicerepotasks:{k|

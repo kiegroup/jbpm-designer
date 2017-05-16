@@ -1339,6 +1339,9 @@ if(!ORYX.I18N.view) ORYX.I18N.view = {};
 ORYX.I18N.view.showFullScreen='<i18n:message key="ORYX.I18N.view.showFullScreen">Show in full screen</i18n:message>';
 ORYX.I18N.view.showFullScreen_desc='<i18n:message key="ORYX.I18N.view.showFullScreen_desc">Show in full screen mode</i18n:message>';
 ORYX.I18N.view.failShowFullScreen='<i18n:message key="ORYX.I18N.view.failShowFullScreen">Browser does not support full screen mode.</i18n:message>';
+ORYX.I18N.view.toggleFullScreen='<i18n:message key="ORYX.I18N.view.toggleFullScreen">Toggle full screen mode</i18n:message>';
+ORYX.I18N.view.toggleFullScreen_desc='<i18n:message key="ORYX.I18N.view.toggleFullScreen_desc">Toggle full screen mode</i18n:message>';
+
 
 ORYX.I18N.view.shareProcessImg='<i18n:message key="ORYX.I18N.view.shareProcessImg">Share Process Image</i18n:message>';
 ORYX.I18N.view.shareProcessImg_desc='<i18n:message key="ORYX.I18N.view.shareProcessImg_desc">Share Process Image</i18n:message>';
