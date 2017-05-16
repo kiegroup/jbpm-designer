@@ -148,31 +148,64 @@ ORYX.Plugins.View = {
         if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
         /* Register full screen to model */
         this.facade.offer({
-            'name':ORYX.I18N.view.showFullScreen,
+            'name':ORYX.I18N.view.toggleFullScreen,
             'functionality': function(context) {
-                var parentBody = parent.document.getElementsByTagName("body")[0];
-                if(parentBody.requestFullScreen) {
-                    parentBody.requestFullScreen();
-                    setTimeout(function(){ parent.designercallonresize(); }, 2000);
-                } else if(parentBody.mozRequestFullScreen) {
-                    parentBody.mozRequestFullScreen();
-                    setTimeout(function(){ parent.designercallonresize(); }, 2000);
-                } else if(parentBody.webkitRequestFullScreen) {
-                    parentBody.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-                    setTimeout(function(){ parent.designercallonresize(); }, 2000);
-                } else {
-                    ORYX.EDITOR._pluginFacade.raiseEvent({
-                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                        ntype		: 'error',
-                        msg         : ORYX.I18N.view.failShowFullScreen,
-                        title       : ''
 
-                    });
+                var isParentInFullScreen = (parent.document.fullscreenElement && parent.document.fullscreenElement !== null) ||
+                    (parent.document.webkitFullscreenElement && parent.document.webkitFullscreenElement !== null) ||
+                    (parent.document.mozFullScreenElement && parent.document.mozFullScreenElement !== null) ||
+                    (parent.document.msFullscreenElement && parent.document.msFullscreenElement !== null);
+
+                var docElm = parent.document.documentElement;
+                if (!isParentInFullScreen) {
+                    if (docElm.requestFullscreen) {
+                        docElm.requestFullscreen();
+                        setTimeout(function(){ parent.designercallonresize(); }, 2000);
+                    } else if (docElm.mozRequestFullScreen) {
+                        docElm.mozRequestFullScreen();
+                        setTimeout(function(){ parent.designercallonresize(); }, 2000);
+                    } else if (docElm.webkitRequestFullScreen) {
+                        docElm.webkitRequestFullScreen();
+                        setTimeout(function(){ parent.designercallonresize(); }, 2000);
+                    } else if (docElm.msRequestFullscreen) {
+                        docElm.msRequestFullscreen();
+                        setTimeout(function(){ parent.designercallonresize(); }, 2000);
+                    } else {
+                        ORYX.EDITOR._pluginFacade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : ORYX.I18N.view.failShowFullScreen,
+                            title       : ''
+
+                        });
+                    }
+                } else {
+                    if (parent.document.exitFullscreen) {
+                        parent.document.exitFullscreen();
+                        setTimeout(function(){ parent.designercallonresize(); }, 2000);
+                    } else if (parent.document.webkitExitFullscreen) {
+                        parent.document.webkitExitFullscreen();
+                        setTimeout(function(){ parent.designercallonresize(); }, 2000);
+                    } else if (parent.document.mozCancelFullScreen) {
+                        parent.document.mozCancelFullScreen();
+                        setTimeout(function(){ parent.designercallonresize(); }, 2000);
+                    } else if (parent.document.msExitFullscreen) {
+                        parent.document.msExitFullscreen();
+                        setTimeout(function(){ parent.designercallonresize(); }, 2000);
+                    } else {
+                        ORYX.EDITOR._pluginFacade.raiseEvent({
+                            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                            ntype		: 'error',
+                            msg         : ORYX.I18N.view.failShowFullScreen,
+                            title       : ''
+
+                        });
+                    }
                 }
             }.bind(this),
             'group': 'fullscreengroup',
             'icon': ORYX.BASE_FILE_PATH + "images/fullscreen.png",
-            'description': ORYX.I18N.view.showFullScreen_desc,
+            'description': ORYX.I18N.view.toggleFullScreen_desc,
             'index': 2,
             'minShape': 0,
             'maxShape': 0,
