@@ -5064,6 +5064,16 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                         Ext.form.VTypes["inputName"] = function(v){
                             return Ext.form.VTypes["inputNameVal"].test(v);
                         };
+                        Ext.form.VTypes["uniqueInputName"] = function(y) {
+                            var validInputNameVal = Ext.form.VTypes["inputNameVal"].test(y);
+                            var uniqueNameVal = true;
+							vardefs.data.each(function() {
+                            	if( (this.data['name'].length > 0) && (this.data['name'] == y) ) {
+                                    uniqueNameVal = false;
+                                }
+                            });
+                            return validInputNameVal && uniqueNameVal;
+                        };
 
                         var cckpi = this.addCustomKPI;
 						var ccf = this.addCaseFile;
@@ -5078,7 +5088,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                                 header: ORYX.I18N.PropertyWindow.name,
                                 width: smallColWidth * 2,
                                 dataIndex: 'name',
-                                editor: new Ext.form.TextField({ allowBlank: true, vtype: 'inputName', regex: /^[a-z0-9\-\.\_]*$/i }),
+                                editor: new Ext.form.TextField({ allowBlank: true, vtype: 'uniqueInputName', regex: /^[a-z0-9\-\.\_]*$/i }),
                                 renderer: Ext.util.Format.htmlEncode
                             }, {
                                 id: 'stype',
