@@ -459,7 +459,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 workDefinition.setCategory(category);
 
                 String icon = (String) workDefinitionMap.get("icon");
-                if (icon == null) {
+                if (icon == null || icon.trim().length() < 1) {
                 	icon = this.globalDir + "/defaultservicenodeicon.png";
                 }
                 Asset<byte[]> iconAsset;
@@ -1091,5 +1091,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 return a.compareTo(b);
             }
         }
+    }
+
+    public void setGlobalDir( String globalDir ) {
+        this.globalDir = globalDir;
     }
 }
