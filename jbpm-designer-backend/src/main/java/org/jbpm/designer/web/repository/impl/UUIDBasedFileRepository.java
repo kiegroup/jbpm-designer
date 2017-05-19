@@ -23,45 +23,45 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfile.IDiagramMarshaller;
 import org.jbpm.designer.web.repository.IUUIDBasedRepository;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Antoine Toulme
- * a simple implementation of the UUID repository storing files directly inside the public.
- * 
- * Convenient for development.
+ *         a simple implementation of the UUID repository storing files directly inside the public.
+ *         <p>
+ *         Convenient for development.
  */
 public class UUIDBasedFileRepository implements IUUIDBasedRepository {
 
     private static final Logger _logger = LoggerFactory.getLogger(UUIDBasedFileRepository.class);
-    
+
     /**
      * the path to the repository inside the servlet.
      */
     private final static String REPOSITORY_PATH = "repository";
 
     private String _repositoryPath;
-    
+
     public void configure(HttpServlet servlet) {
         _repositoryPath = servlet.getServletContext().getRealPath("/" + REPOSITORY_PATH);
     }
-    
-    public byte[] load(HttpServletRequest req, String uuid, IDiagramProfile profile, ServletContext servletContext) throws Exception {
-        
+
+    public byte[] load(HttpServletRequest req,
+                       String uuid,
+                       IDiagramProfile profile,
+                       ServletContext servletContext) throws Exception {
+
         String filename = _repositoryPath + "/" + uuid + ".json";
         if (!new File(filename).exists()) {
-           return new byte[0]; // then return nothing. 
+            return new byte[0]; // then return nothing.
         }
         InputStream input = null;
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -69,57 +69,83 @@ public class UUIDBasedFileRepository implements IUUIDBasedRepository {
             input = new FileInputStream(filename);
             byte[] buffer = new byte[4096];
             int read;
-           
+
             while ((read = input.read(buffer)) != -1) {
-                output.write(buffer, 0, read);
+                output.write(buffer,
+                             0,
+                             read);
             }
         } catch (FileNotFoundException e) {
             //unlikely since we just checked.
-            _logger.error(e.getMessage(), e);
+            _logger.error(e.getMessage(),
+                          e);
             throw new RuntimeException(e);
-            
         } catch (IOException e) {
-            _logger.error(e.getMessage(), e);
+            _logger.error(e.getMessage(),
+                          e);
             throw new RuntimeException(e);
         } finally {
-            if (input != null) { try { input.close();} catch(Exception e) {} }
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (Exception e) {
+                }
+            }
         }
-        
+
         return output.toByteArray();
     }
 
-    public void save(HttpServletRequest req, String uuid, String json, String svg, IDiagramProfile profile, Boolean autosave) {
+    public void save(HttpServletRequest req,
+                     String uuid,
+                     String json,
+                     String svg,
+                     IDiagramProfile profile,
+                     Boolean autosave) {
         String ext = profile.getSerializedModelExtension();
         String preProcessingParam = req.getParameter("pp");
         String model = "";
         try {
             IDiagramMarshaller marshaller = profile.createMarshaller();
-            model = marshaller.parseModel(json, preProcessingParam);
-        } catch(Exception e) {
-            _logger.error(e.getMessage(), e);
+            model = marshaller.parseModel(json,
+                                          preProcessingParam);
+        } catch (Exception e) {
+            _logger.error(e.getMessage(),
+                          e);
         }
-        writeFile(model, _repositoryPath + "/" + uuid + "." + ext);
-        writeFile(json, _repositoryPath + "/" + uuid + ".json");
+        writeFile(model,
+                  _repositoryPath + "/" + uuid + "." + ext);
+        writeFile(json,
+                  _repositoryPath + "/" + uuid + ".json");
         if (!autosave) {
-        	writeFile(svg, _repositoryPath + "/" + uuid + ".svg");
+            writeFile(svg,
+                      _repositoryPath + "/" + uuid + ".svg");
         }
     }
-    
-    private static void writeFile(String contents, String filename) {
+
+    private static void writeFile(String contents,
+                                  String filename) {
         BufferedWriter writer = null;
         try {
             writer = new BufferedWriter(new FileWriter(filename));
             writer.write(contents);
         } catch (IOException e) {
-            _logger.error(e.getMessage(), e);
+            _logger.error(e.getMessage(),
+                          e);
         } finally {
-            if (writer != null) { try { writer.close();} catch(Exception e) {} }
+            if (writer != null) {
+                try {
+                    writer.close();
+                } catch (Exception e) {
+                }
+            }
         }
     }
 
-    public String toXML(String json, IDiagramProfile profile, String preProcessingData) throws Exception {
-        return profile.createMarshaller().parseModel(json, preProcessingData);
+    public String toXML(String json,
+                        IDiagramProfile profile,
+                        String preProcessingData) throws Exception {
+        return profile.createMarshaller().parseModel(json,
+                                                     preProcessingData);
     }
-    
-    
 }

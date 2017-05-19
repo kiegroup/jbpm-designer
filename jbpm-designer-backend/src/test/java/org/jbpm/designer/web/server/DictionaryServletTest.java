@@ -15,6 +15,10 @@
 
 package org.jbpm.designer.web.server;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
 import org.jbpm.designer.helper.TestServletConfig;
@@ -30,14 +34,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import static org.junit.Assert.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-public class DictionaryServletTest  extends RepositoryBaseTest {
+public class DictionaryServletTest extends RepositoryBaseTest {
 
     @Before
     public void setup() {
@@ -52,40 +51,47 @@ public class DictionaryServletTest  extends RepositoryBaseTest {
     @Test
     public void testStoreDictionary() throws Exception {
         Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
 
-        params.put("action", "save");
-        params.put("profile", "jbpm");
-        params.put("dvalue", "this is dictionary");
-
+        params.put("action",
+                   "save");
+        params.put("profile",
+                   "jbpm");
+        params.put("dvalue",
+                   "this is dictionary");
 
         DictionaryServlet dictionaryServlet = new DictionaryServlet();
         dictionaryServlet.setProfile(profile);
 
         dictionaryServlet.init(new TestServletConfig(new TestServletContext(repository)));
-        TestHttpServletResponse response = new  TestHttpServletResponse();
-        dictionaryServlet.doPost(new TestHttpServletRequest(params), response);
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        dictionaryServlet.doPost(new TestHttpServletRequest(params),
+                                 response);
 
         String responseText = new String(response.getContent());
         assertNotNull(responseText);
-        assertEquals("saved", responseText);
+        assertEquals("saved",
+                     responseText);
 
-        Collection<Asset> dictionary = repository.listAssets("/global", new FilterByExtension("json"));
+        Collection<Asset> dictionary = repository.listAssets("/global",
+                                                             new FilterByExtension("json"));
         assertNotNull(dictionary);
-        assertEquals(1, dictionary.size());
+        assertEquals(1,
+                     dictionary.size());
 
         Asset<String> dictionaryAsset = repository.loadAsset(dictionary.iterator().next().getUniqueId());
         assertNotNull(dictionaryAsset);
-        assertEquals("this is dictionary", dictionaryAsset.getAssetContent());
+        assertEquals("this is dictionary",
+                     dictionaryAsset.getAssetContent());
     }
 
     @Test
     public void testLoadDictionary() throws Exception {
         Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("test dictionary content")
@@ -96,19 +102,22 @@ public class DictionaryServletTest  extends RepositoryBaseTest {
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
 
-        params.put("action", "load");
-        params.put("profile", "jbpm");
-
+        params.put("action",
+                   "load");
+        params.put("profile",
+                   "jbpm");
 
         DictionaryServlet dictionaryServlet = new DictionaryServlet();
         dictionaryServlet.setProfile(profile);
 
         dictionaryServlet.init(new TestServletConfig(new TestServletContext(repository)));
-        TestHttpServletResponse response = new  TestHttpServletResponse();
-        dictionaryServlet.doPost(new TestHttpServletRequest(params), response);
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        dictionaryServlet.doPost(new TestHttpServletRequest(params),
+                                 response);
 
         String dictionaryContent = new String(response.getContent());
         assertNotNull(dictionaryContent);
-        assertEquals("test dictionary content", dictionaryContent);
+        assertEquals("test dictionary content",
+                     dictionaryContent);
     }
 }

@@ -14,6 +14,12 @@
 */
 package org.jbpm.designer.web.server;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import javax.enterprise.event.Event;
+
 import org.guvnor.common.services.project.model.Dependencies;
 import org.guvnor.common.services.project.model.Dependency;
 import org.guvnor.common.services.project.model.POM;
@@ -35,7 +41,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.kie.workbench.common.services.shared.project.KieProjectService;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
@@ -47,20 +56,8 @@ import org.uberfire.io.IOService;
 import org.uberfire.mocks.EventSourceMock;
 import org.uberfire.workbench.events.NotificationEvent;
 
-import javax.enterprise.event.Event;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import static org.mockito.Matchers.any;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -89,16 +86,14 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
     protected Event<NotificationEvent> notification = mock(EventSourceMock.class);
 
-
     private final List<Object> receivedWidInstallEvents = new ArrayList<Object>();
 
     private Event<DesignerWorkitemInstalledEvent> widinstall = new EventSourceMock<DesignerWorkitemInstalledEvent>() {
 
         @Override
-        public void fire( DesignerWorkitemInstalledEvent event ) {
+        public void fire(DesignerWorkitemInstalledEvent event) {
             receivedWidInstallEvents.add(event);
         }
-
     };
 
     private Repository repository;
@@ -106,7 +101,6 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
     private String uuid;
 
     private POM projectPOM;
-
 
     @Before
     public void setup() {
@@ -117,12 +111,13 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
             @Override
             public Path answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
-                return PathFactory.newPath((String) args[0], (String) args[0]);
+                return PathFactory.newPath((String) args[0],
+                                           (String) args[0]);
             }
         });
 
         repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
 
         // create the bpmn2 asset
@@ -143,9 +138,11 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         String pomAssetID = repository.createAsset(pomBuilder.getAsset());
         assertNotNull(pomAssetID);
 
-        Collection<Asset> foundAsset = repository.listAssets("/src/main/resources", new FilterByExtension("bpmn2"));
+        Collection<Asset> foundAsset = repository.listAssets("/src/main/resources",
+                                                             new FilterByExtension("bpmn2"));
         assertNotNull(foundAsset);
-        assertEquals(1, foundAsset.size());
+        assertEquals(1,
+                     foundAsset.size());
 
         Path rootPath = Paths.convert(((VFSRepository) repository).getDescriptor().getRepositoryRootPath());
 
@@ -154,18 +151,17 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
         KieProject project = Mockito.mock(KieProject.class);
         when(project.getRootPath()).thenReturn(rootPath);
-        final org.uberfire.backend.vfs.Path pomXmlPath = mock( org.uberfire.backend.vfs.Path.class );
+        final org.uberfire.backend.vfs.Path pomXmlPath = mock(org.uberfire.backend.vfs.Path.class);
 
-        when( project.getPomXMLPath() ).thenReturn( pomXmlPath );
-        when( pomXmlPath.toURI() ).thenReturn(pomuuid);
-        when(project.getPomXMLPath() ).thenReturn( pomXmlPath );
+        when(project.getPomXMLPath()).thenReturn(pomXmlPath);
+        when(pomXmlPath.toURI()).thenReturn(pomuuid);
+        when(project.getPomXMLPath()).thenReturn(pomXmlPath);
 
         projectPOM = new POM();
-        when( pomService.load(pomXmlPath) ).thenReturn(projectPOM);
+        when(pomService.load(pomXmlPath)).thenReturn(projectPOM);
 
         when(ioService.exists(any(org.uberfire.java.nio.file.Path.class))).thenReturn(true);
         when(projectService.resolveProject(any(Path.class))).thenReturn(project);
-
     }
 
     @After
@@ -181,63 +177,82 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         // should not fail if icon is not defined
         assertNotNull(workitemsFromRepo.get("Rewardsystem"));
         WorkDefinitionImpl rewardSystemWorkItem = workitemsFromRepo.get("Rewardsystem");
-        assertEquals("Rewardsystem", rewardSystemWorkItem.getName());
+        assertEquals("Rewardsystem",
+                     rewardSystemWorkItem.getName());
         assertNull(rewardSystemWorkItem.getIcon());
 
         ServiceRepoUtils.installWorkItem(workitemsFromRepo,
-                "Rewardsystem",
-                uuid,
-                repository,
-                vfsServices,
-                widinstall,
-                notification,
-                pomService,
-                projectService,
-                metadataService);
+                                         "Rewardsystem",
+                                         uuid,
+                                         repository,
+                                         vfsServices,
+                                         widinstall,
+                                         notification,
+                                         pomService,
+                                         projectService,
+                                         metadataService);
 
-        Collection<Asset> foundWids = repository.listAssetsRecursively("/", new FilterByExtension("wid"));
+        Collection<Asset> foundWids = repository.listAssetsRecursively("/",
+                                                                       new FilterByExtension("wid"));
         assertNotNull(foundWids);
-        assertEquals(1, foundWids.size());
+        assertEquals(1,
+                     foundWids.size());
         assertTrue(new ArrayList<Asset>(foundWids).get(0).getFullName().endsWith("Rewardsystem.wid"));
 
-        Collection<Asset> foundPngs = repository.listAssetsRecursively("/", new FilterByExtension("png"));
+        Collection<Asset> foundPngs = repository.listAssetsRecursively("/",
+                                                                       new FilterByExtension("png"));
         assertNotNull(foundPngs);
-        assertEquals(0, foundPngs.size());
+        assertEquals(0,
+                     foundPngs.size());
 
         // jbpm-console stores deployment descriptor if it receives install event from designer
         // make sure that the install event was fired
-        assertEquals(1, receivedWidInstallEvents.size());
+        assertEquals(1,
+                     receivedWidInstallEvents.size());
         // make sure the event content is valid
         Object event = receivedWidInstallEvents.get(0);
         assertTrue(event instanceof DesignerWorkitemInstalledEvent);
         DesignerWorkitemInstalledEvent eventReceived = (DesignerWorkitemInstalledEvent) event;
-        assertEquals("Rewardsystem", eventReceived.getName());
-        assertEquals("mvel: new com.rewardsystem.MyRewardsHandler()", eventReceived.getValue());
+        assertEquals("Rewardsystem",
+                     eventReceived.getName());
+        assertEquals("mvel: new com.rewardsystem.MyRewardsHandler()",
+                     eventReceived.getValue());
 
         // nake sure the correct wid maven dependencies got installed into the pom
         assertNotNull(projectPOM);
         assertNotNull(projectPOM.getDependencies());
-        assertEquals(3, projectPOM.getDependencies().size());
+        assertEquals(3,
+                     projectPOM.getDependencies().size());
         Dependencies pomDepends = projectPOM.getDependencies();
 
         Dependency depends1 = pomDepends.get(0);
         assertNotNull(depends1);
-        assertEquals("com.rewardssystem", depends1.getGroupId());
-        assertEquals("myrewardssystem", depends1.getArtifactId());
-        assertEquals("2.0", depends1.getVersion());
+        assertEquals("com.rewardssystem",
+                     depends1.getGroupId());
+        assertEquals("myrewardssystem",
+                     depends1.getArtifactId());
+        assertEquals("2.0",
+                     depends1.getVersion());
 
         Dependency depends2 = pomDepends.get(1);
         assertNotNull(depends2);
-        assertEquals("com.rewardssystem", depends2.getGroupId());
-        assertEquals("systemhelper", depends2.getArtifactId());
-        assertEquals("1.2", depends2.getVersion());
+        assertEquals("com.rewardssystem",
+                     depends2.getGroupId());
+        assertEquals("systemhelper",
+                     depends2.getArtifactId());
+        assertEquals("1.2",
+                     depends2.getVersion());
 
         Dependency depends3 = pomDepends.get(2);
         assertNotNull(depends3);
-        assertEquals("com.sample.demo", depends3.getGroupId());
-        assertEquals("demo-test", depends3.getArtifactId());
-        assertEquals("1.2.3", depends3.getVersion());
-        assertEquals("test", depends3.getScope());
+        assertEquals("com.sample.demo",
+                     depends3.getGroupId());
+        assertEquals("demo-test",
+                     depends3.getArtifactId());
+        assertEquals("1.2.3",
+                     depends3.getVersion());
+        assertEquals("test",
+                     depends3.getScope());
     }
 
     @Test
@@ -245,61 +260,77 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
         Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(getClass().getResource("servicerepo").toURI().toString());
 
-        Collection<Asset> wids = repository.listAssetsRecursively("/", new FilterByExtension("wid"));
-        assertEquals(0, wids.size());
+        Collection<Asset> wids = repository.listAssetsRecursively("/",
+                                                                  new FilterByExtension("wid"));
+        assertEquals(0,
+                     wids.size());
 
-        Collection<Asset> pngs = repository.listAssetsRecursively("/", new FilterByExtension("png"));
-        assertEquals(0, pngs.size());
-
-        ServiceRepoUtils.installWorkItem(workitemsFromRepo,
-                "MicrosoftAcademy",
-                uuid,
-                repository,
-                vfsServices,
-                widinstall,
-                notification,
-                pomService,
-                projectService,
-                metadataService);
+        Collection<Asset> pngs = repository.listAssetsRecursively("/",
+                                                                  new FilterByExtension("png"));
+        assertEquals(0,
+                     pngs.size());
 
         ServiceRepoUtils.installWorkItem(workitemsFromRepo,
-                "MicrosoftAcademy",
-                uuid,
-                repository,
-                vfsServices,
-                widinstall,
-                notification,
-                pomService,
-                projectService,
-                metadataService);
+                                         "MicrosoftAcademy",
+                                         uuid,
+                                         repository,
+                                         vfsServices,
+                                         widinstall,
+                                         notification,
+                                         pomService,
+                                         projectService,
+                                         metadataService);
 
-        assertEquals(2, receivedWidInstallEvents.size());
+        ServiceRepoUtils.installWorkItem(workitemsFromRepo,
+                                         "MicrosoftAcademy",
+                                         uuid,
+                                         repository,
+                                         vfsServices,
+                                         widinstall,
+                                         notification,
+                                         pomService,
+                                         projectService,
+                                         metadataService);
+
+        assertEquals(2,
+                     receivedWidInstallEvents.size());
         // make sure the event content is valid
         Object event = receivedWidInstallEvents.get(0);
         assertTrue(event instanceof DesignerWorkitemInstalledEvent);
         DesignerWorkitemInstalledEvent eventReceived = (DesignerWorkitemInstalledEvent) event;
-        assertEquals("MicrosoftAcademy", eventReceived.getName());
-        assertEquals("mvel: new org.msho.app.MicrosoftAcademyWorkItemHandler()", eventReceived.getValue());
+        assertEquals("MicrosoftAcademy",
+                     eventReceived.getName());
+        assertEquals("mvel: new org.msho.app.MicrosoftAcademyWorkItemHandler()",
+                     eventReceived.getValue());
 
         // nake sure the correct wid maven dependencies got installed into the pom
         assertNotNull(projectPOM);
         assertNotNull(projectPOM.getDependencies());
-        assertEquals(1, projectPOM.getDependencies().size());
+        assertEquals(1,
+                     projectPOM.getDependencies().size());
         Dependencies pomDepends = projectPOM.getDependencies();
 
         Dependency depends1 = pomDepends.get(0);
         assertNotNull(depends1);
-        assertEquals("com.microsoft", depends1.getGroupId());
-        assertEquals("microsoftacademy", depends1.getArtifactId());
-        assertEquals("1.0", depends1.getVersion());
+        assertEquals("com.microsoft",
+                     depends1.getGroupId());
+        assertEquals("microsoftacademy",
+                     depends1.getArtifactId());
+        assertEquals("1.0",
+                     depends1.getVersion());
 
-        wids = repository.listAssetsRecursively("/", new FilterByExtension("wid"));
-        assertEquals(1, wids.size());
+        wids = repository.listAssetsRecursively("/",
+                                                new FilterByExtension("wid"));
+        assertEquals(1,
+                     wids.size());
 
-        pngs = repository.listAssetsRecursively("/", new FilterByExtension("png"));
-        assertEquals(1, pngs.size());
+        pngs = repository.listAssetsRecursively("/",
+                                                new FilterByExtension("png"));
+        assertEquals(1,
+                     pngs.size());
 
-        verify(notification, never()).fire(any(NotificationEvent.class));
+        verify(notification,
+               never()).fire(any(NotificationEvent.class));
     }
 
     @Test
@@ -308,19 +339,20 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         Map<String, WorkDefinitionImpl> workitemsFromRepo = WorkItemRepository.getWorkDefinitions(getClass().getResource("servicerepo").toURI().toString());
 
         ServiceRepoUtils.installWorkItem(workitemsFromRepo,
-                "Minimalistic",
-                uuid,
-                repository,
-                vfsServices,
-                widinstall,
-                notification,
-                pomService,
-                projectService,
-                metadataService);
+                                         "Minimalistic",
+                                         uuid,
+                                         repository,
+                                         vfsServices,
+                                         widinstall,
+                                         notification,
+                                         pomService,
+                                         projectService,
+                                         metadataService);
 
-        assertEquals(0, receivedWidInstallEvents.size());
+        assertEquals(0,
+                     receivedWidInstallEvents.size());
         verify(notification).fire(notificationCaptor.capture());
-        assertEquals("Installed workitem cannot be registered in project configuration.", notificationCaptor.getValue().getNotification());
+        assertEquals("Installed workitem cannot be registered in project configuration.",
+                     notificationCaptor.getValue().getNotification());
     }
-
 }

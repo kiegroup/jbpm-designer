@@ -24,5 +24,4 @@ public interface ExpressionEditorMessageTokens {
     static final String SCRIPT_TOKEN = "script";
     static final String ERROR_CODE_TOKEN = "errorCode";
     static final String ERROR_MESSAGE_TOKEN = "errorMessage";
-
 }

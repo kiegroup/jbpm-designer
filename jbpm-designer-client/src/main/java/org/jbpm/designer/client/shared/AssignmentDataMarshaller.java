@@ -29,7 +29,6 @@ import org.jboss.errai.marshalling.client.marshallers.AbstractNullableMarshaller
 public class AssignmentDataMarshaller
         extends AbstractNullableMarshaller<AssignmentData> {
 
-
     public static final String INPUT_VARIABLES = "inputVariables";
     public static final String OUTPUT_VARIABLES = "outputVariables";
     public static final String PROCESS_VARIABLES = "processVariables";
@@ -38,7 +37,8 @@ public class AssignmentDataMarshaller
     public static final String DISALLOWED_PROPERTY_NAMES = "disallowedPropertyNames";
     public static final String VARIABLE_COUNTS_STRING = "variablecountsstring";
 
-    public AssignmentData doNotNullDemarshall(EJValue o, MarshallingSession ctx) {
+    public AssignmentData doNotNullDemarshall(EJValue o,
+                                              MarshallingSession ctx) {
         EJObject obj = o.isObject();
         String inputVariables = obj.get(INPUT_VARIABLES).isString().stringValue();
         String outputVariables = obj.get(OUTPUT_VARIABLES).isString().stringValue();
@@ -47,12 +47,18 @@ public class AssignmentDataMarshaller
         String varCounts = obj.get(VARIABLE_COUNTS_STRING).isString().stringValue();
         String dataTypes = obj.get(DATA_TYPES).isString().stringValue();
         String disallowedPropertyNames = obj.get(DISALLOWED_PROPERTY_NAMES).isString().stringValue();
-        AssignmentData data = new AssignmentData(inputVariables, outputVariables, processVariables, assignments, dataTypes, disallowedPropertyNames);
+        AssignmentData data = new AssignmentData(inputVariables,
+                                                 outputVariables,
+                                                 processVariables,
+                                                 assignments,
+                                                 dataTypes,
+                                                 disallowedPropertyNames);
         data.setVariableCountsString(varCounts);
         return data;
     }
 
-    public String doNotNullMarshall(AssignmentData o, MarshallingSession ctx) {
+    public String doNotNullMarshall(AssignmentData o,
+                                    MarshallingSession ctx) {
         return "{\"" + SerializationParts.ENCODED_TYPE + "\":\"" + AssignmentData.class.getName() + "\"," +
 
                 "\"" + SerializationParts.OBJECT_ID + "\":\"" + o.hashCode() + "\"," +
@@ -65,7 +71,8 @@ public class AssignmentDataMarshaller
                 "\"" + DISALLOWED_PROPERTY_NAMES + "\":\"" + o.getDisallowedPropertyNamesString() + "\"}";
     }
 
-    @Override public AssignmentData[] getEmptyArray() {
+    @Override
+    public AssignmentData[] getEmptyArray() {
         return new AssignmentData[0];
     }
 }

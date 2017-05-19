@@ -16,7 +16,7 @@
 package org.jbpm.designer.server;
 
 import bpsim.impl.BpsimFactoryImpl;
-import org.eclipse.bpmn2.*;
+import org.eclipse.bpmn2.Definitions;
 import org.guvnor.common.services.backend.util.CommentedOptionFactory;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 import org.jbpm.designer.type.Bpmn2TypeDefinition;
@@ -31,10 +31,10 @@ import org.uberfire.backend.vfs.Path;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.base.options.CommentedOption;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
-import static org.hamcrest.CoreMatchers.containsString;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BusinessProcessCopyHelperTest {
@@ -67,28 +67,28 @@ public class BusinessProcessCopyHelperTest {
 
     @Before
     public void setup() {
-        pathSource = mock( Path.class );
-        pathDestination = mock( Path.class );
-        helper = new BusinessProcessCopyHelper( ioService,
-                bpmn2ResourceType,
-                commentedOptionFactory);
+        pathSource = mock(Path.class);
+        pathDestination = mock(Path.class);
+        helper = new BusinessProcessCopyHelper(ioService,
+                                               bpmn2ResourceType,
+                                               commentedOptionFactory);
     }
 
     @Test
     public void testCopy() {
-        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
-        when( pathDestination.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
-        when( pathDestination.getFileName() ).thenReturn("MyNewProcess.bpmn2");
-        when( ioService.readAllString(any(org.uberfire.java.nio.file.Path.class)) ).thenReturn(DEFAULT_PROCESS);
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
+        when(pathDestination.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
+        when(pathDestination.getFileName()).thenReturn("MyNewProcess.bpmn2");
+        when(ioService.readAllString(any(org.uberfire.java.nio.file.Path.class))).thenReturn(DEFAULT_PROCESS);
 
         helper.postProcess(pathSource,
-                pathDestination);
+                           pathDestination);
 
         final ArgumentCaptor<String> bpmn2ArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify( ioService,
-                times( 1 ) ).write(any(org.uberfire.java.nio.file.Path.class),
-                bpmn2ArgumentCaptor.capture(),
-                any(CommentedOption.class));
+        verify(ioService,
+               times(1)).write(any(org.uberfire.java.nio.file.Path.class),
+                               bpmn2ArgumentCaptor.capture(),
+                               any(CommentedOption.class));
 
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 
@@ -102,7 +102,8 @@ public class BusinessProcessCopyHelperTest {
             org.eclipse.bpmn2.Process process = helper.getRootProcess(def);
             assertNotNull(process);
             assertNotNull(process.getId());
-            assertThat(process.getId(), containsString("MyNewProcess"));
+            assertThat(process.getId(),
+                       containsString("MyNewProcess"));
         } catch (Exception e) {
             fail("Cannot parse new process: " + e.getMessage());
         }
@@ -110,19 +111,19 @@ public class BusinessProcessCopyHelperTest {
 
     @Test
     public void testCopyIDWithMultibyteCharsAndSpaces() {
-        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
-        when( pathDestination.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
-        when( pathDestination.getFileName() ).thenReturn("Эож ты дольорэ     My New Process  어디야.bpmn2");
-        when( ioService.readAllString(any(org.uberfire.java.nio.file.Path.class)) ).thenReturn(DEFAULT_PROCESS);
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
+        when(pathDestination.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
+        when(pathDestination.getFileName()).thenReturn("Эож ты дольорэ     My New Process  어디야.bpmn2");
+        when(ioService.readAllString(any(org.uberfire.java.nio.file.Path.class))).thenReturn(DEFAULT_PROCESS);
 
         helper.postProcess(pathSource,
-                pathDestination);
+                           pathDestination);
 
         final ArgumentCaptor<String> bpmn2ArgumentCaptor = ArgumentCaptor.forClass(String.class);
         verify(ioService,
-                times(1)).write(any(org.uberfire.java.nio.file.Path.class),
-                bpmn2ArgumentCaptor.capture(),
-                any(CommentedOption.class));
+               times(1)).write(any(org.uberfire.java.nio.file.Path.class),
+                               bpmn2ArgumentCaptor.capture(),
+                               any(CommentedOption.class));
 
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 
@@ -136,7 +137,8 @@ public class BusinessProcessCopyHelperTest {
             org.eclipse.bpmn2.Process process = helper.getRootProcess(def);
             assertNotNull(process);
             assertNotNull(process.getId());
-            assertThat(process.getId(), containsString("MyNewProcessEC96B4EB9494EC95BC"));
+            assertThat(process.getId(),
+                       containsString("MyNewProcessEC96B4EB9494EC95BC"));
         } catch (Exception e) {
             fail("Cannot parse new process: " + e.getMessage());
         }
@@ -144,19 +146,19 @@ public class BusinessProcessCopyHelperTest {
 
     @Test
     public void testCopyIDWithInvalidID() {
-        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
-        when( pathDestination.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
-        when( pathDestination.getFileName() ).thenReturn("  << my process    >>");
-        when( ioService.readAllString(any(org.uberfire.java.nio.file.Path.class)) ).thenReturn(DEFAULT_PROCESS);
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
+        when(pathDestination.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
+        when(pathDestination.getFileName()).thenReturn("  << my process    >>");
+        when(ioService.readAllString(any(org.uberfire.java.nio.file.Path.class))).thenReturn(DEFAULT_PROCESS);
 
         helper.postProcess(pathSource,
-                pathDestination);
+                           pathDestination);
 
         final ArgumentCaptor<String> bpmn2ArgumentCaptor = ArgumentCaptor.forClass(String.class);
         verify(ioService,
-                times(1)).write(any(org.uberfire.java.nio.file.Path.class),
-                bpmn2ArgumentCaptor.capture(),
-                any(CommentedOption.class));
+               times(1)).write(any(org.uberfire.java.nio.file.Path.class),
+                               bpmn2ArgumentCaptor.capture(),
+                               any(CommentedOption.class));
 
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 
@@ -170,10 +172,10 @@ public class BusinessProcessCopyHelperTest {
             org.eclipse.bpmn2.Process process = helper.getRootProcess(def);
             assertNotNull(process);
             assertNotNull(process.getId());
-            assertThat(process.getId(), containsString("3C3Cmyprocess"));
+            assertThat(process.getId(),
+                       containsString("3C3Cmyprocess"));
         } catch (Exception e) {
             fail("Cannot parse new process: " + e.getMessage());
         }
     }
-
 }

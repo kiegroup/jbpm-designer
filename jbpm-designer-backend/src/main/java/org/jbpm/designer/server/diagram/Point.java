@@ -19,16 +19,17 @@ package org.jbpm.designer.server.diagram;
  * @author Philipp Represents a 2D Point on a canvas
  */
 public class Point {
+
     Double x;
     Double y;
 
     /**
      * Creates a new Point with x and y coordinates
-     * 
      * @param x
      * @param y
      */
-    public Point(Double x, Double y) {
+    public Point(Double x,
+                 Double y) {
         this.x = x;
         this.y = y;
     }
@@ -41,8 +42,7 @@ public class Point {
     }
 
     /**
-     * @param x
-     *            the x to set
+     * @param x the x to set
      */
     public void setX(Double x) {
         this.x = x;
@@ -56,8 +56,7 @@ public class Point {
     }
 
     /**
-     * @param y
-     *            the y to set
+     * @param y the y to set
      */
     public void setY(Double y) {
         this.y = y;
@@ -84,23 +83,30 @@ public class Point {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         Point other = (Point) obj;
         if (x == null) {
-            if (other.x != null)
+            if (other.x != null) {
                 return false;
-        } else if (!x.equals(other.x))
+            }
+        } else if (!x.equals(other.x)) {
             return false;
+        }
         if (y == null) {
-            if (other.y != null)
+            if (other.y != null) {
                 return false;
-        } else if (!y.equals(other.y))
+            }
+        } else if (!y.equals(other.y)) {
             return false;
+        }
         return true;
     }
 }

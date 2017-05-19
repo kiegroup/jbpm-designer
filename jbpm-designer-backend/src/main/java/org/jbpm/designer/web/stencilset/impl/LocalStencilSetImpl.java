@@ -23,18 +23,18 @@ import java.io.InputStream;
 import org.jbpm.designer.web.plugin.impl.LocalResource;
 import org.jbpm.designer.web.stencilset.IDiagramStencilSet;
 
-
 /**
  * A local implementation of the stencilset for stencilsets defined inside the platform.
  * @author Antoine Toulme
- *
  */
 public class LocalStencilSetImpl extends LocalResource implements IDiagramStencilSet {
 
     private String _basePath;
 
-    public LocalStencilSetImpl(String name, String path) {
-        super(name, path  + "/" + name + ".json");
+    public LocalStencilSetImpl(String name,
+                               String path) {
+        super(name,
+              path + "/" + name + ".json");
         _basePath = path;
     }
 
@@ -46,5 +46,4 @@ public class LocalStencilSetImpl extends LocalResource implements IDiagramStenci
             throw new IllegalArgumentException(e);
         }
     }
-    
 }

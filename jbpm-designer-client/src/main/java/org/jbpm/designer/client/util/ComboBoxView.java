@@ -29,9 +29,11 @@ public interface ComboBoxView {
      */
     interface ModelPresenter {
 
-        void setTextBoxModelValue(final TextBox textBox, String value);
+        void setTextBoxModelValue(final TextBox textBox,
+                                  String value);
 
-        void setListBoxModelValue(final ValueListBox<String> listBox, String value);
+        void setListBoxModelValue(final ValueListBox<String> listBox,
+                                  String value);
 
         String getModelValue(final ValueListBox<String> listBox);
     }
@@ -42,9 +44,11 @@ public interface ComboBoxView {
     interface ComboBoxPresenter {
 
         void init(final ComboBoxView.ModelPresenter modelPresenter,
-                final ValueListBox<String> listBox, final TextBox textBox,
-                final boolean quoteStringValues,
-                final String customPrompt, final String placeholder);
+                  final ValueListBox<String> listBox,
+                  final TextBox textBox,
+                  final boolean quoteStringValues,
+                  final String customPrompt,
+                  final String placeholder);
 
         void setListBoxValues(final ListBoxValues listBoxValues);
 
@@ -56,19 +60,21 @@ public interface ComboBoxView {
 
         void updateListBoxValues(String listBoxValue);
 
-        String addCustomValueToListBoxValues(String newValue, String oldValue);
+        String addCustomValueToListBoxValues(String newValue,
+                                             String oldValue);
 
         String getValue();
 
         void listBoxValueChanged(String newValue);
 
         void textBoxValueChanged(String newValue);
-
     }
 
-    void init(final ComboBoxView.ComboBoxPresenter presenter, final ComboBoxView.ModelPresenter modelPresenter,
-            final ValueListBox<String> listBox, final TextBox textBox,
-            final String placeholder);
+    void init(final ComboBoxView.ComboBoxPresenter presenter,
+              final ComboBoxView.ModelPresenter modelPresenter,
+              final ValueListBox<String> listBox,
+              final TextBox textBox,
+              final String placeholder);
 
     String getModelValue();
 

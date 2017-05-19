@@ -16,7 +16,6 @@
 package org.jbpm.designer.web.server;
 
 import java.io.IOException;
-
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -29,42 +28,45 @@ import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 
-
-/** 
- * 
+/**
  * Check syntax of a BPMN2 process.
  */
 public class SyntaxCheckerServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
 
     protected IDiagramProfile profile;
 
     @Inject
     private IDiagramProfileService _profileService = null;
 
-	@Override
+    @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
     }
-	
-	@Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+
+    @Override
+    protected void doPost(HttpServletRequest req,
+                          HttpServletResponse resp)
             throws ServletException, IOException {
-		String json = req.getParameter("data");
+        String json = req.getParameter("data");
         String profileName = Utils.getDefaultProfileName(req.getParameter("profile"));
         String preprocessingData = req.getParameter("pp");
 
-        if(profile == null) {
-            profile = _profileService.findProfile(req, profileName);
+        if (profile == null) {
+            profile = _profileService.findProfile(req,
+                                                  profileName);
         }
 
-        BPMN2SyntaxChecker checker = new BPMN2SyntaxChecker(json, preprocessingData, profile);
-		checker.checkSyntax();
-		resp.setCharacterEncoding("UTF-8");
+        BPMN2SyntaxChecker checker = new BPMN2SyntaxChecker(json,
+                                                            preprocessingData,
+                                                            profile);
+        checker.checkSyntax();
+        resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
 
-        if(checker.errorsFound()) {
-			resp.getWriter().write(checker.getErrorsAsJson().toString());
-		}
-	}
+        if (checker.errorsFound()) {
+            resp.getWriter().write(checker.getErrorsAsJson().toString());
+        }
+    }
 }

@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.google.gwt.regexp.shared.RegExp;
-import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.service.DesignerSpecific;
 
 @DesignerSpecific
@@ -33,7 +32,7 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
     protected String invalidCharactersInNameErrorMessage;
 
     // Pattern for valid value
-    protected  RegExp regExp = null;
+    protected RegExp regExp = null;
 
     public DataIOEditorNameTextBox() {
         super();
@@ -41,16 +40,16 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
 
     /**
      * Sets the invalid values for the TextBox
-     *
      * @param invalidValues
      * @param isCaseSensitive
      * @param invalidValueErrorMessage
      */
-    public void setInvalidValues(final Set<String> invalidValues, final boolean isCaseSensitive, final String invalidValueErrorMessage) {
+    public void setInvalidValues(final Set<String> invalidValues,
+                                 final boolean isCaseSensitive,
+                                 final String invalidValueErrorMessage) {
         if (isCaseSensitive) {
             this.invalidValues = invalidValues;
-        }
-        else {
+        } else {
             this.invalidValues = new HashSet<String>();
             for (String value : invalidValues) {
                 this.invalidValues.add(value.toLowerCase());
@@ -62,11 +61,11 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
 
     /**
      * Sets the RegExp pattern for the TextBox
-     *
      * @param pattern
      * @param invalidCharactersInNameErrorMessage
      */
-    public void setRegExp(final String pattern, final String invalidCharactersInNameErrorMessage,
+    public void setRegExp(final String pattern,
+                          final String invalidCharactersInNameErrorMessage,
                           final String invalidCharacterTypedMessage) {
         regExp = RegExp.compile(pattern);
         this.invalidCharactersInNameErrorMessage = invalidCharactersInNameErrorMessage;
@@ -74,7 +73,8 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
     }
 
     @Override
-    public String isValidValue(final String value, final boolean isOnFocusLost) {
+    public String isValidValue(final String value,
+                               final boolean isOnFocusLost) {
         if (invalidValues != null && !invalidValues.isEmpty()) {
             if (isOnFocusLost) {
                 String err = testForInvalidValue(value);
@@ -98,7 +98,6 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
 
     /**
      * Tests whether a value is in the list of invalid values
-     *
      * @param value
      * @return error message if value is invalid; otherwise null
      */
@@ -109,14 +108,12 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
         String testValue;
         if (!isCaseSensitive) {
             testValue = value.toLowerCase();
-        }
-        else {
+        } else {
             testValue = value;
         }
         if (invalidValues.contains(testValue)) {
             return invalidValueErrorMessage;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -129,8 +126,7 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
         // It's a known invalid value
         if (testForInvalidValue(value) != null) {
             return "";
-        }
-        else {
+        } else {
             StringBuilder validValue = new StringBuilder(value.length());
             for (int i = 0; i < value.length(); i++) {
                 char c = value.charAt(i);
@@ -143,16 +139,14 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
         }
     }
 
-
     protected String getInvalidCharsInName(final String value) {
         if (value == null || value.isEmpty()) {
             return "";
-        }
-        else {
+        } else {
             StringBuilder invalidChars = new StringBuilder(value.length());
             for (int i = 0; i < value.length(); i++) {
                 char c = value.charAt(i);
-                if (! isValidChar(c)) {
+                if (!isValidChar(c)) {
                     invalidChars.append(c);
                 }
             }
@@ -164,8 +158,7 @@ public class DataIOEditorNameTextBox extends AbstractValidatingTextBox {
     protected boolean isValidChar(final char c) {
         if (regExp != null) {
             return regExp.test("" + c);
-        }
-        else {
+        } else {
             return true;
         }
     }

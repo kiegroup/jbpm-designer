@@ -48,11 +48,9 @@ public class DesignerPresenterTest {
 
     @InjectMocks
     @Spy
-    private DesignerPresenter presenter =  new DesignerPresenter(view)
-    {
+    private DesignerPresenter presenter = new DesignerPresenter(view) {
         @Override
-        protected void resetEditorPages(final Overview overview)
-        {
+        protected void resetEditorPages(final Overview overview) {
         }
     };
 
@@ -60,13 +58,21 @@ public class DesignerPresenterTest {
     public void testSetup() {
         String id = "testId";
 
-        presenter.setup(parameters, id, overview);
+        presenter.setup(parameters,
+                        id,
+                        overview);
 
-        verify(parameters, times(1)).put("readonly", "false");
-        verify(designerEditorParametersPublisher, times(1)).publish(parameters);
-        verify(view, times(1)).setup(id, parameters);
+        verify(parameters,
+               times(1)).put("readonly",
+                             "false");
+        verify(designerEditorParametersPublisher,
+               times(1)).publish(parameters);
+        verify(view,
+               times(1)).setup(id,
+                               parameters);
 
-        assertEquals(1, parameters.size());
+        assertEquals(1,
+                     parameters.size());
         assertTrue(parameters.containsKey("readonly"));
     }
 }

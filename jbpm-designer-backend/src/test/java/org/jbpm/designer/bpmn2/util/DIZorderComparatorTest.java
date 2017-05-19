@@ -26,9 +26,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DIZorderComparatorTest {
@@ -56,21 +55,25 @@ public class DIZorderComparatorTest {
 
     @Test
     public void testShapeBeforeEdge() throws Exception {
-        assertTrue(comparator.compare(mock(BPMNShape.class), mock(BPMNEdge.class)) < 0);
+        assertTrue(comparator.compare(mock(BPMNShape.class),
+                                      mock(BPMNEdge.class)) < 0);
     }
 
     @Test
     public void testEdgeAfterShape() throws Exception {
-        assertTrue(comparator.compare(mock(BPMNEdge.class), mock(BPMNShape.class)) > 0);
+        assertTrue(comparator.compare(mock(BPMNEdge.class),
+                                      mock(BPMNShape.class)) > 0);
     }
 
     @Test
     public void testLaneBeforeTask() throws Exception {
-        assertTrue(comparator.compare(laneShape, taskShape) < 0);
+        assertTrue(comparator.compare(laneShape,
+                                      taskShape) < 0);
     }
 
     @Test
     public void testTaskBeforeLane() throws Exception {
-        assertTrue(comparator.compare(taskShape, laneShape) > 0);
+        assertTrue(comparator.compare(taskShape,
+                                      laneShape) > 0);
     }
 }

@@ -15,6 +15,12 @@
 
 package org.jbpm.designer.web.server;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Map;
+import javax.enterprise.event.Event;
+
 import org.apache.commons.io.IOUtils;
 import org.drools.core.util.ConfFileUtils;
 import org.guvnor.common.services.project.model.Dependencies;
@@ -36,12 +42,6 @@ import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.workbench.events.NotificationEvent;
-
-import javax.enterprise.event.Event;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Map;
 
 public class ServiceRepoUtils {
 
@@ -67,25 +67,26 @@ public class ServiceRepoUtils {
         byte[] iconContent = null;
         try {
             iconContent = getImageBytes(new URL(iconFileURL)
-                    .openStream());
+                                                .openStream());
         } catch (Exception e1) {
             _logger.error("Could not read icon image: " + e1.getMessage());
         }
         // install wid and icon
-        repository.deleteAssetFromPath(getRepositoryDir( uuid ) + "/" +  widName + ".wid");
+        repository.deleteAssetFromPath(getRepositoryDir(uuid) + "/" + widName + ".wid");
 
         AssetBuilder widAssetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         widAssetBuilder.name(widName)
-                .location(getRepositoryDir( uuid ))
+                .location(getRepositoryDir(uuid))
                 .type("wid")
                 .content(workItemDefinitionContent);
 
         repository.createAsset(widAssetBuilder.getAsset());
 
-        if(iconName != null && !iconName.isEmpty()) {
+        if (iconName != null && !iconName.isEmpty()) {
             AssetBuilder iconAssetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
             String iconExtension = iconName.substring(iconName.lastIndexOf(".") + 1);
-            String iconFileName = iconName.substring(0, iconName.lastIndexOf("."));
+            String iconFileName = iconName.substring(0,
+                                                     iconName.lastIndexOf("."));
 
             repository.deleteAssetFromPath(getRepositoryDir(uuid) + "/" + iconFileName + "." + iconExtension);
 
@@ -97,7 +98,7 @@ public class ServiceRepoUtils {
             repository.createAsset(iconAssetBuilder.getAsset());
         }
 
-        if(vfsServices != null ) {
+        if (vfsServices != null) {
             Path assetPath = vfsServices.get(uuid);
 
             if (canUpdateConfigForWorkitem(workitemsFromRepo.get(key))) {
@@ -109,7 +110,8 @@ public class ServiceRepoUtils {
                         ""
                 ));
             } else {
-                notification.fire(new NotificationEvent("Installed workitem cannot be registered in project configuration.", NotificationEvent.NotificationType.WARNING));
+                notification.fire(new NotificationEvent("Installed workitem cannot be registered in project configuration.",
+                                                        NotificationEvent.NotificationType.WARNING));
             }
 
             if (canUpdateProjectPomForWorkitem(workitemsFromRepo.get(key))) {
@@ -117,31 +119,31 @@ public class ServiceRepoUtils {
                 POM projectPOM = pomService.load(assetProject.getPomXMLPath());
                 if (projectPOM != null) {
                     Dependencies projectDepends = projectPOM.getDependencies();
-                    Dependencies validDependsFromWorkitem = getValidDependenciesForWorkitem(projectDepends, workitemsFromRepo.get(key));
+                    Dependencies validDependsFromWorkitem = getValidDependenciesForWorkitem(projectDepends,
+                                                                                            workitemsFromRepo.get(key));
                     if (validDependsFromWorkitem != null && validDependsFromWorkitem.size() > 0) {
                         for (Dependency workitemDependency : validDependsFromWorkitem) {
                             projectPOM.getDependencies().add(workitemDependency);
                         }
 
                         pomService.save(assetProject.getPomXMLPath(),
-                                projectPOM,
-                                metadataService.getMetadata(assetProject.getPomXMLPath()),
-                                "System updated dependencies from workitem configuration.",
-                                false);
-
+                                        projectPOM,
+                                        metadataService.getMetadata(assetProject.getPomXMLPath()),
+                                        "System updated dependencies from workitem configuration.",
+                                        false);
                     }
                 }
             }
         }
-
     }
 
-    private static Dependencies getValidDependenciesForWorkitem(Dependencies projectDepends, WorkDefinitionImpl workitem) {
+    private static Dependencies getValidDependenciesForWorkitem(Dependencies projectDepends,
+                                                                WorkDefinitionImpl workitem) {
         Dependencies validDepends = new Dependencies();
 
         Dependencies workItemDepends = getWorkItemDepends(workitem);
-        for(Dependency depends : workItemDepends) {
-            if(!projectDepends.containsDependency(depends)) {
+        for (Dependency depends : workItemDepends) {
+            if (!projectDepends.containsDependency(depends)) {
                 validDepends.add(depends);
             }
         }
@@ -151,15 +153,15 @@ public class ServiceRepoUtils {
 
     private static Dependencies getWorkItemDepends(WorkDefinitionImpl workitem) {
         Dependencies workItemDepends = new Dependencies();
-        for(String mavenDepends : workitem.getMavenDependencies()) {
+        for (String mavenDepends : workitem.getMavenDependencies()) {
             String[] dependsParts = mavenDepends.split("\\s*:\\s*");
             Dependency newDepend = new Dependency();
-            if(dependsParts.length == 3) {
+            if (dependsParts.length == 3) {
                 newDepend.setGroupId(dependsParts[0]);
                 newDepend.setArtifactId(dependsParts[1]);
                 newDepend.setVersion(dependsParts[2]);
                 workItemDepends.add(newDepend);
-            } else if(dependsParts.length == 4) {
+            } else if (dependsParts.length == 4) {
                 newDepend.setGroupId(dependsParts[0]);
                 newDepend.setArtifactId(dependsParts[1]);
                 newDepend.setVersion(dependsParts[2]);
@@ -173,20 +175,22 @@ public class ServiceRepoUtils {
     private static byte[] getImageBytes(InputStream is) throws Exception {
         try {
             return IOUtils.toByteArray(is);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new Exception("Error creating image byte array.");
-        }
-        finally {
-            if (is != null) { is.close(); }
+        } finally {
+            if (is != null) {
+                is.close();
+            }
         }
     }
 
     private static String getRepositoryDir(String uuid) {
         int iStart = uuid.indexOf("//");
-        iStart = uuid.indexOf('/', iStart + 2);
+        iStart = uuid.indexOf('/',
+                              iStart + 2);
         int iEnd = uuid.lastIndexOf('/');
-        return uuid.substring(iStart, iEnd);
+        return uuid.substring(iStart,
+                              iEnd);
     }
 
     public static boolean canUpdateProjectPomForWorkitem(WorkDefinitionImpl workitem) {
@@ -204,6 +208,4 @@ public class ServiceRepoUtils {
                 workitem.getDefaultHandler() != null &&
                 workitem.getDefaultHandler().trim().length() > 0;
     }
-
-
 }

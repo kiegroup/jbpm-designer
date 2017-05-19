@@ -1,11 +1,10 @@
 package org.jbpm.designer.stencilset;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import java.io.IOException;
 
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class BeautifierTest {
 
@@ -21,6 +20,7 @@ public class BeautifierTest {
     @Test
     public void testgetScriptFromFile() throws IOException {
         String result = Beautifier.getScriptFromFile(FILE_NAME);
-        assertEquals(FILE_CONTENT, result);
+        assertEquals(FILE_CONTENT,
+                     result);
     }
 }

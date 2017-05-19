@@ -15,11 +15,11 @@
 
 package org.jbpm.designer.helper;
 
+import java.util.Collection;
+import javax.servlet.ServletContext;
+
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-
-import javax.servlet.ServletContext;
-import java.util.Collection;
 
 public class TestIDiagramProfile implements IDiagramProfile {
 
@@ -147,10 +147,14 @@ public class TestIDiagramProfile implements IDiagramProfile {
     }
 
     @Override
-    public String getBpsimDisplay() { return "true"; }
+    public String getBpsimDisplay() {
+        return "true";
+    }
 
     @Override
-    public String getFormsType() { return ""; }
+    public String getFormsType() {
+        return "";
+    }
 
     @Override
     public void init(ServletContext context) {

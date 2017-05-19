@@ -26,7 +26,7 @@ public class DesignerAssetServiceTest extends RepositoryBaseTest {
 
     private Event<ResourceOpenedEvent> resourceOpenedEvent = new EventSourceMock<ResourceOpenedEvent>() {
         @Override
-        public void fire( ResourceOpenedEvent event ) {
+        public void fire(ResourceOpenedEvent event) {
             receivedEvents.add(event);
         }
     };
@@ -51,38 +51,51 @@ public class DesignerAssetServiceTest extends RepositoryBaseTest {
         PlaceRequest readOnlyPlaceRequest = mock(PlaceRequest.class);
         PlaceRequest readPlaceRequst = mock(PlaceRequest.class);
 
-        when(readOnlyPlaceRequest.getParameter(anyString(), anyString())).thenAnswer(new Answer<String>() {
+        when(readOnlyPlaceRequest.getParameter(anyString(),
+                                               anyString())).thenAnswer(new Answer<String>() {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
                 return "true";
             }
         });
 
-        when(readPlaceRequst.getParameter(anyString(), anyString())).thenAnswer(new Answer<String>() {
+        when(readPlaceRequst.getParameter(anyString(),
+                                          anyString())).thenAnswer(new Answer<String>() {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
                 return "false";
             }
         });
 
-
-        when(assetService.getEditorParameters(anyObject(), anyString(), anyString(), anyObject())).thenAnswer(new Answer<String>() {
+        when(assetService.getEditorParameters(anyObject(),
+                                              anyString(),
+                                              anyString(),
+                                              anyObject())).thenAnswer(new Answer<String>() {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
                 PlaceRequest place = (PlaceRequest) args[3];
 
-                if(place.getParameter("readonly", "false").equals("true")) {
+                if (place.getParameter("readonly",
+                                       "false").equals("true")) {
                     resourceOpenedEvent.fire(testResourceOpenedEvent);
                 }
                 return null;
             }
         });
 
-        assetService.getEditorParameters(null, null, null, readPlaceRequst);
-        assertEquals(receivedEvents.size(), 0);
+        assetService.getEditorParameters(null,
+                                         null,
+                                         null,
+                                         readPlaceRequst);
+        assertEquals(receivedEvents.size(),
+                     0);
 
-        assetService.getEditorParameters(null, null, null, readOnlyPlaceRequest);
-        assertEquals(receivedEvents.size(), 1);
+        assetService.getEditorParameters(null,
+                                         null,
+                                         null,
+                                         readOnlyPlaceRequest);
+        assertEquals(receivedEvents.size(),
+                     1);
     }
 }

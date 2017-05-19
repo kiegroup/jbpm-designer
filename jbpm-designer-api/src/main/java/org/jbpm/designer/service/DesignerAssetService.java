@@ -15,12 +15,12 @@
 
 package org.jbpm.designer.service;
 
+import java.util.Map;
+
 import org.guvnor.common.services.shared.metadata.model.Metadata;
 import org.jboss.errai.bus.server.annotations.Remote;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.mvp.PlaceRequest;
-
-import java.util.Map;
 
 /**
  * Designer service for loading\saving BPMN2 processes
@@ -30,20 +30,22 @@ public interface DesignerAssetService {
 
     public DesignerContent loadContent(Path path);
 
-    void updateMetadata(final Path resource, final Metadata metadata );
+    void updateMetadata(final Path resource,
+                        final Metadata metadata);
 
-    public Map<String, String> getEditorParameters( final Path path,
-                                  final String editorID,
-                                  String hostInfo,
-                                  PlaceRequest place );
+    public Map<String, String> getEditorParameters(final Path path,
+                                                   final String editorID,
+                                                   String hostInfo,
+                                                   PlaceRequest place);
 
     public String getEditorID();
 
-    public Path createProcess( final Path context,
-                               final String fileName );
+    public Path createProcess(final Path context,
+                              final String fileName);
 
-    public Path createCaseDefinition( final Path context,
-            final String fileName, String caseIdPrefix );
+    public Path createCaseDefinition(final Path context,
+                                     final String fileName,
+                                     String caseIdPrefix);
 
     public boolean isCaseProject(Path rootProjectPath);
 }

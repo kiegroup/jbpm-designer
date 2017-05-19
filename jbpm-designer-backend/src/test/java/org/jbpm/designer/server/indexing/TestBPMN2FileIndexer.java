@@ -15,16 +15,14 @@
  */
 package org.jbpm.designer.server.indexing;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import org.jbpm.designer.type.Bpmn2TypeDefinition;
 import org.kie.workbench.common.services.backend.project.ProjectClassLoaderHelper;
 import org.kie.workbench.common.services.refactoring.backend.server.TestIndexer;
 import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.uberfire.io.IOService;
 
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 public class TestBPMN2FileIndexer extends BPMN2FileIndexer implements TestIndexer<Bpmn2TypeDefinition> {
 
@@ -47,5 +45,4 @@ public class TestBPMN2FileIndexer extends BPMN2FileIndexer implements TestIndexe
     public void setResourceTypeDefinition(Bpmn2TypeDefinition type) {
         this.bpmn2TypeDefinition = type;
     }
-
 }

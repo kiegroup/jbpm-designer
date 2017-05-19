@@ -23,21 +23,34 @@ public class AssetTypeMapper {
     private static Map<String, String> mimeTypes = new HashMap<String, String>();
 
     static {
-        mimeTypes.put("text", "text/plain");
-        mimeTypes.put("pdf", "application/pdf");
-        mimeTypes.put("ftl", "text/plain");
-        mimeTypes.put("form", "text/xml");
-        mimeTypes.put("xml", "text/xml");
-        mimeTypes.put("json", "text/json");
-        mimeTypes.put("html", "text/html");
-        mimeTypes.put("htm", "text/html");
-        mimeTypes.put("js", "text/javascript");
-        mimeTypes.put("css", "text/css");
-        mimeTypes.put("java", "text/x-java-source");
-        mimeTypes.put("bpmn", "text/xml");
-        mimeTypes.put("bpmn2", "text/xml");
-        mimeTypes.put( "frm", "application/json" );
-
+        mimeTypes.put("text",
+                      "text/plain");
+        mimeTypes.put("pdf",
+                      "application/pdf");
+        mimeTypes.put("ftl",
+                      "text/plain");
+        mimeTypes.put("form",
+                      "text/xml");
+        mimeTypes.put("xml",
+                      "text/xml");
+        mimeTypes.put("json",
+                      "text/json");
+        mimeTypes.put("html",
+                      "text/html");
+        mimeTypes.put("htm",
+                      "text/html");
+        mimeTypes.put("js",
+                      "text/javascript");
+        mimeTypes.put("css",
+                      "text/css");
+        mimeTypes.put("java",
+                      "text/x-java-source");
+        mimeTypes.put("bpmn",
+                      "text/xml");
+        mimeTypes.put("bpmn2",
+                      "text/xml");
+        mimeTypes.put("frm",
+                      "application/json");
     }
 
     public static String findMimeType(Asset asset) {

@@ -19,37 +19,35 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
 
 /**
  * @author Antoine Toulme
- * A configurable filter config, so that users can set settings programmatically.
- *
+ *         A configurable filter config, so that users can set settings programmatically.
  */
 @SuppressWarnings("rawtypes")
 public class ConfigurableFilterConfig implements FilterConfig {
-    
+
     private Map<String, String> _parameters = new HashMap<String, String>();
-    
+
     private String _name;
 
     private ServletContext _servletContext;
-    
+
     public ConfigurableFilterConfig(FilterConfig config) {
         Enumeration parameters = config.getInitParameterNames();
-        while(parameters.hasMoreElements()) {
+        while (parameters.hasMoreElements()) {
             String name = (String) parameters.nextElement();
-            _parameters.put(name, config.getInitParameter(name));
+            _parameters.put(name,
+                            config.getInitParameter(name));
         }
         _name = config.getFilterName();
         _servletContext = config.getServletContext();
-        
     }
 
-    /** 
-     * Returns the filter-name of this filter as defined in the deployment descriptor. 
+    /**
+     * Returns the filter-name of this filter as defined in the deployment descriptor.
      */
     public String getFilterName() {
         return _name;
@@ -58,30 +56,23 @@ public class ConfigurableFilterConfig implements FilterConfig {
     /**
      * Returns a reference to the {@link javax.servlet.ServletContext} in which the caller
      * is executing.
-     *
-     *
-     * @return      a {@link javax.servlet.ServletContext} object, used
-     *          by the caller to interact with its servlet 
-     *                  container
-     * 
-     * @see     javax.servlet.ServletContext
-     *
+     * @return a {@link javax.servlet.ServletContext} object, used
+     * by the caller to interact with its servlet
+     * container
+     * @see javax.servlet.ServletContext
      */
     public ServletContext getServletContext() {
         return _servletContext;
     }
 
     /**
-     * Returns a <code>String</code> containing the value of the 
-     * named initialization parameter, or <code>null</code> if 
+     * Returns a <code>String</code> containing the value of the
+     * named initialization parameter, or <code>null</code> if
      * the parameter does not exist.
-     *
-     * @param name  a <code>String</code> specifying the name
-     *          of the initialization parameter
-     *
-     * @return      a <code>String</code> containing the value 
-     *          of the initialization parameter
-     *
+     * @param name a <code>String</code> specifying the name
+     * of the initialization parameter
+     * @return a <code>String</code> containing the value
+     * of the initialization parameter
      */
     public String getInitParameter(String name) {
         return _parameters.get(name);
@@ -89,16 +80,12 @@ public class ConfigurableFilterConfig implements FilterConfig {
 
     /**
      * Returns the names of the filter's initialization parameters
-     * as an <code>Enumeration</code> of <code>String</code> objects, 
+     * as an <code>Enumeration</code> of <code>String</code> objects,
      * or an empty <code>Enumeration</code> if the filter has
      * no initialization parameters.
-     *
-     * @return      an <code>Enumeration</code> of <code>String</code> 
-     *          objects containing the names of the filter's 
-     *          initialization parameters
-     *
-     *
-     *
+     * @return an <code>Enumeration</code> of <code>String</code>
+     * objects containing the names of the filter's
+     * initialization parameters
      */
     public Enumeration getInitParameterNames() {
         final LinkedList<String> keys = new LinkedList<String>(_parameters.keySet());
@@ -110,24 +97,26 @@ public class ConfigurableFilterConfig implements FilterConfig {
 
             public Object nextElement() {
                 return keys.pop();
-            }};
+            }
+        };
     }
-    
+
     /**
      * Sets the value of a parameter
      * @param name the name of the parameter
      * @param value the value of the parameter
      */
-    public void setParameter(String name, String value) {
-        _parameters.put(name, value);
+    public void setParameter(String name,
+                             String value) {
+        _parameters.put(name,
+                        value);
     }
-    
+
     /**
      * Sets the name of the filter.
-     * @param name 
+     * @param name
      */
     public void setFilterName(String name) {
         _name = name;
     }
-
 }

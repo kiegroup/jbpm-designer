@@ -17,9 +17,9 @@ package org.jbpm.designer.repository;
 
 /**
  * Generic type of component managed by repository
- *
  */
 public interface Item {
+
     /**
      * Returns uniqueId of this asset
      * @return unique identifier of this asset

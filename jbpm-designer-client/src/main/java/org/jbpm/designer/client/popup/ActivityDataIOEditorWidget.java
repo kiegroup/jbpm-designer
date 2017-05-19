@@ -16,18 +16,18 @@
 
 package org.jbpm.designer.client.popup;
 
-import com.google.gwt.user.client.ui.Widget;
-import org.jbpm.designer.client.shared.AssignmentRow;
-import org.jbpm.designer.client.shared.Variable.VariableType;
-import org.jbpm.designer.client.util.ListBoxValues;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+
+import com.google.gwt.user.client.ui.Widget;
+import org.jbpm.designer.client.shared.AssignmentRow;
+import org.jbpm.designer.client.shared.Variable.VariableType;
+import org.jbpm.designer.client.util.ListBoxValues;
 
 @Dependent
 public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetView.Presenter {
@@ -60,8 +60,7 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
     public void handleAddClick() {
         if (isSingleVar && view.getAssignmentRows().size() > 0) {
             view.showOnlySingleEntryAllowed();
-        }
-        else {
+        } else {
             addAssignment();
         }
     }
@@ -72,17 +71,14 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
             view.setProcessVarAsSource();
             if (isSingleVar) {
                 view.setTableTitleInputSingle();
-            }
-            else {
+            } else {
                 view.setTableTitleInputMultiple();
             }
-        }
-        else {
+        } else {
             view.setProcessVarAsTarget();
             if (isSingleVar) {
                 view.setTableTitleOutputSingle();
-            }
-            else {
+            } else {
                 view.setTableTitleOutputMultiple();
             }
         }
@@ -92,7 +88,8 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
         this.variableType = variableType;
     }
 
-    public void setAllowDuplicateNames(boolean allowDuplicateNames, String duplicateNameErrorMessage) {
+    public void setAllowDuplicateNames(boolean allowDuplicateNames,
+                                       String duplicateNameErrorMessage) {
         this.allowDuplicateNames = allowDuplicateNames;
         this.duplicateNameErrorMessage = duplicateNameErrorMessage;
     }
@@ -116,8 +113,10 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
         widget.setProcessVariables(processVarListBoxValues);
         widget.setShowConstants(getShowConstants());
 
-        widget.setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
-        widget.setAllowDuplicateNames(allowDuplicateNames, duplicateNameErrorMessage);
+        widget.setDisallowedNames(disallowedNames,
+                                  disallowedNameErrorMessage);
+        widget.setAllowDuplicateNames(allowDuplicateNames,
+                                      duplicateNameErrorMessage);
         widget.setParentWidget(this);
     }
 
@@ -138,7 +137,8 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
                 if (row.getName() != null && !row.getName().isEmpty()) {
                     if (disallowedNames.contains(row.getName().toLowerCase())) {
                         assignmentRows.remove(i);
-                        hiddenPropertyRows.add(0, row);
+                        hiddenPropertyRows.add(0,
+                                               row);
                     }
                 }
             }
@@ -146,8 +146,7 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
 
         if (assignmentRows.isEmpty()) {
             view.setNoneDisplayStyle();
-        }
-        else {
+        } else {
             view.setTableDisplayStyle();
         }
 
@@ -155,8 +154,10 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
 
         for (int i = 0; i < assignmentRows.size(); i++) {
             view.getAssignmentWidget(i).setParentWidget(this);
-            view.getAssignmentWidget(i).setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
-            view.getAssignmentWidget(i).setAllowDuplicateNames(allowDuplicateNames, duplicateNameErrorMessage);
+            view.getAssignmentWidget(i).setDisallowedNames(disallowedNames,
+                                                           disallowedNameErrorMessage);
+            view.getAssignmentWidget(i).setAllowDuplicateNames(allowDuplicateNames,
+                                                               duplicateNameErrorMessage);
         }
     }
 
@@ -191,18 +192,19 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
         }
     }
 
-    public void setDisallowedNames(Set<String> disallowedNames, String disallowedNameErrorMessage) {
+    public void setDisallowedNames(Set<String> disallowedNames,
+                                   String disallowedNameErrorMessage) {
         this.disallowedNames = disallowedNames;
         this.disallowedNameErrorMessage = disallowedNameErrorMessage;
 
         for (int i = 0; i < view.getAssignmentsCount(); i++) {
-            view.getAssignmentWidget(i).setDisallowedNames(disallowedNames, disallowedNameErrorMessage);
+            view.getAssignmentWidget(i).setDisallowedNames(disallowedNames,
+                                                           disallowedNameErrorMessage);
         }
     }
 
     /**
      * Tests whether a Row name occurs more than once in the list of rows
-     *
      * @param name
      * @return
      */
@@ -229,7 +231,7 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
         view.setVisible(visible);
     }
 
-    public Widget getWidget(){
+    public Widget getWidget() {
         return (Widget) view;
     }
 }

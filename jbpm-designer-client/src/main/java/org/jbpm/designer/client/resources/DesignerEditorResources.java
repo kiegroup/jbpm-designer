@@ -21,7 +21,7 @@ import org.jbpm.designer.client.resources.images.DesignerEditorImageResources;
 
 public interface DesignerEditorResources extends ClientBundle {
 
-    public static final DesignerEditorResources INSTANCE = GWT.create(DesignerEditorResources.class );
+    public static final DesignerEditorResources INSTANCE = GWT.create(DesignerEditorResources.class);
 
     DesignerEditorImageResources images();
 }

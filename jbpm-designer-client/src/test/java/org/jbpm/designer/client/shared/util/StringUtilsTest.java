@@ -17,6 +17,7 @@
 package org.jbpm.designer.client.shared.util;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class StringUtilsTest {
@@ -28,17 +29,20 @@ public class StringUtilsTest {
 
     @Test
     public void testCreateQuotedConstantEmpty() throws Exception {
-        assertEquals("", StringUtils.createQuotedConstant(""));
+        assertEquals("",
+                     StringUtils.createQuotedConstant(""));
     }
 
     @Test
     public void testCreateQuotedConstantNumber() throws Exception {
-        assertEquals("-123", StringUtils.createQuotedConstant("-123"));
+        assertEquals("-123",
+                     StringUtils.createQuotedConstant("-123"));
     }
 
     @Test
     public void testCreateQuotedConstant() throws Exception {
-        assertEquals("\" abc \"", StringUtils.createQuotedConstant(" abc "));
+        assertEquals("\" abc \"",
+                     StringUtils.createQuotedConstant(" abc "));
     }
 
     @Test
@@ -48,16 +52,19 @@ public class StringUtilsTest {
 
     @Test
     public void testCreateUnquotedConstantEmpty() throws Exception {
-        assertEquals("", StringUtils.createUnquotedConstant(""));
+        assertEquals("",
+                     StringUtils.createUnquotedConstant(""));
     }
 
     @Test
     public void testCreateUnquotedConstantNoAction() throws Exception {
-        assertEquals("-123", StringUtils.createUnquotedConstant("-123"));
+        assertEquals("-123",
+                     StringUtils.createUnquotedConstant("-123"));
     }
 
     @Test
     public void testCreateUnquotedConstant() throws Exception {
-        assertEquals(" abc ", StringUtils.createUnquotedConstant("\" abc \""));
+        assertEquals(" abc ",
+                     StringUtils.createUnquotedConstant("\" abc \""));
     }
 }

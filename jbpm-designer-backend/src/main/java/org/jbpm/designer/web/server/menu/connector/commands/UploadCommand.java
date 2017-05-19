@@ -15,20 +15,21 @@
 
 package org.jbpm.designer.web.server.menu.connector.commands;
 
-import org.apache.commons.fileupload.FileItemStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.json.JSONObject;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItemStream;
+import org.jbpm.designer.repository.Repository;
+import org.jbpm.designer.web.profile.IDiagramProfile;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UploadCommand extends AbstractCommand {
+
     private static Logger logger = LoggerFactory.getLogger(RenameCommand.class);
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -38,7 +39,13 @@ public class UploadCommand extends AbstractCommand {
     List<FileItemStream> listFiles;
     List<ByteArrayOutputStream> listFileStreams;
 
-    public void init(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile, Repository repository, Map<String, Object> requestParams, List<FileItemStream> listFiles, List<ByteArrayOutputStream> listFileStreams) {
+    public void init(HttpServletRequest request,
+                     HttpServletResponse response,
+                     IDiagramProfile profile,
+                     Repository repository,
+                     Map<String, Object> requestParams,
+                     List<FileItemStream> listFiles,
+                     List<ByteArrayOutputStream> listFileStreams) {
         this.request = request;
         this.response = response;
         this.profile = profile;
@@ -52,6 +59,10 @@ public class UploadCommand extends AbstractCommand {
         String tree = (String) requestParams.get("tree");
         String current = (String) requestParams.get("current");
 
-        return uploadFiles(profile, current, listFiles, listFileStreams, Boolean.parseBoolean(tree));
+        return uploadFiles(profile,
+                           current,
+                           listFiles,
+                           listFileStreams,
+                           Boolean.parseBoolean(tree));
     }
 }

@@ -32,7 +32,8 @@ import org.eclipse.emf.ecore.xmi.impl.ElementHandlerImpl;
 import org.jboss.drools.impl.DroolsFactoryImpl;
 
 public class JBPMBpmn2ResourceFactoryImpl extends ResourceFactoryImpl {
-	/**
+
+    /**
      * Creates an instance of the resource factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -52,26 +53,33 @@ public class JBPMBpmn2ResourceFactoryImpl extends ResourceFactoryImpl {
         BpsimFactoryImpl.init();
         JBPMBpmn2ResourceImpl result = new JBPMBpmn2ResourceImpl(uri);
         ExtendedMetaData extendedMetadata = new XmlExtendedMetadata();
-        result.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetadata);
-        result.getDefaultLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetadata);
+        result.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA,
+                                           extendedMetadata);
+        result.getDefaultLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA,
+                                           extendedMetadata);
 
         result.getDefaultSaveOptions().put(XMLResource.OPTION_SAVE_TYPE_INFORMATION,
-                new OnlyContainmentTypeInfo());
+                                           new OnlyContainmentTypeInfo());
 
         result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE,
-                Boolean.TRUE);
+                                           Boolean.TRUE);
         result.getDefaultSaveOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE,
-                Boolean.TRUE);
+                                           Boolean.TRUE);
 
-        result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_LEXICAL_HANDLER, Boolean.TRUE);
+        result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_LEXICAL_HANDLER,
+                                           Boolean.TRUE);
 
         result.getDefaultSaveOptions().put(XMLResource.OPTION_ELEMENT_HANDLER,
-                new ElementHandlerImpl(true));
+                                           new ElementHandlerImpl(true));
 
-        result.getDefaultSaveOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");
-        result.getDefaultSaveOptions().put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, new ArrayList<Object>());
-        result.getDefaultSaveOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
-        result.getDefaultSaveOptions().put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
+        result.getDefaultSaveOptions().put(XMLResource.OPTION_ENCODING,
+                                           "UTF-8");
+        result.getDefaultSaveOptions().put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE,
+                                           new ArrayList<Object>());
+        result.getDefaultSaveOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION,
+                                           true);
+        result.getDefaultSaveOptions().put(XMLResource.OPTION_PROCESS_DANGLING_HREF,
+                                           XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
 
         return result;
     }

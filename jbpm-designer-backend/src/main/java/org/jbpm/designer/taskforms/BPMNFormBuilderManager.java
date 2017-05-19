@@ -33,19 +33,19 @@ public class BPMNFormBuilderManager {
     private List<BPMNFormBuilderService<Definitions>> formBuilders = new ArrayList<>();
 
     @Inject
-    public BPMNFormBuilderManager( Instance<BPMNFormBuilderService<Definitions>> installedFormBuilders ) {
-        installedFormBuilders.iterator().forEachRemaining( formBuilder -> {
-            formBuilders.add( formBuilder );
-        } );
+    public BPMNFormBuilderManager(Instance<BPMNFormBuilderService<Definitions>> installedFormBuilders) {
+        installedFormBuilders.iterator().forEachRemaining(formBuilder -> {
+            formBuilders.add(formBuilder);
+        });
     }
 
     public List<BPMNFormBuilderService<Definitions>> getFormBuilders() {
         return Collections.unmodifiableList(formBuilders);
     }
 
-    public BPMNFormBuilderService<Definitions> getBuilderByFormType( String extension ) {
-        Optional<BPMNFormBuilderService<Definitions>> optional = formBuilders.stream().filter( builderService -> builderService.getFormExtension().equals( extension ) ).findFirst();
-        if ( optional.isPresent() ) {
+    public BPMNFormBuilderService<Definitions> getBuilderByFormType(String extension) {
+        Optional<BPMNFormBuilderService<Definitions>> optional = formBuilders.stream().filter(builderService -> builderService.getFormExtension().equals(extension)).findFirst();
+        if (optional.isPresent()) {
             return optional.get();
         }
         return null;

@@ -15,18 +15,19 @@
 
 package org.jbpm.designer.web.server.menu.connector.commands;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.json.JSONObject;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PasteCommand extends AbstractCommand {
+
     private static Logger logger = LoggerFactory.getLogger(PasteCommand.class);
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -34,7 +35,11 @@ public class PasteCommand extends AbstractCommand {
     private Repository repository;
     private Map<String, Object> requestParams;
 
-    public void init(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile, Repository repository, Map<String, Object> requestParams) {
+    public void init(HttpServletRequest request,
+                     HttpServletResponse response,
+                     IDiagramProfile profile,
+                     Repository repository,
+                     Map<String, Object> requestParams) {
         this.request = request;
         this.response = response;
         this.profile = profile;
@@ -50,7 +55,12 @@ public class PasteCommand extends AbstractCommand {
         String src = (String) requestParams.get("src");
         String tree = (String) requestParams.get("tree");
 
-        return pasteDirectoriesOrAssets(profile, current, targets, cut, dst, src, Boolean.parseBoolean(tree));
+        return pasteDirectoriesOrAssets(profile,
+                                        current,
+                                        targets,
+                                        cut,
+                                        dst,
+                                        src,
+                                        Boolean.parseBoolean(tree));
     }
-
 }

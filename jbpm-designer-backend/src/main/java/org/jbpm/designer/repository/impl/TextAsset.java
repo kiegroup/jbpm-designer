@@ -15,8 +15,6 @@
 
 package org.jbpm.designer.repository.impl;
 
-import org.jbpm.designer.repository.Asset;
-
 public class TextAsset extends AbstractAsset<String> {
 
     private String assetContent;

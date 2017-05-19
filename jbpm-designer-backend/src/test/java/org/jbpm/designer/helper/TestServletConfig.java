@@ -15,9 +15,9 @@
 
 package org.jbpm.designer.helper;
 
+import java.util.Enumeration;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
-import java.util.Enumeration;
 
 public class TestServletConfig implements ServletConfig {
 
@@ -28,7 +28,7 @@ public class TestServletConfig implements ServletConfig {
     }
 
     public String getServletName() {
-        return null;  
+        return null;
     }
 
     public ServletContext getServletContext() {
@@ -40,6 +40,6 @@ public class TestServletConfig implements ServletConfig {
     }
 
     public Enumeration getInitParameterNames() {
-        return null;  
+        return null;
     }
 }

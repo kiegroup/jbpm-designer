@@ -15,15 +15,6 @@
 
 package org.jbpm.designer.server.indexing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -54,20 +45,24 @@ import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.uberfire.java.nio.file.Path;
 import org.uberfire.paging.PageResponse;
 
+import static org.junit.Assert.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
+
 public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefinition> {
 
     protected Set<NamedQuery> getQueries() {
         return new HashSet<NamedQuery>() {{
-            add( new FindResourcesQuery() {
+            add(new FindResourcesQuery() {
                 @Override
                 public ResponseBuilder getResponseBuilder() {
-                    return new DefaultResponseBuilder( ioService() );
+                    return new DefaultResponseBuilder(ioService());
                 }
             });
-            add( new FindAllChangeImpactQuery() {
+            add(new FindAllChangeImpactQuery() {
                 @Override
                 public ResponseBuilder getResponseBuilder() {
-                    return new DefaultResponseBuilder( ioService() );
+                    return new DefaultResponseBuilder(ioService());
                 }
             });
         }};
@@ -78,7 +73,7 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
     @Test
     public void testBPMN2Indexing() throws Exception {
 
-        String [] bpmn2Files = {
+        String[] bpmn2Files = {
                 "callActivity.bpmn2",
                 "callActivityByName.bpmn2",
                 "callActivityCalledSubProcess.bpmn2",
@@ -89,92 +84,110 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
         };
 
         List<Path> pathList = new ArrayList<>();
-        for( int i = 0; i < bpmn2Files.length; ++i ) {
+        for (int i = 0; i < bpmn2Files.length; ++i) {
             String bpmn2File = bpmn2Files[i];
-           if( bpmn2File.endsWith("bpmn2") ) {
-               Path path = basePath.resolve( bpmn2File );
-               pathList.add( path );
-               String bpmn2Str = loadText( bpmn2File );
-               ioService().write( path, bpmn2Str );
-           }
+            if (bpmn2File.endsWith("bpmn2")) {
+                Path path = basePath.resolve(bpmn2File);
+                pathList.add(path);
+                String bpmn2Str = loadText(bpmn2File);
+                ioService().write(path,
+                                  bpmn2Str);
+            }
         }
-        Path [] path = pathList.toArray(new Path[pathList.size()]);
+        Path[] path = pathList.toArray(new Path[pathList.size()]);
 
-        Thread.sleep( 5000 ); //wait for events to be consumed from jgit -> (notify changes -> watcher -> index) -> lucene index
+        Thread.sleep(5000); //wait for events to be consumed from jgit -> (notify changes -> watcher -> index) -> lucene index
 
         {
-            final RefactoringPageRequest request = new RefactoringPageRequest( FindResourcesQuery.NAME,
-                                                                               new HashSet<ValueIndexTerm>() {{
-                                                                                   add( new ValueResourceIndexTerm( "*", ResourceType.BPMN2, TermSearchType.WILDCARD ) );
-                                                                               }},
-                                                                               0,
-                                                                               10 );
+            final RefactoringPageRequest request = new RefactoringPageRequest(FindResourcesQuery.NAME,
+                                                                              new HashSet<ValueIndexTerm>() {{
+                                                                                  add(new ValueResourceIndexTerm("*",
+                                                                                                                 ResourceType.BPMN2,
+                                                                                                                 TermSearchType.WILDCARD));
+                                                                              }},
+                                                                              0,
+                                                                              10);
 
             try {
-                final PageResponse<RefactoringPageRow> response = service.query( request );
-                assertNotNull( response );
-                assertEquals( path.length, response.getPageRowList().size() );
-            } catch( IllegalArgumentException e ) {
+                final PageResponse<RefactoringPageRow> response = service.query(request);
+                assertNotNull(response);
+                assertEquals(path.length,
+                             response.getPageRowList().size());
+            } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
         }
 
         {
             QueryOperationRequest request = QueryOperationRequest
-                    .referencesSharedPart("*", PartType.RULEFLOW_GROUP, TermSearchType.WILDCARD)
+                    .referencesSharedPart("*",
+                                          PartType.RULEFLOW_GROUP,
+                                          TermSearchType.WILDCARD)
                     .inAllProjects().onAllBranches();
 
             try {
-                final List<RefactoringPageRow> response = service.queryToList( request );
-                assertNotNull( response );
-                assertEquals( 1, response.size() );
-                assertResponseContains(response, path[4]);
-            } catch( IllegalArgumentException e ) {
+                final List<RefactoringPageRow> response = service.queryToList(request);
+                assertNotNull(response);
+                assertEquals(1,
+                             response.size());
+                assertResponseContains(response,
+                                       path[4]);
+            } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
         }
 
         {
             QueryOperationRequest request = QueryOperationRequest
-                    .referencesSharedPart("MySignal", PartType.SIGNAL)
+                    .referencesSharedPart("MySignal",
+                                          PartType.SIGNAL)
                     .inAllProjects().onAllBranches();
 
             try {
-                final List<RefactoringPageRow> response = service.queryToList( request );
-                assertNotNull( response );
-                assertEquals( 1, response.size() );
-                assertResponseContains(response, path[5]);
-            } catch( IllegalArgumentException e ) {
+                final List<RefactoringPageRow> response = service.queryToList(request);
+                assertNotNull(response);
+                assertEquals(1,
+                             response.size());
+                assertResponseContains(response,
+                                       path[5]);
+            } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
         }
 
         {
             QueryOperationRequest request = QueryOperationRequest
-                    .referencesSharedPart("BrokenSignal", PartType.SIGNAL)
+                    .referencesSharedPart("BrokenSignal",
+                                          PartType.SIGNAL)
                     .inAllProjects().onAllBranches();
 
             try {
-                final List<RefactoringPageRow> response = service.queryToList( request );
-                assertNotNull( response );
-                assertEquals( 1, response.size() );
-                assertResponseContains(response, path[6]);
-            } catch( IllegalArgumentException e ) {
+                final List<RefactoringPageRow> response = service.queryToList(request);
+                assertNotNull(response);
+                assertEquals(1,
+                             response.size());
+                assertResponseContains(response,
+                                       path[6]);
+            } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
         }
         {
             QueryOperationRequest request = QueryOperationRequest
-                    .referencesSharedPart("name", PartType.GLOBAL)
+                    .referencesSharedPart("name",
+                                          PartType.GLOBAL)
                     .inAllProjects().onAllBranches();
 
             try {
-                final List<RefactoringPageRow> response = service.queryToList( request );
-                assertNotNull( response );
-                assertEquals( 2, response.size() );
-                assertResponseContains(response, path[5]);
-                assertResponseContains(response, path[6]);
-            } catch( IllegalArgumentException e ) {
+                final List<RefactoringPageRow> response = service.queryToList(request);
+                assertNotNull(response);
+                assertEquals(2,
+                             response.size());
+                assertResponseContains(response,
+                                       path[5]);
+                assertResponseContains(response,
+                                       path[6]);
+            } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
         }
@@ -182,12 +195,12 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
 
     @Override
     protected KieProjectService getProjectService() {
-        final org.uberfire.backend.vfs.Path mockRoot = mock( org.uberfire.backend.vfs.Path.class );
-        when( mockRoot.toURI() ).thenReturn( TEST_PROJECT_ROOT );
+        final org.uberfire.backend.vfs.Path mockRoot = mock(org.uberfire.backend.vfs.Path.class);
+        when(mockRoot.toURI()).thenReturn(TEST_PROJECT_ROOT);
 
-        final KieProject mockProject = mock( KieProject.class );
-        when( mockProject.getRootPath() ).thenReturn( mockRoot );
-        when( mockProject.getProjectName() ).thenReturn( TEST_PROJECT_NAME );
+        final KieProject mockProject = mock(KieProject.class);
+        when(mockProject.getRootPath()).thenReturn(mockRoot);
+        when(mockProject.getProjectName()).thenReturn(TEST_PROJECT_NAME);
 
         POM mockPom = mock(POM.class);
         when(mockProject.getPom()).thenReturn(mockPom);
@@ -195,16 +208,15 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
         when(mockPom.getGav()).thenReturn(mockGAV);
         when(mockGAV.toString()).thenReturn(DEPLOYMENT_ID);
 
-        final Package mockPackage = mock( Package.class );
-        when( mockPackage.getPackageName() ).thenReturn( TEST_PACKAGE_NAME );
+        final Package mockPackage = mock(Package.class);
+        when(mockPackage.getPackageName()).thenReturn(TEST_PACKAGE_NAME);
 
-        final KieProjectService mockProjectService = mock( KieProjectService.class );
-        when( mockProjectService.resolveProject( any( org.uberfire.backend.vfs.Path.class ) ) ).thenReturn( mockProject );
-        when( mockProjectService.resolvePackage( any( org.uberfire.backend.vfs.Path.class ) ) ).thenReturn( mockPackage );
+        final KieProjectService mockProjectService = mock(KieProjectService.class);
+        when(mockProjectService.resolveProject(any(org.uberfire.backend.vfs.Path.class))).thenReturn(mockProject);
+        when(mockProjectService.resolvePackage(any(org.uberfire.backend.vfs.Path.class))).thenReturn(mockPackage);
 
         return mockProjectService;
     }
-
 
     @Override
     protected TestIndexer getIndexer() {
@@ -220,5 +232,4 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
     protected String getRepositoryName() {
         return this.getClass().getSimpleName();
     }
-
 }

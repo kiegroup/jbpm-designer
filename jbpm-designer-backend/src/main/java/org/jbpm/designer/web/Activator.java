@@ -16,8 +16,8 @@
 package org.jbpm.designer.web;
 
 import java.util.Hashtable;
+import javax.inject.Inject;
 
-import org.jbpm.designer.server.EditorHandler;
 import org.jbpm.designer.web.filter.IFilterFactory;
 import org.jbpm.designer.web.filter.impl.PluggableFilter;
 import org.jbpm.designer.web.preference.IDiagramPreferenceService;
@@ -33,14 +33,10 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
-import javax.inject.Inject;
-
-
 /**
  * @author Antoine Toulme
- * 
- * This activator is called when the bundle starts to register services for the bundle.
- *
+ *         <p>
+ *         This activator is called when the bundle starts to register services for the bundle.
  */
 public class Activator implements BundleActivator {
 
@@ -51,7 +47,7 @@ public class Activator implements BundleActivator {
     public void start(final BundleContext context) throws Exception {
         {
             ServiceReference sRef =
-                context.getServiceReference(IUUIDBasedRepositoryService.class.getName());
+                    context.getServiceReference(IUUIDBasedRepositoryService.class.getName());
             if (sRef != null) {
                 IUUIDBasedRepositoryService service = (IUUIDBasedRepositoryService) context.getService(sRef);
                 UUIDBasedRepositoryServlet._factory = service;
@@ -59,11 +55,13 @@ public class Activator implements BundleActivator {
                 //use a service tracker to be called back when the IUUIDBasedRepositoryFactory is ready:
                 ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
 
-                    public void removedService(ServiceReference reference, Object service) {
+                    public void removedService(ServiceReference reference,
+                                               Object service) {
                         //special servlet shutdown
                     }
 
-                    public void modifiedService(ServiceReference reference, Object service) {
+                    public void modifiedService(ServiceReference reference,
+                                                Object service) {
                         //reload?
                     }
 
@@ -74,44 +72,46 @@ public class Activator implements BundleActivator {
                     }
                 };
                 ServiceTracker tracker = new ServiceTracker(context,
-                        IUUIDBasedRepositoryService.class.getName(), cust);
+                                                            IUUIDBasedRepositoryService.class.getName(),
+                                                            cust);
                 tracker.open();
-
             }
         }
-        
+
         {
             ServiceReference sRef =
-                context.getServiceReference(IDiagramPreferenceService.class.getName());
+                    context.getServiceReference(IDiagramPreferenceService.class.getName());
             if (sRef != null) {
-            	IDiagramPreferenceService service = (IDiagramPreferenceService) context.getService(sRef);
+                IDiagramPreferenceService service = (IDiagramPreferenceService) context.getService(sRef);
             } else {
                 //use a service tracker to be called back when the IUUIDBasedRepositoryFactory is ready:
                 ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
 
-                    public void removedService(ServiceReference reference, Object service) {
+                    public void removedService(ServiceReference reference,
+                                               Object service) {
                         //special servlet shutdown
                     }
 
-                    public void modifiedService(ServiceReference reference, Object service) {
+                    public void modifiedService(ServiceReference reference,
+                                                Object service) {
                         //reload?
                     }
 
                     public Object addingService(ServiceReference reference) {
-                    	IDiagramPreferenceService service = (IDiagramPreferenceService) context.getService(reference);
+                        IDiagramPreferenceService service = (IDiagramPreferenceService) context.getService(reference);
                         return service;
                     }
                 };
                 ServiceTracker tracker = new ServiceTracker(context,
-                		IDiagramPreferenceService.class.getName(), cust);
+                                                            IDiagramPreferenceService.class.getName(),
+                                                            cust);
                 tracker.open();
-
             }
         }
 
         {
             ServiceReference sRef =
-                context.getServiceReference(IFilterFactory.class.getName());
+                    context.getServiceReference(IFilterFactory.class.getName());
             if (sRef != null) {
                 IFilterFactory service = (IFilterFactory) context.getService(sRef);
                 PluggableFilter.registerFilter(service);
@@ -119,11 +119,13 @@ public class Activator implements BundleActivator {
                 //use a service tracker to be called back when the IFilterFactory is ready:
                 ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
 
-                    public void removedService(ServiceReference reference, Object service) {
+                    public void removedService(ServiceReference reference,
+                                               Object service) {
                         //special servlet shutdown
                     }
 
-                    public void modifiedService(ServiceReference reference, Object service) {
+                    public void modifiedService(ServiceReference reference,
+                                                Object service) {
                         //reload?
                     }
 
@@ -134,43 +136,49 @@ public class Activator implements BundleActivator {
                     }
                 };
                 ServiceTracker tracker = new ServiceTracker(context,
-                        IFilterFactory.class.getName(), cust);
+                                                            IFilterFactory.class.getName(),
+                                                            cust);
                 tracker.open();
-
             }
         }
-        
+
         {
-        	ServiceReference[] sRefs = null;
-	        try {
-	            sRefs = context.getServiceReferences(IDiagramProfileFactory.class.getName(), null);
-	        } catch (InvalidSyntaxException e) {
-	        }
-	        if (sRefs != null) {
-	            for (ServiceReference sRef : sRefs) {
-	                IDiagramProfileFactory service = (IDiagramProfileFactory) context.getService(sRef);
+            ServiceReference[] sRefs = null;
+            try {
+                sRefs = context.getServiceReferences(IDiagramProfileFactory.class.getName(),
+                                                     null);
+            } catch (InvalidSyntaxException e) {
+            }
+            if (sRefs != null) {
+                for (ServiceReference sRef : sRefs) {
+                    IDiagramProfileFactory service = (IDiagramProfileFactory) context.getService(sRef);
                     profile.getFactories().add(service);
-	            }
-	        }
-	        ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
-	
-	            public void removedService(ServiceReference reference, Object service) {
-	            }
-	
-	            public void modifiedService(ServiceReference reference, Object service) {
-	            }
-	
-	            public Object addingService(ServiceReference reference) {
-	                IDiagramProfileFactory service = (IDiagramProfileFactory) context.getService(reference);
+                }
+            }
+            ServiceTrackerCustomizer cust = new ServiceTrackerCustomizer() {
+
+                public void removedService(ServiceReference reference,
+                                           Object service) {
+                }
+
+                public void modifiedService(ServiceReference reference,
+                                            Object service) {
+                }
+
+                public Object addingService(ServiceReference reference) {
+                    IDiagramProfileFactory service = (IDiagramProfileFactory) context.getService(reference);
                     profile.getFactories().add(service);
-	                return service;
-	            }
-	        };
-	        ServiceTracker tracker = new ServiceTracker(context,
-	                IDiagramProfileFactory.class.getName(), cust);
-	        tracker.open();
-	        // register self to make the default profile available to the world:
-	        context.registerService(IDiagramProfileService.class.getName(), profile, new Hashtable());
+                    return service;
+                }
+            };
+            ServiceTracker tracker = new ServiceTracker(context,
+                                                        IDiagramProfileFactory.class.getName(),
+                                                        cust);
+            tracker.open();
+            // register self to make the default profile available to the world:
+            context.registerService(IDiagramProfileService.class.getName(),
+                                    profile,
+                                    new Hashtable());
         }
     }
 

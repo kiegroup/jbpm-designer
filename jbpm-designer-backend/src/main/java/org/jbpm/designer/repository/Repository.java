@@ -15,15 +15,14 @@
 
 package org.jbpm.designer.repository;
 
-import org.uberfire.java.nio.file.NoSuchFileException;
-
 import java.util.Collection;
-import java.util.Map;
+
+import org.uberfire.java.nio.file.NoSuchFileException;
 
 /**
  * Repository is responsible for managing its components that are as follows:
  * <ul>
- *     <li>Asset - component that can be of any type and is stored in a custom location</li>
+ * <li>Asset - component that can be of any type and is stored in a custom location</li>
  * </ul>
  */
 public interface Repository {
@@ -44,12 +43,12 @@ public interface Repository {
     /**
      * Retrieves all directories stored under <code>startAt</code> location including all sub folders.
      * NOTE: Directory should be always relative to the repository root
-     *
      * @param startAt - location where directories should be fetched from
      * @param filter - filter that allows to narrow the results
      * @return - list of assets found
      */
-    Collection<Asset> listAssetsRecursively(String startAt, Filter filter);
+    Collection<Asset> listAssetsRecursively(String startAt,
+                                            Filter filter);
 
     /**
      * Stores new directory in given location, in case of sub folders existence in the location
@@ -73,7 +72,8 @@ public interface Repository {
      * @param directory - directory to be deleted
      * @param failIfNotEmpty - indicates if delete operation should fail in case given directory is not empty
      */
-    boolean deleteDirectory(String directory, boolean failIfNotEmpty);
+    boolean deleteDirectory(String directory,
+                            boolean failIfNotEmpty);
 
     /**
      * Copy directory given by <code>uniqueId</code> into destination given by <code>location</code>
@@ -81,7 +81,8 @@ public interface Repository {
      * @param location - destination where directory will be copied to
      * @return - true when copy operation was successful otherwise false
      */
-    boolean copyDirectory(String sourceDirectory, String location);
+    boolean copyDirectory(String sourceDirectory,
+                          String location);
 
     /**
      * Moves directory given by <code>uniqueId</code> into destination given by <code>location</code>
@@ -91,7 +92,9 @@ public interface Repository {
      * @param name - name of the directory after move, if null is given name is not changed
      * @return - returns true if move operation was successful otherwise false
      */
-    boolean moveDirectory(String sourceDirectory, String location, String name);
+    boolean moveDirectory(String sourceDirectory,
+                          String location,
+                          String name);
 
     /**
      * Retrieves all assets stored in the given location.
@@ -108,7 +111,8 @@ public interface Repository {
      * @param filter - allows to defined filter criteria to fetch only assets of interest
      * @return - list of available assets
      */
-    Collection<Asset> listAssets(String location, Filter filter);
+    Collection<Asset> listAssets(String location,
+                                 Filter filter);
 
     /**
      * Loads an asset given by the <code>assetUniqueId</code> including actual content of the asset.
@@ -140,7 +144,9 @@ public interface Repository {
      * @return - returns uniqueId of the asset
      * @throws NoSuchFileException - throws in case of asset given by id does not exist
      */
-    String updateAsset(Asset asset, String commitMessage, String sessionId) throws NoSuchFileException;
+    String updateAsset(Asset asset,
+                       String commitMessage,
+                       String sessionId) throws NoSuchFileException;
 
     /**
      * Deletes asset from repository identified by <code>assetUniqueId</code> if exists
@@ -169,7 +175,8 @@ public interface Repository {
      * @param location - destination where asset will be copied to
      * @return - true when copy operation was successful otherwise false
      */
-    boolean copyAsset(String uniqueId, String location);
+    boolean copyAsset(String uniqueId,
+                      String location);
 
     /**
      * Moves asset given by <code>uniqueId</code> into destination given by <code>location</code>
@@ -179,6 +186,7 @@ public interface Repository {
      * @param name - name of the asset after move, if null is given name is not changed
      * @return - returns true if move operation was successful otherwise false
      */
-    boolean moveAsset(String uniqueId, String location, String name);
-
+    boolean moveAsset(String uniqueId,
+                      String location,
+                      String name);
 }

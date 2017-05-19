@@ -52,15 +52,13 @@ import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.DirectoryStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
-@RunWith( MockitoJUnitRunner.class )
+@RunWith(MockitoJUnitRunner.class)
 public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
 
     @Mock
@@ -79,8 +77,10 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
 
     @BeforeClass
     public static void setupOnce() {
-        System.setProperty("org.uberfire.nio.git.daemon.enabled", "false");
-        System.setProperty("org.uberfire.nio.git.ssh.enabled", "false");
+        System.setProperty("org.uberfire.nio.git.daemon.enabled",
+                           "false");
+        System.setProperty("org.uberfire.nio.git.ssh.enabled",
+                           "false");
     }
 
     @AfterClass
@@ -88,6 +88,7 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         System.clearProperty("org.uberfire.nio.git.daemon.enabled");
         System.clearProperty("org.uberfire.nio.git.ssh.enabled");
     }
+
     @Before
     public void setup() {
         super.setup();
@@ -109,29 +110,32 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         final Metadata metadata = new Metadata();
 
         final HashMap<String, Object> map = new HashMap<String, Object>();
-        when(metadataService.setUpAttributes(path,metadata)).thenReturn( map );
+        when(metadataService.setUpAttributes(path,
+                                             metadata)).thenReturn(map);
 
-        service.updateMetadata( path, metadata );
+        service.updateMetadata(path,
+                               metadata);
 
-
-        verify( ioService ).setAttributes(any(org.uberfire.java.nio.file.Path.class),
-                eq(map));
+        verify(ioService).setAttributes(any(org.uberfire.java.nio.file.Path.class),
+                                        eq(map));
     }
 
     @Test
     public void testCreateProcessWithDefaultPackage() throws Exception {
-        final Path pathSource = mock( Path.class );
-        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
-        when( pathSource.getFileName() ).thenReturn("MyProcess.bpmn2");
+        final Path pathSource = mock(Path.class);
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
+        when(pathSource.getFileName()).thenReturn("MyProcess.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
         assetService.setRepository(repository);
 
         final ArgumentCaptor<Asset> assetArgumentCaptor = ArgumentCaptor.forClass(Asset.class);
 
-        assetService.createProcess(pathSource, "MyProcess.bpmn2");
+        assetService.createProcess(pathSource,
+                                   "MyProcess.bpmn2");
 
-        verify(repository, times(1)).createAsset(assetArgumentCaptor.capture());
+        verify(repository,
+               times(1)).createAsset(assetArgumentCaptor.capture());
 
         Asset<String> asset = assetArgumentCaptor.getValue();
         assertNotNull(asset);
@@ -142,28 +146,31 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assertNotNull(element);
         String processId = element.getAttribute("id");
         assertNotNull(processId);
-        assertEquals("Evaluation.MyProcess", processId);
+        assertEquals("Evaluation.MyProcess",
+                     processId);
 
         String packageName = element.getAttribute("drools:packageName");
         assertNotNull(packageName);
-        assertEquals("", packageName);
-
+        assertEquals("",
+                     packageName);
     }
 
     @Test
     public void testCreateProcessWithSingleLevelPackage() throws Exception {
-        final Path pathSource = mock( Path.class );
-        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/org/MyProcess.bpmn2");
-        when( pathSource.getFileName() ).thenReturn("MyProcess.bpmn2");
+        final Path pathSource = mock(Path.class);
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/org/MyProcess.bpmn2");
+        when(pathSource.getFileName()).thenReturn("MyProcess.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
         assetService.setRepository(repository);
 
         final ArgumentCaptor<Asset> assetArgumentCaptor = ArgumentCaptor.forClass(Asset.class);
 
-        assetService.createProcess(pathSource, "MyProcess.bpmn2");
+        assetService.createProcess(pathSource,
+                                   "MyProcess.bpmn2");
 
-        verify(repository, times(1)).createAsset(assetArgumentCaptor.capture());
+        verify(repository,
+               times(1)).createAsset(assetArgumentCaptor.capture());
 
         Asset<String> asset = assetArgumentCaptor.getValue();
         assertNotNull(asset);
@@ -174,28 +181,31 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assertNotNull(element);
         String processId = element.getAttribute("id");
         assertNotNull(processId);
-        assertEquals("Evaluation.MyProcess", processId);
+        assertEquals("Evaluation.MyProcess",
+                     processId);
 
         String packageName = element.getAttribute("drools:packageName");
         assertNotNull(packageName);
-        assertEquals("org", packageName);
-
+        assertEquals("org",
+                     packageName);
     }
 
     @Test
     public void testCreateProcessWithMultiLevelPackage() throws Exception {
-        final Path pathSource = mock( Path.class );
-        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/org/jbpm/test/process/MyProcess.bpmn2");
-        when( pathSource.getFileName() ).thenReturn("MyProcess.bpmn2");
+        final Path pathSource = mock(Path.class);
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/org/jbpm/test/process/MyProcess.bpmn2");
+        when(pathSource.getFileName()).thenReturn("MyProcess.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
         assetService.setRepository(repository);
 
         final ArgumentCaptor<Asset> assetArgumentCaptor = ArgumentCaptor.forClass(Asset.class);
 
-        assetService.createProcess(pathSource, "MyProcess.bpmn2");
+        assetService.createProcess(pathSource,
+                                   "MyProcess.bpmn2");
 
-        verify(repository, times(1)).createAsset(assetArgumentCaptor.capture());
+        verify(repository,
+               times(1)).createAsset(assetArgumentCaptor.capture());
 
         Asset<String> asset = assetArgumentCaptor.getValue();
         assertNotNull(asset);
@@ -206,28 +216,32 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assertNotNull(element);
         String processId = element.getAttribute("id");
         assertNotNull(processId);
-        assertEquals("Evaluation.MyProcess", processId);
+        assertEquals("Evaluation.MyProcess",
+                     processId);
 
         String packageName = element.getAttribute("drools:packageName");
         assertNotNull(packageName);
-        assertEquals("org.jbpm.test.process", packageName);
-
+        assertEquals("org.jbpm.test.process",
+                     packageName);
     }
 
     @Test
     public void testCreateCaseDefinitionWithDefaultPackage() throws Exception {
-        final Path pathSource = mock( Path.class );
-        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/MyCase.bpmn2");
-        when( pathSource.getFileName() ).thenReturn("MyCase.bpmn2");
+        final Path pathSource = mock(Path.class);
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyCase.bpmn2");
+        when(pathSource.getFileName()).thenReturn("MyCase.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
         assetService.setRepository(repository);
 
         final ArgumentCaptor<Asset> assetArgumentCaptor = ArgumentCaptor.forClass(Asset.class);
 
-        assetService.createCaseDefinition(pathSource, "MyCase.bpmn2", "HR");
+        assetService.createCaseDefinition(pathSource,
+                                          "MyCase.bpmn2",
+                                          "HR");
 
-        verify(repository, times(1)).createAsset(assetArgumentCaptor.capture());
+        verify(repository,
+               times(1)).createAsset(assetArgumentCaptor.capture());
 
         Asset<String> asset = assetArgumentCaptor.getValue();
         assertNotNull(asset);
@@ -238,40 +252,48 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assertNotNull(element);
         String processId = element.getAttribute("id");
         assertNotNull(processId);
-        assertEquals("Evaluation.MyCase", processId);
+        assertEquals("Evaluation.MyCase",
+                     processId);
 
         String packageName = element.getAttribute("drools:packageName");
         assertNotNull(packageName);
-        assertEquals("", packageName);
+        assertEquals("",
+                     packageName);
 
         String adHoc = element.getAttribute("drools:adHoc");
         assertNotNull(adHoc);
-        assertEquals("true", adHoc);
+        assertEquals("true",
+                     adHoc);
 
         Element metadataElement = getMetaDataElementFromXml(asset.getAssetContent());
         String caseIdPrefix = metadataElement.getAttribute("name");
         assertNotNull(caseIdPrefix);
-        assertEquals("customCaseIdPrefix", caseIdPrefix);
+        assertEquals("customCaseIdPrefix",
+                     caseIdPrefix);
 
         String caseIdPrefixValue = metadataElement.getFirstChild().getNextSibling().getTextContent();
         assertNotNull(caseIdPrefixValue);
-        assertEquals("HR", caseIdPrefixValue);
+        assertEquals("HR",
+                     caseIdPrefixValue);
     }
 
     @Test
     public void testCreateCaseDefinitionWithPackageNoPrefix() throws Exception {
-        final Path pathSource = mock( Path.class );
-        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/src/main/resources/org/jbpm/test/cases/MyCase.bpmn2");
-        when( pathSource.getFileName() ).thenReturn("MyCase.bpmn2");
+        final Path pathSource = mock(Path.class);
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/org/jbpm/test/cases/MyCase.bpmn2");
+        when(pathSource.getFileName()).thenReturn("MyCase.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
         assetService.setRepository(repository);
 
         final ArgumentCaptor<Asset> assetArgumentCaptor = ArgumentCaptor.forClass(Asset.class);
 
-        assetService.createCaseDefinition(pathSource, "MyCase.bpmn2", "");
+        assetService.createCaseDefinition(pathSource,
+                                          "MyCase.bpmn2",
+                                          "");
 
-        verify(repository, times(1)).createAsset(assetArgumentCaptor.capture());
+        verify(repository,
+               times(1)).createAsset(assetArgumentCaptor.capture());
 
         Asset<String> asset = assetArgumentCaptor.getValue();
         assertNotNull(asset);
@@ -282,24 +304,29 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assertNotNull(element);
         String processId = element.getAttribute("id");
         assertNotNull(processId);
-        assertEquals("Evaluation.MyCase", processId);
+        assertEquals("Evaluation.MyCase",
+                     processId);
 
         String packageName = element.getAttribute("drools:packageName");
         assertNotNull(packageName);
-        assertEquals("org.jbpm.test.cases", packageName);
+        assertEquals("org.jbpm.test.cases",
+                     packageName);
 
         String adHoc = element.getAttribute("drools:adHoc");
         assertNotNull(adHoc);
-        assertEquals("true", adHoc);
+        assertEquals("true",
+                     adHoc);
 
         Element metadataElement = getMetaDataElementFromXml(asset.getAssetContent());
         String caseIdPrefix = metadataElement.getAttribute("name");
         assertNotNull(caseIdPrefix);
-        assertEquals("customCaseIdPrefix", caseIdPrefix);
+        assertEquals("customCaseIdPrefix",
+                     caseIdPrefix);
 
         String caseIdPrefixValue = metadataElement.getFirstChild().getNextSibling().getTextContent();
         assertNotNull(caseIdPrefixValue);
-        assertEquals("CASE", caseIdPrefixValue);
+        assertEquals("CASE",
+                     caseIdPrefixValue);
     }
 
     @Test
@@ -308,17 +335,18 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assetService.setRepository(repository);
         assetService.setIoService(ioService);
 
-        final Path packagePath = mock( Path.class );
-        when( packagePath.toURI() ).thenReturn("default://p0/Evaluation/");
+        final Path packagePath = mock(Path.class);
+        when(packagePath.toURI()).thenReturn("default://p0/Evaluation/");
 
-
-        final Path pathSource = mock( Path.class );
-        when( pathSource.toURI() ).thenReturn("default://p0/Evaluation/.caseproject");
-        when( pathSource.getFileName() ).thenReturn(".caseproject");
-        assetService.createProcess(pathSource, ".caseproject");
+        final Path pathSource = mock(Path.class);
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/.caseproject");
+        when(pathSource.getFileName()).thenReturn(".caseproject");
+        assetService.createProcess(pathSource,
+                                   ".caseproject");
 
         DirectoryStream directoryStream = Mockito.mock(DirectoryStream.class);
-        when(ioService.newDirectoryStream(any(), any())).thenReturn((DirectoryStream<org.uberfire.java.nio.file.Path>) directoryStream);
+        when(ioService.newDirectoryStream(any(),
+                                          any())).thenReturn((DirectoryStream<org.uberfire.java.nio.file.Path>) directoryStream);
         when(directoryStream.iterator()).thenReturn(Arrays.asList(packagePath).iterator());
 
         assertTrue(assetService.isCaseProject(packagePath));
@@ -327,11 +355,12 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     private Element getProcessElementFromXml(String content) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        ByteArrayInputStream input =  new ByteArrayInputStream(content.getBytes("UTF-8"));
+        ByteArrayInputStream input = new ByteArrayInputStream(content.getBytes("UTF-8"));
 
         Document xml = builder.parse(input);
         XPathExpression expr = xpath.compile("/definitions/process");
-        Element element = (Element) expr.evaluate(xml, XPathConstants.NODE);
+        Element element = (Element) expr.evaluate(xml,
+                                                  XPathConstants.NODE);
 
         return element;
     }
@@ -339,11 +368,12 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     private Element getMetaDataElementFromXml(String content) throws Exception {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        ByteArrayInputStream input =  new ByteArrayInputStream(content.getBytes("UTF-8"));
+        ByteArrayInputStream input = new ByteArrayInputStream(content.getBytes("UTF-8"));
 
         Document xml = builder.parse(input);
         XPathExpression expr = xpath.compile("/definitions/process/extensionElements/metaData");
-        Element element = (Element) expr.evaluate(xml, XPathConstants.NODE);
+        Element element = (Element) expr.evaluate(xml,
+                                                  XPathConstants.NODE);
 
         return element;
     }
@@ -352,7 +382,8 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         if (Base64.isArrayByteBase64(uniqueId.getBytes())) {
             byte[] decoded = Base64.decodeBase64(uniqueId);
             try {
-                String uri = new String(decoded, "UTF-8");
+                String uri = new String(decoded,
+                                        "UTF-8");
 
                 return UriUtils.encode(uri);
             } catch (UnsupportedEncodingException e) {
@@ -362,5 +393,4 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
 
         return UriUtils.encode(uniqueId);
     }
-
 }

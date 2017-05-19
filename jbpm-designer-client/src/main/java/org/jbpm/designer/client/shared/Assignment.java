@@ -39,12 +39,21 @@ public class Assignment {
     public Assignment() {
     }
 
-    public Assignment(AssignmentData assignmentData, String variableName, VariableType variableType, String dataType, String customDataType,
-            String processVarName, String constant) {
+    public Assignment(AssignmentData assignmentData,
+                      String variableName,
+                      VariableType variableType,
+                      String dataType,
+                      String customDataType,
+                      String processVarName,
+                      String constant) {
         this.assignmentData = assignmentData;
-        variable = assignmentData.findVariable(variableName, variableType);
+        variable = assignmentData.findVariable(variableName,
+                                               variableType);
         if (variable == null) {
-            variable = new Variable(variableName, variableType, dataType, customDataType);
+            variable = new Variable(variableName,
+                                    variableType,
+                                    dataType,
+                                    customDataType);
             assignmentData.addVariable(variable);
         }
 
@@ -52,12 +61,17 @@ public class Assignment {
         this.constant = constant;
     }
 
-    public Assignment(AssignmentData assignmentData, String variableName, VariableType variableType, String processVarName,
-            String constant) {
+    public Assignment(AssignmentData assignmentData,
+                      String variableName,
+                      VariableType variableType,
+                      String processVarName,
+                      String constant) {
         this.assignmentData = assignmentData;
-        variable = assignmentData.findVariable(variableName, variableType);
+        variable = assignmentData.findVariable(variableName,
+                                               variableType);
         if (variable == null) {
-            variable = new Variable(variableName, variableType);
+            variable = new Variable(variableName,
+                                    variableType);
             assignmentData.addVariable(variable);
         }
 
@@ -78,13 +92,12 @@ public class Assignment {
     }
 
     public void setVariableType(VariableType variableType) {
-       variable.setVariableType(variableType);
+        variable.setVariableType(variableType);
     }
 
     public Variable getVariable() {
         return variable;
     }
-
 
     public String getDataType() {
         return variable.getDataType();
@@ -99,11 +112,11 @@ public class Assignment {
     }
 
     public void setCustomDataType(String customDataType) {
-       variable.setCustomDataType(customDataType);
+        variable.setCustomDataType(customDataType);
     }
 
     public String getProcessVarName() {
-        return ((processVar != null) ?  processVar.getName() :  null);
+        return ((processVar != null) ? processVar.getName() : null);
     }
 
     public void setProcessVarName(String processVarName) {
@@ -120,16 +133,22 @@ public class Assignment {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Assignment)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Assignment)) {
+            return false;
+        }
 
         Assignment that = (Assignment) o;
 
-        if (getVariable() != null ? !getVariable().equals(that.getVariable()) : that.getVariable() != null)
+        if (getVariable() != null ? !getVariable().equals(that.getVariable()) : that.getVariable() != null) {
             return false;
-        if (processVar != null ? !processVar.equals(that.processVar) : that.processVar != null) return false;
+        }
+        if (processVar != null ? !processVar.equals(that.processVar) : that.processVar != null) {
+            return false;
+        }
         return getConstant() != null ? getConstant().equals(that.getConstant()) : that.getConstant() == null;
-
     }
 
     @Override
@@ -143,7 +162,6 @@ public class Assignment {
     /**
      * Serializes assignment
      * e.g. e.g. [din]str1->inStr, [din]inStrConst=TheString, [dout]outStr1->str1
-     *
      * @return
      */
     @Override
@@ -153,19 +171,15 @@ public class Assignment {
             if (getConstant() != null && !getConstant().isEmpty()) {
                 sb.append(INPUT_ASSIGNMENT_PREFIX).append(getName()).append(ASSIGNMENT_OPERATOR_TOCONSTANT).append(
                         StringUtils.urlEncode(getConstant()));
-            }
-            else if (getProcessVarName() != null && !getProcessVarName().isEmpty()) {
+            } else if (getProcessVarName() != null && !getProcessVarName().isEmpty()) {
                 sb.append(INPUT_ASSIGNMENT_PREFIX).append(getProcessVarName()).append(ASSIGNMENT_OPERATOR_TOVARIABLE).append(getName());
-            }
-            else {
+            } else {
                 sb.append(INPUT_ASSIGNMENT_PREFIX).append(ASSIGNMENT_OPERATOR_TOVARIABLE).append(getName());
             }
-        }
-        else {
+        } else {
             if (getProcessVarName() != null && !getProcessVarName().isEmpty()) {
                 sb.append(OUTPUT_ASSIGNMENT_PREFIX).append(getName()).append(ASSIGNMENT_OPERATOR_TOVARIABLE).append(getProcessVarName());
-            }
-            else {
+            } else {
                 sb.append(OUTPUT_ASSIGNMENT_PREFIX).append(getName()).append(ASSIGNMENT_OPERATOR_TOVARIABLE);
             }
         }
@@ -175,11 +189,11 @@ public class Assignment {
     /**
      * Deserializes an assignment string
      * e.g. [din]str1->inStr, [din]inStrConst=TheString, [dout]outStr1->str1
-     *
      * @param sAssignment
      * @return Assignment
      */
-    public static Assignment deserialize(AssignmentData assignmentData, String sAssignment) {
+    public static Assignment deserialize(AssignmentData assignmentData,
+                                         String sAssignment) {
         if (sAssignment == null || sAssignment.isEmpty()) {
             return null;
         }
@@ -189,8 +203,7 @@ public class Assignment {
         if (sAssignment.startsWith(INPUT_ASSIGNMENT_PREFIX)) {
             assignmentType = VariableType.INPUT;
             sAssignment = sAssignment.substring(INPUT_ASSIGNMENT_PREFIX.length());
-        }
-        else if (sAssignment.startsWith(OUTPUT_ASSIGNMENT_PREFIX)) {
+        } else if (sAssignment.startsWith(OUTPUT_ASSIGNMENT_PREFIX)) {
             assignmentType = VariableType.OUTPUT;
             sAssignment = sAssignment.substring(OUTPUT_ASSIGNMENT_PREFIX.length());
         }
@@ -200,22 +213,26 @@ public class Assignment {
         if (sAssignment.contains(ASSIGNMENT_OPERATOR_TOVARIABLE)) {
             int i = sAssignment.indexOf(ASSIGNMENT_OPERATOR_TOVARIABLE);
             if (assignmentType == VariableType.INPUT) {
-                processVariableName = sAssignment.substring(0, i);
+                processVariableName = sAssignment.substring(0,
+                                                            i);
                 variableName = sAssignment.substring(i + ASSIGNMENT_OPERATOR_TOVARIABLE.length());
-            }
-            else {
-                variableName = sAssignment.substring(0, i);
+            } else {
+                variableName = sAssignment.substring(0,
+                                                     i);
                 processVariableName = sAssignment.substring(i + ASSIGNMENT_OPERATOR_TOVARIABLE.length());
             }
-        }
-        else if (sAssignment.contains(ASSIGNMENT_OPERATOR_TOCONSTANT)) {
+        } else if (sAssignment.contains(ASSIGNMENT_OPERATOR_TOCONSTANT)) {
             int i = sAssignment.indexOf(ASSIGNMENT_OPERATOR_TOCONSTANT);
-            variableName = sAssignment.substring(0, i);
+            variableName = sAssignment.substring(0,
+                                                 i);
             constant = StringUtils.urlDecode(sAssignment.substring(i + ASSIGNMENT_OPERATOR_TOCONSTANT.length()));
         }
 
         // Create the new assignment
-        return new Assignment(assignmentData, variableName, assignmentType, processVariableName, constant);
+        return new Assignment(assignmentData,
+                              variableName,
+                              assignmentType,
+                              processVariableName,
+                              constant);
     }
-
 }

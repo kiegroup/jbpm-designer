@@ -15,10 +15,11 @@
 
 package org.jbpm.designer.taskforms;
 
-/** 
+/**
  * Holds info for one task form input.
  */
 public class TaskFormInput {
+
     private String name;
     private String value;
     private String refType;
@@ -33,7 +34,7 @@ public class TaskFormInput {
 
     public void setRefType(String refType) {
         this.refType = refType;
-        if(refType != null) {
+        if (refType != null) {
             this.booleanRefType = this.refType.equals("Boolean");
             this.integerRefType = this.refType.equals("Integer");
             this.dateRefType = this.refType.equals("Date");
@@ -56,7 +57,7 @@ public class TaskFormInput {
     public void setBooleanRefType(boolean booleanRefType) {
         this.booleanRefType = booleanRefType;
     }
-    
+
     public boolean isIntegerRefType() {
         return integerRefType;
     }
@@ -72,7 +73,7 @@ public class TaskFormInput {
     public void setDateRefType(boolean dateRefType) {
         this.dateRefType = dateRefType;
     }
-    
+
     public boolean isFloatRefType() {
         return floatRefType;
     }

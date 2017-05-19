@@ -25,8 +25,7 @@ import java.net.URLEncoder;
 import com.google.gwt.junit.GWTMockUtilities;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.util.StringUtils;
-import org.mockito.*;
-
+import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.powermock.api.mockito.PowerMockito;
@@ -43,8 +42,10 @@ public class AssignmentBaseTest {
                 return invocation.getMethod().getName();
             }
         };
-        final DesignerEditorConstants designerEditorConstants = PowerMockito.mock(DesignerEditorConstants.class, answer);
-        setFinalStaticField(DesignerEditorConstants.class.getDeclaredField("INSTANCE"), designerEditorConstants);
+        final DesignerEditorConstants designerEditorConstants = PowerMockito.mock(DesignerEditorConstants.class,
+                                                                                  answer);
+        setFinalStaticField(DesignerEditorConstants.class.getDeclaredField("INSTANCE"),
+                            designerEditorConstants);
 
         // Mock StringUtils URL Encoding methods
         PowerMockito.mockStatic(StringUtils.class);
@@ -73,7 +74,6 @@ public class AssignmentBaseTest {
 
     /**
      * Implementation of urlEncode for PowerMocked StringUtils
-     *
      * @param s
      * @return
      */
@@ -83,7 +83,8 @@ public class AssignmentBaseTest {
         }
 
         try {
-            return URLEncoder.encode(s, "UTF-8");
+            return URLEncoder.encode(s,
+                                     "UTF-8");
         } catch (UnsupportedEncodingException e) {
             return s;
         }
@@ -91,7 +92,6 @@ public class AssignmentBaseTest {
 
     /**
      * Implementation of urlDecode for PowerMocked StringUtils
-     *
      * @param s
      * @return
      */
@@ -100,20 +100,21 @@ public class AssignmentBaseTest {
             return s;
         }
         try {
-            return URLDecoder.decode(s, "UTF-8");
-        }
-        catch (UnsupportedEncodingException e) {
+            return URLDecoder.decode(s,
+                                     "UTF-8");
+        } catch (UnsupportedEncodingException e) {
             return s;
         }
     }
 
-
-    private void setFinalStaticField(Field field, Object newValue) throws Exception {
+    private void setFinalStaticField(Field field,
+                                     Object newValue) throws Exception {
         field.setAccessible(true);
         Field modifiersField = Field.class.getDeclaredField("modifiers");
         modifiersField.setAccessible(true);
-        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-        field.set(null, newValue);
+        modifiersField.setInt(field,
+                              field.getModifiers() & ~Modifier.FINAL);
+        field.set(null,
+                  newValue);
     }
-
 }

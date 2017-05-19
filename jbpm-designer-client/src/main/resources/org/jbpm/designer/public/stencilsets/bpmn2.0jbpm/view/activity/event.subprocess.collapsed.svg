@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns:oryx="http://www.b3mn.org/oryx"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   width="100"
-   height="80"
-   version="1.0">
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:oryx="http://www.b3mn.org/oryx"
+    width="100"
+    height="80"
+    version="1.0">
   <defs></defs>
   <oryx:magnets>
   	<oryx:magnet oryx:cx="0" oryx:cy="40" oryx:anchors="left" />

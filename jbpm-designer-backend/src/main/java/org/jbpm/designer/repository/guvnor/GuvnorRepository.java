@@ -15,13 +15,14 @@
 
 package org.jbpm.designer.repository.guvnor;
 
-import org.jbpm.designer.repository.*;
-import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.uberfire.java.nio.file.NoSuchFileException;
-
-import javax.enterprise.inject.Alternative;
 import java.util.Collection;
-import java.util.Map;
+import javax.enterprise.inject.Alternative;
+
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.Directory;
+import org.jbpm.designer.repository.Filter;
+import org.jbpm.designer.repository.Repository;
+import org.uberfire.java.nio.file.NoSuchFileException;
 
 /**
  * Repository implementation that is using Guvnor as a storage
@@ -42,7 +43,8 @@ public class GuvnorRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public Collection<Asset> listAssetsRecursively(String startAt, Filter filter) {
+    public Collection<Asset> listAssetsRecursively(String startAt,
+                                                   Filter filter) {
         throw new UnsupportedOperationException();
     }
 
@@ -54,15 +56,19 @@ public class GuvnorRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public boolean deleteDirectory(String directory, boolean failIfNotEmpty) {
+    public boolean deleteDirectory(String directory,
+                                   boolean failIfNotEmpty) {
         throw new UnsupportedOperationException();
     }
 
-    public boolean copyDirectory(String uniqueId, String location) {
+    public boolean copyDirectory(String uniqueId,
+                                 String location) {
         throw new UnsupportedOperationException();
     }
 
-    public boolean moveDirectory(String uniqueId, String location, String name) {
+    public boolean moveDirectory(String uniqueId,
+                                 String location,
+                                 String name) {
         throw new UnsupportedOperationException();
     }
 
@@ -70,7 +76,8 @@ public class GuvnorRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public Collection<Asset> listAssets(String location, Filter filter) {
+    public Collection<Asset> listAssets(String location,
+                                        Filter filter) {
         throw new UnsupportedOperationException();
     }
 
@@ -86,7 +93,9 @@ public class GuvnorRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public String updateAsset(Asset asset, String commitMessage, String sessionId) throws NoSuchFileException {
+    public String updateAsset(Asset asset,
+                              String commitMessage,
+                              String sessionId) throws NoSuchFileException {
         return null;
     }
 
@@ -102,11 +111,14 @@ public class GuvnorRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public boolean copyAsset(String uniqueId, String location) {
+    public boolean copyAsset(String uniqueId,
+                             String location) {
         throw new UnsupportedOperationException();
     }
 
-    public boolean moveAsset(String uniqueId, String location, String name) {
+    public boolean moveAsset(String uniqueId,
+                             String location,
+                             String name) {
         throw new UnsupportedOperationException();
     }
 }

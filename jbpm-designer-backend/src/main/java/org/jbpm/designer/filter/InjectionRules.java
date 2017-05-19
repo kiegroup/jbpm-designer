@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class InjectionRules extends ArrayList {
+
     public InjectionRules() {
         super();
     }

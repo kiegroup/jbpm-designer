@@ -18,7 +18,6 @@ package org.jbpm.designer.server.indexing.bpmn2;
 import org.jbpm.compiler.xml.ProcessDataEventListener;
 import org.jbpm.compiler.xml.ProcessDataEventListenerProvider;
 
-
 /**
  * This is referenced in
  * jbpm-designer-backend/src/main/resources/META-INF/services/org.jbpm.compiler.xml.ProcessDataEventListenerProvider
@@ -29,5 +28,4 @@ public class DesignerProcessDataEventListenerProvider implements ProcessDataEven
     public ProcessDataEventListener newInstance() {
         return new DesignerProcessDataEventListener();
     }
-
 }

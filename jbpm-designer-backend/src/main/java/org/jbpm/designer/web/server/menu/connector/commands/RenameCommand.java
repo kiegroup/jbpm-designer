@@ -15,17 +15,18 @@
 
 package org.jbpm.designer.web.server.menu.connector.commands;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.json.JSONObject;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RenameCommand extends AbstractCommand {
+
     private static Logger logger = LoggerFactory.getLogger(RenameCommand.class);
     private HttpServletRequest request;
     private HttpServletResponse response;
@@ -33,7 +34,11 @@ public class RenameCommand extends AbstractCommand {
     private Repository repository;
     private Map<String, Object> requestParams;
 
-    public void init(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile, Repository repository, Map<String, Object> requestParams) {
+    public void init(HttpServletRequest request,
+                     HttpServletResponse response,
+                     IDiagramProfile profile,
+                     Repository repository,
+                     Map<String, Object> requestParams) {
         this.request = request;
         this.response = response;
         this.profile = profile;
@@ -47,6 +52,10 @@ public class RenameCommand extends AbstractCommand {
         String tree = (String) requestParams.get("tree");
         String current = (String) requestParams.get("current");
 
-        return moveDirectoryOrAsset(profile, name, target, current, Boolean.parseBoolean(tree));
+        return moveDirectoryOrAsset(profile,
+                                    name,
+                                    target,
+                                    current,
+                                    Boolean.parseBoolean(tree));
     }
 }

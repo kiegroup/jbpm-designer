@@ -19,15 +19,16 @@ import javax.servlet.ServletConfig;
 
 /**
  * @author Antoine Toulme
- * 
- * A factory to create IUUIDBasedRepository objects.
- *
+ *         <p>
+ *         A factory to create IUUIDBasedRepository objects.
  */
 public interface IUUIDBasedRepositoryService {
-    
-    public void init();
-    public IUUIDBasedRepository createRepository();
-    public IUUIDBasedRepository createRepository(ServletConfig config);
-    public IUUIDBasedRepository lookupRepository(String name);
 
+    public void init();
+
+    public IUUIDBasedRepository createRepository();
+
+    public IUUIDBasedRepository createRepository(ServletConfig config);
+
+    public IUUIDBasedRepository lookupRepository(String name);
 }

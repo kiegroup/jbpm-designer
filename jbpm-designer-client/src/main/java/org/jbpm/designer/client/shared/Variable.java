@@ -38,12 +38,16 @@ public class Variable {
         this.variableType = variableType;
     }
 
-    public Variable(String name, VariableType variableType) {
+    public Variable(String name,
+                    VariableType variableType) {
         this.name = name;
         this.variableType = variableType;
     }
 
-    public Variable(String name, VariableType variableType, String dataType, String customDataType) {
+    public Variable(String name,
+                    VariableType variableType,
+                    String dataType,
+                    String customDataType) {
         this.name = name;
         this.variableType = variableType;
         this.dataType = dataType;
@@ -87,8 +91,7 @@ public class Variable {
             StringBuilder sb = new StringBuilder().append(name);
             if (customDataType != null && !customDataType.isEmpty()) {
                 sb.append(':').append(customDataType);
-            }
-            else if (dataType != null && !dataType.isEmpty()) {
+            } else if (dataType != null && !dataType.isEmpty()) {
                 sb.append(':').append(dataType);
             }
             return sb.toString();
@@ -98,13 +101,14 @@ public class Variable {
 
     /**
      * Deserializes a variable, checking whether the datatype is custom or not
-     *
      * @param s
      * @param variableType
      * @param dataTypes
      * @return
      */
-    public static Variable deserialize(String s, VariableType variableType, List<String> dataTypes) {
+    public static Variable deserialize(String s,
+                                       VariableType variableType,
+                                       List<String> dataTypes) {
         Variable var = new Variable(variableType);
         String[] varParts = s.split(":");
         if (varParts.length > 0) {
@@ -128,28 +132,38 @@ public class Variable {
 
     /**
      * Deserializes a variable, NOT checking whether the datatype is custom
-     *
      * @param s
      * @param variableType
      * @return
      */
-    public static Variable deserialize(String s, VariableType variableType) {
-        return deserialize(s, variableType, null);
+    public static Variable deserialize(String s,
+                                       VariableType variableType) {
+        return deserialize(s,
+                           variableType,
+                           null);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Variable)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Variable)) {
+            return false;
+        }
 
         Variable variable = (Variable) o;
 
-        if (getVariableType() != variable.getVariableType()) return false;
-        if (getName() != null ? !getName().equals(variable.getName()) : variable.getName() != null) return false;
-        if (getDataType() != null ? !getDataType().equals(variable.getDataType()) : variable.getDataType() != null)
+        if (getVariableType() != variable.getVariableType()) {
             return false;
+        }
+        if (getName() != null ? !getName().equals(variable.getName()) : variable.getName() != null) {
+            return false;
+        }
+        if (getDataType() != null ? !getDataType().equals(variable.getDataType()) : variable.getDataType() != null) {
+            return false;
+        }
         return getCustomDataType() != null ? getCustomDataType().equals(variable.getCustomDataType()) : variable.getCustomDataType() == null;
-
     }
 
     @Override

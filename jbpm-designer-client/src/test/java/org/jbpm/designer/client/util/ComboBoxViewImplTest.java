@@ -31,13 +31,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Spy;
 
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-@RunWith( GwtMockitoTestRunner.class )
+@RunWith(GwtMockitoTestRunner.class)
 public class ComboBoxViewImplTest {
 
     private static final String LB_VALUE = "LIST_BOX_VALUE";
@@ -70,16 +68,24 @@ public class ComboBoxViewImplTest {
         ArgumentCaptor<BlurHandler> blurCaptor = ArgumentCaptor.forClass(BlurHandler.class);
         ArgumentCaptor<FocusHandler> focusCaptor = ArgumentCaptor.forClass(FocusHandler.class);
 
-        view.init(presenter, modelPresenter, valueListBox, textBox, "placeholder");
+        view.init(presenter,
+                  modelPresenter,
+                  valueListBox,
+                  textBox,
+                  "placeholder");
 
-        verify(valueListBox).addDomHandler(mousDownCaptor.capture(), eq(MouseDownEvent.getType()));
+        verify(valueListBox).addDomHandler(mousDownCaptor.capture(),
+                                           eq(MouseDownEvent.getType()));
         mousDownCaptor.getValue().onMouseDown(null);
-        assertEquals(true, view.listBoxHasFocus);
+        assertEquals(true,
+                     view.listBoxHasFocus);
         verify(presenter).updateListBoxValues(LB_VALUE);
 
-        verify(valueListBox).addDomHandler(blurCaptor.capture(), eq(BlurEvent.getType()));
+        verify(valueListBox).addDomHandler(blurCaptor.capture(),
+                                           eq(BlurEvent.getType()));
         blurCaptor.getValue().onBlur(null);
-        assertEquals(false, view.listBoxHasFocus);
+        assertEquals(false,
+                     view.listBoxHasFocus);
 
         verify(textBox).addFocusHandler(focusCaptor.capture());
         focusCaptor.getValue().onFocus(null);

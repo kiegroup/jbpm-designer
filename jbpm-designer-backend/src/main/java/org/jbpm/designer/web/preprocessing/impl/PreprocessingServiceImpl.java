@@ -19,25 +19,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.guvnor.common.services.project.service.POMService;
-import org.guvnor.common.services.project.service.ProjectService;
-import org.guvnor.common.services.shared.metadata.MetadataService;
-import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingService;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.uberfire.backend.vfs.VFSService;
-import org.uberfire.workbench.events.NotificationEvent;
-
 
 /**
- * 
  * @author Tihomir Surdilovic
  */
 public class PreprocessingServiceImpl implements IDiagramPreprocessingService {
@@ -53,7 +45,6 @@ public class PreprocessingServiceImpl implements IDiagramPreprocessingService {
     public final static PreprocessingServiceImpl INSTANCE = new PreprocessingServiceImpl();
     private Map<String, IDiagramPreprocessingUnit> _registry = new HashMap<String, IDiagramPreprocessingUnit>();
 
-
     public Collection<IDiagramPreprocessingUnit> getRegisteredPreprocessingUnits(
             HttpServletRequest request) {
         Map<String, IDiagramPreprocessingUnit> preprocessingUnits = new HashMap<String, IDiagramPreprocessingUnit>(_registry);
@@ -61,16 +52,19 @@ public class PreprocessingServiceImpl implements IDiagramPreprocessingService {
     }
 
     public IDiagramPreprocessingUnit findPreprocessingUnit(
-            HttpServletRequest request, IDiagramProfile profile) {
+            HttpServletRequest request,
+            IDiagramProfile profile) {
         Map<String, IDiagramPreprocessingUnit> preprocessingUnits = new HashMap<String, IDiagramPreprocessingUnit>(_registry);
         return preprocessingUnits.get(profile.getName());
     }
 
     public void init(ServletContext context,
                      VFSService vfsService) {
-        ((JbpmPreprocessingUnit)jbpmPreprocessingUnit).init(context, vfsService);
-        _registry.put("default", defaultPreprocessingUnit);
-        _registry.put("jbpm", jbpmPreprocessingUnit);
+        ((JbpmPreprocessingUnit) jbpmPreprocessingUnit).init(context,
+                                                             vfsService);
+        _registry.put("default",
+                      defaultPreprocessingUnit);
+        _registry.put("jbpm",
+                      jbpmPreprocessingUnit);
     }
-
 }

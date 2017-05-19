@@ -15,5 +15,9 @@
 package org.jbpm.designer.web.preprocessing.impl;
 
 public enum CarsEnum {
-    HONDA, MAZDA, NISSAN, TOYOTA, FORD
+    HONDA,
+    MAZDA,
+    NISSAN,
+    TOYOTA,
+    FORD
 }

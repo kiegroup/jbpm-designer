@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,13 @@
  */
 
 package org.jbpm.designer.editorhandler;
+
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+import javax.servlet.ServletConfig;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestServletConfig;
@@ -29,23 +36,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-
-import javax.servlet.ServletConfig;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
-
-
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EditorHandlerBaseTest extends RepositoryBaseTest {
@@ -68,10 +72,11 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
     @Before
     public void setup() {
         super.setup();
-        when(profileService.findProfile(any(HttpServletRequest.class), anyString())).thenReturn(profile);
+        when(profileService.findProfile(any(HttpServletRequest.class),
+                                        anyString())).thenReturn(profile);
 
         repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
 
         when(editorHandler.getProfile()).thenReturn(profile);
@@ -90,15 +95,20 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
     @Test
     public void testGetInstanceViewMode() throws Exception {
         Map<String, String> params = new HashMap<String, String>();
-        params.put("instanceviewmode", "false");
+        params.put("instanceviewmode",
+                   "false");
 
-        assertEquals(editorHandler.getInstanceViewMode(new TestHttpServletRequest(params)), "false");
+        assertEquals(editorHandler.getInstanceViewMode(new TestHttpServletRequest(params)),
+                     "false");
 
-        params.put("instanceviewmode", "true");
-        assertEquals(editorHandler.getInstanceViewMode(new TestHttpServletRequest(params)), "true");
+        params.put("instanceviewmode",
+                   "true");
+        assertEquals(editorHandler.getInstanceViewMode(new TestHttpServletRequest(params)),
+                     "true");
 
         params.remove("instanceviewmode");
-        assertEquals(editorHandler.getInstanceViewMode(new TestHttpServletRequest(params)), "false");
+        assertEquals(editorHandler.getInstanceViewMode(new TestHttpServletRequest(params)),
+                     "false");
     }
 
     @Test
@@ -110,60 +120,77 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
         assertFalse(editorHandler.doShowPDFDoc(config));
 
         // init parameter set and no system property set
-        config.getServletContext().setInitParameter(EditorHandler.SHOW_PDF_DOC, "false");
+        config.getServletContext().setInitParameter(EditorHandler.SHOW_PDF_DOC,
+                                                    "false");
         assertFalse(editorHandler.doShowPDFDoc(config));
 
-        config.getServletContext().setInitParameter(EditorHandler.SHOW_PDF_DOC, "true");
+        config.getServletContext().setInitParameter(EditorHandler.SHOW_PDF_DOC,
+                                                    "true");
         assertTrue(editorHandler.doShowPDFDoc(config));
 
         // system property overwrites config init parameter
-        config.getServletContext().setInitParameter(EditorHandler.SHOW_PDF_DOC, "true");
-        System.setProperty(EditorHandler.SHOW_PDF_DOC, "false");
+        config.getServletContext().setInitParameter(EditorHandler.SHOW_PDF_DOC,
+                                                    "true");
+        System.setProperty(EditorHandler.SHOW_PDF_DOC,
+                           "false");
         assertFalse(editorHandler.doShowPDFDoc(config));
 
-        config.getServletContext().setInitParameter(EditorHandler.SHOW_PDF_DOC, "false");
-        System.setProperty(EditorHandler.SHOW_PDF_DOC, "true");
+        config.getServletContext().setInitParameter(EditorHandler.SHOW_PDF_DOC,
+                                                    "false");
+        System.setProperty(EditorHandler.SHOW_PDF_DOC,
+                           "true");
         assertTrue(editorHandler.doShowPDFDoc(config));
-
     }
 
     @Test
     public void testDoGetFindProfile() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         try {
-            editorHandler.doGet(request, mock(HttpServletResponse.class));
+            editorHandler.doGet(request,
+                                mock(HttpServletResponse.class));
         } catch (Exception e) {
             // exception thrown due to mocked request and response
         }
-        verify(profileService, times(1)).findProfile(request, "jbpm");
+        verify(profileService,
+               times(1)).findProfile(request,
+                                     "jbpm");
     }
-
 
     @Test
     public void testBPSimDisplayViaSystemProp() {
-        System.setProperty(EditorHandler.BPSIM_DISPLAY, "true");
-        assertEquals("true", editorHandler.getProfile().getBpsimDisplay());
+        System.setProperty(EditorHandler.BPSIM_DISPLAY,
+                           "true");
+        assertEquals("true",
+                     editorHandler.getProfile().getBpsimDisplay());
 
-        System.setProperty(EditorHandler.BPSIM_DISPLAY, "false");
-        assertEquals("false", editorHandler.getProfile().getBpsimDisplay());
+        System.setProperty(EditorHandler.BPSIM_DISPLAY,
+                           "false");
+        assertEquals("false",
+                     editorHandler.getProfile().getBpsimDisplay());
 
         System.clearProperty(EditorHandler.BPSIM_DISPLAY);
-        assertNull( editorHandler.getProfile().getBpsimDisplay());
+        assertNull(editorHandler.getProfile().getBpsimDisplay());
     }
 
     @Test
     public void testFormsTypeViaSystemProp() {
-        System.setProperty(EditorHandler.FORMS_TYPE, "form");
-        assertEquals("form", editorHandler.getProfile().getFormsType());
+        System.setProperty(EditorHandler.FORMS_TYPE,
+                           "form");
+        assertEquals("form",
+                     editorHandler.getProfile().getFormsType());
 
-        System.setProperty(EditorHandler.FORMS_TYPE, "frm");
-        assertEquals("frm", editorHandler.getProfile().getFormsType());
+        System.setProperty(EditorHandler.FORMS_TYPE,
+                           "frm");
+        assertEquals("frm",
+                     editorHandler.getProfile().getFormsType());
 
-        System.setProperty(EditorHandler.FORMS_TYPE, "");
-        assertEquals("", editorHandler.getProfile().getFormsType());
+        System.setProperty(EditorHandler.FORMS_TYPE,
+                           "");
+        assertEquals("",
+                     editorHandler.getProfile().getFormsType());
 
         System.clearProperty(EditorHandler.FORMS_TYPE);
-        assertNull( editorHandler.getProfile().getFormsType());
+        assertNull(editorHandler.getProfile().getFormsType());
     }
 
     @Test
@@ -171,49 +198,61 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         editorHandler.setProfile(profile);
         try {
-            editorHandler.doGet(request, mock(HttpServletResponse.class));
+            editorHandler.doGet(request,
+                                mock(HttpServletResponse.class));
         } catch (Exception e) {
             // exception thrown due to mocked request and response
         }
-        verify(profileService, never()).findProfile(any(HttpServletRequest.class), anyString());
+        verify(profileService,
+               never()).findProfile(any(HttpServletRequest.class),
+                                    anyString());
     }
 
     @Test
     public void testServiceRepoAndTaskSystem() throws Exception {
-        System.setProperty(EditorHandler.SERVICE_REPO, "service repo");
-        System.setProperty(EditorHandler.SERVICE_REPO_TASKS, "taskA,taskB");
+        System.setProperty(EditorHandler.SERVICE_REPO,
+                           "service repo");
+        System.setProperty(EditorHandler.SERVICE_REPO_TASKS,
+                           "taskA,taskB");
         TestServletConfig config = new TestServletConfig(new TestServletContext(repository));
 
-        verifyServiceRepoAndTasks(config, true);
+        verifyServiceRepoAndTasks(config,
+                                  true);
     }
 
     @Test
     public void testServiceRepoAndTaskServlet() throws Exception {
         TestServletContext context = new TestServletContext(repository);
-        context.setInitParameter(EditorHandler.SERVICE_REPO, "service repo");
-        context.setInitParameter(EditorHandler.SERVICE_REPO_TASKS, "taskA,taskB");
+        context.setInitParameter(EditorHandler.SERVICE_REPO,
+                                 "service repo");
+        context.setInitParameter(EditorHandler.SERVICE_REPO_TASKS,
+                                 "taskA,taskB");
         TestServletConfig config = new TestServletConfig(context);
 
-        verifyServiceRepoAndTasks(config, true);
+        verifyServiceRepoAndTasks(config,
+                                  true);
     }
 
     @Test
     public void testServiceRepoAndTaskEmpty() throws Exception {
         TestServletConfig config = new TestServletConfig(new TestServletContext(repository));
-        verifyServiceRepoAndTasks(config, false);
+        verifyServiceRepoAndTasks(config,
+                                  false);
     }
 
-    private void verifyServiceRepoAndTasks(ServletConfig config, boolean present) throws Exception {
+    private void verifyServiceRepoAndTasks(ServletConfig config,
+                                           boolean present) throws Exception {
         PrintWriter writer = mock(PrintWriter.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(response.getWriter()).thenReturn(writer);
 
         editorHandler.init(config);
-        editorHandler.doGet(mock(HttpServletRequest.class),response);
+        editorHandler.doGet(mock(HttpServletRequest.class),
+                            response);
 
         verify(writer).write(stringCaptor.capture());
 
-        if(present) {
+        if (present) {
             assertTrue(stringCaptor.getValue().contains("ORYX.SERVICE_REPO = \"service repo\";"));
             assertTrue(stringCaptor.getValue().contains("ORYX.SERVICE_REPO_TASKS"));
             assertTrue(stringCaptor.getValue().contains("\"name\" : \"taskA\""));

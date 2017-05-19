@@ -20,7 +20,6 @@ import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -45,20 +44,22 @@ public class DesignerInjectionFilter implements Filter {
         rules = cf.getRules();
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response,
+    public void doFilter(ServletRequest request,
+                         ServletResponse response,
                          FilterChain chain) throws IOException, ServletException {
-
 
         try {
             DesignerResponseWrapper wrapper = new DesignerResponseWrapper((HttpServletResponse) response);
-            chain.doFilter(request, wrapper);
+            chain.doFilter(request,
+                           wrapper);
             if (!(((HttpServletResponse) response).containsHeader("Content-Encoding")) && response.getContentType() != null &&
                     response.getContentType().indexOf("text/html") >= 0) {
                 StringBuffer buff = wrapper.getBuffer();
                 PrintWriter out = response.getWriter();
                 // workaround for hosted gwt mode
-                if(!(((HttpServletRequest) request).getRequestURI().endsWith("hosted.html"))) {
-                    String modifiedResponse = processContent(buff, rules);
+                if (!(((HttpServletRequest) request).getRequestURI().endsWith("hosted.html"))) {
+                    String modifiedResponse = processContent(buff,
+                                                             rules);
                     out.write(modifiedResponse);
                 } else {
                     out.write(buff.toString());
@@ -67,14 +68,14 @@ public class DesignerInjectionFilter implements Filter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void destroy() {
         fc = null;
     }
 
-    protected static String processContent(StringBuffer buffer, InjectionRules rulesToApply) {
+    protected static String processContent(StringBuffer buffer,
+                                           InjectionRules rulesToApply) {
         String strResponse = buffer.toString();
 
         String tagsToInsert = "";
@@ -96,38 +97,44 @@ public class DesignerInjectionFilter implements Filter {
                     if (!headBeginInserted) {
                         tagsToInsert = "<head>\n" + tagsToInsert
                                 + headBeginMarker;
-                        modResponse = findAndReplace(tagsToInsert, modResponse,
-                                "<head>");
+                        modResponse = findAndReplace(tagsToInsert,
+                                                     modResponse,
+                                                     "<head>");
                         headBeginInserted = true;
                     } else {
                         tagsToInsert = tagsToInsert + headBeginMarker;
-                        modResponse = findAndReplace(tagsToInsert, modResponse,
-                                headBeginMarker);
+                        modResponse = findAndReplace(tagsToInsert,
+                                                     modResponse,
+                                                     headBeginMarker);
                     }
                     break;
 
                 case InsertAt.HEAD_END:
                     tagsToInsert += "</head>";
-                    modResponse = findAndReplace(tagsToInsert, modResponse,
-                            "</head>");
+                    modResponse = findAndReplace(tagsToInsert,
+                                                 modResponse,
+                                                 "</head>");
                     break;
 
                 case InsertAt.BODY_BEGIN:
                     if (!bodyBeginInserted) {
                         Pattern p = Pattern.compile("<body[^>]*>",
-                                Pattern.CASE_INSENSITIVE | Pattern.MULTILINE
-                                        | Pattern.DOTALL);
+                                                    Pattern.CASE_INSENSITIVE | Pattern.MULTILINE
+                                                            | Pattern.DOTALL);
                         Matcher m = p.matcher(modResponse);
                         StringBuffer sb = new StringBuffer();
                         do {
-                            if (!m.find())
+                            if (!m.find()) {
                                 break;
+                            }
                             String origBody = m.group();
-                            if (origBody == null)
+                            if (origBody == null) {
                                 continue;
-                            m.appendReplacement(sb, origBody.replaceAll("\\$",
-                                    "\\\\\\$")
-                                    + "\n" + tagsToInsert + bodyBeginMarker);
+                            }
+                            m.appendReplacement(sb,
+                                                origBody.replaceAll("\\$",
+                                                                    "\\\\\\$")
+                                                        + "\n" + tagsToInsert + bodyBeginMarker);
                             break;
                         } while (true);
                         m.appendTail(sb);
@@ -135,28 +142,31 @@ public class DesignerInjectionFilter implements Filter {
                         bodyBeginInserted = true;
                     } else {
                         tagsToInsert = tagsToInsert + bodyBeginMarker;
-                        modResponse = findAndReplace(tagsToInsert, modResponse,
-                                bodyBeginMarker);
+                        modResponse = findAndReplace(tagsToInsert,
+                                                     modResponse,
+                                                     bodyBeginMarker);
                     }
                     break;
 
                 case InsertAt.BODY_END:
                     tagsToInsert += "\n</body>";
-                    modResponse = findAndReplace(tagsToInsert, modResponse,
-                            "</body>");
+                    modResponse = findAndReplace(tagsToInsert,
+                                                 modResponse,
+                                                 "</body>");
                     break;
             }
         }
         return modResponse;
     }
 
-    protected static String findAndReplace(String tagsToInsert, String modResponse,
-                                  String strPattern) {
-        Pattern p = Pattern.compile(strPattern, Pattern.CASE_INSENSITIVE);
+    protected static String findAndReplace(String tagsToInsert,
+                                           String modResponse,
+                                           String strPattern) {
+        Pattern p = Pattern.compile(strPattern,
+                                    Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(modResponse);
         modResponse = m.replaceFirst(tagsToInsert);
         return modResponse;
     }
-
 }
 

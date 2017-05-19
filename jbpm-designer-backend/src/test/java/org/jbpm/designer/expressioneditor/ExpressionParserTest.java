@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,15 +15,6 @@
  */
 
 package org.jbpm.designer.expressioneditor;
-
-import org.jbpm.designer.expressioneditor.model.Condition;
-import org.jbpm.designer.expressioneditor.model.ConditionExpression;
-import org.jbpm.designer.expressioneditor.parser.ExpressionParser;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,10 +25,18 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jbpm.designer.expressioneditor.model.Condition;
+import org.jbpm.designer.expressioneditor.model.ConditionExpression;
+import org.jbpm.designer.expressioneditor.parser.ExpressionParser;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
-
 
 public class ExpressionParserTest {
 
@@ -53,13 +52,12 @@ public class ExpressionParserTest {
         expectedCondition.addParam("variable");
         expectedCondition.addParam("value");
         expectedExpression.getConditions().add(expectedCondition);
-
     }
 
     @Test
     public void testOneScriptPerLine() throws Exception {
 
-        LineNumberReader lineReader = new LineNumberReader(new InputStreamReader(ExpressionEditorMessageMarshallingTest.class.getResourceAsStream("OneScriptPerLine.txt") ));
+        LineNumberReader lineReader = new LineNumberReader(new InputStreamReader(ExpressionEditorMessageMarshallingTest.class.getResourceAsStream("OneScriptPerLine.txt")));
         String line = null;
 
         List<ConditionExpression> expectedExpressions = new ArrayList<ConditionExpression>();
@@ -98,7 +96,6 @@ public class ExpressionParserTest {
         expression.getConditions().add(condition);
         expectedExpressions.add(expression);
 
-
         while ((line = lineReader.readLine()) != null) {
 
             logger.debug("line(" + lineReader.getLineNumber() + "): " + line);
@@ -106,23 +103,22 @@ public class ExpressionParserTest {
             ExpressionParser parser = new ExpressionParser(line);
 
             ConditionExpression conditionExpression = parser.parse();
-            assertEqualsExpression(expectedExpressions.get(lineReader.getLineNumber()-1) , conditionExpression);
+            assertEqualsExpression(expectedExpressions.get(lineReader.getLineNumber() - 1),
+                                   conditionExpression);
         }
-
     }
 
     private String readFile(String fileName) throws IOException {
 
-        BufferedReader reader = new LineNumberReader(new InputStreamReader(ExpressionEditorMessageMarshallingTest.class.getResourceAsStream(fileName) ));
+        BufferedReader reader = new LineNumberReader(new InputStreamReader(ExpressionEditorMessageMarshallingTest.class.getResourceAsStream(fileName)));
         StringBuilder result = new StringBuilder();
         String line = null;
-        while ((line =  reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             result.append(line);
             result.append("\n");
         }
         return result.toString();
     }
-
 
     @Test
     public void testScript1() throws Exception {
@@ -142,11 +138,12 @@ public class ExpressionParserTest {
         for (Condition condition : actualExpression.getConditions()) {
             logger.debug("condition: " + condition.getFunction());
             for (String param : condition.getParameters()) {
-                logger.debug("\""+param+"\"");
+                logger.debug("\"" + param + "\"");
             }
         }
 
-        assertEqualsExpression(expectedExpression, actualExpression);
+        assertEqualsExpression(expectedExpression,
+                               actualExpression);
     }
 
     @Test
@@ -158,7 +155,8 @@ public class ExpressionParserTest {
         ExpressionParser parser = new ExpressionParser(script);
         ConditionExpression actualExpression = parser.parse();
 
-        assertEqualsExpression(expectedExpression, actualExpression);
+        assertEqualsExpression(expectedExpression,
+                               actualExpression);
     }
 
     @Test
@@ -167,7 +165,8 @@ public class ExpressionParserTest {
         ExpressionParser parser = new ExpressionParser(script);
         ConditionExpression actualExpression = parser.parse();
         expectedCondition.setFunction(Condition.EQUALS_TO);
-        assertEqualsExpression(expectedExpression, actualExpression);
+        assertEqualsExpression(expectedExpression,
+                               actualExpression);
     }
 
     @Test
@@ -176,7 +175,8 @@ public class ExpressionParserTest {
         ExpressionParser parser = new ExpressionParser(script);
         ConditionExpression actualExpression = parser.parse();
         expectedCondition.setFunction(Condition.GREATER_THAN);
-        assertEqualsExpression(expectedExpression, actualExpression);
+        assertEqualsExpression(expectedExpression,
+                               actualExpression);
     }
 
     @Test
@@ -185,7 +185,8 @@ public class ExpressionParserTest {
         ExpressionParser parser = new ExpressionParser(script);
         ConditionExpression actualExpression = parser.parse();
         expectedCondition.setFunction(Condition.LESS_THAN);
-        assertEqualsExpression(expectedExpression, actualExpression);
+        assertEqualsExpression(expectedExpression,
+                               actualExpression);
     }
 
     @Test
@@ -195,7 +196,8 @@ public class ExpressionParserTest {
         ConditionExpression actualExpression = parser.parse();
         expectedCondition.setFunction(Condition.IS_NULL);
         expectedCondition.getParameters().remove(1);
-        assertEqualsExpression(expectedExpression, actualExpression);
+        assertEqualsExpression(expectedExpression,
+                               actualExpression);
     }
 
     @Test
@@ -205,8 +207,10 @@ public class ExpressionParserTest {
         boolean exceptionCaught = false;
         try {
             parser.parse();
-        }catch (ParseException e) {
-            assertEquals(e.getMessage(), MessageFormat.format(ExpressionParser.FUNCTION_CALL_NOT_CLOSED_PROPERLY_ERROR, "between"));
+        } catch (ParseException e) {
+            assertEquals(e.getMessage(),
+                         MessageFormat.format(ExpressionParser.FUNCTION_CALL_NOT_CLOSED_PROPERLY_ERROR,
+                                              "between"));
             exceptionCaught = true;
         }
 
@@ -220,8 +224,10 @@ public class ExpressionParserTest {
         boolean exceptionCaught = false;
         try {
             parser.parse();
-        }catch (ParseException e) {
-            assertEquals(e.getMessage(), MessageFormat.format(ExpressionParser.RETURN_SENTENCE_EXPECTED_ERROR, "return"));
+        } catch (ParseException e) {
+            assertEquals(e.getMessage(),
+                         MessageFormat.format(ExpressionParser.RETURN_SENTENCE_EXPECTED_ERROR,
+                                              "return"));
             exceptionCaught = true;
         }
 
@@ -235,8 +241,9 @@ public class ExpressionParserTest {
         boolean exceptionCaught = false;
         try {
             parser.parse();
-        }catch (ParseException e) {
-            assertEquals(e.getMessage(), ExpressionParser.PARAMETER_DELIMITER_EXPECTED_ERROR);
+        } catch (ParseException e) {
+            assertEquals(e.getMessage(),
+                         ExpressionParser.PARAMETER_DELIMITER_EXPECTED_ERROR);
             exceptionCaught = true;
         }
 
@@ -250,8 +257,9 @@ public class ExpressionParserTest {
         boolean exceptionCaught = false;
         try {
             parser.parse();
-        }catch (ParseException e) {
-            assertEquals(e.getMessage(), ExpressionParser.STRING_PARAMETER_EXPECTED_ERROR);
+        } catch (ParseException e) {
+            assertEquals(e.getMessage(),
+                         ExpressionParser.STRING_PARAMETER_EXPECTED_ERROR);
             exceptionCaught = true;
         }
 
@@ -265,7 +273,7 @@ public class ExpressionParserTest {
         boolean exceptionCaught = false;
         try {
             parser.parse();
-        }catch (ParseException e) {
+        } catch (ParseException e) {
             assertTrue(e.getMessage().contains("must be followed"));
             exceptionCaught = true;
         }
@@ -280,8 +288,9 @@ public class ExpressionParserTest {
         boolean exceptionCaught = false;
         try {
             parser.parse();
-        }catch (ParseException e) {
-            assertEquals(e.getMessage(), ExpressionParser.VARIABLE_NAME_EXPECTED_ERROR);
+        } catch (ParseException e) {
+            assertEquals(e.getMessage(),
+                         ExpressionParser.VARIABLE_NAME_EXPECTED_ERROR);
             exceptionCaught = true;
         }
 
@@ -296,24 +305,33 @@ public class ExpressionParserTest {
         ConditionExpression actualExpression = parser.parse();
         expectedCondition.setFunction(Condition.EQUALS_TO);
         expectedExpression.getConditions().add(expectedCondition);
-        assertEqualsExpression(expectedExpression, actualExpression);
+        assertEqualsExpression(expectedExpression,
+                               actualExpression);
     }
 
-    public void assertEqualsExpression(ConditionExpression expected, ConditionExpression actual) {
+    public void assertEqualsExpression(ConditionExpression expected,
+                                       ConditionExpression actual) {
         assertNotNull(actual);
-        assertEquals(expected.getOperator(), actual.getOperator());
-        assertEquals(expected.getConditions().size(), actual.getConditions().size());
+        assertEquals(expected.getOperator(),
+                     actual.getOperator());
+        assertEquals(expected.getConditions().size(),
+                     actual.getConditions().size());
         for (int i = 0; i < expected.getConditions().size(); i++) {
-            assertEqualsCondition(expected.getConditions().get(i), actual.getConditions().get(i));
+            assertEqualsCondition(expected.getConditions().get(i),
+                                  actual.getConditions().get(i));
         }
     }
 
-    public void assertEqualsCondition(Condition expected, Condition actual) {
+    public void assertEqualsCondition(Condition expected,
+                                      Condition actual) {
         assertNotNull(actual);
-        assertEquals(expected.getFunction(), actual.getFunction());
-        assertEquals(expected.getParameters().size(), actual.getParameters().size());
+        assertEquals(expected.getFunction(),
+                     actual.getFunction());
+        assertEquals(expected.getParameters().size(),
+                     actual.getParameters().size());
         for (int i = 0; i < expected.getParameters().size(); i++) {
-            assertEquals(expected.getParameters().get(i), actual.getParameters().get(i));
+            assertEquals(expected.getParameters().get(i),
+                         actual.getParameters().get(i));
         }
     }
 }

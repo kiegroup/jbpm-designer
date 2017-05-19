@@ -15,6 +15,10 @@
 
 package org.jbpm.designer.web.server;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
 import org.jbpm.designer.helper.TestServletConfig;
@@ -30,14 +34,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import static org.junit.Assert.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-public class CustomEditorsServletTest  extends RepositoryBaseTest {
+public class CustomEditorsServletTest extends RepositoryBaseTest {
 
     @Before
     public void setup() {
@@ -52,7 +51,7 @@ public class CustomEditorsServletTest  extends RepositoryBaseTest {
     @Test
     public void testLoadCustomEditors() throws Exception {
         Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("custom editors content")
@@ -63,26 +62,31 @@ public class CustomEditorsServletTest  extends RepositoryBaseTest {
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
 
-        params.put("profile", "jbpm");
-
+        params.put("profile",
+                   "jbpm");
 
         CustomEditorsServlet customEditorsServlet = new CustomEditorsServlet();
         customEditorsServlet.setProfile(profile);
 
         customEditorsServlet.init(new TestServletConfig(new TestServletContext(repository)));
-        TestHttpServletResponse response = new  TestHttpServletResponse();
-        customEditorsServlet.doPost(new TestHttpServletRequest(params), response);
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        customEditorsServlet.doPost(new TestHttpServletRequest(params),
+                                    response);
 
         String responseText = new String(response.getContent());
         assertNotNull(responseText);
-        assertEquals("custom editors content", responseText);
+        assertEquals("custom editors content",
+                     responseText);
 
-        Collection<Asset> dictionary = repository.listAssets("/global", new FilterByExtension("json"));
+        Collection<Asset> dictionary = repository.listAssets("/global",
+                                                             new FilterByExtension("json"));
         assertNotNull(dictionary);
-        assertEquals(1, dictionary.size());
+        assertEquals(1,
+                     dictionary.size());
 
         Asset<String> dictionaryAsset = repository.loadAsset(dictionary.iterator().next().getUniqueId());
         assertNotNull(dictionaryAsset);
-        assertEquals("custom editors content", dictionaryAsset.getAssetContent());
+        assertEquals("custom editors content",
+                     dictionaryAsset.getAssetContent());
     }
 }

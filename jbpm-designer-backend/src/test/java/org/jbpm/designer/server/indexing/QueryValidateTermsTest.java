@@ -15,7 +15,6 @@
  */
 package org.jbpm.designer.server.indexing;
 
-import static org.junit.Assert.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +27,8 @@ import org.kie.workbench.common.services.refactoring.model.index.terms.valueterm
 import org.kie.workbench.common.services.refactoring.service.PartType;
 import org.kie.workbench.common.services.refactoring.service.ResourceType;
 
+import static org.junit.Assert.*;
+
 /**
  *
  */
@@ -37,73 +38,87 @@ public class QueryValidateTermsTest {
 
     @Test
     public void findRuleFlowNamesQueryTermsTest() {
-       DesignerFindRuleFlowNamesQuery query = new DesignerFindRuleFlowNamesQuery();
+        DesignerFindRuleFlowNamesQuery query = new DesignerFindRuleFlowNamesQuery();
 
-       Set<ValueIndexTerm> queryTerms = new HashSet<>();
-       try {
-           query.validateTerms(queryTerms);
-           fail( "The required rule-flow term is missing, but no exception was thrown.");
-       } catch( IllegalArgumentException iae ) {
-           assertTrue( "Incorrect error message: " + iae.getMessage(), iae.getMessage().contains("At least 1 term") );
-       }
+        Set<ValueIndexTerm> queryTerms = new HashSet<>();
+        try {
+            query.validateTerms(queryTerms);
+            fail("The required rule-flow term is missing, but no exception was thrown.");
+        } catch (IllegalArgumentException iae) {
+            assertTrue("Incorrect error message: " + iae.getMessage(),
+                       iae.getMessage().contains("At least 1 term"));
+        }
 
-       queryTerms = new HashSet<>();
-       queryTerms.add(new ValueSharedPartIndexTerm("not-rule-flow",  PartType.ACTIVATION_GROUP));
-       try {
-           query.validateTerms(queryTerms);
-           fail( "The required rule-flow term is missing, but no exception was thrown.");
-       } catch( IllegalArgumentException iae ) {
-           assertTrue( "Incorrect error message: " + iae.getMessage(), iae.getMessage().contains(ERROR_MSG) );
-       }
+        queryTerms = new HashSet<>();
+        queryTerms.add(new ValueSharedPartIndexTerm("not-rule-flow",
+                                                    PartType.ACTIVATION_GROUP));
+        try {
+            query.validateTerms(queryTerms);
+            fail("The required rule-flow term is missing, but no exception was thrown.");
+        } catch (IllegalArgumentException iae) {
+            assertTrue("Incorrect error message: " + iae.getMessage(),
+                       iae.getMessage().contains(ERROR_MSG));
+        }
 
-       queryTerms = new HashSet<>();
-       queryTerms.add(new ValueSharedPartIndexTerm("not-rule-flow",  PartType.ACTIVATION_GROUP));
-       queryTerms.add(new ValueSharedPartIndexTerm("rule-flow",  PartType.RULEFLOW_GROUP));
-       try {
-           query.validateTerms(queryTerms);
-           fail( "The activation term is not acceptable here, but no exception was thrown.");
-       } catch( IllegalArgumentException iae ) {
-           assertTrue( "Incorrect error message: " + iae.getMessage(), iae.getMessage().contains(ERROR_MSG) );
-       }
+        queryTerms = new HashSet<>();
+        queryTerms.add(new ValueSharedPartIndexTerm("not-rule-flow",
+                                                    PartType.ACTIVATION_GROUP));
+        queryTerms.add(new ValueSharedPartIndexTerm("rule-flow",
+                                                    PartType.RULEFLOW_GROUP));
+        try {
+            query.validateTerms(queryTerms);
+            fail("The activation term is not acceptable here, but no exception was thrown.");
+        } catch (IllegalArgumentException iae) {
+            assertTrue("Incorrect error message: " + iae.getMessage(),
+                       iae.getMessage().contains(ERROR_MSG));
+        }
 
-       queryTerms = new HashSet<>();
-       queryTerms.add(new ValueSharedPartIndexTerm("rule-flow",  PartType.RULEFLOW_GROUP));
-       query.validateTerms(queryTerms);
+        queryTerms = new HashSet<>();
+        queryTerms.add(new ValueSharedPartIndexTerm("rule-flow",
+                                                    PartType.RULEFLOW_GROUP));
+        query.validateTerms(queryTerms);
     }
 
     @Test
     public void designerFindDataTypesQueryTest() {
-       DesignerFindDataTypesQuery query = new DesignerFindDataTypesQuery();
+        DesignerFindDataTypesQuery query = new DesignerFindDataTypesQuery();
 
-       Set<ValueIndexTerm> queryTerms = new HashSet<>();
-       try {
-           query.validateTerms(queryTerms);
-           fail( "The required java term is missing, but no exception was thrown.");
-       } catch( IllegalArgumentException iae ) {
-           assertTrue( "Incorrect error message: " + iae.getMessage(), iae.getMessage().contains("At least 1 term") );
-       }
+        Set<ValueIndexTerm> queryTerms = new HashSet<>();
+        try {
+            query.validateTerms(queryTerms);
+            fail("The required java term is missing, but no exception was thrown.");
+        } catch (IllegalArgumentException iae) {
+            assertTrue("Incorrect error message: " + iae.getMessage(),
+                       iae.getMessage().contains("At least 1 term"));
+        }
 
-       queryTerms = new HashSet<>();
-       queryTerms.add(new ValueSharedPartIndexTerm("not-rule-flow",  PartType.ACTIVATION_GROUP));
-       try {
-           query.validateTerms(queryTerms);
-           fail( "The required java term is missing, but no exception was thrown.");
-       } catch( IllegalArgumentException iae ) {
-           assertTrue( "Incorrect error message: " + iae.getMessage(), iae.getMessage().contains(ERROR_MSG) );
-       }
+        queryTerms = new HashSet<>();
+        queryTerms.add(new ValueSharedPartIndexTerm("not-rule-flow",
+                                                    PartType.ACTIVATION_GROUP));
+        try {
+            query.validateTerms(queryTerms);
+            fail("The required java term is missing, but no exception was thrown.");
+        } catch (IllegalArgumentException iae) {
+            assertTrue("Incorrect error message: " + iae.getMessage(),
+                       iae.getMessage().contains(ERROR_MSG));
+        }
 
-       queryTerms = new HashSet<>();
-       queryTerms.add(new ValueSharedPartIndexTerm("not-rule-flow",  PartType.ACTIVATION_GROUP));
-       queryTerms.add(new ValueResourceIndexTerm("java.class", ResourceType.JAVA));
-       try {
-           query.validateTerms(queryTerms);
-           fail( "The activation term is not acceptable here, but no exception was thrown.");
-       } catch( IllegalArgumentException iae ) {
-           assertTrue( "Incorrect error message: " + iae.getMessage(), iae.getMessage().contains(ERROR_MSG) );
-       }
+        queryTerms = new HashSet<>();
+        queryTerms.add(new ValueSharedPartIndexTerm("not-rule-flow",
+                                                    PartType.ACTIVATION_GROUP));
+        queryTerms.add(new ValueResourceIndexTerm("java.class",
+                                                  ResourceType.JAVA));
+        try {
+            query.validateTerms(queryTerms);
+            fail("The activation term is not acceptable here, but no exception was thrown.");
+        } catch (IllegalArgumentException iae) {
+            assertTrue("Incorrect error message: " + iae.getMessage(),
+                       iae.getMessage().contains(ERROR_MSG));
+        }
 
-       queryTerms = new HashSet<>();
-       queryTerms.add(new ValueResourceIndexTerm("java.class", ResourceType.JAVA));
-       query.validateTerms(queryTerms);
+        queryTerms = new HashSet<>();
+        queryTerms.add(new ValueResourceIndexTerm("java.class",
+                                                  ResourceType.JAVA));
+        query.validateTerms(queryTerms);
     }
 }

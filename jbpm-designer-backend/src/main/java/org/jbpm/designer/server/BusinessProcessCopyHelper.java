@@ -15,9 +15,16 @@
  */
 package org.jbpm.designer.server;
 
+import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import bpsim.impl.BpsimFactoryImpl;
-import org.eclipse.bpmn2.*;
+import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.Process;
+import org.eclipse.bpmn2.RootElement;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -30,22 +37,10 @@ import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.uberfire.ext.editor.commons.backend.service.helper.CopyHelper;
-import org.uberfire.io.IOService;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
-import org.w3c.dom.Document;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
+import org.uberfire.ext.editor.commons.backend.service.helper.CopyHelper;
+import org.uberfire.io.IOService;
 
 /**
  * CopyHelper for Business Processes
@@ -63,22 +58,22 @@ public class BusinessProcessCopyHelper implements CopyHelper {
     }
 
     @Inject
-    public BusinessProcessCopyHelper( final @Named("ioStrategy") IOService ioService,
-                                      final Bpmn2TypeDefinition bpmn2ResourceType,
-                                      final CommentedOptionFactory commentedOptionFactory) {
+    public BusinessProcessCopyHelper(final @Named("ioStrategy") IOService ioService,
+                                     final Bpmn2TypeDefinition bpmn2ResourceType,
+                                     final CommentedOptionFactory commentedOptionFactory) {
         this.ioService = ioService;
         this.bpmn2ResourceType = bpmn2ResourceType;
         this.commentedOptionFactory = commentedOptionFactory;
     }
 
     @Override
-    public boolean supports( final Path destination ) {
-        return ( bpmn2ResourceType.accept( destination ) );
+    public boolean supports(final Path destination) {
+        return (bpmn2ResourceType.accept(destination));
     }
 
     @Override
-    public void postProcess( final Path source,
-                             final Path destination ) {
+    public void postProcess(final Path source,
+                            final Path destination) {
         //Load existing file
         final org.uberfire.java.nio.file.Path _destination = Paths.convert(destination);
         final String processSource = ioService.readAllString(_destination);
@@ -91,42 +86,42 @@ public class BusinessProcessCopyHelper implements CopyHelper {
             Process process = getRootProcess(def);
 
             String destinationPkg = "";
-            if(!"/".equals(_destination.getParent().toString())) {
+            if (!"/".equals(_destination.getParent().toString())) {
                 String[] pathParts = _destination.getParent().toString().split("/");
                 destinationPkg = pathParts[1];
             }
 
-            String destinationID = destinationPkg + "." + destination.getFileName().toString().substring(0, destination.getFileName().length() - 6);
+            String destinationID = destinationPkg + "." + destination.getFileName().toString().substring(0,
+                                                                                                         destination.getFileName().length() - 6);
             process.setId(Utils.toBPMNIdentifier(destinationID));
 
             ResourceSet rSet = new ResourceSetImpl();
-            rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
+            rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2",
+                                                                             new JBPMBpmn2ResourceFactoryImpl());
             JBPMBpmn2ResourceImpl bpmn2resource = (JBPMBpmn2ResourceImpl) rSet.createResource(URI.createURI("virtual.bpmn2"));
             rSet.getResources().add(bpmn2resource);
             bpmn2resource.getContents().add(def);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            bpmn2resource.save(outputStream, new HashMap<Object, Object>());
-            String destinationBpmn2 =  outputStream.toString();
+            bpmn2resource.save(outputStream,
+                               new HashMap<Object, Object>());
+            String destinationBpmn2 = outputStream.toString();
 
-            if ( destinationBpmn2 != null ) {
-                ioService.write( _destination,
-                        destinationBpmn2,
-                        commentedOptionFactory.makeCommentedOption( "File [" + source.toURI() + "] copied to [" + destination.toURI() + "]." ) );
+            if (destinationBpmn2 != null) {
+                ioService.write(_destination,
+                                destinationBpmn2,
+                                commentedOptionFactory.makeCommentedOption("File [" + source.toURI() + "] copied to [" + destination.toURI() + "]."));
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-
     }
 
     public Process getRootProcess(Definitions def) {
-        for(RootElement nextRootElement : def.getRootElements()) {
-            if(nextRootElement instanceof Process) {
+        for (RootElement nextRootElement : def.getRootElements()) {
+            if (nextRootElement instanceof Process) {
                 return (Process) nextRootElement;
             }
         }
         return null;
     }
-
-
 }

@@ -15,13 +15,14 @@
 
 package org.jbpm.designer.filter;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 public class DesignerResponseWrapper extends HttpServletResponseWrapper {
+
     private StringWriter stringWriter;
     private InjectionRules rules;
 
@@ -31,19 +32,18 @@ public class DesignerResponseWrapper extends HttpServletResponseWrapper {
     }
 
     public PrintWriter getWriter() {
-        return(new PrintWriter(stringWriter));
+        return (new PrintWriter(stringWriter));
     }
 
     public ServletOutputStream getOutputStream() {
-        return(new DesignerStream(stringWriter));
+        return (new DesignerStream(stringWriter));
     }
 
     public String toString() {
-        return(stringWriter.toString());
+        return (stringWriter.toString());
     }
 
     public StringBuffer getBuffer() {
-        return(stringWriter.getBuffer());
+        return (stringWriter.getBuffer());
     }
-
 }

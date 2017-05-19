@@ -64,7 +64,8 @@ public class DesignerViewImpl
 
     @Override
     public void raiseEventCheckSave(String pathURI) {
-        designerWidget.raiseEventCheckSave(designerWidget.getEditorID(), pathURI);
+        designerWidget.raiseEventCheckSave(designerWidget.getEditorID(),
+                                           pathURI);
     }
 
     @Override
@@ -78,8 +79,10 @@ public class DesignerViewImpl
     }
 
     @Override
-    public void setup(String editorID, Map<String, String> editorParameters) {
-        designerWidget.setup(editorID, editorParameters);
+    public void setup(String editorID,
+                      Map<String, String> editorParameters) {
+        designerWidget.setup(editorID,
+                             editorParameters);
     }
 
     @Override
@@ -87,7 +90,7 @@ public class DesignerViewImpl
         designerWidget.setProcessUnSaved(designerWidget.getEditorID());
     }
 
-    private native void publishCallOnReisize( DesignerViewImpl dvi )/*-{
+    private native void publishCallOnReisize(DesignerViewImpl dvi)/*-{
         $wnd.designercallonresize = function () {
             dvi.@org.jbpm.designer.client.DesignerViewImpl::onResize()();
         }
@@ -114,12 +117,14 @@ public class DesignerViewImpl
         int height = getParent().getOffsetHeight();
         int width = getParent().getOffsetWidth();
 
-        setPixelSize( width, height );
+        setPixelSize(width,
+                     height);
 
         this.setWidth(width + "px");
-        this.setHeight( Math.max(0, height - 5) + "px");
+        this.setHeight(Math.max(0,
+                                height - 5) + "px");
 
-        ( (RequiresResize) designerWidget.getView() ).onResize();
+        ((RequiresResize) designerWidget.getView()).onResize();
     }
 
     public void setDesignerWidget(DesignerWidgetPresenter widgetPresenter) {

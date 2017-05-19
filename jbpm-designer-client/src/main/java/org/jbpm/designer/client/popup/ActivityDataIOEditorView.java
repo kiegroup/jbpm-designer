@@ -16,15 +16,16 @@
 
 package org.jbpm.designer.client.popup;
 
-import org.jbpm.designer.client.shared.AssignmentRow;
-import org.jbpm.designer.client.util.ListBoxValues;
-
 import java.util.List;
 import java.util.Set;
+
+import org.jbpm.designer.client.shared.AssignmentRow;
+import org.jbpm.designer.client.util.ListBoxValues;
 
 public interface ActivityDataIOEditorView {
 
     interface Presenter {
+
         void handleSaveClick();
 
         void handleCancelClick();

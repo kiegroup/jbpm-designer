@@ -19,16 +19,17 @@ package org.jbpm.designer.server.diagram;
  * @author Philipp Bounds represent the svg bound of a shape
  */
 public class Bounds {
+
     Point lowerRight;
     Point upperLeft;
 
     /**
      * Constructs a Bounds with initial lowerRight and upperleft
-     * 
      * @param lowerRight
      * @param upperLeft
      */
-    public Bounds(Point lowerRight, Point upperLeft) {
+    public Bounds(Point lowerRight,
+                  Point upperLeft) {
         super();
         this.lowerRight = lowerRight;
         this.upperLeft = upperLeft;
@@ -42,8 +43,7 @@ public class Bounds {
     }
 
     /**
-     * @param lowerRight
-     *            the lowerRight to set
+     * @param lowerRight the lowerRight to set
      */
     public void setLowerRight(Point lowerRight) {
         this.lowerRight = lowerRight;
@@ -57,11 +57,9 @@ public class Bounds {
     }
 
     /**
-     * @param upperLeft
-     *            the upperLeft to set
+     * @param upperLeft the upperLeft to set
      */
     public void setUpperLeft(Point upperLeft) {
         this.upperLeft = upperLeft;
     }
-
 }

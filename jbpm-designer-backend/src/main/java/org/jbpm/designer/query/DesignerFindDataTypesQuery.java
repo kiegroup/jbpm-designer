@@ -19,16 +19,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.lucene.search.Query;
 import org.kie.workbench.common.services.refactoring.backend.server.query.NamedQuery;
 import org.kie.workbench.common.services.refactoring.backend.server.query.response.ResponseBuilder;
 import org.kie.workbench.common.services.refactoring.backend.server.query.standard.AbstractFindQuery;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueBranchNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueProjectNameIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueBranchNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringStringPageRow;
 import org.kie.workbench.common.services.refactoring.service.ResourceType;
@@ -49,7 +48,7 @@ public class DesignerFindDataTypesQuery extends AbstractFindQuery implements Nam
     }
 
     @Override
-    public Query toQuery( final Set<ValueIndexTerm> terms ) {
+    public Query toQuery(final Set<ValueIndexTerm> terms) {
 
         // terms check is done in validateTerms
         ValueIndexTerm term = terms.iterator().next();
@@ -69,45 +68,46 @@ public class DesignerFindDataTypesQuery extends AbstractFindQuery implements Nam
     public void validateTerms(Set<ValueIndexTerm> queryTerms) throws IllegalArgumentException {
         checkNotNullAndNotEmpty(queryTerms);
 
-        checkInvalidAndRequiredTerms(queryTerms, NAME,
-                new String [] {
-                        ResourceType.JAVA.toString(),
-                        null, null // not required
-                },
-                (t) -> (t.getTerm().equals(ResourceType.JAVA.toString())),
-                (t) -> (t instanceof ValueProjectNameIndexTerm),
-                (t) -> (t instanceof ValueBranchNameIndexTerm)
-                );
+        checkInvalidAndRequiredTerms(queryTerms,
+                                     NAME,
+                                     new String[]{
+                                             ResourceType.JAVA.toString(),
+                                             null, null // not required
+                                     },
+                                     (t) -> (t.getTerm().equals(ResourceType.JAVA.toString())),
+                                     (t) -> (t instanceof ValueProjectNameIndexTerm),
+                                     (t) -> (t instanceof ValueBranchNameIndexTerm)
+        );
     }
 
     private static class DataTypesResponseBuilder implements ResponseBuilder {
 
         @Override
-        public PageResponse<RefactoringPageRow> buildResponse( final int pageSize,
-                                                               final int startRow,
-                                                               final List<KObject> kObjects ) {
+        public PageResponse<RefactoringPageRow> buildResponse(final int pageSize,
+                                                              final int startRow,
+                                                              final List<KObject> kObjects) {
             final int hits = kObjects.size();
             final PageResponse<RefactoringPageRow> response = new PageResponse<RefactoringPageRow>();
-            final List<RefactoringPageRow> result = buildResponse( kObjects );
-            response.setTotalRowSize( hits );
-            response.setPageRowList( result );
-            response.setTotalRowSizeExact( true );
-            response.setStartRowIndex( startRow );
-            response.setLastPage( ( pageSize * startRow + 2 ) >= hits );
+            final List<RefactoringPageRow> result = buildResponse(kObjects);
+            response.setTotalRowSize(hits);
+            response.setPageRowList(result);
+            response.setTotalRowSizeExact(true);
+            response.setStartRowIndex(startRow);
+            response.setLastPage((pageSize * startRow + 2) >= hits);
 
             return response;
         }
 
         @Override
-        public List<RefactoringPageRow> buildResponse( final List<KObject> kObjects ) {
-            final List<RefactoringPageRow> result = new ArrayList<RefactoringPageRow>( kObjects.size() );
+        public List<RefactoringPageRow> buildResponse(final List<KObject> kObjects) {
+            final List<RefactoringPageRow> result = new ArrayList<RefactoringPageRow>(kObjects.size());
             final Set<String> uniqueDataTypeNames = new HashSet<>();
-            for ( final KObject kObject : kObjects ) {
+            for (final KObject kObject : kObjects) {
                 final Set<String> dataTypeNames = getDataTypeNamesFromKObject(kObject);
                 uniqueDataTypeNames.addAll(dataTypeNames);
             }
 
-            for( String dataTypeName : uniqueDataTypeNames ) {
+            for (String dataTypeName : uniqueDataTypeNames) {
                 final RefactoringStringPageRow row = new RefactoringStringPageRow();
                 row.setValue(dataTypeName);
                 result.add(row);
@@ -115,19 +115,17 @@ public class DesignerFindDataTypesQuery extends AbstractFindQuery implements Nam
             return result;
         }
 
-        private Set<String> getDataTypeNamesFromKObject( final KObject kObject ) {
+        private Set<String> getDataTypeNamesFromKObject(final KObject kObject) {
             final Set<String> dataTypeNames = new HashSet<>();
-            if ( kObject == null ) {
+            if (kObject == null) {
                 return dataTypeNames;
             }
-            for ( KProperty property : kObject.getProperties() ) {
-                if ( property.getName().equals( ResourceType.JAVA.toString() ) ) {
+            for (KProperty property : kObject.getProperties()) {
+                if (property.getName().equals(ResourceType.JAVA.toString())) {
                     dataTypeNames.add(property.getValue().toString());
                 }
             }
             return dataTypeNames;
         }
-
     }
-
 }

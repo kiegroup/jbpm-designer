@@ -39,13 +39,20 @@ public class ComboBox implements ComboBoxView.ComboBoxPresenter {
     ComboBoxView view;
 
     @Override
-    public void init(final ComboBoxView.ModelPresenter modelPresenter, final ValueListBox<String> listBox, final TextBox textBox,
-            final boolean quoteStringValues,
-            final String customPrompt, final String placeholder) {
+    public void init(final ComboBoxView.ModelPresenter modelPresenter,
+                     final ValueListBox<String> listBox,
+                     final TextBox textBox,
+                     final boolean quoteStringValues,
+                     final String customPrompt,
+                     final String placeholder) {
         this.quoteStringValues = quoteStringValues;
         this.customPrompt = customPrompt;
 
-        view.init(this, modelPresenter, listBox, textBox, placeholder);
+        view.init(this,
+                  modelPresenter,
+                  listBox,
+                  textBox,
+                  placeholder);
     }
 
     @Override
@@ -134,7 +141,8 @@ public class ComboBox implements ComboBoxView.ComboBoxPresenter {
                     currentTextValue = "";
                 } else {
                     String oldValue = currentTextValue;
-                    String displayValue = addCustomValueToListBoxValues(newValue, oldValue);
+                    String displayValue = addCustomValueToListBoxValues(newValue,
+                                                                        oldValue);
                     setTextBoxValue(newValue);
                     currentTextValue = newValue;
                     setListBoxValue(displayValue);
@@ -151,12 +159,14 @@ public class ComboBox implements ComboBoxView.ComboBoxPresenter {
     }
 
     @Override
-    public String addCustomValueToListBoxValues(String newValue, String oldValue) {
+    public String addCustomValueToListBoxValues(String newValue,
+                                                String oldValue) {
         if (quoteStringValues) {
             newValue = StringUtils.createQuotedConstant(newValue);
             oldValue = StringUtils.createQuotedConstant(oldValue);
         }
-        return listBoxValues.addCustomValue(newValue, oldValue);
+        return listBoxValues.addCustomValue(newValue,
+                                            oldValue);
     }
 
     public void setTextBoxValue(String value) {
@@ -168,5 +178,4 @@ public class ComboBox implements ComboBoxView.ComboBoxPresenter {
         view.setListBoxValue(value);
         view.setListBoxModelValue(value);
     }
-
 }

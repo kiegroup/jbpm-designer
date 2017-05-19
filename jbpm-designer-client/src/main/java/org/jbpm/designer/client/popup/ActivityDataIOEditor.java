@@ -16,19 +16,18 @@
 
 package org.jbpm.designer.client.popup;
 
-import org.jboss.errai.marshalling.client.Marshalling;
-import org.jbpm.designer.client.shared.AssignmentData;
-import org.jbpm.designer.client.shared.AssignmentRow;
-import org.jbpm.designer.client.util.ListBoxValues;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 
+import org.jboss.errai.marshalling.client.Marshalling;
+import org.jbpm.designer.client.shared.AssignmentData;
+import org.jbpm.designer.client.shared.AssignmentRow;
+import org.jbpm.designer.client.util.ListBoxValues;
 
 @Dependent
 public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter {
@@ -43,8 +42,10 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
      * edited Assignments data.
      */
     public interface GetDataCallback {
+
         void getData(String assignmentData);
     }
+
     GetDataCallback callback = null;
 
     @Inject
@@ -57,7 +58,7 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
     private AssignmentData assignmentData;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         view.init(this);
     }
 
@@ -68,12 +69,17 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
     @Override
     public void handleSaveClick() {
 
-        if ( callback != null ) {
-            AssignmentData data = new AssignmentData( view.getInputAssignmentData(),
-                    view.getOutputAssignmentData(), dataTypes, dataTypeDisplayNames );
-            data.setVariableCountsString(hasInputVars, isSingleInputVar, hasOutputVars, isSingleOutputVar);
+        if (callback != null) {
+            AssignmentData data = new AssignmentData(view.getInputAssignmentData(),
+                                                     view.getOutputAssignmentData(),
+                                                     dataTypes,
+                                                     dataTypeDisplayNames);
+            data.setVariableCountsString(hasInputVars,
+                                         isSingleInputVar,
+                                         hasOutputVars,
+                                         isSingleOutputVar);
             String sData = marshallToJson(data);
-            callback.getData( sData );
+            callback.getData(sData);
         }
         view.hideView();
     }
@@ -87,7 +93,8 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
         view.hideView();
     }
 
-    public void setDataTypes(List<String> dataTypes, List<String> dataTypeDisplayNames) {
+    public void setDataTypes(List<String> dataTypes,
+                             List<String> dataTypeDisplayNames) {
         this.dataTypes = dataTypes;
         this.dataTypeDisplayNames = dataTypeDisplayNames;
 
@@ -99,7 +106,11 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
         this.assignmentData = assignmentData;
     }
 
-    public void configureDialog(String taskName, boolean hasInputVars, boolean isSingleInputVar, boolean hasOutputVars, boolean isSingleOutputVar) {
+    public void configureDialog(String taskName,
+                                boolean hasInputVars,
+                                boolean isSingleInputVar,
+                                boolean hasOutputVars,
+                                boolean isSingleOutputVar) {
         this.hasInputVars = hasInputVars;
         this.isSingleInputVar = isSingleInputVar;
         this.hasOutputVars = hasOutputVars;
@@ -107,8 +118,7 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
 
         if (taskName != null && !taskName.isEmpty()) {
             view.setCustomViewTitle(taskName);
-        }
-        else {
+        } else {
             view.setDefaultViewTitle();
         }
 
@@ -133,11 +143,11 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
         view.setOutputAssignmentsProcessVariables(processVariables);
     }
 
-    public void setInputAssignmentRows(List<AssignmentRow> inputAssignmentRows){
+    public void setInputAssignmentRows(List<AssignmentRow> inputAssignmentRows) {
         view.setInputAssignmentRows(inputAssignmentRows);
     }
 
-    public void setOutputAssignmentRows(List<AssignmentRow> outputAssignmentRows){
+    public void setOutputAssignmentRows(List<AssignmentRow> outputAssignmentRows) {
         view.setOutputAssignmentRows(outputAssignmentRows);
     }
 
@@ -151,8 +161,7 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
             public String getNonCustomValueForUserString(String userValue) {
                 if (assignmentData != null) {
                     return assignmentData.getDataTypeDisplayNameForUserString(userValue);
-                }
-                else {
+                } else {
                     return null;
                 }
             }

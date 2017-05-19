@@ -53,17 +53,17 @@ public class NewProcessHandlerTest {
 
     @Before
     public void setup() {
-        designerAssetServiceCaller = new CallerMock<>( designerAssetService );
-        newProcessHandler = new NewProcessHandler( designerAssetServiceCaller,
-                                                   placeManager,
-                                                   null ) {
+        designerAssetServiceCaller = new CallerMock<>(designerAssetService);
+        newProcessHandler = new NewProcessHandler(designerAssetServiceCaller,
+                                                  placeManager,
+                                                  null) {
             {
                 newResourceSuccessEvent = newResourceSuccessEventMock;
             }
 
             @Override
-            protected String buildFileName( final String baseFileName,
-                                            final ResourceTypeDefinition resourceType ) {
+            protected String buildFileName(final String baseFileName,
+                                           final ResourceTypeDefinition resourceType) {
                 return "fileName";
             }
 
@@ -75,18 +75,19 @@ public class NewProcessHandlerTest {
 
     @Test
     public void createTest() {
-        final NewResourcePresenter presenter = mock( NewResourcePresenter.class );
-        final Path path = mock( Path.class );
-        doReturn( path ).when( designerAssetService ).createProcess( any( Path.class ),
-                                                                     anyString() );
+        final NewResourcePresenter presenter = mock(NewResourcePresenter.class);
+        final Path path = mock(Path.class);
+        doReturn(path).when(designerAssetService).createProcess(any(Path.class),
+                                                                anyString());
 
-        newProcessHandler.create( mock( Package.class ),
-                                  "",
-                                  presenter );
+        newProcessHandler.create(mock(Package.class),
+                                 "",
+                                 presenter);
 
-        verify( presenter ).complete();
-        verify( newResourceSuccessEventMock, times( 1 ) ).fire( any( NewResourceSuccessEvent.class ) );
-        verify( placeManager, times( 1 ) ).goTo( path );
+        verify(presenter).complete();
+        verify(newResourceSuccessEventMock,
+               times(1)).fire(any(NewResourceSuccessEvent.class));
+        verify(placeManager,
+               times(1)).goTo(path);
     }
-
 }

@@ -25,7 +25,6 @@ public class StringUtils {
 
     /**
      * Puts strings inside quotes and numerics are left as they are.
-     *
      * @param str
      * @return
      */
@@ -33,12 +32,9 @@ public class StringUtils {
         if (str == null || str.isEmpty()) {
             return str;
         }
-        try
-        {
+        try {
             Double.parseDouble(str);
-        }
-        catch(NumberFormatException nfe)
-        {
+        } catch (NumberFormatException nfe) {
             return "\"" + str + "\"";
         }
         return str;
@@ -46,7 +42,6 @@ public class StringUtils {
 
     /**
      * Removes double-quotes from around a string
-     *
      * @param str
      * @return
      */
@@ -58,14 +53,14 @@ public class StringUtils {
             str = str.substring(1);
         }
         if (str.endsWith("\"")) {
-            str = str.substring(0, str.length() - 1);
+            str = str.substring(0,
+                                str.length() - 1);
         }
         return str;
     }
 
     /**
      * Returns true if string starts and ends with double-quote
-     *
      * @param str
      * @return
      */
@@ -78,7 +73,6 @@ public class StringUtils {
 
     /**
      * URLEncode a string
-     *
      * @param s
      * @return
      */
@@ -92,7 +86,6 @@ public class StringUtils {
 
     /**
      * URLDecode a string
-     *
      * @param s
      * @return
      */
@@ -102,6 +95,4 @@ public class StringUtils {
         }
         return URL.decodeQueryString(s);
     }
-
-
 }

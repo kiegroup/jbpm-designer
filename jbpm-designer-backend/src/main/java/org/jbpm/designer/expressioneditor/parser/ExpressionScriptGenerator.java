@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,19 +16,18 @@
 
 package org.jbpm.designer.expressioneditor.parser;
 
+import java.lang.reflect.Method;
+import java.util.List;
+
 import org.drools.core.util.KieFunctions;
 import org.jbpm.designer.expressioneditor.model.Condition;
 import org.jbpm.designer.expressioneditor.model.ConditionExpression;
 import org.jbpm.designer.expressioneditor.server.ExpressionEditorErrors;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
-
 public class ExpressionScriptGenerator {
 
-
-    public String generateScript(ConditionExpression expression, List<String> errors) {
+    public String generateScript(ConditionExpression expression,
+                                 List<String> errors) {
 
         StringBuilder script = new StringBuilder();
         String operator = null;
@@ -49,7 +48,11 @@ public class ExpressionScriptGenerator {
         }
 
         for (Condition condition : expression.getConditions()) {
-            if (addConditionToScript(condition, script, operator, validTerms, errors) > 0) {
+            if (addConditionToScript(condition,
+                                     script,
+                                     operator,
+                                     validTerms,
+                                     errors) > 0) {
                 validTerms++;
             } else {
                 //we have an invalid condition.
@@ -61,7 +64,11 @@ public class ExpressionScriptGenerator {
         return "return " + script.toString() + ";";
     }
 
-    private int addConditionToScript(final Condition condition, final StringBuilder script, final String operator, final int validTerms, final List<String> errors) {
+    private int addConditionToScript(final Condition condition,
+                                     final StringBuilder script,
+                                     final String operator,
+                                     final int validTerms,
+                                     final List<String> errors) {
         if (condition == null) {
             errors.add(ExpressionEditorErrors.INVALID_CONDITION_ERROR);
             return 0;
@@ -91,7 +98,7 @@ public class ExpressionScriptGenerator {
                 script.append(", ");
                 script.append("\"" + escapeStringParam(param) + "\"");
             }
-            if(param == null || param.isEmpty()) {
+            if (param == null || param.isEmpty()) {
                 errors.add(ExpressionEditorErrors.PARAMETER_NULL_EMPTY);
                 return 0;
             }
@@ -101,50 +108,49 @@ public class ExpressionScriptGenerator {
     }
 
     private String escapeStringParam(String param) {
-        if (param == null) return null;
+        if (param == null) {
+            return null;
+        }
         StringBuilder escapedParam = new StringBuilder(param.length() * 2);
         char c;
         for (int i = 0; i < param.length(); i++) {
             c = param.charAt(i);
             switch (c) {
-                case '"' :
+                case '"':
                     escapedParam.append('\\');
                     escapedParam.append('"');
                     break;
-                case '\n' :
+                case '\n':
                     escapedParam.append('\\');
                     escapedParam.append('n');
                     break;
-                case '\\' :
+                case '\\':
                     escapedParam.append('\\');
                     escapedParam.append('\\');
                     break;
                 default:
                     escapedParam.append(c);
-
             }
         }
         return escapedParam.toString();
     }
 
-
     private boolean isValidFunction(String function) {
-        if(function == null) {
+        if (function == null) {
             return false;
         }
 
-        if(function.trim().isEmpty()) {
+        if (function.trim().isEmpty()) {
             return false;
         }
 
         function = function.trim();
 
-        for(Method method : KieFunctions.class.getMethods()) {
-            if(function.equals(method.getName())) {
+        for (Method method : KieFunctions.class.getMethods()) {
+            if (function.equals(method.getName())) {
                 return true;
             }
         }
-
 
         return false;
     }

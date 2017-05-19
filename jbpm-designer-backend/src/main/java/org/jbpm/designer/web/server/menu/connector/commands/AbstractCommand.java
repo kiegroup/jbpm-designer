@@ -46,20 +46,33 @@ import org.slf4j.LoggerFactory;
 import org.uberfire.java.nio.file.NoSuchFileException;
 
 public abstract class AbstractCommand {
+
     private static Logger logger = LoggerFactory.getLogger(AbstractCommand.class);
 
-    public JSONObject listContent(IDiagramProfile profile, String target, String current, boolean tree) throws Exception {
+    public JSONObject listContent(IDiagramProfile profile,
+                                  String target,
+                                  String current,
+                                  boolean tree) throws Exception {
         try {
-            if(target == null || target.length() < 1) {
+            if (target == null || target.length() < 1) {
                 target = "/";
-            } else if(!target.startsWith("/")) {
+            } else if (!target.startsWith("/")) {
                 target = "/" + target;
             }
             JSONObject retObj = new JSONObject();
-            retObj.put("cwd", getCwd(profile, target, tree));
-            retObj.put("cdc", getCdc(profile, target, tree));
-            if(target == "/") {
-                retObj.put("tree", getTree(profile, target, tree));
+            retObj.put("cwd",
+                       getCwd(profile,
+                              target,
+                              tree));
+            retObj.put("cdc",
+                       getCdc(profile,
+                              target,
+                              tree));
+            if (target == "/") {
+                retObj.put("tree",
+                           getTree(profile,
+                                   target,
+                                   tree));
             }
             addParams(retObj);
             return retObj;
@@ -70,29 +83,39 @@ public abstract class AbstractCommand {
         }
     }
 
-    public JSONObject pasteDirectoriesOrAssets(IDiagramProfile profile, String current, List<String> targets, String cut, String dst, String src, boolean tree) throws Exception {
-        if(current == null || current.length() < 1) {
+    public JSONObject pasteDirectoriesOrAssets(IDiagramProfile profile,
+                                               String current,
+                                               List<String> targets,
+                                               String cut,
+                                               String dst,
+                                               String src,
+                                               boolean tree) throws Exception {
+        if (current == null || current.length() < 1) {
             current = "/";
-        } else if(!current.startsWith("/")) {
+        } else if (!current.startsWith("/")) {
             current = "/" + current;
         }
-        if(current.startsWith("//")) {
-            current = current.substring(1, current.length());
+        if (current.startsWith("//")) {
+            current = current.substring(1,
+                                        current.length());
         }
 
-        if(targets != null) {
-            for(String target : targets) {
-                if(target.startsWith("//")) {
-                    target = target.substring(1, target.length());
+        if (targets != null) {
+            for (String target : targets) {
+                if (target.startsWith("//")) {
+                    target = target.substring(1,
+                                              target.length());
                 }
-                if(profile.getRepository().directoryExists(target)) {
-                    boolean copied = profile.getRepository().copyDirectory(target, dst);
-                    if(!copied) {
+                if (profile.getRepository().directoryExists(target)) {
+                    boolean copied = profile.getRepository().copyDirectory(target,
+                                                                           dst);
+                    if (!copied) {
                         logger.error("Unable to copy directory: " + target + " to " + dst);
                     } else {
-                        if(cut != null && cut.equals("1")) {
-                            boolean deleted = profile.getRepository().deleteDirectory(target, false);
-                            if(!deleted) {
+                        if (cut != null && cut.equals("1")) {
+                            boolean deleted = profile.getRepository().deleteDirectory(target,
+                                                                                      false);
+                            if (!deleted) {
                                 logger.error("Unable to delete directory: " + target);
                             }
                         }
@@ -101,13 +124,14 @@ public abstract class AbstractCommand {
                     Asset toPasteAsset = null;
                     try {
                         toPasteAsset = profile.getRepository().loadAssetFromPath(target);
-                        boolean copied = profile.getRepository().copyAsset(toPasteAsset.getUniqueId(), dst);
-                        if(!copied) {
+                        boolean copied = profile.getRepository().copyAsset(toPasteAsset.getUniqueId(),
+                                                                           dst);
+                        if (!copied) {
                             logger.error("Unable to copy asset: " + toPasteAsset.getUniqueId() + " to " + dst);
                         } else {
-                            if(cut != null && cut.equals("1")) {
+                            if (cut != null && cut.equals("1")) {
                                 boolean deleted = profile.getRepository().deleteAsset(toPasteAsset.getUniqueId());
-                                if(!deleted) {
+                                if (!deleted) {
                                     logger.error("Unable to delete asset: " + toPasteAsset.getUniqueId());
                                 }
                             }
@@ -120,34 +144,51 @@ public abstract class AbstractCommand {
         }
 
         JSONObject retObj = new JSONObject();
-        retObj.put("cwd", getCwd(profile, current, tree));
-        retObj.put("cdc", getCdc(profile, current, tree));
-        retObj.put("tree", getTree(profile, "/", tree));
-        retObj.put("select", current);
+        retObj.put("cwd",
+                   getCwd(profile,
+                          current,
+                          tree));
+        retObj.put("cdc",
+                   getCdc(profile,
+                          current,
+                          tree));
+        retObj.put("tree",
+                   getTree(profile,
+                           "/",
+                           tree));
+        retObj.put("select",
+                   current);
 
         return retObj;
     }
 
-
-    public JSONObject moveDirectoryOrAsset(IDiagramProfile profile, String name, String target, String current, boolean tree) throws Exception {
-        if(current == null || current.length() < 1) {
+    public JSONObject moveDirectoryOrAsset(IDiagramProfile profile,
+                                           String name,
+                                           String target,
+                                           String current,
+                                           boolean tree) throws Exception {
+        if (current == null || current.length() < 1) {
             current = "/";
-        } else if(!current.startsWith("/")) {
+        } else if (!current.startsWith("/")) {
             current = "/" + current;
         }
-        if(current.startsWith("//")) {
-            current = current.substring(1, current.length());
+        if (current.startsWith("//")) {
+            current = current.substring(1,
+                                        current.length());
         }
 
-        if(target.startsWith("//")) {
-            target = target.substring(1, target.length());
+        if (target.startsWith("//")) {
+            target = target.substring(1,
+                                      target.length());
         }
 
         Repository repository = profile.getRepository();
 
-        if(repository.directoryExists(target)) {
-            boolean moved = repository.moveDirectory(target, current, name);
-            if(!moved) {
+        if (repository.directoryExists(target)) {
+            boolean moved = repository.moveDirectory(target,
+                                                     current,
+                                                     name);
+            if (!moved) {
                 logger.error("Unable to move directory: " + target);
             }
         } else {
@@ -157,73 +198,106 @@ public abstract class AbstractCommand {
             } catch (NoSuchFileException e) {
                 logger.error("Unable to retrieve asset: " + target);
             }
-            if(tobeRenamedAsset != null) {
-                if(name.indexOf(".") < 0) {
+            if (tobeRenamedAsset != null) {
+                if (name.indexOf(".") < 0) {
                     name += "." + tobeRenamedAsset.getAssetType();
                 }
-                boolean moved = repository.moveAsset(tobeRenamedAsset.getUniqueId(), current, name);
-                if(!moved) {
+                boolean moved = repository.moveAsset(tobeRenamedAsset.getUniqueId(),
+                                                     current,
+                                                     name);
+                if (!moved) {
                     logger.error("Unable to move asset: " + target);
                 }
             }
         }
 
         JSONObject retObj = new JSONObject();
-        retObj.put("cwd", getCwd(profile, current, tree));
-        retObj.put("cdc", getCdc(profile, current, tree));
-        retObj.put("tree", getTree(profile, "/", tree));
-        retObj.put("select", current);
+        retObj.put("cwd",
+                   getCwd(profile,
+                          current,
+                          tree));
+        retObj.put("cdc",
+                   getCdc(profile,
+                          current,
+                          tree));
+        retObj.put("tree",
+                   getTree(profile,
+                           "/",
+                           tree));
+        retObj.put("select",
+                   current);
 
         return retObj;
     }
 
-    public JSONObject removeAssets(IDiagramProfile profile, String current, List<String> targets, boolean tree) throws Exception {
-        if(current == null || current.length() < 1) {
+    public JSONObject removeAssets(IDiagramProfile profile,
+                                   String current,
+                                   List<String> targets,
+                                   boolean tree) throws Exception {
+        if (current == null || current.length() < 1) {
             current = "/";
-        } else if(!current.startsWith("/")) {
+        } else if (!current.startsWith("/")) {
             current = "/" + current;
         }
-        if(current.startsWith("//")) {
-            current = current.substring(1, current.length());
+        if (current.startsWith("//")) {
+            current = current.substring(1,
+                                        current.length());
         }
 
-        if(profile.getRepository().directoryExists(current)) {
-            for(String target : targets) {
-                if(target.startsWith("//")) {
-                    target = target.substring(1, target.length());
+        if (profile.getRepository().directoryExists(current)) {
+            for (String target : targets) {
+                if (target.startsWith("//")) {
+                    target = target.substring(1,
+                                              target.length());
                 }
                 boolean deleted;
                 if (profile.getRepository().directoryExists(target)) {
-                    deleted = profile.getRepository().deleteDirectory(target, false);
+                    deleted = profile.getRepository().deleteDirectory(target,
+                                                                      false);
                 } else {
                     deleted = profile.getRepository().deleteAssetFromPath(target);
                 }
-                if(!deleted) {
+                if (!deleted) {
                     logger.error("Unable to delete asset: " + target);
                 }
             }
         }
 
         JSONObject retObj = new JSONObject();
-        retObj.put("cwd", getCwd(profile, current, tree));
-        retObj.put("cdc", getCdc(profile, current, tree));
-        retObj.put("tree", getTree(profile, "/", tree));
-        retObj.put("select", "");
+        retObj.put("cwd",
+                   getCwd(profile,
+                          current,
+                          tree));
+        retObj.put("cdc",
+                   getCdc(profile,
+                          current,
+                          tree));
+        retObj.put("tree",
+                   getTree(profile,
+                           "/",
+                           tree));
+        retObj.put("select",
+                   "");
 
         return retObj;
     }
 
-    public JSONObject uploadFiles(IDiagramProfile profile, String current, List<FileItemStream> listFiles, List<ByteArrayOutputStream> listFileStreams, boolean tree) throws Exception {
-        if(current == null || current.length() < 1) {
+    public JSONObject uploadFiles(IDiagramProfile profile,
+                                  String current,
+                                  List<FileItemStream> listFiles,
+                                  List<ByteArrayOutputStream> listFileStreams,
+                                  boolean tree) throws Exception {
+        if (current == null || current.length() < 1) {
             current = "/";
-        } else if(!current.startsWith("/")) {
+        } else if (!current.startsWith("/")) {
             current = "/" + current;
         }
-        if(current.startsWith("//")) {
-            current = current.substring(1, current.length());
+        if (current.startsWith("//")) {
+            current = current.substring(1,
+                                        current.length());
         }
 
-        if(profile.getRepository().directoryExists(current)) {
+        if (profile.getRepository().directoryExists(current)) {
             try {
                 int i = 0;
                 for (FileItemStream uplFile : listFiles) {
@@ -231,12 +305,16 @@ public abstract class AbstractCommand {
                     String fileContentType = uplFile.getContentType();
 
                     ByteArrayOutputStream os = listFileStreams.get(i);
-                    checkUploadFile(fileName, os);
-                    checkAlreadyExists(profile, fileName,  current);
+                    checkUploadFile(fileName,
+                                    os);
+                    checkAlreadyExists(profile,
+                                       fileName,
+                                       current);
 
                     String[] fileParts = fileName.split("\\.");
-                    String fileType = fileParts[fileParts.length-1];
-                    String fileNameOnly = fileName.substring(0, fileName.length() - (fileType.length() + 1));
+                    String fileType = fileParts[fileParts.length - 1];
+                    String fileNameOnly = fileName.substring(0,
+                                                             fileName.length() - (fileType.length() + 1));
 
                     AssetBuilder assetBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
                     assetBuilder.content(os.toByteArray())
@@ -256,19 +334,31 @@ public abstract class AbstractCommand {
         }
 
         JSONObject retObj = new JSONObject();
-        retObj.put("cwd", getCwd(profile, current, tree));
-        retObj.put("cdc", getCdc(profile, current, tree));
-        retObj.put("tree", getTree(profile, current, tree));
-        retObj.put("select", current);
+        retObj.put("cwd",
+                   getCwd(profile,
+                          current,
+                          tree));
+        retObj.put("cdc",
+                   getCdc(profile,
+                          current,
+                          tree));
+        retObj.put("tree",
+                   getTree(profile,
+                           current,
+                           tree));
+        retObj.put("select",
+                   current);
         addParams(retObj);
         return retObj;
     }
 
-
-    public JSONObject makeDirectory(IDiagramProfile profile, String current, String name, boolean tree) throws Exception {
-        if(current == null || current.length() < 1) {
+    public JSONObject makeDirectory(IDiagramProfile profile,
+                                    String current,
+                                    String name,
+                                    boolean tree) throws Exception {
+        if (current == null || current.length() < 1) {
             current = "/";
-        } else if(!current.startsWith("/")) {
+        } else if (!current.startsWith("/")) {
             current = "/" + current;
         }
 
@@ -280,25 +370,40 @@ public abstract class AbstractCommand {
         }
 
         JSONObject retObj = new JSONObject();
-        retObj.put("cwd", getCwd(profile, current, tree));
-        retObj.put("cdc", getCdc(profile, current, tree));
-        retObj.put("tree", getTree(profile, "/", tree));
-        retObj.put("select", newDir == null ? "" : newDir.getName());
+        retObj.put("cwd",
+                   getCwd(profile,
+                          current,
+                          tree));
+        retObj.put("cdc",
+                   getCdc(profile,
+                          current,
+                          tree));
+        retObj.put("tree",
+                   getTree(profile,
+                           "/",
+                           tree));
+        retObj.put("select",
+                   newDir == null ? "" : newDir.getName());
 
         return retObj;
     }
 
-    public JSONObject makeFile(IDiagramProfile profile, String current, String name, boolean tree) throws Exception {
-        if(current == null || current.length() < 1) {
+    public JSONObject makeFile(IDiagramProfile profile,
+                               String current,
+                               String name,
+                               boolean tree) throws Exception {
+        if (current == null || current.length() < 1) {
             current = "/";
-        } else if(!current.startsWith("/")) {
+        } else if (!current.startsWith("/")) {
             current = "/" + current;
         }
 
-        if(name.endsWith(".bpmn2")) {
-            name = name.substring(0, name.length() - 6);
-        } else if(name.endsWith(("bpmn"))) {
-            name = name.substring(0, name.length() - 5);
+        if (name.endsWith(".bpmn2")) {
+            name = name.substring(0,
+                                  name.length() - 6);
+        } else if (name.endsWith(("bpmn"))) {
+            name = name.substring(0,
+                                  name.length() - 5);
         }
         String fullName = name + ".bpmn2";
 
@@ -309,22 +414,34 @@ public abstract class AbstractCommand {
                 .location(current);
 
         String newFileId = profile.getRepository().createAsset(builder.getAsset());
-        if(newFileId == null) {
+        if (newFileId == null) {
             logger.error("Unable to create asset: " + current + "/" + fullName);
         }
 
         JSONObject retObj = new JSONObject();
-        retObj.put("cwd", getCwd(profile, current, tree));
-        retObj.put("cdc", getCdc(profile, current, tree));
-        retObj.put("tree", getTree(profile, "/", tree));
-        retObj.put("select", newFileId == null ? "" : current + "/" + fullName);
+        retObj.put("cwd",
+                   getCwd(profile,
+                          current,
+                          tree));
+        retObj.put("cdc",
+                   getCdc(profile,
+                          current,
+                          tree));
+        retObj.put("tree",
+                   getTree(profile,
+                           "/",
+                           tree));
+        retObj.put("select",
+                   newFileId == null ? "" : current + "/" + fullName);
 
         return retObj;
     }
 
-    public Map<String, Object> getTree(IDiagramProfile profile, String path, boolean tree) throws Exception {
+    public Map<String, Object> getTree(IDiagramProfile profile,
+                                       String path,
+                                       boolean tree) throws Exception {
         String qname = "";
-        if(!"/".equals(path)) {
+        if (!"/".equals(path)) {
             String[] pathParts = path.split("/");
             qname = pathParts[pathParts.length - 1];
         } else {
@@ -332,97 +449,148 @@ public abstract class AbstractCommand {
         }
 
         Map<String, Object> info = new HashMap<String, Object>();
-        info.put("hash", path);
-        info.put("name", qname);
-        info.put("read", "true");
-        info.put("write", "true");
+        info.put("hash",
+                 path);
+        info.put("name",
+                 qname);
+        info.put("read",
+                 "true");
+        info.put("write",
+                 "true");
 
         Collection<Directory> subdirs = profile.getRepository().listDirectories(path);
         List<Object> dirs = new ArrayList<Object>();
-        if(subdirs != null) {
-            for(Directory sub : subdirs) {
-                dirs.add(getTree(profile, path.endsWith("/") ? path+sub.getName() : path + "/" + sub.getName(), tree));
+        if (subdirs != null) {
+            for (Directory sub : subdirs) {
+                dirs.add(getTree(profile,
+                                 path.endsWith("/") ? path + sub.getName() : path + "/" + sub.getName(),
+                                 tree));
             }
         }
 
-        info.put("dirs", dirs);
+        info.put("dirs",
+                 dirs);
         return info;
     }
 
-    public List<Map<String, Object>> getCdc(IDiagramProfile profile, String path, boolean tree) throws Exception {
+    public List<Map<String, Object>> getCdc(IDiagramProfile profile,
+                                            String path,
+                                            boolean tree) throws Exception {
         List<Map<String, Object>> cdcinfo = new ArrayList<Map<String, Object>>();
         Collection<Asset> assets = profile.getRepository().listAssets(path);
         Collection<Directory> dirs = profile.getRepository().listDirectories(path);
 
-        if(assets != null) {
-            for(Asset asset : assets) {
-                cdcinfo.add(getAssetInfo(profile, asset));
+        if (assets != null) {
+            for (Asset asset : assets) {
+                cdcinfo.add(getAssetInfo(profile,
+                                         asset));
             }
         }
-        if(dirs != null) {
-            for(Directory dir : dirs) {
-                cdcinfo.add(getDirectoryInfo(profile,dir));
+        if (dirs != null) {
+            for (Directory dir : dirs) {
+                cdcinfo.add(getDirectoryInfo(profile,
+                                             dir));
             }
         }
         return cdcinfo;
     }
 
-    public Map<String, Object> getCwd(IDiagramProfile profile, String path, boolean tree) throws Exception {
+    public Map<String, Object> getCwd(IDiagramProfile profile,
+                                      String path,
+                                      boolean tree) throws Exception {
         Map<String, Object> cwdinfo = new HashMap<String, Object>();
-        cwdinfo.put("hash", path);
-        cwdinfo.put("name", path);
-        cwdinfo.put("mime", "directory");
-        cwdinfo.put("rel", path);
-        cwdinfo.put("size", "0");
-        cwdinfo.put("date", ""); // TODO fix
-        cwdinfo.put("read", true);
-        cwdinfo.put("write", true);
-        cwdinfo.put("rm", false);
+        cwdinfo.put("hash",
+                    path);
+        cwdinfo.put("name",
+                    path);
+        cwdinfo.put("mime",
+                    "directory");
+        cwdinfo.put("rel",
+                    path);
+        cwdinfo.put("size",
+                    "0");
+        cwdinfo.put("date",
+                    ""); // TODO fix
+        cwdinfo.put("read",
+                    true);
+        cwdinfo.put("write",
+                    true);
+        cwdinfo.put("rm",
+                    false);
         return cwdinfo;
     }
 
     public void addParams(JSONObject retObj) throws Exception {
         JSONObject paramsObj = new JSONObject();
-        paramsObj.put("dotFiles", "true");
-        paramsObj.put("archives", new JSONArray());
-        paramsObj.put("uplMaxSize", "100M");
-        paramsObj.put("url", "");
-        paramsObj.put("extract", new JSONArray());
-        retObj.put("params", paramsObj);
-        retObj.put("disabled", new JSONArray());
+        paramsObj.put("dotFiles",
+                      "true");
+        paramsObj.put("archives",
+                      new JSONArray());
+        paramsObj.put("uplMaxSize",
+                      "100M");
+        paramsObj.put("url",
+                      "");
+        paramsObj.put("extract",
+                      new JSONArray());
+        retObj.put("params",
+                   paramsObj);
+        retObj.put("disabled",
+                   new JSONArray());
     }
 
-    protected Map<String, Object> getDirectoryInfo(IDiagramProfile profile, Directory dir) {
+    protected Map<String, Object> getDirectoryInfo(IDiagramProfile profile,
+                                                   Directory dir) {
         Map<String, Object> info = new HashMap<String, Object>();
-        info.put("name", dir.getName());
-        info.put("hash", dir.getLocation() + "/" + dir.getName());
-        info.put("mime", "directory");
-        info.put("date", "");
-        info.put("size", "");
-        info.put("read", true);
-        info.put("write", true);
-        info.put("rm",  true);
-        info.put("url",  "");
-        info.put("tmb", "");
+        info.put("name",
+                 dir.getName());
+        info.put("hash",
+                 dir.getLocation() + "/" + dir.getName());
+        info.put("mime",
+                 "directory");
+        info.put("date",
+                 "");
+        info.put("size",
+                 "");
+        info.put("read",
+                 true);
+        info.put("write",
+                 true);
+        info.put("rm",
+                 true);
+        info.put("url",
+                 "");
+        info.put("tmb",
+                 "");
 
         return info;
     }
 
-    protected Map<String, Object> getAssetInfo(IDiagramProfile profile, Asset asset) {
+    protected Map<String, Object> getAssetInfo(IDiagramProfile profile,
+                                               Asset asset) {
         Map<String, Object> info = new HashMap<String, Object>();
-        info.put("name", asset.getFullName());
-        info.put("hash", asset.getAssetLocation() + "/" + asset.getFullName());
-        info.put("mime", AssetTypeMapper.findMimeType(asset));
-        info.put("date", "");
-        info.put("size", "");
-        info.put("read", true);
-        info.put("write", true);
-        info.put("rm",  true);
-        info.put("url", asset.getAssetType() + "|" + asset.getUniqueId());
+        info.put("name",
+                 asset.getFullName());
+        info.put("hash",
+                 asset.getAssetLocation() + "/" + asset.getFullName());
+        info.put("mime",
+                 AssetTypeMapper.findMimeType(asset));
+        info.put("date",
+                 "");
+        info.put("size",
+                 "");
+        info.put("read",
+                 true);
+        info.put("write",
+                 true);
+        info.put("rm",
+                 true);
+        info.put("url",
+                 asset.getAssetType() + "|" + asset.getUniqueId());
 
-        if(asset.getAssetType().equals("bpmn") || asset.getAssetType().equals("bpmn2")) {
+        if (asset.getAssetType().equals("bpmn") || asset.getAssetType().equals("bpmn2")) {
             try {
-                info.put("processlocation", asset.getAssetLocation());
+                info.put("processlocation",
+                         asset.getAssetLocation());
                 Asset ab = profile.getRepository().loadAssetFromPath(asset.getAssetLocation() + "/" + asset.getFullName());
 
                 DroolsFactoryImpl.init();
@@ -431,38 +599,45 @@ public abstract class AbstractCommand {
                 Definitions def = ((JbpmProfileImpl) profile).getDefinitions((String) ab.getAssetContent());
 
                 List<RootElement> rootElements = def.getRootElements();
-                for(RootElement root : rootElements) {
-                    if(root instanceof Process) {
+                for (RootElement root : rootElements) {
+                    if (root instanceof Process) {
                         Process process = (Process) root;
-                        info.put("processid", process.getId());
+                        info.put("processid",
+                                 process.getId());
 
                         boolean foundVersion = false;
                         Iterator<FeatureMap.Entry> iter = process.getAnyAttribute().iterator();
-                        while(iter.hasNext()) {
+                        while (iter.hasNext()) {
                             FeatureMap.Entry entry = iter.next();
-                            if(entry.getEStructuralFeature().getName().equals("version")) {
-                                info.put("assetversion", entry.getValue());
+                            if (entry.getEStructuralFeature().getName().equals("version")) {
+                                info.put("assetversion",
+                                         entry.getValue());
                                 foundVersion = true;
                             }
                         }
-                        if(!foundVersion) {
-                            info.put("assetversion", "");
+                        if (!foundVersion) {
+                            info.put("assetversion",
+                                     "");
                         }
                     }
                 }
             } catch (Exception e) {
                 logger.warn("Unable to extract process id and version from: " + asset.getFullName());
-                info.put("processid", "");
-                info.put("assetversion", "");
+                info.put("processid",
+                         "");
+                info.put("assetversion",
+                         "");
             }
         } else {
-            info.put("assetversion", "");
+            info.put("assetversion",
+                     "");
         }
 
         return info;
     }
 
-    protected void checkUploadFile(String fileName, ByteArrayOutputStream os) throws Exception {
+    protected void checkUploadFile(String fileName,
+                                   ByteArrayOutputStream os) throws Exception {
         if (!_checkName(fileName)) {
             throw new Exception("Invalid upload file name: " + fileName);
         }
@@ -470,11 +645,13 @@ public abstract class AbstractCommand {
         checkUploadSizes(uploadSizeOctets);
     }
 
-    protected void checkAlreadyExists(IDiagramProfile profile, String fileName, String current) throws Exception {
+    protected void checkAlreadyExists(IDiagramProfile profile,
+                                      String fileName,
+                                      String current) throws Exception {
         Collection<Asset> assets = profile.getRepository().listAssets(current);
-        for(Asset asset : assets) {
+        for (Asset asset : assets) {
             String assetFull = asset.getName() + "." + asset.getAssetType();
-            if(assetFull.equals(fileName)) {
+            if (assetFull.equals(fileName)) {
                 throw new Exception("File name " + fileName + " already exists in directory " + current);
             }
         }

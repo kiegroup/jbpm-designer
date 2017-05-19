@@ -26,20 +26,22 @@ public class DesignerNotificationEvent {
     private final String userId;
 
     public DesignerNotificationEvent() {
-        this( "Designernotification", "message", "userid" );
+        this("Designernotification",
+             "message",
+             "userid");
     }
 
-    public DesignerNotificationEvent( final String notification,
-                                      final String message,
-                                      final String userId) {
-        this( notification,
-              NotificationEvent.NotificationType.DEFAULT,
-              userId);
+    public DesignerNotificationEvent(final String notification,
+                                     final String message,
+                                     final String userId) {
+        this(notification,
+             NotificationEvent.NotificationType.DEFAULT,
+             userId);
     }
 
-    public DesignerNotificationEvent( final String notification,
-                                      final NotificationEvent.NotificationType type,
-                                      final String userId) {
+    public DesignerNotificationEvent(final String notification,
+                                     final NotificationEvent.NotificationType type,
+                                     final String userId) {
         this.notification = notification;
         this.type = type;
         this.userId = userId;

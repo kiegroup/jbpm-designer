@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Red Hat, Inc. and/or its affiliates.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,8 @@
 
 package org.jbpm.designer.expressioneditor;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jbpm.designer.expressioneditor.model.Condition;
 import org.jbpm.designer.expressioneditor.model.ConditionExpression;
@@ -24,11 +26,7 @@ import org.jbpm.designer.expressioneditor.server.ExpressionEditorErrors;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class ExpressionScriptGeneratorTest {
 
@@ -55,9 +53,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("value");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.equalsTo(variable, \"value\");", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.equalsTo(variable, \"value\");",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -67,10 +68,13 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
+        String script = generator.generateScript(expression,
+                                                 errors);
         assertNull(script);
-        assertEquals(1, errors.size());
-        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY, errors.get(0));
+        assertEquals(1,
+                     errors.size());
+        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY,
+                     errors.get(0));
     }
 
     @Test
@@ -80,9 +84,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("value");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.contains(variable, \"value\");", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.contains(variable, \"value\");",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -92,10 +99,13 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
+        String script = generator.generateScript(expression,
+                                                 errors);
         assertNull(script);
-        assertEquals(1, errors.size());
-        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY, errors.get(0));
+        assertEquals(1,
+                     errors.size());
+        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY,
+                     errors.get(0));
     }
 
     @Test
@@ -104,9 +114,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("variable");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.isNull(variable);", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.isNull(variable);",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -115,9 +128,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("variable");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.isEmpty(variable);", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.isEmpty(variable);",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -127,9 +143,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("value");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.startsWith(variable, \"value\");", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.startsWith(variable, \"value\");",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -139,10 +158,13 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
+        String script = generator.generateScript(expression,
+                                                 errors);
         assertNull(script);
-        assertEquals(1, errors.size());
-        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY, errors.get(0));
+        assertEquals(1,
+                     errors.size());
+        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY,
+                     errors.get(0));
     }
 
     @Test
@@ -152,9 +174,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("value");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.endsWith(variable, \"value\");", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.endsWith(variable, \"value\");",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -164,10 +189,13 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
+        String script = generator.generateScript(expression,
+                                                 errors);
         assertNull(script);
-        assertEquals(1, errors.size());
-        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY, errors.get(0));
+        assertEquals(1,
+                     errors.size());
+        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY,
+                     errors.get(0));
     }
 
     @Test
@@ -176,9 +204,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("variable");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.isTrue(variable);", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.isTrue(variable);",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -187,9 +218,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("variable");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.isFalse(variable);", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.isFalse(variable);",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -200,9 +234,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("secondValue");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.between(variable, \"value\", \"secondValue\");", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.between(variable, \"value\", \"secondValue\");",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -213,10 +250,13 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("secondValue");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
+        String script = generator.generateScript(expression,
+                                                 errors);
         assertNull(script);
-        assertEquals(1, errors.size());
-        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY, errors.get(0));
+        assertEquals(1,
+                     errors.size());
+        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY,
+                     errors.get(0));
     }
 
     @Test
@@ -227,10 +267,13 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
+        String script = generator.generateScript(expression,
+                                                 errors);
         assertNull(script);
-        assertEquals(1, errors.size());
-        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY, errors.get(0));
+        assertEquals(1,
+                     errors.size());
+        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY,
+                     errors.get(0));
     }
 
     @Test
@@ -240,9 +283,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("value");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.greaterThan(variable, \"value\");", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.greaterThan(variable, \"value\");",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -252,10 +298,13 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
+        String script = generator.generateScript(expression,
+                                                 errors);
         assertNull(script);
-        assertEquals(1, errors.size());
-        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY, errors.get(0));
+        assertEquals(1,
+                     errors.size());
+        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY,
+                     errors.get(0));
     }
 
     @Test
@@ -265,9 +314,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("value");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.lessThan(variable, \"value\");", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.lessThan(variable, \"value\");",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -277,10 +329,13 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
+        String script = generator.generateScript(expression,
+                                                 errors);
         assertNull(script);
-        assertEquals(1, errors.size());
-        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY, errors.get(0));
+        assertEquals(1,
+                     errors.size());
+        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY,
+                     errors.get(0));
     }
 
     @Test
@@ -290,9 +345,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("value");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.greaterOrEqualThan(variable, \"value\");", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.greaterOrEqualThan(variable, \"value\");",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -302,10 +360,13 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
+        String script = generator.generateScript(expression,
+                                                 errors);
         assertNull(script);
-        assertEquals(1, errors.size());
-        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY, errors.get(0));
+        assertEquals(1,
+                     errors.size());
+        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY,
+                     errors.get(0));
     }
 
     @Test
@@ -315,9 +376,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("value");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.lessOrEqualThan(variable, \"value\");", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.lessOrEqualThan(variable, \"value\");",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -327,10 +391,13 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
+        String script = generator.generateScript(expression,
+                                                 errors);
         assertNull(script);
-        assertEquals(1, errors.size());
-        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY, errors.get(0));
+        assertEquals(1,
+                     errors.size());
+        assertEquals(ExpressionEditorErrors.PARAMETER_NULL_EMPTY,
+                     errors.get(0));
     }
 
     @Test
@@ -341,9 +408,12 @@ public class ExpressionScriptGeneratorTest {
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
-        assertEquals("return  KieFunctions.greaterThan(variable, \"value\") && KieFunctions.greaterThan(variable, \"value\");", script);
-        assertEquals(0, errors.size());
+        String script = generator.generateScript(expression,
+                                                 errors);
+        assertEquals("return  KieFunctions.greaterThan(variable, \"value\") && KieFunctions.greaterThan(variable, \"value\");",
+                     script);
+        assertEquals(0,
+                     errors.size());
     }
 
     @Test
@@ -353,10 +423,12 @@ public class ExpressionScriptGeneratorTest {
         parameters.add("value");
         condition.setParameters(parameters);
         expression.getConditions().add(condition);
-        String script  = generator.generateScript(expression, errors);
+        String script = generator.generateScript(expression,
+                                                 errors);
         assertNull(script);
-        assertEquals(1, errors.size());
-        assertEquals("Invalid function: invalidFunction", errors.get(0));
+        assertEquals(1,
+                     errors.size());
+        assertEquals("Invalid function: invalidFunction",
+                     errors.get(0));
     }
-
 }

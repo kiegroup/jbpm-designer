@@ -45,7 +45,6 @@ import org.kie.workbench.common.services.refactoring.service.ResourceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * This listener is called by the build process and immediately stores the indexing information (as it is also a
  * {@link ResourceReferenceCollector})
@@ -54,8 +53,9 @@ import org.slf4j.LoggerFactory;
  * to retrieve the {@link DesignerProcessDataEventListener} instance later and add it to the indexing information.
  */
 public class DesignerProcessDataEventListener
-    extends ResourceReferenceCollector
-    implements ProcessDataEventListener, Serializable {
+        extends ResourceReferenceCollector
+        implements ProcessDataEventListener,
+                   Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(DesignerProcessDataEventListener.class);
 
@@ -75,7 +75,6 @@ public class DesignerProcessDataEventListener
     // can be transient as it's only used when building
     private transient Resource resource;
 
-
     public Process getProcess() {
         return process;
     }
@@ -87,42 +86,52 @@ public class DesignerProcessDataEventListener
         if (node instanceof RuleSetNode) {
             RuleSetNode ruleSetNode = (RuleSetNode) node;
             String ruleFlowGroup = ruleSetNode.getRuleFlowGroup();
-            if( ruleFlowGroup != null ) {
-                addSharedReference(ruleFlowGroup, PartType.RULEFLOW_GROUP);
+            if (ruleFlowGroup != null) {
+                addSharedReference(ruleFlowGroup,
+                                   PartType.RULEFLOW_GROUP);
             }
         } else if (node instanceof WorkItemNode) {
             String taskName = ((WorkItemNode) node).getWork().getName();
-            addSharedReference(taskName, PartType.TASK_NAME);
+            addSharedReference(taskName,
+                               PartType.TASK_NAME);
         } else if (node instanceof SubProcessNode) {
             SubProcessNode subProcess = (SubProcessNode) node;
 
             String processName = subProcess.getProcessName();
-            if ( ! StringUtils.isEmpty(processName)) {
-                addResourceReference(processName, ResourceType.BPMN2_NAME);
+            if (!StringUtils.isEmpty(processName)) {
+                addResourceReference(processName,
+                                     ResourceType.BPMN2_NAME);
             }
             String processId = subProcess.getProcessId();
-            if ( ! StringUtils.isEmpty(processId)) {
-                addResourceReference(processId, ResourceType.BPMN2);
+            if (!StringUtils.isEmpty(processId)) {
+                addResourceReference(processId,
+                                     ResourceType.BPMN2);
             }
         }
     }
 
     @Override
     public void onProcessAdded(Process process) {
-        logger.debug("Added process with id {} and name {}", process.getId(), process.getName());
+        logger.debug("Added process with id {} and name {}",
+                     process.getId(),
+                     process.getName());
         this.process = process;
-        resource = addResource(process.getId(), ResourceType.BPMN2);
-        addResource(process.getName(), ResourceType.BPMN2_NAME);
+        resource = addResource(process.getId(),
+                               ResourceType.BPMN2);
+        addResource(process.getName(),
+                    ResourceType.BPMN2_NAME);
 
         //add process descriptor as process meta data
-        process.getMetaData().put(NAME, this);
+        process.getMetaData().put(NAME,
+                                  this);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onMetaDataAdded(String name, Object data) {
+    public void onMetaDataAdded(String name,
+                                Object data) {
         if (name.equals("Variable")) {
-            if( variables == null ) {
+            if (variables == null) {
                 variables = new ArrayList<>();
             }
             variables.add((Variable) data);
@@ -130,12 +139,11 @@ public class DesignerProcessDataEventListener
             itemDefinitions = (Map<String, ItemDefinition>) data;
         } else if ("signalNames".equals(name)) {
             signals = ((Set<String>) data);
-        } else if( "Messages".equals(name) ) {
+        } else if ("Messages".equals(name)) {
             Map<String, Message> builderMessagesMap = (Map<String, Message>) data;
             messages = builderMessagesMap.keySet();
         }
     }
-
 
     @Override
     public void onComplete(Process process) {
@@ -143,7 +151,7 @@ public class DesignerProcessDataEventListener
         if (itemDefinitions != null) {
             for (ItemDefinition item : itemDefinitions.values()) {
                 String structureRef = item.getStructureRef();
-                if( structureRef.contains(".") ) {
+                if (structureRef.contains(".")) {
                     getReferencedClasses().add(structureRef);
                 } else {
                     getUnqualifiedClasses().add(structureRef);
@@ -152,14 +160,14 @@ public class DesignerProcessDataEventListener
         }
 
         // process globals
-        Map<String, String> globals = ((RuleFlowProcess)process).getGlobals();
+        Map<String, String> globals = ((RuleFlowProcess) process).getGlobals();
         visitGlobals(globals);
 
         { // process imports
-            Set<String> imports = ((RuleFlowProcess)process).getImports();
+            Set<String> imports = ((RuleFlowProcess) process).getImports();
             if (imports != null) {
                 for (String type : imports) {
-                    if( type.contains(".") ) {
+                    if (type.contains(".")) {
                         getReferencedClasses().add(type);
                     } else {
                         getUnqualifiedClasses().add(type);
@@ -172,17 +180,18 @@ public class DesignerProcessDataEventListener
     private void visitGlobals(Map<String, String> globals) {
         if (globals != null) {
             Set<String> globalNames = new HashSet<>();
-            for (Entry<String, String> globalEntry : globals.entrySet() ) {
+            for (Entry<String, String> globalEntry : globals.entrySet()) {
                 globalNames.add(globalEntry.getKey());
                 String type = globalEntry.getValue();
-                if( type.contains(".") ) {
+                if (type.contains(".")) {
                     getReferencedClasses().add(type);
                 } else {
                     getUnqualifiedClasses().add(type);
                 }
             }
-            for( String globalName : globalNames ) {
-                addSharedReference(globalName, PartType.GLOBAL);
+            for (String globalName : globalNames) {
+                addSharedReference(globalName,
+                                   PartType.GLOBAL);
             }
         }
     }
@@ -235,8 +244,9 @@ public class DesignerProcessDataEventListener
                     type = itemDef.getStructureRef();
                 }
 
-                resource.addPart(data.getName(), PartType.VARIABLE);
-                if( type.contains(".") ) {
+                resource.addPart(data.getName(),
+                                 PartType.VARIABLE);
+                if (type.contains(".")) {
                     getReferencedClasses().add(type);
                 } else {
                     getUnqualifiedClasses().add(type);
@@ -249,23 +259,25 @@ public class DesignerProcessDataEventListener
         visitSignals(messages);
 
         // (DRL) function imports
-        visitFunctionImports(((RuleFlowProcess)process).getFunctionImports());
+        visitFunctionImports(((RuleFlowProcess) process).getFunctionImports());
     }
 
     private void visitFunctionImports(List<String> functionImports) {
         if (functionImports != null) {
             for (String functionImport : functionImports) {
-                if( ! functionImport.endsWith("*") ) {
-                   addResourceReference(functionImport, ResourceType.FUNCTION);
+                if (!functionImport.endsWith("*")) {
+                    addResourceReference(functionImport,
+                                         ResourceType.FUNCTION);
                 }
             }
         }
     }
 
     private void visitSignals(Collection<String> signals) {
-        if( signals != null ) {
-            for( String signal : signals ) {
-                addSharedReference(signal, PartType.SIGNAL);
+        if (signals != null) {
+            for (String signal : signals) {
+                addSharedReference(signal,
+                                   PartType.SIGNAL);
             }
         }
     }
@@ -274,38 +286,39 @@ public class DesignerProcessDataEventListener
 
     private void resolveUnqualifiedClasses() {
         Set<String> qualifiedClassSimpleNames = new HashSet<String>();
-        for( String className : getReferencedClasses() ) {
+        for (String className : getReferencedClasses()) {
             qualifiedClassSimpleNames.add(className.substring(className.lastIndexOf('.') + 1));
         }
-        for( Iterator<String> iter = getUnqualifiedClasses().iterator(); iter.hasNext(); ) {
-            if( qualifiedClassSimpleNames.contains(iter.next()) ) {
+        for (Iterator<String> iter = getUnqualifiedClasses().iterator(); iter.hasNext(); ) {
+            if (qualifiedClassSimpleNames.contains(iter.next())) {
                 iter.remove();
             }
         }
-        for( Iterator<String> iter = getUnqualifiedClasses().iterator(); iter.hasNext(); ) {
+        for (Iterator<String> iter = getUnqualifiedClasses().iterator(); iter.hasNext(); ) {
             String name = iter.next();
-            if( "Object".equals(name) || "String".equals(name)
-                || "Float".equals(name) || "Integer".equals(name)
-                || "Boolean".equals(name) ) {
-                getReferencedClasses().add("java.lang." + name );
-               iter.remove();
+            if ("Object".equals(name) || "String".equals(name)
+                    || "Float".equals(name) || "Integer".equals(name)
+                    || "Boolean".equals(name)) {
+                getReferencedClasses().add("java.lang." + name);
+                iter.remove();
             }
         }
-        for( String className : getUnqualifiedClasses() ) {
-            logger.warn("Unable to resolve unqualified class name, adding to list of classes: '{}'", className );
+        for (String className : getUnqualifiedClasses()) {
+            logger.warn("Unable to resolve unqualified class name, adding to list of classes: '{}'",
+                        className);
             getReferencedClasses().add(className);
         }
     }
 
     private Set<String> getReferencedClasses() {
-        if( referencedClasses == null ) {
+        if (referencedClasses == null) {
             referencedClasses = new HashSet<>(4);
         }
         return referencedClasses;
     }
 
     private Set<String> getUnqualifiedClasses() {
-        if( unqualifiedClasses == null ) {
+        if (unqualifiedClasses == null) {
             unqualifiedClasses = new HashSet<>(4);
         }
         return unqualifiedClasses;

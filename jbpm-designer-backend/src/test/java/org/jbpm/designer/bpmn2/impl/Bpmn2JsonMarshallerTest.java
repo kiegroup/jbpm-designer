@@ -32,39 +32,55 @@ public class Bpmn2JsonMarshallerTest {
     @Test
     public void testGroupMarshalling() throws Exception {
         JSONObject process = loader.loadProcessFromXml("group.bpmn2");
-        JSONObject group = getChildByName(process, "group");
+        JSONObject group = getChildByName(process,
+                                          "group");
 
-        assertNotNull("Group with name 'group' not found in process.", group);
-        assertEquals("Group has wrong documentation.", "group documentation", loader.getDocumentationFor(group));
+        assertNotNull("Group with name 'group' not found in process.",
+                      group);
+        assertEquals("Group has wrong documentation.",
+                     "group documentation",
+                     loader.getDocumentationFor(group));
     }
 
     @Test
     public void testBoundaryEventDocumentation() throws Exception {
         JSONObject process = loader.loadProcessFromXml("boundaryEventsDocumentation.bpmn2");
-        JSONObject boundaryEvent = getChildByName(process, "CancelOnTimer");
+        JSONObject boundaryEvent = getChildByName(process,
+                                                  "CancelOnTimer");
 
-        assertNotNull("BoundaryEvent with name 'CancelOnTimer' not found in process.", boundaryEvent);
-        assertEquals("BoundaryEvent has wrong documentation.", "Cancel task on timeout.", loader.getDocumentationFor(boundaryEvent));
+        assertNotNull("BoundaryEvent with name 'CancelOnTimer' not found in process.",
+                      boundaryEvent);
+        assertEquals("BoundaryEvent has wrong documentation.",
+                     "Cancel task on timeout.",
+                     loader.getDocumentationFor(boundaryEvent));
     }
 
     @Test
     public void testSwimlaneDocumentation() throws Exception {
         JSONObject process = loader.loadProcessFromXml("swimlane.bpmn2");
-        JSONObject swimlane = getChildByName(process, "Documented Swimlane");
+        JSONObject swimlane = getChildByName(process,
+                                             "Documented Swimlane");
 
-        assertNotNull("Swimlane with name 'Documented Swimlane' not found in process.", swimlane);
-        assertEquals("Swimlane has wrong documentation.", "Some documentation for swimlane.", loader.getDocumentationFor(swimlane));
+        assertNotNull("Swimlane with name 'Documented Swimlane' not found in process.",
+                      swimlane);
+        assertEquals("Swimlane has wrong documentation.",
+                     "Some documentation for swimlane.",
+                     loader.getDocumentationFor(swimlane));
     }
 
     @Test
     public void testConstraint() throws Exception {
         JSONObject process = loader.loadProcessFromXml("constraint.bpmn2");
-        JSONObject condition1 = getChildByName(process, "Condition1");
-        JSONObject condition2 = getChildByName(process, "Condition2");
+        JSONObject condition1 = getChildByName(process,
+                                               "Condition1");
+        JSONObject condition2 = getChildByName(process,
+                                               "Condition2");
         JSONObject condition1Properties = condition1.getJSONObject("properties");
         JSONObject condition2Properties = condition2.getJSONObject("properties");
-        assertEquals("return  KieFunctions.endsWith(customVar, \"sample\");", condition1Properties.getString("conditionexpression"));
-        assertEquals("return  !KieFunctions.isNull(intVar);", condition2Properties.getString("conditionexpression"));
+        assertEquals("return  KieFunctions.endsWith(customVar, \"sample\");",
+                     condition1Properties.getString("conditionexpression"));
+        assertEquals("return  !KieFunctions.isNull(intVar);",
+                     condition2Properties.getString("conditionexpression"));
     }
 
     @Test
@@ -72,87 +88,133 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject process = loader.loadProcessFromXml("multiLineNames.bpmn2");
 
         // Lane elements
-        JSONObject lane = Bpmn2Loader.getChildByName(process, "my\nlane");
+        JSONObject lane = Bpmn2Loader.getChildByName(process,
+                                                     "my\nlane");
         assertNotNull(lane);
-        assertNotNull(Bpmn2Loader.getChildByName(lane, "my\nuser\ntask"));
-        assertNotNull(Bpmn2Loader.getChildByName(lane, "my\nmessage"));
-        JSONObject adhocSubprocess = Bpmn2Loader.getChildByName(lane, "my\nadhoc\nsubprocess");
+        assertNotNull(Bpmn2Loader.getChildByName(lane,
+                                                 "my\nuser\ntask"));
+        assertNotNull(Bpmn2Loader.getChildByName(lane,
+                                                 "my\nmessage"));
+        JSONObject adhocSubprocess = Bpmn2Loader.getChildByName(lane,
+                                                                "my\nadhoc\nsubprocess");
 
         assertNotNull(adhocSubprocess);
-        assertNotNull(Bpmn2Loader.getChildByName(adhocSubprocess, "my\ntask\nin\nadhoc"));
-        assertNotNull(Bpmn2Loader.getChildByName(adhocSubprocess, "my\nmessage\nin\nsubprocess\nin\nlane"));
+        assertNotNull(Bpmn2Loader.getChildByName(adhocSubprocess,
+                                                 "my\ntask\nin\nadhoc"));
+        assertNotNull(Bpmn2Loader.getChildByName(adhocSubprocess,
+                                                 "my\nmessage\nin\nsubprocess\nin\nlane"));
 
         // Other elements in process
-        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nstart"));
-        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nflow\nin\nlane"));
-        assertNotNull(Bpmn2Loader.getChildByName(process, "my\ngate"));
-        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nterminate\nend"));
-        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nthrowing\nmessage"));
-        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nend"));
-        assertNotNull(Bpmn2Loader.getChildByName(process, "my\nflow"));
+        assertNotNull(Bpmn2Loader.getChildByName(process,
+                                                 "my\nstart"));
+        assertNotNull(Bpmn2Loader.getChildByName(process,
+                                                 "my\nflow\nin\nlane"));
+        assertNotNull(Bpmn2Loader.getChildByName(process,
+                                                 "my\ngate"));
+        assertNotNull(Bpmn2Loader.getChildByName(process,
+                                                 "my\nterminate\nend"));
+        assertNotNull(Bpmn2Loader.getChildByName(process,
+                                                 "my\nthrowing\nmessage"));
+        assertNotNull(Bpmn2Loader.getChildByName(process,
+                                                 "my\nend"));
+        assertNotNull(Bpmn2Loader.getChildByName(process,
+                                                 "my\nflow"));
 
         // Embedded subprocess elements
-        JSONObject embeddedSubprocess = Bpmn2Loader.getChildByName(process, "my\nsubprocess");
+        JSONObject embeddedSubprocess = Bpmn2Loader.getChildByName(process,
+                                                                   "my\nsubprocess");
         assertNotNull(embeddedSubprocess);
-        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nmessage\nstart"));
-        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\ninner\nend"));
-        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nflow\nin\nsubprocess"));
-        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nmanual\ntask"));
-        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess, "my\nescalation\nevent"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess,
+                                                 "my\nmessage\nstart"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess,
+                                                 "my\ninner\nend"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess,
+                                                 "my\nflow\nin\nsubprocess"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess,
+                                                 "my\nmanual\ntask"));
+        assertNotNull(Bpmn2Loader.getChildByName(embeddedSubprocess,
+                                                 "my\nescalation\nevent"));
     }
 
     @Test
     public void testTextAnnotationEdges() throws Exception {
         List<SimpleEdge> expectedEdges = new ArrayList<SimpleEdge>();
         expectedEdges.add(createEdge("Start\nAnnotation")
-                        .addPoint(15, 15)
-                        .addPoint(1, 25)
+                                  .addPoint(15,
+                                            15)
+                                  .addPoint(1,
+                                            25)
         );
         expectedEdges.add(createEdge("Task\nIn\nLane\nAnnotation")
-                        .addPoint(50, 40)
-                        .addPoint(380, 184)
-                        .addPoint(331, 184)
-                        .addPoint(1, 25)
+                                  .addPoint(50,
+                                            40)
+                                  .addPoint(380,
+                                            184)
+                                  .addPoint(331,
+                                            184)
+                                  .addPoint(1,
+                                            25)
         );
         expectedEdges.add(createEdge("WID\nTask\nannotation")
-                        .addPoint(50, 40)
-                        .addPoint(690, 507)
-                        .addPoint(1, 25)
+                                  .addPoint(50,
+                                            40)
+                                  .addPoint(690,
+                                            507)
+                                  .addPoint(1,
+                                            25)
         );
         expectedEdges.add(createEdge("User\nTask\nAnnotation")
-                        .addPoint(50, 40)
-                        .addPoint(196, 646)
-                        .addPoint(1, 25)
+                                  .addPoint(50,
+                                            40)
+                                  .addPoint(196,
+                                            646)
+                                  .addPoint(1,
+                                            25)
         );
         expectedEdges.add(createEdge("Gateway\nin\nlane\nannotation")
-                        .addPoint(20, 20)
-                        .addPoint(1, 25)
+                                  .addPoint(20,
+                                            20)
+                                  .addPoint(1,
+                                            25)
         );
         expectedEdges.add(createEdge("End\nIn\nSwimlane")
-                        .addPoint(14, 14)
-                        .addPoint(915, 231)
-                        .addPoint(1, 25)
+                                  .addPoint(14,
+                                            14)
+                                  .addPoint(915,
+                                            231)
+                                  .addPoint(1,
+                                            25)
         );
         expectedEdges.add(createEdge("Subprocess's\nAnnotation")
-                .addPoint(100, 80)
-                .addPoint(495, 847)
-                .addPoint(1, 25)
+                                  .addPoint(100,
+                                            80)
+                                  .addPoint(495,
+                                            847)
+                                  .addPoint(1,
+                                            25)
         );
         expectedEdges.add(createEdge("Swimlane's\nAnnotation")
-                        .addPoint(300, 125)
-                        .addPoint(1066, 320)
-                        .addPoint(1, 25)
+                                  .addPoint(300,
+                                            125)
+                                  .addPoint(1066,
+                                            320)
+                                  .addPoint(1,
+                                            25)
         );
 
         JSONObject process = loader.loadProcessFromXml("textAnnotation.bpmn2");
-        List<JSONObject> edges = Bpmn2Loader.getChildByTypeName(process, "Association_Undirected");
-        List<JSONObject> annotations = Bpmn2Loader.getChildByTypeName(process, "TextAnnotation");
-        annotations.addAll(Bpmn2Loader.getChildByTypeName(getChildByName(process, "swimlane"), "TextAnnotation"));
+        List<JSONObject> edges = Bpmn2Loader.getChildByTypeName(process,
+                                                                "Association_Undirected");
+        List<JSONObject> annotations = Bpmn2Loader.getChildByTypeName(process,
+                                                                      "TextAnnotation");
+        annotations.addAll(Bpmn2Loader.getChildByTypeName(getChildByName(process,
+                                                                         "swimlane"),
+                                                          "TextAnnotation"));
         List<SimpleEdge> actualEdges = new ArrayList<SimpleEdge>();
         for (JSONObject edge : edges) {
             SimpleEdge current = null;
 
-            String associatedWith = ((JSONObject)edge.getJSONArray("outgoing").get(0)).getString("resourceId");
+            String associatedWith = ((JSONObject) edge.getJSONArray("outgoing").get(0)).getString("resourceId");
             for (JSONObject annotation : annotations) {
                 if (Bpmn2Loader.getResourceId(annotation).equals(associatedWith)) {
                     current = createEdge(Bpmn2Loader.getNameFor(annotation));
@@ -162,30 +224,50 @@ public class Bpmn2JsonMarshallerTest {
             JSONArray dockers = edge.getJSONArray("dockers");
             for (int i = 0; i < dockers.length(); i++) {
                 JSONObject dockerPoint = (JSONObject) dockers.get(i);
-                current.addPoint(Float.parseFloat(dockerPoint.getString("x")), Float.parseFloat(dockerPoint.getString("y")));
+                current.addPoint(Float.parseFloat(dockerPoint.getString("x")),
+                                 Float.parseFloat(dockerPoint.getString("y")));
             }
             actualEdges.add(current);
         }
 
-        assertEquals(expectedEdges, actualEdges);
+        assertEquals(expectedEdges,
+                     actualEdges);
     }
 
     @Test
     public void testTextAnnotationLink() throws Exception {
         JSONObject process = loader.loadProcessFromXml("textAnnotation.bpmn2");
-        assertEquals(2, getChildByName(process, "Start").getJSONArray("outgoing").length());
-        assertEquals(2, getChildByName(process, "ServiceTask").getJSONArray("outgoing").length());
-        assertEquals(0, getChildByName(process, "End2").getJSONArray("outgoing").length());
+        assertEquals(2,
+                     getChildByName(process,
+                                    "Start").getJSONArray("outgoing").length());
+        assertEquals(2,
+                     getChildByName(process,
+                                    "ServiceTask").getJSONArray("outgoing").length());
+        assertEquals(0,
+                     getChildByName(process,
+                                    "End2").getJSONArray("outgoing").length());
 
-        JSONObject swimlane =  getChildByName(process, "swimlane");
-        assertEquals(1, swimlane.getJSONArray("outgoing").length());
-        assertEquals(2, getChildByName(swimlane, "ManualTask").getJSONArray("outgoing").length());
-        assertEquals(3, getChildByName(swimlane, "Gateway").getJSONArray("outgoing").length());
-        assertEquals(1, getChildByName(swimlane, "End1").getJSONArray("outgoing").length());
+        JSONObject swimlane = getChildByName(process,
+                                             "swimlane");
+        assertEquals(1,
+                     swimlane.getJSONArray("outgoing").length());
+        assertEquals(2,
+                     getChildByName(swimlane,
+                                    "ManualTask").getJSONArray("outgoing").length());
+        assertEquals(3,
+                     getChildByName(swimlane,
+                                    "Gateway").getJSONArray("outgoing").length());
+        assertEquals(1,
+                     getChildByName(swimlane,
+                                    "End1").getJSONArray("outgoing").length());
 
-        JSONObject subprocess =  getChildByName(process, "Subprocess");
-        assertEquals(2, subprocess.getJSONArray("outgoing").length());
-        assertEquals(1, getChildByName(subprocess, "Task_1").getJSONArray("outgoing").length());
+        JSONObject subprocess = getChildByName(process,
+                                               "Subprocess");
+        assertEquals(2,
+                     subprocess.getJSONArray("outgoing").length());
+        assertEquals(1,
+                     getChildByName(subprocess,
+                                    "Task_1").getJSONArray("outgoing").length());
     }
 
     @Test
@@ -195,18 +277,21 @@ public class Bpmn2JsonMarshallerTest {
                 "Priority", "Skippable", "TaskName", "MyDataInput1", "MyDataInput2"};
 
         JSONObject process = loader.loadProcessFromXml("nonusertaskdatainputs.bpmn2");
-        JSONObject sendtask = getChildByName(process, "MySendTask");
+        JSONObject sendtask = getChildByName(process,
+                                             "MySendTask");
         JSONObject properties = sendtask.getJSONObject("properties");
         String datainputset = properties.getString("datainputset");
         for (String variableName : variableNames) {
             String dataInput = variableName + ":String";
-            assertTrue("Variable \"" + variableName + "\" not found in datainputset", datainputset.contains(dataInput));
+            assertTrue("Variable \"" + variableName + "\" not found in datainputset",
+                       datainputset.contains(dataInput));
         }
 
         String assignments = properties.getString("assignments");
         for (String variableName : variableNames) {
             String assignment = "[din]" + variableName + "=a" + variableName;
-            assertTrue("Assignment \"" + assignment + "\" not found in assignments", assignments.contains(assignment));
+            assertTrue("Assignment \"" + assignment + "\" not found in assignments",
+                       assignments.contains(assignment));
         }
     }
 
@@ -217,265 +302,366 @@ public class Bpmn2JsonMarshallerTest {
         String[] nonExistingVariableNames = {"TaskName"};
 
         JSONObject process = loader.loadProcessFromXml("customtasktaskname.bpmn2");
-        JSONObject logtask = getChildByName(process, "Log");
+        JSONObject logtask = getChildByName(process,
+                                            "Log");
         JSONObject properties = logtask.getJSONObject("properties");
         String datainputset = properties.getString("datainputset");
         String assignments = properties.getString("assignments");
 
         for (String variableName : existingVariableNames) {
             String dataInput = variableName + ":String";
-            assertTrue("Variable \"" + variableName + "\" not found in datainputset", datainputset.contains(dataInput));
+            assertTrue("Variable \"" + variableName + "\" not found in datainputset",
+                       datainputset.contains(dataInput));
         }
         for (String variableName : existingVariableNames) {
             String assignment = "[din]" + variableName + "=";
-            assertTrue("Assignment \"" + assignment + "\" not found in assignments", assignments.contains(assignment));
+            assertTrue("Assignment \"" + assignment + "\" not found in assignments",
+                       assignments.contains(assignment));
         }
 
         for (String variableName : nonExistingVariableNames) {
             String dataInput = variableName + ":String";
-            assertFalse("Variable \"" + variableName + "\" found in datainputset", datainputset.contains(dataInput));
+            assertFalse("Variable \"" + variableName + "\" found in datainputset",
+                        datainputset.contains(dataInput));
         }
         for (String variableName : nonExistingVariableNames) {
             String assignment = "[din]" + variableName + "=";
-            assertFalse("Assignment \"" + assignment + "\" found in assignments", assignments.contains(assignment));
+            assertFalse("Assignment \"" + assignment + "\" found in assignments",
+                        assignments.contains(assignment));
         }
     }
 
     @Test
     public void testSimulationStartEvent() throws Exception {
         JSONObject process = loader.loadProcessFromXml("simulationProcess.bpmn2");
-        JSONObject startEvent = getChildByName(process, "StartEvent");
+        JSONObject startEvent = getChildByName(process,
+                                               "StartEvent");
         JSONObject properties = startEvent.getJSONObject("properties");
-        assertEquals(99, properties.getInt(PROBABILITY));
-        assertEquals(5, properties.getInt(PROCESSING_TIME_MAX));
-        assertEquals(4, properties.getInt(PROCESSING_TIME_MIN));
-        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+        assertEquals(99,
+                     properties.getInt(PROBABILITY));
+        assertEquals(5,
+                     properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(4,
+                     properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals("uniform",
+                     properties.getString(DISTRIBUTION_TYPE));
     }
 
     @Test
     public void testSimulationUserTask() throws Exception {
         JSONObject process = loader.loadProcessFromXml("simulationProcess.bpmn2");
-        JSONObject userTask = getChildByName(process, "UserTask");
+        JSONObject userTask = getChildByName(process,
+                                             "UserTask");
         JSONObject properties = userTask.getJSONObject("properties");
-        assertEquals(8, properties.getInt(COST_PER_TIME_UNIT));
-        assertEquals(7, properties.getInt(PROCESSING_TIME_MAX));
-        assertEquals(3, properties.getInt(PROCESSING_TIME_MIN));
-        assertEquals(5, properties.getInt(WORKING_HOURS));
-        assertEquals(2, properties.getInt(QUANTITY));
-        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+        assertEquals(8,
+                     properties.getInt(COST_PER_TIME_UNIT));
+        assertEquals(7,
+                     properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(3,
+                     properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals(5,
+                     properties.getInt(WORKING_HOURS));
+        assertEquals(2,
+                     properties.getInt(QUANTITY));
+        assertEquals("uniform",
+                     properties.getString(DISTRIBUTION_TYPE));
     }
 
     @Test
     public void testSimulationGatewayProbability() throws Exception {
         JSONObject process = loader.loadProcessFromXml("simulationProcess.bpmn2");
-        JSONObject lowSequence = getChildByName(process, "LowProbability");
-        JSONObject highSequence = getChildByName(process, "HighProbability");
+        JSONObject lowSequence = getChildByName(process,
+                                                "LowProbability");
+        JSONObject highSequence = getChildByName(process,
+                                                 "HighProbability");
         JSONObject lowProperties = lowSequence.getJSONObject("properties");
-        assertEquals(30, lowProperties.getInt("probability"));
+        assertEquals(30,
+                     lowProperties.getInt("probability"));
         JSONObject highProperties = highSequence.getJSONObject("properties");
-        assertEquals(70, highProperties.getInt("probability"));
+        assertEquals(70,
+                     highProperties.getInt("probability"));
     }
 
     @Test
     public void testSimulationThrowEvent() throws Exception {
         JSONObject process = loader.loadProcessFromXml("simulationProcess.bpmn2");
-        JSONObject throwEvent = getChildByName(process, "ThrowEvent");
+        JSONObject throwEvent = getChildByName(process,
+                                               "ThrowEvent");
         JSONObject properties = throwEvent.getJSONObject("properties");
-        assertEquals(3, properties.getInt(PROCESSING_TIME_MEAN));
-        assertEquals("poisson", properties.getString(DISTRIBUTION_TYPE));
+        assertEquals(3,
+                     properties.getInt(PROCESSING_TIME_MEAN));
+        assertEquals("poisson",
+                     properties.getString(DISTRIBUTION_TYPE));
     }
 
     @Test
     public void testSimulationCallActivity() throws Exception {
         JSONObject process = loader.loadProcessFromXml("simulationProcess.bpmn2");
-        JSONObject callActivity = getChildByName(process, "CallActivity");
+        JSONObject callActivity = getChildByName(process,
+                                                 "CallActivity");
         JSONObject properties = callActivity.getJSONObject("properties");
-        assertEquals(3, properties.getInt(COST_PER_TIME_UNIT));
-        assertEquals(2, properties.getInt(PROCESSING_TIME_MEAN));
-        assertEquals(1, properties.getInt(STANDARD_DEVIATION));
-        assertEquals("normal", properties.getString(DISTRIBUTION_TYPE));
+        assertEquals(3,
+                     properties.getInt(COST_PER_TIME_UNIT));
+        assertEquals(2,
+                     properties.getInt(PROCESSING_TIME_MEAN));
+        assertEquals(1,
+                     properties.getInt(STANDARD_DEVIATION));
+        assertEquals("normal",
+                     properties.getString(DISTRIBUTION_TYPE));
     }
 
     @Test
     public void testSimulationEndEvent() throws Exception {
         JSONObject process = loader.loadProcessFromXml("simulationProcess.bpmn2");
-        JSONObject endEvent = getChildByName(process, "EndEvent");
+        JSONObject endEvent = getChildByName(process,
+                                             "EndEvent");
         JSONObject properties = endEvent.getJSONObject("properties");
-        assertEquals(9, properties.getInt(PROCESSING_TIME_MAX));
-        assertEquals(8, properties.getInt(PROCESSING_TIME_MIN));
-        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+        assertEquals(9,
+                     properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(8,
+                     properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals("uniform",
+                     properties.getString(DISTRIBUTION_TYPE));
     }
 
     @Test
     public void testSimulationSubProcess() throws Exception {
         JSONObject process = loader.loadProcessFromXml("simulationProcess.bpmn2");
-        JSONObject subProcess = getChildByName(process, "SubProcess");
+        JSONObject subProcess = getChildByName(process,
+                                               "SubProcess");
         JSONObject properties = subProcess.getJSONObject("properties");
-        assertEquals(12, properties.getInt(COST_PER_TIME_UNIT));
-        assertEquals(6, properties.getInt(PROCESSING_TIME_MAX));
-        assertEquals(2, properties.getInt(PROCESSING_TIME_MIN));
-        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+        assertEquals(12,
+                     properties.getInt(COST_PER_TIME_UNIT));
+        assertEquals(6,
+                     properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(2,
+                     properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals("uniform",
+                     properties.getString(DISTRIBUTION_TYPE));
     }
 
     @Test
     public void testSimulationSubService() throws Exception {
         JSONObject process = loader.loadProcessFromXml("simulationProcess.bpmn2");
-        JSONObject serviceTask = getChildByName(getChildByName(process, "SubProcess"), "SubService");
+        JSONObject serviceTask = getChildByName(getChildByName(process,
+                                                               "SubProcess"),
+                                                "SubService");
         JSONObject properties = serviceTask.getJSONObject("properties");
-        assertEquals(14, properties.getInt(COST_PER_TIME_UNIT));
-        assertEquals(7, properties.getInt(PROCESSING_TIME_MEAN));
-        assertEquals("poisson", properties.getString(DISTRIBUTION_TYPE));
+        assertEquals(14,
+                     properties.getInt(COST_PER_TIME_UNIT));
+        assertEquals(7,
+                     properties.getInt(PROCESSING_TIME_MEAN));
+        assertEquals("poisson",
+                     properties.getString(DISTRIBUTION_TYPE));
     }
 
     @Test
     public void testSimulationBoundaryEvent() throws Exception {
         JSONObject process = loader.loadProcessFromXml("simulationProcess.bpmn2");
-        JSONObject boundaryEvent = getChildByName(process, "BoundaryEvent");
+        JSONObject boundaryEvent = getChildByName(process,
+                                                  "BoundaryEvent");
         JSONObject properties = boundaryEvent.getJSONObject("properties");
-        assertEquals(13, properties.getInt(PROCESSING_TIME_MAX));
-        assertEquals(4, properties.getInt(PROCESSING_TIME_MIN));
-        assertEquals(85, properties.getInt(PROBABILITY));
-        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+        assertEquals(13,
+                     properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(4,
+                     properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals(85,
+                     properties.getInt(PROBABILITY));
+        assertEquals("uniform",
+                     properties.getString(DISTRIBUTION_TYPE));
     }
 
     @Test
     public void testSimulationCancelEvent() throws Exception {
         JSONObject process = loader.loadProcessFromXml("simulationProcess.bpmn2");
-        JSONObject cancelEvent = getChildByName(process, "CancelEvent");
+        JSONObject cancelEvent = getChildByName(process,
+                                                "CancelEvent");
         JSONObject properties = cancelEvent.getJSONObject("properties");
-        assertEquals(15, properties.getInt(PROCESSING_TIME_MAX));
-        assertEquals(6, properties.getInt(PROCESSING_TIME_MIN));
-        assertEquals("uniform", properties.getString(DISTRIBUTION_TYPE));
+        assertEquals(15,
+                     properties.getInt(PROCESSING_TIME_MAX));
+        assertEquals(6,
+                     properties.getInt(PROCESSING_TIME_MIN));
+        assertEquals("uniform",
+                     properties.getString(DISTRIBUTION_TYPE));
     }
 
     @Test
     public void testUserTaskAndTaskName() throws Exception {
-        JSONObject process = loader.loadProcessFromXml("userTaskWithTaskName.bpmn2", BPMN2SyntaxCheckerTest.class);
-        JSONObject userTask = getChildByName(process, "User Task");
+        JSONObject process = loader.loadProcessFromXml("userTaskWithTaskName.bpmn2",
+                                                       BPMN2SyntaxCheckerTest.class);
+        JSONObject userTask = getChildByName(process,
+                                             "User Task");
         JSONObject properties = userTask.getJSONObject("properties");
-        assertEquals("taskForSomebody", properties.getString("taskname"));
-        assertEquals(true, properties.getBoolean("isasync"));
+        assertEquals("taskForSomebody",
+                     properties.getString("taskname"));
+        assertEquals(true,
+                     properties.getBoolean("isasync"));
     }
 
     @Test
     public void testCallActivity() throws Exception {
-        JSONObject process = loader.loadProcessFromXml("callActivity.bpmn2", BPMN2SyntaxCheckerTest.class);
-        JSONObject callActivity = getChildByName(process, "callActivity");
+        JSONObject process = loader.loadProcessFromXml("callActivity.bpmn2",
+                                                       BPMN2SyntaxCheckerTest.class);
+        JSONObject callActivity = getChildByName(process,
+                                                 "callActivity");
         JSONObject properties = callActivity.getJSONObject("properties");
-        assertEquals("abc.noCalledElementCallActivity", properties.getString("calledelement"));
-        assertEquals(true, properties.getBoolean("isabortparent"));
+        assertEquals("abc.noCalledElementCallActivity",
+                     properties.getString("calledelement"));
+        assertEquals(true,
+                     properties.getBoolean("isabortparent"));
     }
 
     @Test
     public void testNoCalledElementCallActivity() throws Exception {
-        JSONObject process = loader.loadProcessFromXml("noCalledElementCallActivity.bpmn2", BPMN2SyntaxCheckerTest.class);
-        JSONObject callActivity = getChildByName(process, "callActivity");
+        JSONObject process = loader.loadProcessFromXml("noCalledElementCallActivity.bpmn2",
+                                                       BPMN2SyntaxCheckerTest.class);
+        JSONObject callActivity = getChildByName(process,
+                                                 "callActivity");
         JSONObject properties = callActivity.getJSONObject("properties");
         assertFalse(properties.has("calledelement"));
     }
 
     @Test
     public void testErrorBoundaryEvent() throws Exception {
-        JSONObject process = loader.loadProcessFromXml("errorBoundaryEvent.bpmn2", BPMN2SyntaxCheckerTest.class);
-        JSONObject lane = getChildByName(process, "myLane");
-        JSONObject error = getChildByName(lane, "MyError");
+        JSONObject process = loader.loadProcessFromXml("errorBoundaryEvent.bpmn2",
+                                                       BPMN2SyntaxCheckerTest.class);
+        JSONObject lane = getChildByName(process,
+                                         "myLane");
+        JSONObject error = getChildByName(lane,
+                                          "MyError");
         JSONObject properties = error.getJSONObject("properties");
-        assertEquals("errorReference", properties.getString("errorref"));
+        assertEquals("errorReference",
+                     properties.getString("errorref"));
     }
 
     @Test
     public void testErrorBoundaryEventMissingDefinition() throws Exception {
-        JSONObject process = loader.loadProcessFromXml("errorBoundaryEventMissingDefinition.bpmn2", BPMN2SyntaxCheckerTest.class);
-        JSONObject lane = getChildByName(process, "myLane");
-        JSONObject error = getChildByName(lane, "MyError");
+        JSONObject process = loader.loadProcessFromXml("errorBoundaryEventMissingDefinition.bpmn2",
+                                                       BPMN2SyntaxCheckerTest.class);
+        JSONObject lane = getChildByName(process,
+                                         "myLane");
+        JSONObject error = getChildByName(lane,
+                                          "MyError");
         JSONObject properties = error.getJSONObject("properties");
-        assertEquals("", properties.getString("errorref"));
+        assertEquals("",
+                     properties.getString("errorref"));
     }
 
     @Test
     public void testServiceTaskInterfaceAndOperation() throws Exception {
         JSONObject process = loader.loadProcessFromXml("serviceTaskInterfaceAndOperation.bpmn2");
-        JSONObject serviceTask = getChildByName(process, "Send PO");
+        JSONObject serviceTask = getChildByName(process,
+                                                "Send PO");
         JSONObject properties = serviceTask.getJSONObject("properties");
-        assertEquals("Java", properties.getString("serviceimplementation"));
-        assertEquals("sendInterface", properties.getString("serviceinterface"));
-        assertEquals("sendOperation", properties.getString("serviceoperation"));
-        assertEquals(true, properties.getBoolean("isasync"));
+        assertEquals("Java",
+                     properties.getString("serviceimplementation"));
+        assertEquals("sendInterface",
+                     properties.getString("serviceinterface"));
+        assertEquals("sendOperation",
+                     properties.getString("serviceoperation"));
+        assertEquals(true,
+                     properties.getBoolean("isasync"));
     }
 
     @Test
     public void testServiceTaskNoInterfaceNoOperation() throws Exception {
         JSONObject process = loader.loadProcessFromXml("serviceTaskNoInterfaceNoOperation.bpmn2");
-        JSONObject serviceTask = getChildByName(process, "Send PO");
+        JSONObject serviceTask = getChildByName(process,
+                                                "Send PO");
         JSONObject properties = serviceTask.getJSONObject("properties");
-        assertEquals("Java", properties.getString("serviceimplementation"));
-        assertEquals("", properties.getString("serviceinterface"));
-        assertEquals("", properties.getString("serviceoperation"));
+        assertEquals("Java",
+                     properties.getString("serviceimplementation"));
+        assertEquals("",
+                     properties.getString("serviceinterface"));
+        assertEquals("",
+                     properties.getString("serviceoperation"));
     }
 
     @Test
     public void testSubprocessTaskAssignments() throws Exception {
         JSONObject process = loader.loadProcessFromXml("subprocessTaskAssignments.bpmn2");
-        JSONObject subprocess = getChildByName(process, "Embedded subprocess");
-        JSONObject userTask = getChildByName(subprocess, "UserTask");
+        JSONObject subprocess = getChildByName(process,
+                                               "Embedded subprocess");
+        JSONObject userTask = getChildByName(subprocess,
+                                             "UserTask");
         JSONObject properties = userTask.getJSONObject("properties");
         assertTrue(properties.getString("datainputset").contains("sInput:String"));
         assertTrue(properties.getString("dataoutputset").contains("iOutput:Integer"));
         JSONObject subprocessProperties = subprocess.getJSONObject("properties");
-        assertEquals(true, subprocessProperties.getBoolean("isasync"));
+        assertEquals(true,
+                     subprocessProperties.getBoolean("isasync"));
     }
 
     @Test
     public void testEndEventsAssignments() throws Exception {
         JSONObject process = loader.loadProcessFromXml("subprocessTaskAssignments.bpmn2");
 
-        JSONObject subprocess = getChildByName(process, "Embedded subprocess");
-        JSONObject subEnd = getChildByName(subprocess, "SubEnd");
+        JSONObject subprocess = getChildByName(process,
+                                               "Embedded subprocess");
+        JSONObject subEnd = getChildByName(subprocess,
+                                           "SubEnd");
         JSONObject subProperties = subEnd.getJSONObject("properties");
-        assertEquals("intSubInput:Integer", subProperties.getString("datainput"));
-        assertEquals("[din]intVar->intSubInput", subProperties.getString("datainputassociations"));
+        assertEquals("intSubInput:Integer",
+                     subProperties.getString("datainput"));
+        assertEquals("[din]intVar->intSubInput",
+                     subProperties.getString("datainputassociations"));
 
-        JSONObject endEvent = getChildByName(process, "End Event");
+        JSONObject endEvent = getChildByName(process,
+                                             "End Event");
         JSONObject properties = endEvent.getJSONObject("properties");
-        assertEquals("intInput:Integer", properties.getString("datainput"));
-        assertEquals("[din]intVar->intInput", properties.getString("datainputassociations"));
+        assertEquals("intInput:Integer",
+                     properties.getString("datainput"));
+        assertEquals("[din]intVar->intInput",
+                     properties.getString("datainputassociations"));
     }
 
     @Test
     public void testBusinessRuleTask() throws Exception {
-        JSONObject process = loader.loadProcessFromXml("businessRule.bpmn2", BPMN2SyntaxCheckerTest.class);
-        JSONObject ruleTask = getChildByName(process, "businessRuleTask");
+        JSONObject process = loader.loadProcessFromXml("businessRule.bpmn2",
+                                                       BPMN2SyntaxCheckerTest.class);
+        JSONObject ruleTask = getChildByName(process,
+                                             "businessRuleTask");
         JSONObject properties = ruleTask.getJSONObject("properties");
-        assertEquals("simpleGroup", properties.getString("ruleflowgroup"));
-        assertEquals(true, properties.getBoolean("isasync"));
-        assertEquals(BpmnMarshallerHelper.RULE_LANG_DRL, properties.getString("rulelanguage"));
+        assertEquals("simpleGroup",
+                     properties.getString("ruleflowgroup"));
+        assertEquals(true,
+                     properties.getBoolean("isasync"));
+        assertEquals(BpmnMarshallerHelper.RULE_LANG_DRL,
+                     properties.getString("rulelanguage"));
     }
 
     @Test
     public void testReceiveTask() throws Exception {
         JSONObject process = loader.loadProcessFromXml("receiveTask.bpmn2");
-        JSONObject receiveTask = getChildByName(process, "receiveTask");
+        JSONObject receiveTask = getChildByName(process,
+                                                "receiveTask");
         JSONObject properties = receiveTask.getJSONObject("properties");
-        assertEquals("parcel", properties.getString("messageref"));
-        assertEquals(true, properties.getBoolean("isasync"));
+        assertEquals("parcel",
+                     properties.getString("messageref"));
+        assertEquals(true,
+                     properties.getBoolean("isasync"));
     }
 
     @Test
     public void testSendTask() throws Exception {
         JSONObject process = loader.loadProcessFromXml("sendTask.bpmn2");
-        JSONObject sendTask = getChildByName(process, "sendTask");
+        JSONObject sendTask = getChildByName(process,
+                                             "sendTask");
         JSONObject properties = sendTask.getJSONObject("properties");
-        assertEquals("parcel", properties.getString("messageref"));
-        assertEquals(true, properties.getBoolean("isasync"));
+        assertEquals("parcel",
+                     properties.getString("messageref"));
+        assertEquals(true,
+                     properties.getBoolean("isasync"));
     }
 
     @Test
     public void testRestTaskAssignments() throws Exception {
         String[] existingVariableNames = {"Content", "ContentType", "ResultClass", "Method", "Username", "Password",
-                                            "ReadTimeout", "ConnectTimeout", "Url"};
+                "ReadTimeout", "ConnectTimeout", "Url"};
 
         JSONObject process = loader.loadProcessFromXml("restTask.bpmn2");
-        JSONObject restTask = getChildByName(process, "REST");
+        JSONObject restTask = getChildByName(process,
+                                             "REST");
         JSONObject properties = restTask.getJSONObject("properties");
         String datainputset = properties.getString("datainputset");
         String dataoutputset = properties.getString("dataoutputset");
@@ -483,11 +669,13 @@ public class Bpmn2JsonMarshallerTest {
 
         for (String variableName : existingVariableNames) {
             String dataInput = variableName + ":String";
-            assertTrue("Variable \"" + variableName + "\" not found in datainputset", datainputset.contains(dataInput));
+            assertTrue("Variable \"" + variableName + "\" not found in datainputset",
+                       datainputset.contains(dataInput));
         }
         for (String variableName : existingVariableNames) {
             String assignment = "[din]" + variableName + "=";
-            assertTrue("Assignment \"" + assignment + "\" not found in assignments", assignments.contains(assignment));
+            assertTrue("Assignment \"" + assignment + "\" not found in assignments",
+                       assignments.contains(assignment));
         }
 
         assertTrue(assignments.contains("[dout]Result->processVariable"));
@@ -497,8 +685,10 @@ public class Bpmn2JsonMarshallerTest {
     @Test
     public void testCallActivityAssignments() throws Exception {
         JSONObject process = loader.loadProcessFromXml("callActivityInSubprocess.bpmn2");
-        JSONObject subProcess = getChildByName(process, "SubProcess");
-        JSONObject callActivity = getChildByName(subProcess, "callActivity");
+        JSONObject subProcess = getChildByName(process,
+                                               "SubProcess");
+        JSONObject callActivity = getChildByName(subProcess,
+                                                 "callActivity");
         JSONObject properties = callActivity.getJSONObject("properties");
         String datainputset = properties.getString("datainputset");
         String dataoutputset = properties.getString("dataoutputset");
@@ -519,70 +709,83 @@ public class Bpmn2JsonMarshallerTest {
         String caseIdPrefix = properties.getString("customcaseidprefix");
         String caseRoles = properties.getString("customcaseroles");
 
-
-        assertEquals("HR", caseIdPrefix);
-        assertEquals("owner:1,participant:2", caseRoles);
+        assertEquals("HR",
+                     caseIdPrefix);
+        assertEquals("owner:1,participant:2",
+                     caseRoles);
     }
 
     @Test
     public void testTaskCustomProperties() throws Exception {
         JSONObject process = loader.loadProcessFromXml("customPropertiesTask.bpmn2");
-        JSONObject task = getChildByName(process, "Task_1");
+        JSONObject task = getChildByName(process,
+                                         "Task_1");
         JSONObject properties = task.getJSONObject("properties");
         String autoStart = properties.getString("customautostart");
 
-        assertEquals("true", autoStart);
+        assertEquals("true",
+                     autoStart);
     }
 
     @Test
     public void testOnEntryOnExitActions() throws Exception {
         JSONObject process = loader.loadProcessFromXml("onEntryonExitActions.bpmn2");
-        JSONObject bcTask = getChildByName(process, "bc");
+        JSONObject bcTask = getChildByName(process,
+                                           "bc");
         JSONObject properties = bcTask.getJSONObject("properties");
 
-        assertEquals("onExit1;\nonExit2;\n", properties.getString("onexitactions"));
-        assertEquals("onEntry1;\nonEntry2;\n", properties.getString("onentryactions"));
-
+        assertEquals("onExit1;\nonExit2;\n",
+                     properties.getString("onexitactions"));
+        assertEquals("onEntry1;\nonEntry2;\n",
+                     properties.getString("onentryactions"));
     }
 
     @Test
     public void testOnEntryOnExitActionsEscaping() throws Exception {
         JSONObject process = loader.loadProcessFromXml("onEntryonExitActionsEscaping.bpmn2");
-        JSONObject task = getChildByName(process, "task");
+        JSONObject task = getChildByName(process,
+                                         "task");
         JSONObject properties = task.getJSONObject("properties");
 
-        assertEquals("myVariable = \"\\\\\"text in quotes\\\\\"\";\\nSystem.out.println(myVariable);\\n", properties.getString("onentryactions"));
-        assertEquals("myVariable = \"\\\\\"another text in quotes\\\\\"\";\\nSystem.out.println(myVariable);\\n", properties.getString("onexitactions"));
-
+        assertEquals("myVariable = \"\\\\\"text in quotes\\\\\"\";\\nSystem.out.println(myVariable);\\n",
+                     properties.getString("onentryactions"));
+        assertEquals("myVariable = \"\\\\\"another text in quotes\\\\\"\";\\nSystem.out.println(myVariable);\\n",
+                     properties.getString("onexitactions"));
     }
 
     @Test
     public void testAdHocSubprocessDroolsCompletionCondition() throws Exception {
         JSONObject process = loader.loadProcessFromXml("adHocSubprocessCompletionCondition.bpmn2");
-        JSONObject adHocSubprocess = getChildByName(process, "abcde");
+        JSONObject adHocSubprocess = getChildByName(process,
+                                                    "abcde");
         JSONObject properties = adHocSubprocess.getJSONObject("properties");
 
         String completionCondition = properties.getString("adhoccompletioncondition");
         String scriptLanguage = properties.getString("script_language");
 
-        assertEquals("org.kie.api.runtime.process.CaseData(data.get(\"claimReportDone\") == true)", completionCondition);
-        assertEquals("drools", scriptLanguage);
+        assertEquals("org.kie.api.runtime.process.CaseData(data.get(\"claimReportDone\") == true)",
+                     completionCondition);
+        assertEquals("drools",
+                     scriptLanguage);
     }
 
     @Test
     public void testDMNBusinessRuleTask() throws Exception {
         JSONObject process = loader.loadProcessFromXml("dmnBusinessRule.bpmn2");
-        JSONObject ruleTask = getChildByName(process, "test");
+        JSONObject ruleTask = getChildByName(process,
+                                             "test");
         JSONObject properties = ruleTask.getJSONObject("properties");
-        assertEquals(BpmnMarshallerHelper.RULE_LANG_DMN, properties.getString("rulelanguage"));
+        assertEquals(BpmnMarshallerHelper.RULE_LANG_DMN,
+                     properties.getString("rulelanguage"));
     }
 
     @Test
     public void testCallActivityAbortParent() throws Exception {
         JSONObject process = loader.loadProcessFromXml("callActivityAbortParent.bpmn2");
-        JSONObject callActivity = getChildByName(process, "callActivity");
+        JSONObject callActivity = getChildByName(process,
+                                                 "callActivity");
         JSONObject properties = callActivity.getJSONObject("properties");
-        assertEquals(false, properties.getBoolean("isabortparent"));
+        assertEquals(false,
+                     properties.getBoolean("isabortparent"));
     }
-
 }

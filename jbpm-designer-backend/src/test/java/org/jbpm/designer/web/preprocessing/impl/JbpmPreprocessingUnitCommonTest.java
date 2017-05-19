@@ -1,13 +1,11 @@
 package org.jbpm.designer.web.preprocessing.impl;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class JbpmPreprocessingUnitCommonTest {
 
@@ -23,7 +21,8 @@ public class JbpmPreprocessingUnitCommonTest {
     @Test
     public void testReadFile() throws IOException {
         String result = JbpmPreprocessingUnit.readFile(FILE_NAME);
-        assertEquals(FILE_CONTENT + System.lineSeparator(), result);
+        assertEquals(FILE_CONTENT + System.lineSeparator(),
+                     result);
     }
 
     @Test
@@ -33,8 +32,9 @@ public class JbpmPreprocessingUnitCommonTest {
     }
 
     @Test
-    public void testGetBytesFromFile() throws  IOException {
+    public void testGetBytesFromFile() throws IOException {
         byte[] result = JbpmPreprocessingUnit.getBytesFromFile(new File(FILE_NAME));
-        assertEquals(FILE_CONTENT, new String(result));
+        assertEquals(FILE_CONTENT,
+                     new String(result));
     }
 }

@@ -19,7 +19,6 @@ import org.jbpm.designer.repository.Asset;
 
 public abstract class AbstractAsset<T> implements Asset<T> {
 
-
     private String uniqueId;
     private String name;
     private String description;
@@ -30,7 +29,6 @@ public abstract class AbstractAsset<T> implements Asset<T> {
 
     private String creationDate;
     private String lastModificationDate;
-
 
     public String getAssetLocation() {
         return this.assetLocation;

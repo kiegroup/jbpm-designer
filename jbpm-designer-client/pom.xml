@@ -15,6 +15,10 @@
 
   <name>jBPM Designer - Client</name>
 
+  <!--<properties>-->
+    <!--<checkstyle.skip>true</checkstyle.skip>-->
+  <!--</properties>-->
+
   <dependencies>
 
     <!-- dependencies added because of new illegal transitive dependency check -->
@@ -191,6 +195,14 @@
 
   <build>
     <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <configuration>
+          <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+        </configuration>
+      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

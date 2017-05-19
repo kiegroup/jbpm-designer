@@ -15,11 +15,12 @@
 
 package org.jbpm.designer.filter;
 
+import java.io.StringWriter;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
-import java.io.*;
 
 public class DesignerStream extends ServletOutputStream {
+
     private StringWriter stringWriter;
     private WriteListener writeListener;
 

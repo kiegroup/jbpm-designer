@@ -26,9 +26,9 @@ import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 public class RepositoryBaseTest {
 
     protected static final String REPOSITORY_ROOT = (System.getProperty("java.io.tmpdir").endsWith(File.separator)
-            ?System.getProperty("java.io.tmpdir"):(System.getProperty("java.io.tmpdir") + File.separator)) + "designer-repo";
+            ? System.getProperty("java.io.tmpdir") : (System.getProperty("java.io.tmpdir") + File.separator)) + "designer-repo";
     protected static final String VFS_REPOSITORY_ROOT = "default://" + REPOSITORY_ROOT;
-    
+
     protected JbpmProfileImpl profile;
     protected RepositoryDescriptor descriptor;
     protected VFSFileSystemProducer producer;
@@ -47,14 +47,16 @@ public class RepositoryBaseTest {
         profile = new JbpmProfileImpl();
         producer = new VFSFileSystemProducer();
         HashMap<String, String> env = new HashMap<String, String>();
-        env.put("repository.root", VFS_REPOSITORY_ROOT);
-        env.put("repository.globaldir", "/global");
+        env.put("repository.root",
+                VFS_REPOSITORY_ROOT);
+        env.put("repository.globaldir",
+                "/global");
         descriptor = producer.produceFileSystem(env);
     }
 
     public void teardown() {
         File repo = new File(REPOSITORY_ROOT);
-        if(repo.exists()) {
+        if (repo.exists()) {
             deleteFiles(repo);
         }
         repo.delete();
@@ -62,12 +64,16 @@ public class RepositoryBaseTest {
 
     public Repository createRepository() {
         Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         return repository;
     }
 
-    public String createAsset(Repository repository, String location, String name, String fileType, String bpContent) {
+    public String createAsset(Repository repository,
+                              String location,
+                              String name,
+                              String fileType,
+                              String bpContent) {
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content(bpContent)
                 .type(fileType)
@@ -75,5 +81,4 @@ public class RepositoryBaseTest {
                 .location(location);
         return repository.createAsset(builder.getAsset());
     }
-
 }

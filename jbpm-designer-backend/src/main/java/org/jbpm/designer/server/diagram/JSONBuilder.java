@@ -18,17 +18,17 @@ package org.jbpm.designer.server.diagram;
 /**
  * Copyright (c) 2009
  * Philipp Giese
- * 
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ * <p>
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -46,9 +46,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * 
+ *
  * @author Philipp Giese
- * 
+ *
  */
 
 public class JSONBuilder {
@@ -61,27 +61,35 @@ public class JSONBuilder {
 
         JSONObject json = new JSONObject();
 
-        json.put("resourceId", diagram.getResourceId().toString());
-        json.put("properties", parseProperties(diagram.getProperties()));
-        json.put("stencil", parseStencil(diagram.getStencilId()));
-        json.put("childShapes", parseChildShapesRecursive(diagram.getChildShapes()));
-        json.put("bounds", parseBounds(diagram.getBounds()));
-        json.put("stencilset", parseStencilSet(diagram.getStencilset()));
-        json.put("ssextensions", parseStencilSetExtensions(diagram.getSsextensions()));
+        json.put("resourceId",
+                 diagram.getResourceId().toString());
+        json.put("properties",
+                 parseProperties(diagram.getProperties()));
+        json.put("stencil",
+                 parseStencil(diagram.getStencilId()));
+        json.put("childShapes",
+                 parseChildShapesRecursive(diagram.getChildShapes()));
+        json.put("bounds",
+                 parseBounds(diagram.getBounds()));
+        json.put("stencilset",
+                 parseStencilSet(diagram.getStencilset()));
+        json.put("ssextensions",
+                 parseStencilSetExtensions(diagram.getSsextensions()));
 
         return json;
     }
 
     /**
      * Delivers the correct JSON Object for the stencilId
-     * 
+     *
      * @param stencilId
      * @throws org.json.JSONException
      */
     private static JSONObject parseStencil(String stencilId) throws JSONException {
         JSONObject stencilObject = new JSONObject();
 
-        stencilObject.put("id", stencilId.toString());
+        stencilObject.put("id",
+                          stencilId.toString());
 
         return stencilObject;
     }
@@ -89,7 +97,7 @@ public class JSONBuilder {
     /**
      * Parses all child Shapes recursively and adds them to the correct JSON
      * Object
-     * 
+     *
      * @param childShapes
      * @throws org.json.JSONException
      */
@@ -100,16 +108,25 @@ public class JSONBuilder {
             for (Shape childShape : childShapes) {
                 JSONObject childShapeObject = new JSONObject();
 
-                childShapeObject.put("resourceId", childShape.getResourceId().toString());
-                childShapeObject.put("properties", parseProperties(childShape.getProperties()));
-                childShapeObject.put("stencil", parseStencil(childShape.getStencilId()));
-                childShapeObject.put("childShapes", parseChildShapesRecursive(childShape.getChildShapes()));
-                childShapeObject.put("outgoing", parseOutgoings(childShape.getOutgoings()));
-                childShapeObject.put("bounds", parseBounds(childShape.getBounds()));
-                childShapeObject.put("dockers", parseDockers(childShape.getDockers()));
+                childShapeObject.put("resourceId",
+                                     childShape.getResourceId().toString());
+                childShapeObject.put("properties",
+                                     parseProperties(childShape.getProperties()));
+                childShapeObject.put("stencil",
+                                     parseStencil(childShape.getStencilId()));
+                childShapeObject.put("childShapes",
+                                     parseChildShapesRecursive(childShape.getChildShapes()));
+                childShapeObject.put("outgoing",
+                                     parseOutgoings(childShape.getOutgoings()));
+                childShapeObject.put("bounds",
+                                     parseBounds(childShape.getBounds()));
+                childShapeObject.put("dockers",
+                                     parseDockers(childShape.getDockers()));
 
-                if (childShape.getTarget() != null)
-                    childShapeObject.put("target", parseTarget(childShape.getTarget()));
+                if (childShape.getTarget() != null) {
+                    childShapeObject.put("target",
+                                         parseTarget(childShape.getTarget()));
+                }
 
                 childShapesArray.put(childShapeObject);
             }
@@ -122,21 +139,22 @@ public class JSONBuilder {
 
     /**
      * Delivers the correct JSON Object for the target
-     * 
+     *
      * @param target
      * @throws org.json.JSONException
      */
     private static JSONObject parseTarget(Shape target) throws JSONException {
         JSONObject targetObject = new JSONObject();
 
-        targetObject.put("resourceId", target.getResourceId().toString());
+        targetObject.put("resourceId",
+                         target.getResourceId().toString());
 
         return targetObject;
     }
 
     /**
      * Delivers the correct JSON Object for the dockers
-     * 
+     *
      * @param dockers
      * @throws org.json.JSONException
      */
@@ -147,8 +165,10 @@ public class JSONBuilder {
             for (Point docker : dockers) {
                 JSONObject dockerObject = new JSONObject();
 
-                dockerObject.put("x", docker.getX().doubleValue());
-                dockerObject.put("y", docker.getY().doubleValue());
+                dockerObject.put("x",
+                                 docker.getX().doubleValue());
+                dockerObject.put("y",
+                                 docker.getY().doubleValue());
 
                 dockersArray.put(dockerObject);
             }
@@ -161,7 +181,7 @@ public class JSONBuilder {
 
     /**
      * Delivers the correct JSON Object for outgoings
-     * 
+     *
      * @param outgoings
      * @throws org.json.JSONException
      */
@@ -172,7 +192,8 @@ public class JSONBuilder {
             for (Shape outgoing : outgoings) {
                 JSONObject outgoingObject = new JSONObject();
 
-                outgoingObject.put("resourceId", outgoing.getResourceId().toString());
+                outgoingObject.put("resourceId",
+                                   outgoing.getResourceId().toString());
                 outgoingsArray.put(outgoingObject);
             }
 
@@ -184,7 +205,7 @@ public class JSONBuilder {
 
     /**
      * Delivers the correct JSON Object for properties
-     * 
+     *
      * @param properties
      * @throws org.json.JSONException
      */
@@ -206,11 +227,13 @@ public class JSONBuilder {
                  * propertiesObject.put(key, value);
                  * 
                  * } else
-                 */if (propertyValue.startsWith("{") && propertyValue.endsWith("}")) {
-                    propertiesObject.put(key, new JSONObject(propertyValue));
-
+                 */
+                if (propertyValue.startsWith("{") && propertyValue.endsWith("}")) {
+                    propertiesObject.put(key,
+                                         new JSONObject(propertyValue));
                 } else {
-                    propertiesObject.put(key, propertyValue.toString());
+                    propertiesObject.put(key,
+                                         propertyValue.toString());
                 }
             }
 
@@ -222,15 +245,16 @@ public class JSONBuilder {
 
     /**
      * Delivers the correct JSON Object for the Stencilset Extensions
-     * 
+     *
      * @param extensions
      */
     private static JSONArray parseStencilSetExtensions(ArrayList<String> extensions) {
         if (extensions != null) {
             JSONArray extensionsArray = new JSONArray();
 
-            for (String extension : extensions)
+            for (String extension : extensions) {
                 extensionsArray.put(extension.toString());
+            }
 
             return extensionsArray;
         }
@@ -240,7 +264,7 @@ public class JSONBuilder {
 
     /**
      * Delivers the correct JSON Object for the Stencilset
-     * 
+     *
      * @param stencilSet
      * @throws org.json.JSONException
      */
@@ -248,8 +272,10 @@ public class JSONBuilder {
         if (stencilSet != null) {
             JSONObject stencilSetObject = new JSONObject();
 
-            stencilSetObject.put("url", stencilSet.getUrl().toString());
-            stencilSetObject.put("namespace", stencilSet.getNamespace().toString());
+            stencilSetObject.put("url",
+                                 stencilSet.getUrl().toString());
+            stencilSetObject.put("namespace",
+                                 stencilSet.getNamespace().toString());
 
             return stencilSetObject;
         }
@@ -259,7 +285,7 @@ public class JSONBuilder {
 
     /**
      * Delivers the correct JSON Object for the Bounds
-     * 
+     *
      * @param bounds
      * @throws org.json.JSONException
      */
@@ -269,14 +295,20 @@ public class JSONBuilder {
             JSONObject lowerRight = new JSONObject();
             JSONObject upperLeft = new JSONObject();
 
-            lowerRight.put("x", bounds.getLowerRight().getX().doubleValue());
-            lowerRight.put("y", bounds.getLowerRight().getY().doubleValue());
+            lowerRight.put("x",
+                           bounds.getLowerRight().getX().doubleValue());
+            lowerRight.put("y",
+                           bounds.getLowerRight().getY().doubleValue());
 
-            upperLeft.put("x", bounds.getUpperLeft().getX().doubleValue());
-            upperLeft.put("y", bounds.getUpperLeft().getY().doubleValue());
+            upperLeft.put("x",
+                          bounds.getUpperLeft().getX().doubleValue());
+            upperLeft.put("y",
+                          bounds.getUpperLeft().getY().doubleValue());
 
-            boundsObject.put("lowerRight", lowerRight);
-            boundsObject.put("upperLeft", upperLeft);
+            boundsObject.put("lowerRight",
+                             lowerRight);
+            boundsObject.put("upperLeft",
+                             upperLeft);
 
             return boundsObject;
         }

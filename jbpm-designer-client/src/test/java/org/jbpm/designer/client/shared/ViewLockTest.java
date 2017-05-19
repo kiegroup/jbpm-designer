@@ -16,23 +16,16 @@
 
 package org.jbpm.designer.client.shared;
 
-import com.google.gwtmockito.GwtMock;
-import com.google.gwtmockito.GwtMockitoTestRunner;
 import org.jbpm.designer.client.DesignerPresenter;
 import org.jbpm.designer.client.DesignerView;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.uberfire.backend.vfs.ObservablePath;
-import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.mvp.UpdatedLockStatusEvent;
 import org.uberfire.ext.editor.commons.client.history.VersionRecordManager;
-import org.uberfire.mvp.Command;
-import org.uberfire.mvp.ParameterizedCommand;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ViewLockTest {
 
@@ -53,28 +46,30 @@ public class ViewLockTest {
 
     @Test
     public void testOnLockChangeOnSamePath() {
-        when ( versionRecordManager.getCurrentPath() ).thenReturn( path );
-        when ( updatedLockStatusEvent.getFile() ).thenReturn( path );
+        when(versionRecordManager.getCurrentPath()).thenReturn(path);
+        when(updatedLockStatusEvent.getFile()).thenReturn(path);
 
         DesignerPresenter designerPresenter = new DesignerPresenter(designerView);
         designerPresenter.setVersionRecordManager(versionRecordManager);
 
         designerPresenter.onLockChange(updatedLockStatusEvent);
 
-        Mockito.verify(designerView, Mockito.times(1)).raiseEventUpdateLock();
+        Mockito.verify(designerView,
+                       Mockito.times(1)).raiseEventUpdateLock();
     }
 
     @Test
     public void testOnLockChangeOnDifferentPath() {
-        when(versionRecordManager.getCurrentPath() ).thenReturn( path );
-        when ( updatedLockStatusEvent.getFile() ).thenReturn( otherPath );
+        when(versionRecordManager.getCurrentPath()).thenReturn(path);
+        when(updatedLockStatusEvent.getFile()).thenReturn(otherPath);
 
         DesignerPresenter designerPresenter = new DesignerPresenter(designerView);
         designerPresenter.setVersionRecordManager(versionRecordManager);
 
         designerPresenter.onLockChange(updatedLockStatusEvent);
 
-        Mockito.verify(designerView, Mockito.times(0)).raiseEventUpdateLock();
+        Mockito.verify(designerView,
+                       Mockito.times(0)).raiseEventUpdateLock();
     }
 }
  

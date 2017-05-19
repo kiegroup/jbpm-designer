@@ -20,7 +20,6 @@ package org.jbpm.designer.repository;
  */
 public interface Asset<T> extends Item {
 
-
     public enum AssetType {
         Text,
         Byte;

@@ -1,6 +1,7 @@
 package org.jbpm.designer.bpmn2.validation;
 
 public class SyntaxCheckerErrors {
+
     public static final String AT_LEAST_ONE_OUTGOING_PROBABILITY_VALUE_100 = "At least one outgoing connection should have probability equal to 100.";
     public static final String BUSINESS_RULE_TASK_NO_RULEFLOW_GROUP = "Business Rule Task has no ruleflow-group.";
     public static final String DMN_BUSINESS_RULE_TASK_NO_NAMESPACE = "DMN Business Rule Task has no namespace set.";
