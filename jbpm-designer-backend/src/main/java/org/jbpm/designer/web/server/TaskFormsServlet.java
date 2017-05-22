@@ -50,10 +50,10 @@ import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 
 /**
- *
  * Creates/updates task forms for a specific process.
  */
 public class TaskFormsServlet extends HttpServlet {
+
     private static final long serialVersionUID = 1L;
     private static final Logger _logger = LoggerFactory
             .getLogger(TaskFormsServlet.class);
@@ -83,7 +83,8 @@ public class TaskFormsServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPost(HttpServletRequest req,
+                          HttpServletResponse resp)
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         String json = req.getParameter("json");
@@ -94,7 +95,8 @@ public class TaskFormsServlet extends HttpServlet {
         String formType = req.getParameter("formtype");
 
         if (profile == null) {
-            profile = _profileService.findProfile(req, profileName);
+            profile = _profileService.findProfile(req,
+                                                  profileName);
         }
         Repository repository = profile.getRepository();
 
@@ -107,17 +109,27 @@ public class TaskFormsServlet extends HttpServlet {
             BpsimFactoryImpl.init();
 
             Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-            Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
+            Definitions def = ((Definitions) unmarshaller.unmarshall(json,
+                                                                     preprocessingData).getContents().get(0));
 
-            Path myPath = vfsServices.get( uuid );
+            Path myPath = vfsServices.get(uuid);
 
-            TaskFormTemplateManager templateManager = new TaskFormTemplateManager( myPath, formBuilderManager, profile, processAsset, getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH), def, taskId, formType);
+            TaskFormTemplateManager templateManager = new TaskFormTemplateManager(myPath,
+                                                                                  formBuilderManager,
+                                                                                  profile,
+                                                                                  processAsset,
+                                                                                  getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH),
+                                                                                  def,
+                                                                                  taskId,
+                                                                                  formType);
             templateManager.processTemplates();
 
             //storeInRepository(templateManager, processAsset.getAssetLocation(), repository);
             //displayResponse( templateManager, resp, profile );
             resp.setContentType("application/json");
-            resp.getWriter().write(storeInRepository(templateManager, processAsset.getAssetLocation(), repository).toString());
+            resp.getWriter().write(storeInRepository(templateManager,
+                                                     processAsset.getAssetLocation(),
+                                                     repository).toString());
         } catch (Exception e) {
             _logger.error(e.getMessage());
             //displayErrorResponse(resp, e.getMessage());
@@ -126,61 +138,69 @@ public class TaskFormsServlet extends HttpServlet {
         }
     }
 
-    public JSONArray storeInRepository(TaskFormTemplateManager templateManager, String location, Repository repository) throws Exception {
+    public JSONArray storeInRepository(TaskFormTemplateManager templateManager,
+                                       String location,
+                                       Repository repository) throws Exception {
         JSONArray retArray = new JSONArray();
-        List<TaskFormInfo> taskForms =  templateManager.getTaskFormInformationList();
-        for(TaskFormInfo taskForm : taskForms) {
-            retArray.put(storeTaskForm(taskForm, location, repository));
+        List<TaskFormInfo> taskForms = templateManager.getTaskFormInformationList();
+        for (TaskFormInfo taskForm : taskForms) {
+            retArray.put(storeTaskForm(taskForm,
+                                       location,
+                                       repository));
         }
 
         return retArray;
     }
 
-    public JSONObject storeTaskForm(TaskFormInfo taskForm, String location, Repository repository) throws Exception {
+    public JSONObject storeTaskForm(TaskFormInfo taskForm,
+                                    String location,
+                                    Repository repository) throws Exception {
         try {
             JSONObject retObj = new JSONObject();
 
             // create the modeler form assets
 
-            taskForm.getModelerOutputs().forEach( new BiConsumer<String, String>() {
+            taskForm.getModelerOutputs().forEach(new BiConsumer<String, String>() {
                 @Override
-                public void accept( String extension, String content ) {
+                public void accept(String extension,
+                                   String content) {
                     try {
-                        repository.deleteAssetFromPath( taskForm.getPkgName() + "/" + taskForm.getId() + "." + extension );
-                        AssetBuilder modelerBuilder = AssetBuilderFactory.getAssetBuilder( Asset.AssetType.Byte );
-                        modelerBuilder.name( taskForm.getId() )
-                                .location( location )
-                                .type( extension )
-                                .content( content.getBytes( "UTF-8" ) );
+                        repository.deleteAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId() + "." + extension);
+                        AssetBuilder modelerBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+                        modelerBuilder.name(taskForm.getId())
+                                .location(location)
+                                .type(extension)
+                                .content(content.getBytes("UTF-8"));
 
-                        repository.createAsset( modelerBuilder.getAsset() );
+                        repository.createAsset(modelerBuilder.getAsset());
 
-                        Asset newModelerFormAsset = repository.loadAssetFromPath( taskForm.getPkgName() + "/" + taskForm.getId() + "." + extension );
+                        Asset newModelerFormAsset = repository.loadAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId() + "." + extension);
 
                         String modelerUniqueId = newModelerFormAsset.getUniqueId();
                         if (Base64.isBase64(modelerUniqueId)) {
                             byte[] decoded = Base64.decodeBase64(modelerUniqueId);
                             try {
-                                modelerUniqueId =  new String(decoded, "UTF-8");
+                                modelerUniqueId = new String(decoded,
+                                                             "UTF-8");
                             } catch (UnsupportedEncodingException e) {
                                 e.printStackTrace();
                             }
                         }
 
-                        if ( extension.equals( FORMMODELER_FILE_EXTENSION) || extension.equals( FORMMODELER_PREVIEW_FILE_EXTENSION) ) {
-                            retObj.put( "formuri", modelerUniqueId );
+                        if (extension.equals(FORMMODELER_FILE_EXTENSION) || extension.equals(FORMMODELER_PREVIEW_FILE_EXTENSION)) {
+                            retObj.put("formuri",
+                                       modelerUniqueId);
                         }
-                    } catch ( Exception ex ) {
-                        _logger.error( "Error creating form for: " +taskForm.getId() + "." + extension );
+                    } catch (Exception ex) {
+                        _logger.error("Error creating form for: " + taskForm.getId() + "." + extension);
                     }
                 }
-            } );
+            });
 
             return retObj;
-
-		} catch (Exception e) {
-			_logger.error(e.getMessage());
+        } catch (Exception e) {
+            _logger.error(e.getMessage());
             return new JSONObject();
-		}
+        }
     }
 }

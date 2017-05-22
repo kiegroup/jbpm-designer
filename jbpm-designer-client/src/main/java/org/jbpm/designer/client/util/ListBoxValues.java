@@ -29,6 +29,7 @@ import org.jbpm.designer.client.shared.util.StringUtils;
  * the user adds them.
  */
 public class ListBoxValues {
+
     protected List<String> acceptableValuesWithCustomValues = new ArrayList<String>();
     protected List<String> acceptableValuesWithoutCustomValues = new ArrayList<String>();
     protected List<String> customValues = new ArrayList<String>();
@@ -43,27 +44,34 @@ public class ListBoxValues {
     protected static final int DEFAULT_MAX_DISPLAY_LENGTH = -1;
 
     public interface ValueTester {
+
         String getNonCustomValueForUserString(String userValue);
-    };
+    }
+
+    ;
 
     ValueTester valueTester = null;
 
-    public ListBoxValues(final String customPrompt, final String editPrefix, final ValueTester valueTester, final int maxDisplayLength) {
+    public ListBoxValues(final String customPrompt,
+                         final String editPrefix,
+                         final ValueTester valueTester,
+                         final int maxDisplayLength) {
         this.customPrompt = customPrompt;
         this.editPrefix = editPrefix;
         this.valueTester = valueTester;
         this.maxDisplayLength = maxDisplayLength;
     }
 
-    public ListBoxValues(final String customPrompt, final String editPrefix, final ValueTester valueTester) {
+    public ListBoxValues(final String customPrompt,
+                         final String editPrefix,
+                         final ValueTester valueTester) {
         this.customPrompt = customPrompt;
         this.editPrefix = editPrefix;
         this.valueTester = valueTester;
         this.maxDisplayLength = DEFAULT_MAX_DISPLAY_LENGTH;
     }
 
-    public String getEditPrefix()
-    {
+    public String getEditPrefix() {
         return editPrefix;
     }
 
@@ -81,9 +89,9 @@ public class ListBoxValues {
         }
     }
 
-    public String addCustomValue(String newValue, String oldValue) {
-        if (oldValue != null && !oldValue.isEmpty())
-        {
+    public String addCustomValue(String newValue,
+                                 String oldValue) {
+        if (oldValue != null && !oldValue.isEmpty()) {
             if (acceptableValuesWithCustomValues.contains(oldValue)) {
                 acceptableValuesWithCustomValues.remove(oldValue);
             }
@@ -97,18 +105,17 @@ public class ListBoxValues {
             String newDisplayValue = addDisplayValue(newValue);
             if (!acceptableValuesWithCustomValues.contains(newDisplayValue)) {
                 int index = 1;
-                if (acceptableValuesWithCustomValues.size() < 1)
-                {
+                if (acceptableValuesWithCustomValues.size() < 1) {
                     index = acceptableValuesWithCustomValues.size();
                 }
-                acceptableValuesWithCustomValues.add(index, newDisplayValue);
+                acceptableValuesWithCustomValues.add(index,
+                                                     newDisplayValue);
             }
             if (!customValues.contains(newDisplayValue)) {
                 customValues.add(newDisplayValue);
             }
             return newDisplayValue;
-        }
-        else {
+        } else {
             return newValue;
         }
     }
@@ -126,24 +133,23 @@ public class ListBoxValues {
             int editPromptIndex = acceptableValuesWithCustomValues.indexOf(currentValue);
             if (editPromptIndex > -1) {
                 editPromptIndex++;
-            }
-            else if (acceptableValuesWithCustomValues.size() > 1) {
+            } else if (acceptableValuesWithCustomValues.size() > 1) {
                 editPromptIndex = 2;
-            }
-            else {
+            } else {
                 editPromptIndex = acceptableValuesWithCustomValues.size();
             }
-            acceptableValuesWithCustomValues.add(editPromptIndex, newEditValuePrompt);
-        }
-        else if (currentEditValuePrompt != null) {
+            acceptableValuesWithCustomValues.add(editPromptIndex,
+                                                 newEditValuePrompt);
+        } else if (currentEditValuePrompt != null) {
             acceptableValuesWithCustomValues.remove(currentEditValuePrompt);
         }
         return acceptableValuesWithCustomValues;
-   }
+    }
 
     public List<String> getAcceptableValuesWithCustomValues() {
         return acceptableValuesWithCustomValues;
     }
+
     public List<String> getAcceptableValuesWithoutCustomValues() {
         return acceptableValuesWithoutCustomValues;
     }
@@ -151,8 +157,7 @@ public class ListBoxValues {
     public boolean isCustomValue(String value) {
         if (value == null || value.isEmpty()) {
             return false;
-        }
-        else {
+        } else {
             return customValues.contains(value);
         }
     }
@@ -188,13 +193,12 @@ public class ListBoxValues {
 
     /**
      * Function for handling values which are longer than MAX_DISPLAY_LENGTH such as very long string constants.
-     *
+     * <p>
      * Creates display value for a value and adds it to the mapDisplayValuesToValues map.
      * If display value already present in mapDisplayValuesToValues, returns it.
-     *
+     * <p>
      * The first display value for values which are the same is of the form "\"abcdeabcde...\"" and subsequent display values
      * are of the form "\"abcdeabcde...(01)\""
-     *
      * @param value the value
      * @return the displayValue for value
      */
@@ -210,13 +214,15 @@ public class ListBoxValues {
         String displayValue = value;
         // Create special displayValue only for quoted constants longer than maxDisplayLength
         if (maxDisplayLength > 0 && value != null && StringUtils.isQuotedConstant(value) && value.length() > maxDisplayLength + 2) {
-            String displayValueStart = value.substring(0, maxDisplayLength + 1);
+            String displayValueStart = value.substring(0,
+                                                       maxDisplayLength + 1);
             int nextIndex = 0;
             for (String existingDisplayValue : mapDisplayValuesToValues.keySet()) {
                 if (existingDisplayValue.startsWith(displayValueStart)) {
                     // Is it like "\"abcdeabcde...(01)\""
                     if (existingDisplayValue.length() == (maxDisplayLength + 9)) {
-                        String sExistingIndex = existingDisplayValue.substring(existingDisplayValue.length() - 4, existingDisplayValue.length() - 2);
+                        String sExistingIndex = existingDisplayValue.substring(existingDisplayValue.length() - 4,
+                                                                               existingDisplayValue.length() - 2);
                         try {
                             int existingIndex = Integer.parseInt(sExistingIndex);
                             if (nextIndex <= existingIndex) {
@@ -234,8 +240,7 @@ public class ListBoxValues {
             }
             if (nextIndex == 0) {
                 displayValue = displayValueStart + "..." + "\"";
-            }
-            else {
+            } else {
                 String sNextIndex = Integer.toString(nextIndex);
                 if (nextIndex < 10) {
                     sNextIndex = "0" + sNextIndex;
@@ -243,14 +248,14 @@ public class ListBoxValues {
                 displayValue = displayValueStart + "...(" + sNextIndex + ")\"";
             }
         }
-        mapDisplayValuesToValues.put(displayValue, value);
+        mapDisplayValuesToValues.put(displayValue,
+                                     value);
 
         return displayValue;
     }
 
     /**
      * Returns real unquoted value for a DisplayValue
-     *
      * @param key
      * @return
      */
@@ -264,8 +269,7 @@ public class ListBoxValues {
     public String getNonCustomValueForUserString(String userValue) {
         if (valueTester != null) {
             return valueTester.getNonCustomValueForUserString(userValue);
-        }
-        else {
+        } else {
             return null;
         }
     }

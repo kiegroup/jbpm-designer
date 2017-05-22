@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,21 +16,20 @@
 
 package org.jbpm.designer.expressioneditor.marshalling;
 
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonToken;
-import org.jbpm.designer.expressioneditor.model.Condition;
-import org.jbpm.designer.expressioneditor.model.ExpressionEditorMessage;
-import org.jbpm.designer.expressioneditor.model.ConditionExpression;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.JsonFactory;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonToken;
+import org.jbpm.designer.expressioneditor.model.Condition;
+import org.jbpm.designer.expressioneditor.model.ConditionExpression;
+import org.jbpm.designer.expressioneditor.model.ExpressionEditorMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExpressionEditorMessageJSONUnmarshaller {
 
@@ -45,7 +44,8 @@ public class ExpressionEditorMessageJSONUnmarshaller {
         try {
             parser = jsonFactory.createJsonParser(jsonMessage);
         } catch (Exception e) {
-            logger.error("It was not possible to create a json parser for the jsonMessage: " + jsonMessage, e);
+            logger.error("It was not possible to create a json parser for the jsonMessage: " + jsonMessage,
+                         e);
             throw e;
         }
         return unmarshall(parser);
@@ -57,12 +57,12 @@ public class ExpressionEditorMessageJSONUnmarshaller {
         try {
             parser = jsonFactory.createJsonParser(inputStream);
         } catch (Exception e) {
-            logger.error("It was not possible to create the a json parser for the inputStream: " + inputStream, e);
+            logger.error("It was not possible to create the a json parser for the inputStream: " + inputStream,
+                         e);
             throw e;
         }
         return unmarshall(parser);
     }
-
 
     private ExpressionEditorMessage unmarshall(JsonParser parser) throws Exception {
         ExpressionEditorMessage message = new ExpressionEditorMessage();
@@ -121,7 +121,7 @@ public class ExpressionEditorMessageJSONUnmarshaller {
         return result;
     }
 
-    private Condition parseCondition(JsonParser parser)  throws IOException, JsonParseException {
+    private Condition parseCondition(JsonParser parser) throws IOException, JsonParseException {
         Condition condition = null;
         if (parser.getCurrentToken() == JsonToken.START_OBJECT && parser.nextToken() != JsonToken.END_OBJECT) {
             condition = new Condition();
@@ -140,5 +140,4 @@ public class ExpressionEditorMessageJSONUnmarshaller {
         }
         return condition;
     }
-
 }

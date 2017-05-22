@@ -15,6 +15,16 @@
 
 package org.jbpm.designer.web.server;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import javax.inject.Inject;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.codec.binary.Base64;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
@@ -26,23 +36,12 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-
-import javax.inject.Inject;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-/** 
- * 
+/**
  * Used to store sources to local file system.
  */
 public class FileStoreServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L;
     private static final Logger _logger = LoggerFactory.getLogger(FileStoreServlet.class);
 
     protected IDiagramProfile profile;
@@ -50,18 +49,19 @@ public class FileStoreServlet extends HttpServlet {
     @Inject
     private IDiagramProfileService _profileService = null;
 
-	@Override
+    @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPost(HttpServletRequest req,
+                          HttpServletResponse resp)
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-    	String fname = req.getParameter("fname");
-    	String fext = req.getParameter("fext");
-    	String data = req.getParameter("data");
+        String fname = req.getParameter("fname");
+        String fext = req.getParameter("fext");
+        String data = req.getParameter("data");
         String dataEncoded = req.getParameter("data_encoded");
 
         String storeInRepo = req.getParameter("storeinrepo");
@@ -69,54 +69,65 @@ public class FileStoreServlet extends HttpServlet {
         String uuid = Utils.getUUID(req);
         String processid = req.getParameter("processid");
 
-        if(profile == null) {
-            profile = _profileService.findProfile(req, profileName);
+        if (profile == null) {
+            profile = _profileService.findProfile(req,
+                                                  profileName);
         }
         Repository repository = profile.getRepository();
 
         String retData;
-        if(dataEncoded != null && dataEncoded.length() > 0) {
+        if (dataEncoded != null && dataEncoded.length() > 0) {
             retData = new String(Base64.decodeBase64(dataEncoded));
         } else {
             retData = data;
         }
 
-    	if(fext != null && (fext.equals("bpmn2") || fext.equals("svg"))) {
-    		try {
-				if(fext.equals("bpmn2")) {
+        if (fext != null && (fext.equals("bpmn2") || fext.equals("svg"))) {
+            try {
+                if (fext.equals("bpmn2")) {
                     resp.setContentType("application/xml; charset=UTF-8");
-                } else if(fext.equals("svg")) {
+                } else if (fext.equals("svg")) {
                     resp.setContentType("image/svg+xml; charset=UTF-8");
                 }
 
                 if (processid != null) {
                     resp.setHeader("Content-Disposition",
-                            "attachment; filename=\"" + processid + "." + fext + "\"");
-                } else if(uuid != null) {
+                                   "attachment; filename=\"" + processid + "." + fext + "\"");
+                } else if (uuid != null) {
                     resp.setHeader("Content-Disposition",
-                            "attachment; filename=\"" + uuid + "." + fext + "\"");
+                                   "attachment; filename=\"" + uuid + "." + fext + "\"");
                 } else {
                     resp.setHeader("Content-Disposition",
-                            "attachment; filename=\"" + fname + "." + fext + "\"");
+                                   "attachment; filename=\"" + fname + "." + fext + "\"");
                 }
                 resp.getWriter().write(retData);
-			} catch (Exception e) {
-				resp.sendError(500, e.getMessage());
-			}
-
-            if(storeInRepo != null && storeInRepo.equals("true")) {
-                storeInRepository(uuid, retData, fext, processid, repository);
+            } catch (Exception e) {
+                resp.sendError(500,
+                               e.getMessage());
             }
-    	}
+
+            if (storeInRepo != null && storeInRepo.equals("true")) {
+                storeInRepository(uuid,
+                                  retData,
+                                  fext,
+                                  processid,
+                                  repository);
+            }
+        }
     }
 
-    private void storeInRepository(String uuid, String retData, String fext, String processid, Repository repository) {
+    private void storeInRepository(String uuid,
+                                   String retData,
+                                   String fext,
+                                   String processid,
+                                   Repository repository) {
         try {
-            if(processid != null) {
+            if (processid != null) {
                 Asset<byte[]> processAsset = repository.loadAsset(uuid);
 
-                if(processid.startsWith(".")) {
-                    processid = processid.substring(1, processid.length());
+                if (processid.startsWith(".")) {
+                    processid = processid.substring(1,
+                                                    processid.length());
                 }
                 String assetFullName = processid + "-" + fext + "." + fext;
 

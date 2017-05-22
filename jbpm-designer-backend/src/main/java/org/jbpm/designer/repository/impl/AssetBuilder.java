@@ -16,7 +16,6 @@
 package org.jbpm.designer.repository.impl;
 
 import org.jbpm.designer.repository.Asset;
-import org.jbpm.designer.repository.UriUtils;
 
 public class AssetBuilder {
 
@@ -84,6 +83,4 @@ public class AssetBuilder {
 //        this.asset.setName(UriUtils.decode(this.asset.getName()));
         return this;
     }
-
-
 }

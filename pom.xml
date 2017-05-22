@@ -24,6 +24,8 @@
 
   <properties>
     <port>8888</port>
+    <checkstyle.failOnViolation>true</checkstyle.failOnViolation>
+    <checkstyle.logViolationsToConsole>true</checkstyle.logViolationsToConsole>
   </properties>
 
   <modules>

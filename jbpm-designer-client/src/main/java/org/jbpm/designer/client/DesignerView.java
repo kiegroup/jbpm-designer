@@ -22,7 +22,9 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import org.kie.workbench.common.widgets.metadata.client.KieEditorView;
 
 public interface DesignerView
-        extends KieEditorView, RequiresResize, ProvidesResize {
+        extends KieEditorView,
+                RequiresResize,
+                ProvidesResize {
 
     boolean canClose();
 
@@ -38,12 +40,12 @@ public interface DesignerView
 
     void raiseEventReload();
 
-    void setup(String editorID, Map<String, String> editorParameters);
+    void setup(String editorID,
+               Map<String, String> editorParameters);
 
     void setProcessUnSaved();
 
     void askOpenInXMLEditor();
 
     void raiseEventUpdateLock();
-
 }

@@ -15,6 +15,9 @@
 
 package org.jbpm.designer.web.server;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
 import org.jbpm.designer.helper.TestServletConfig;
@@ -29,13 +32,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
+import static org.junit.Assert.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-public class FormWidgetServletTest  extends RepositoryBaseTest {
+public class FormWidgetServletTest extends RepositoryBaseTest {
 
     @Before
     public void setup() {
@@ -50,7 +49,7 @@ public class FormWidgetServletTest  extends RepositoryBaseTest {
     @Test
     public void testGetFormWidgets() throws Exception {
         Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("form widget content")
@@ -61,26 +60,29 @@ public class FormWidgetServletTest  extends RepositoryBaseTest {
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
 
-        params.put("action", "getwidgets");
-        params.put("profile", "jbpm");
-
+        params.put("action",
+                   "getwidgets");
+        params.put("profile",
+                   "jbpm");
 
         FormWidgetServlet formWidgetServlet = new FormWidgetServlet();
         formWidgetServlet.setProfile(profile);
 
         formWidgetServlet.init(new TestServletConfig(new TestServletContext(repository)));
-        TestHttpServletResponse response = new  TestHttpServletResponse();
-        formWidgetServlet.doPost(new TestHttpServletRequest(params), response);
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        formWidgetServlet.doPost(new TestHttpServletRequest(params),
+                                 response);
 
         String widgets = new String(response.getContent());
         assertNotNull(widgets);
-        assertEquals("{\"testformwidget\":\"testformwidget\"}", widgets);
+        assertEquals("{\"testformwidget\":\"testformwidget\"}",
+                     widgets);
     }
 
     @Test
     public void testGetFormWidgetSource() throws Exception {
         Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("form widget content")
@@ -91,20 +93,24 @@ public class FormWidgetServletTest  extends RepositoryBaseTest {
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
 
-        params.put("action", "getwidgetsource");
-        params.put("profile", "jbpm");
-        params.put("widgetname", "testformwidget");
-
+        params.put("action",
+                   "getwidgetsource");
+        params.put("profile",
+                   "jbpm");
+        params.put("widgetname",
+                   "testformwidget");
 
         FormWidgetServlet formWidgetServlet = new FormWidgetServlet();
         formWidgetServlet.setProfile(profile);
 
         formWidgetServlet.init(new TestServletConfig(new TestServletContext(repository)));
-        TestHttpServletResponse response = new  TestHttpServletResponse();
-        formWidgetServlet.doPost(new TestHttpServletRequest(params), response);
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        formWidgetServlet.doPost(new TestHttpServletRequest(params),
+                                 response);
 
         String widgets = new String(response.getContent());
         assertNotNull(widgets);
-        assertEquals("form widget content", widgets);
+        assertEquals("form widget content",
+                     widgets);
     }
 }

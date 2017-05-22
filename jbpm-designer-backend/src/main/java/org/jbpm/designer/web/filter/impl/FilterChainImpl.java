@@ -18,7 +18,6 @@ package org.jbpm.designer.web.filter.impl;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -26,29 +25,30 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 /**
- * 
  * @author Antoine Toulme
- * An implementation of filter chain to delegate to a series of stored filters.
- *
+ *         An implementation of filter chain to delegate to a series of stored filters.
  */
 public class FilterChainImpl implements FilterChain {
-    
+
     private LinkedList<Filter> _filters = new LinkedList<Filter>();
     private FilterChain _chain;
-    
-    public FilterChainImpl(Collection<Filter> filters, FilterChain chain) {
+
+    public FilterChainImpl(Collection<Filter> filters,
+                           FilterChain chain) {
         _filters.addAll(filters);
         _chain = chain;
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
+    public void doFilter(ServletRequest request,
+                         ServletResponse response) throws IOException, ServletException {
         if (!_filters.isEmpty()) {
             // remove the first element from the chain and pass itself to the filter.
             Filter filter = _filters.pop();
             FilterChain chain = this;
             //when reaching the last filter, pass the original chain.
-            filter.doFilter(request, response, chain);
+            filter.doFilter(request,
+                            response,
+                            chain);
         }
     }
-
 }

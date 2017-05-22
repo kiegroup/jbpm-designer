@@ -46,20 +46,19 @@ public class DesignerNotificationPopupsManager {
     private List<NotificationPopupView> activeNotifications = new ArrayList<NotificationPopupView>();
     private List<NotificationPopupView> deactiveNotifications = new ArrayList<NotificationPopupView>();
 
-
     /**
      * Display a Notification message
      * @param event
      */
-    public void addNotification( @Observes final DesignerNotificationEvent event ) {
+    public void addNotification(@Observes final DesignerNotificationEvent event) {
         if (user.getIdentifier().equals(event.getUserId())) {
 
-            if(event.getNotification() != null && !event.getNotification().equals("openinxmleditor")) {
+            if (event.getNotification() != null && !event.getNotification().equals("openinxmleditor")) {
                 //Create a Notification pop-up. Because it is instantiated with CDI we need to manually destroy it when finished
                 final NotificationPopupView view = iocManager.lookupBean(NotificationPopupView.class).getInstance();
                 activeNotifications.add(view);
                 view.setPopupPosition(getMargin(),
-                        activeNotifications.size() * SPACING);
+                                      activeNotifications.size() * SPACING);
 
                 view.setNotification(event.getNotification());
                 view.setType(event.getType());
@@ -72,7 +71,6 @@ public class DesignerNotificationPopupsManager {
                         deactiveNotifications.add(view);
                         remove();
                     }
-
                 });
             }
         }
@@ -80,35 +78,35 @@ public class DesignerNotificationPopupsManager {
 
     //80% of screen width
     private int getWidth() {
-        return (int) ( Window.getClientWidth() * 0.8 );
+        return (int) (Window.getClientWidth() * 0.8);
     }
 
     //10% of screen width
     private int getMargin() {
-        return (int) ( ( Window.getClientWidth() - getWidth() ) / 2 );
+        return (int) ((Window.getClientWidth() - getWidth()) / 2);
     }
 
     //Remove a notification message. Recursive until all pending removals have been completed.
     private void remove() {
-        if ( removing ) {
+        if (removing) {
             return;
         }
-        if ( deactiveNotifications.size() == 0 ) {
+        if (deactiveNotifications.size() == 0) {
             return;
         }
         removing = true;
-        final NotificationPopupView view = deactiveNotifications.get( 0 );
-        final LinearFadeOutAnimation fadeOutAnimation = new LinearFadeOutAnimation( view ) {
+        final NotificationPopupView view = deactiveNotifications.get(0);
+        final LinearFadeOutAnimation fadeOutAnimation = new LinearFadeOutAnimation(view) {
 
             @Override
-            public void onUpdate( double progress ) {
-                super.onUpdate( progress );
-                for ( int i = 0; i < activeNotifications.size(); i++ ) {
-                    NotificationPopupView v = activeNotifications.get( i );
+            public void onUpdate(double progress) {
+                super.onUpdate(progress);
+                for (int i = 0; i < activeNotifications.size(); i++) {
+                    NotificationPopupView v = activeNotifications.get(i);
                     final int left = v.getPopupLeft();
-                    final int top = (int) ( ( ( i + 1 ) * SPACING ) - ( progress * SPACING ) );
-                    v.setPopupPosition( left,
-                            top );
+                    final int top = (int) (((i + 1) * SPACING) - (progress * SPACING));
+                    v.setPopupPosition(left,
+                                       top);
                 }
             }
 
@@ -116,15 +114,13 @@ public class DesignerNotificationPopupsManager {
             public void onComplete() {
                 super.onComplete();
                 view.hide();
-                deactiveNotifications.remove( view );
-                activeNotifications.remove( view );
-                iocManager.destroyBean( view );
+                deactiveNotifications.remove(view);
+                activeNotifications.remove(view);
+                iocManager.destroyBean(view);
                 removing = false;
                 remove();
             }
-
         };
-        fadeOutAnimation.run( 500 );
+        fadeOutAnimation.run(500);
     }
-
 }

@@ -16,6 +16,11 @@
 
 package org.jbpm.designer.web.server;
 
+import java.io.File;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.jbpm.designer.helper.TestHttpServletRequest;
@@ -24,14 +29,7 @@ import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.Test;
 
-import java.io.File;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ProcessInfoServletTest {
 
@@ -44,16 +42,22 @@ public class ProcessInfoServletTest {
         String encodedJson = Base64.encodeBase64String(UriUtils.encode(rawJson.toString()).getBytes("UTF-8"));
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("json", encodedJson);
-        params.put("profile", "jbpm");
-        params.put("ppdata", "Email,Log,Rest,WebService");
-        params.put("gatewayid", "_FD098FB2-3615-4C26-A5F6-06D4B453E234");
+        params.put("json",
+                   encodedJson);
+        params.put("profile",
+                   "jbpm");
+        params.put("ppdata",
+                   "Email,Log,Rest,WebService");
+        params.put("gatewayid",
+                   "_FD098FB2-3615-4C26-A5F6-06D4B453E234");
 
         TestHttpServletResponse response = new TestHttpServletResponse();
-        processInfoServlet.doPost(new TestHttpServletRequest(params), response);
+        processInfoServlet.doPost(new TestHttpServletRequest(params),
+                                  response);
 
         int responseStatus = response.getStatus();
-        assertEquals(0, responseStatus);
+        assertEquals(0,
+                     responseStatus);
 
         String responseText = new String(response.getContent());
         assertNotNull(responseText);

@@ -58,39 +58,44 @@ public class DesignerPopUpPresenter extends Composite implements RequiresResize 
     @PostConstruct
     public void init() {
         container.clear();
-        container.add( designerWidget.getView() );
+        container.add(designerWidget.getView());
     }
 
     @OnOpen
     public void onOpen() {
-        designerWidget.setSize(1000, 600);
+        designerWidget.setSize(1000,
+                               600);
     }
 
     @OnStartup
-    public void onStartup( final PlaceRequest place ) {
+    public void onStartup(final PlaceRequest place) {
         // read only set to true for now
         this.isReadOnly = true;
 
-        if ( place instanceof PathPlaceRequest ) {
-            assetService.call( new RemoteCallback<String>() {
+        if (place instanceof PathPlaceRequest) {
+            assetService.call(new RemoteCallback<String>() {
                 @Override
-                public void callback( final String editorID ) {
-                    String url = GWT.getHostPageBaseURL().replaceFirst( "/" + GWT.getModuleName() + "/", "" );
-                    assetService.call( new RemoteCallback<Map<String, String>>() {
+                public void callback(final String editorID) {
+                    String url = GWT.getHostPageBaseURL().replaceFirst("/" + GWT.getModuleName() + "/",
+                                                                       "");
+                    assetService.call(new RemoteCallback<Map<String, String>>() {
                         @Override
-                        public void callback( Map<String, String> editorParameters ) {
-                            if ( editorParameters != null ) {
-                                if ( editorParameters.containsKey( "readonly" ) ) {
-                                    isReadOnly = Boolean.valueOf( editorParameters.get( "readonly" ) );
+                        public void callback(Map<String, String> editorParameters) {
+                            if (editorParameters != null) {
+                                if (editorParameters.containsKey("readonly")) {
+                                    isReadOnly = Boolean.valueOf(editorParameters.get("readonly"));
                                 }
                                 designerEditorParametersPublisher.publish(editorParameters);
-                                designerWidget.setup( editorID, editorParameters );
+                                designerWidget.setup(editorID,
+                                                     editorParameters);
                             }
                         }
-
-                    } ).getEditorParameters( ( (PathPlaceRequest) place ).getPath(), editorID, url, place );
+                    }).getEditorParameters(((PathPlaceRequest) place).getPath(),
+                                           editorID,
+                                           url,
+                                           place);
                 }
-            } ).getEditorID();
+            }).getEditorID();
         }
     }
 
@@ -111,11 +116,10 @@ public class DesignerPopUpPresenter extends Composite implements RequiresResize 
         int width = getContainer().getParent().getOffsetWidth();
 
         getContainer().setWidth(width + "px");
-        getContainer().setHeight( height + "px");
+        getContainer().setHeight(height + "px");
     }
 
     public FlowPanel getContainer() {
         return this.container;
     }
-
 }

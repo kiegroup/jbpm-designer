@@ -19,6 +19,8 @@ package org.jbpm.designer.client.shared;
 import org.jboss.errai.databinding.client.api.Bindable;
 import org.jbpm.designer.client.shared.Variable.VariableType;
 
+import static java.lang.Math.toIntExact;
+
 /**
  * Class which is bound to rows in the DataIOEditor
  */
@@ -33,6 +35,8 @@ public class AssignmentRow {
     private String processVar;
     private String constant;
 
+
+
     // Field which is incremented for each row.
     // Required to implement equals function which needs a unique field
     private static long lastId = 0;
@@ -41,7 +45,12 @@ public class AssignmentRow {
         this.id = lastId++;
     }
 
-    public AssignmentRow(String name, VariableType variableType, String dataType, String customDataType, String processVar, String constant) {
+    public AssignmentRow(String name,
+                         VariableType variableType,
+                         String dataType,
+                         String customDataType,
+                         String processVar,
+                         String constant) {
         this.id = lastId++;
         this.name = name;
         this.variableType = variableType;
@@ -51,7 +60,7 @@ public class AssignmentRow {
         this.constant = constant;
     }
 
-    public long getId()  {
+    public long getId() {
         return id;
     }
 
@@ -110,30 +119,37 @@ public class AssignmentRow {
     public boolean isComplete() {
         if (name == null || name.isEmpty()) {
             return false;
-        }
-        else if ((dataType == null || dataType.isEmpty())
+        } else if ((dataType == null || dataType.isEmpty())
                 && (customDataType == null || customDataType.isEmpty())) {
             return false;
-        }
-        else if ((processVar == null || processVar.isEmpty())
+        } else if ((processVar == null || processVar.isEmpty())
                 && (constant == null || constant.isEmpty())) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
+        }
         AssignmentRow other = (AssignmentRow) obj;
         return (id == other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 17;
+        return prime * result + toIntExact(id);
     }
 
     @Override

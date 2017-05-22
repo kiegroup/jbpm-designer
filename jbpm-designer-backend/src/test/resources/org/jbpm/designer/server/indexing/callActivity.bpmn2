@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <definitions id="Definition"
              targetNamespace="http://www.example.org/MinimalExample"
              typeLanguage="http://www.java.com/javaTypes"
@@ -9,7 +9,7 @@
              xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
              xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
              xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
-             xmlns:tns="http://www.jboss.org/drools">
+>
 
   <process processType="Private" isExecutable="true" id="ParentProcess" name="Parent Process" >
 

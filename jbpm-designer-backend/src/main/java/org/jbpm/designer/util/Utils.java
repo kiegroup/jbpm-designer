@@ -33,16 +33,18 @@ import org.jboss.drools.MetaDataType;
 public class Utils {
 
     public static String getUUID(HttpServletRequest request) {
-        return getEncodedParam(request, "uuid");
+        return getEncodedParam(request,
+                               "uuid");
     }
 
-    public static String getEncodedParam(HttpServletRequest request, String paramName) {
+    public static String getEncodedParam(HttpServletRequest request,
+                                         String paramName) {
         String uniqueId = request.getParameter(paramName);
         if (uniqueId != null && Base64.isBase64(uniqueId)) {
             byte[] decoded = Base64.decodeBase64(uniqueId);
             try {
-                uniqueId = new String(decoded, "UTF-8");
-
+                uniqueId = new String(decoded,
+                                      "UTF-8");
             } catch (UnsupportedEncodingException e) {
 
             }
@@ -61,7 +63,8 @@ public class Utils {
      */
     public static String toBPMNIdentifier(String str) {
 
-        str = str.replaceAll("\\s+", "");
+        str = str.replaceAll("\\s+",
+                             "");
         StringBuilder sb = new StringBuilder(str.length());
 
         for (int i = 0; i < str.length(); i++) {
@@ -107,21 +110,24 @@ public class Utils {
         StringBuilder sb = new StringBuilder(4);
 
         for (int i = 0; i < bytes.length; i++) {
-            sb.append(String.format("%x", bytes[i]));
+            sb.append(String.format("%x",
+                                    bytes[i]));
         }
         return sb.toString().toUpperCase();
     }
 
-    public static String getMetaDataValue (List<ExtensionAttributeValue> extensionValues, String metaDataName) {
-        if(extensionValues != null && extensionValues.size() > 0) {
-            for(ExtensionAttributeValue extattrval : extensionValues) {
+    public static String getMetaDataValue(List<ExtensionAttributeValue> extensionValues,
+                                          String metaDataName) {
+        if (extensionValues != null && extensionValues.size() > 0) {
+            for (ExtensionAttributeValue extattrval : extensionValues) {
                 FeatureMap extensionElements = extattrval.getValue();
 
                 List<MetaDataType> metadataExtensions = (List<MetaDataType>) extensionElements
-                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, true);
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA,
+                             true);
 
-                for(MetaDataType metaType : metadataExtensions) {
-                    if(metaType.getName() != null && metaType.getName().equals(metaDataName) && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
+                for (MetaDataType metaType : metadataExtensions) {
+                    if (metaType.getName() != null && metaType.getName().equals(metaDataName) && metaType.getMetaValue() != null && metaType.getMetaValue().length() > 0) {
                         return metaType.getMetaValue();
                     }
                 }
@@ -131,8 +137,10 @@ public class Utils {
         return null;
     }
 
-    public static void setMetaDataExtensionValue(BaseElement element, String metaDataName, String metaDataValue) {
-        if(element != null) {
+    public static void setMetaDataExtensionValue(BaseElement element,
+                                                 String metaDataName,
+                                                 String metaDataValue) {
+        if (element != null) {
             MetaDataType eleMetadata = DroolsFactory.eINSTANCE.createMetaDataType();
             eleMetadata.setName(metaDataName);
             eleMetadata.setMetaValue(metaDataValue);
@@ -142,13 +150,14 @@ public class Utils {
                 element.getExtensionValues().add(extensionElement);
             }
             FeatureMap.Entry eleExtensionElementEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(
-                    (EStructuralFeature.Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA, eleMetadata);
+                    (EStructuralFeature.Internal) DroolsPackage.Literals.DOCUMENT_ROOT__META_DATA,
+                    eleMetadata);
             element.getExtensionValues().get(0).getValue().add(eleExtensionElementEntry);
         }
     }
 
     public static String getDefaultProfileName(String profileName) {
-        if(profileName == null || profileName.trim().isEmpty()) {
+        if (profileName == null || profileName.trim().isEmpty()) {
             return "jbpm";
         } else {
             return profileName;

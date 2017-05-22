@@ -19,7 +19,6 @@ import java.io.File;
 import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
@@ -32,7 +31,7 @@ import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.Path;
 
 @RequestScoped
-public class  RepositoryDescriptor {
+public class RepositoryDescriptor {
 
     private static final String SEP = File.separator;
 
@@ -40,7 +39,6 @@ public class  RepositoryDescriptor {
     private Instance<HttpServletRequest> httpRequest;
     @Inject
     private RepositoryDescriptorProvider provider;
-
 
     private URI repositoryRoot;
     private Path repositoryRootPath;
@@ -52,7 +50,9 @@ public class  RepositoryDescriptor {
 
     }
 
-    public RepositoryDescriptor(URI repositoryRoot, FileSystem fileSystem, Path repositoryRootPath) {
+    public RepositoryDescriptor(URI repositoryRoot,
+                                FileSystem fileSystem,
+                                Path repositoryRootPath) {
         this.repositoryRoot = repositoryRoot;
         this.fileSystem = fileSystem;
         this.repositoryRootPath = repositoryRootPath;
@@ -67,7 +67,8 @@ public class  RepositoryDescriptor {
     public String getStringRepositoryRoot() {
         String repo = this.repositoryRoot.toString();
         if (repo.endsWith("/")) {
-            return repo.substring(0, repo.length() - 1);
+            return repo.substring(0,
+                                  repo.length() - 1);
         }
 
         return repo;
@@ -130,14 +131,13 @@ public class  RepositoryDescriptor {
                         repositoryAlias = matcher.group(3);
                     }
                 }
-
             }
 
-            RepositoryDescriptor found = provider.getRepositoryDescriptor(repositoryAlias, branchName);
+            RepositoryDescriptor found = provider.getRepositoryDescriptor(repositoryAlias,
+                                                                          branchName);
             this.fileSystem = found.getFileSystem();
             this.repositoryRoot = found.getRepositoryRoot();
             this.repositoryRootPath = found.getRepositoryRootPath();
         }
     }
-
 }

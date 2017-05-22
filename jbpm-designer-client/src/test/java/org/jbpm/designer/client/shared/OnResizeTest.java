@@ -80,14 +80,21 @@ public class OnResizeTest {
 
         designerWidgetView.onResize();
 
-        verify(designerWidgetView).setPixelSize(pixelSizeCaptorWidth.capture(), pixelSizeCaptorHeight.capture());
-        verify(inlineFrame, times(2)).setHeight(captorHeight.capture());
-        verify(inlineFrame, times(2)).setWidth(captorWidth.capture());
+        verify(designerWidgetView).setPixelSize(pixelSizeCaptorWidth.capture(),
+                                                pixelSizeCaptorHeight.capture());
+        verify(inlineFrame,
+               times(2)).setHeight(captorHeight.capture());
+        verify(inlineFrame,
+               times(2)).setWidth(captorWidth.capture());
 
-        assertEquals(100, (int) pixelSizeCaptorWidth.getValue());
-        assertEquals(100, (int) pixelSizeCaptorHeight.getValue());
-        assertEquals("95px", Iterables.getLast(captorHeight.getAllValues()));
-        assertEquals("100%", Iterables.getLast(captorWidth.getAllValues()));
+        assertEquals(100,
+                     (int) pixelSizeCaptorWidth.getValue());
+        assertEquals(100,
+                     (int) pixelSizeCaptorHeight.getValue());
+        assertEquals("95px",
+                     Iterables.getLast(captorHeight.getAllValues()));
+        assertEquals("100%",
+                     Iterables.getLast(captorWidth.getAllValues()));
     }
 
     @Test
@@ -106,8 +113,10 @@ public class OnResizeTest {
         verify(parentContaner).setWidth(pixelSizeCaptorWidth.capture());
         verify(parentContaner).setHeight(pixelSizeCaptorHeight.capture());
 
-        assertEquals("100px", pixelSizeCaptorWidth.getValue());
-        assertEquals("100px", pixelSizeCaptorHeight.getValue());
+        assertEquals("100px",
+                     pixelSizeCaptorWidth.getValue());
+        assertEquals("100px",
+                     pixelSizeCaptorHeight.getValue());
     }
 
     @Test
@@ -127,15 +136,21 @@ public class OnResizeTest {
 
         designerViewImpl.onResize();
 
-        verify(designerViewImpl).setPixelSize(pixelSizeCaptorWidth.capture(), pixelSizeCaptorHeight.capture());
+        verify(designerViewImpl).setPixelSize(pixelSizeCaptorWidth.capture(),
+                                              pixelSizeCaptorHeight.capture());
         verify(designerViewImpl).setHeight(captorHeight.capture());
         verify(designerViewImpl).setWidth(captorWidth.capture());
 
-        assertEquals(100, (int) pixelSizeCaptorWidth.getValue());
-        assertEquals(100, (int) pixelSizeCaptorHeight.getValue());
-        assertEquals("95px", captorHeight.getValue());
-        assertEquals("100px", captorWidth.getValue());
+        assertEquals(100,
+                     (int) pixelSizeCaptorWidth.getValue());
+        assertEquals(100,
+                     (int) pixelSizeCaptorHeight.getValue());
+        assertEquals("95px",
+                     captorHeight.getValue());
+        assertEquals("100px",
+                     captorWidth.getValue());
 
-        verify(designerWidgetView).setPixelSize(anyInt(), anyInt());
+        verify(designerWidgetView).setPixelSize(anyInt(),
+                                                anyInt());
     }
 }

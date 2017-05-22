@@ -15,31 +15,33 @@
  */
 package org.jbpm.designer.web.plugin.impl;
 
-import org.jbpm.designer.util.ConfigurationProvider;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-
 import javax.servlet.ServletContext;
+
+import org.jbpm.designer.util.ConfigurationProvider;
 
 /**
  * @author Antoine Toulme
- * A default implementation of a plugin for plugins defined inside the Process Designer web application
+ *         A default implementation of a plugin for plugins defined inside the Process Designer web application
  */
 public class LocalResource {
 
     private String _path;
     private String _name;
 
-    public LocalResource(String name, String path, ServletContext context) {
+    public LocalResource(String name,
+                         String path,
+                         ServletContext context) {
         this._name = name;
         StringBuilder localPath = new StringBuilder();
         localPath.append(ConfigurationProvider.getInstance().getDesignerContext()).append("js").append("/").append("Plugins").append("/").append(path);
         this._path = context.getRealPath(localPath.toString());
     }
-    
-    public LocalResource(String name, String path) {
+
+    public LocalResource(String name,
+                         String path) {
         this._name = name;
         this._path = path;
     }

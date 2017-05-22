@@ -20,7 +20,6 @@ import java.util.Map;
 
 /**
  * The interface defining a plugin.
- * 
  * @author Antoine Toulme
  */
 public interface IDiagramPlugin {
@@ -28,23 +27,22 @@ public interface IDiagramPlugin {
     /**
      * @return the name of the plugin.
      * The name of the plugin should be unique amongst all plugins, so you should make sure to qualify it.
-     * 
      */
     public String getName();
-    
+
     /**
      * @return the contents of a plugin.
      * The contents of the plugin file.
-     * 
+     * <p>
      * The object returned by this method MUST be closed explicitely.
      */
     public InputStream getContents();
-    
+
     /**
      * @return true if the plugin should be considered a core plugin and loaded for all profiles.
      */
     public boolean isCore();
-    
+
     /**
      * @return the properties of the plugin
      */

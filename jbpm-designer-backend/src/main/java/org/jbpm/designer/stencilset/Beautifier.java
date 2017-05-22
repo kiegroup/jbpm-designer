@@ -73,14 +73,24 @@ public class Beautifier {
             ScriptableObject scope = new ImporterTopLevel(cx);
 
             // evaluate stencil set and beautifier
-            cx.evaluateString(scope, stencilsetScript, "<cmd>", 1, null);
-            cx.evaluateString(scope, beautifierScript, "<cmd>", 1, null);
+            cx.evaluateString(scope,
+                              stencilsetScript,
+                              "<cmd>",
+                              1,
+                              null);
+            cx.evaluateString(scope,
+                              beautifierScript,
+                              "<cmd>",
+                              1,
+                              null);
 
             // run beautifier on stencil set
-            String result = (String) ScriptableObject.callMethod(scope, "beautify", new Object[] { scope.get("set", scope) });
+            String result = (String) ScriptableObject.callMethod(scope,
+                                                                 "beautify",
+                                                                 new Object[]{scope.get("set",
+                                                                                        scope)});
 
             System.out.println(result.toString());
-
         } finally {
             Context.exit();
         }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleEdge {
+
     private String name;
     private List<Point> points = new ArrayList<Point>();
 
@@ -16,13 +17,17 @@ public class SimpleEdge {
         return new SimpleEdge(name);
     }
 
-    public SimpleEdge addPoint(float x, float y) {
-        points.add(new Point((int) x, (int) y));
+    public SimpleEdge addPoint(float x,
+                               float y) {
+        points.add(new Point((int) x,
+                             (int) y));
         return this;
     }
 
-    public SimpleEdge addPoint(int x, int y) {
-        points.add(new Point(x, y));
+    public SimpleEdge addPoint(int x,
+                               int y) {
+        points.add(new Point(x,
+                             y));
         return this;
     }
 
@@ -37,8 +42,18 @@ public class SimpleEdge {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 17;
+        result = prime * result + ((this.name == null) ? 0 : this.name.hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         String result = name + " " + points.toString();
-        return result.replace("java.awt.Point", "").replace("\n", "\\n");
+        return result.replace("java.awt.Point",
+                              "").replace("\n",
+                                          "\\n");
     }
 }

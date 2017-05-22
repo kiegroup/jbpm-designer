@@ -17,24 +17,27 @@ package org.jbpm.designer.web.plugin.impl;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.ServletContext;
 
 import org.jbpm.designer.web.plugin.IDiagramPlugin;
 
-
 /**
  * @author Antoine Toulme
- * A default implementation of a plugin for plugins defined inside the Process Designer web application
+ *         A default implementation of a plugin for plugins defined inside the Process Designer web application
  */
 public class LocalPluginImpl extends LocalResource implements IDiagramPlugin {
 
     private boolean _core;
     private Map<String, Object> _properties = new HashMap<String, Object>();
 
-    public LocalPluginImpl(String name, String path, ServletContext context, 
-            boolean core, Map<String, Object> props) {
-        super(name, path, context);
+    public LocalPluginImpl(String name,
+                           String path,
+                           ServletContext context,
+                           boolean core,
+                           Map<String, Object> props) {
+        super(name,
+              path,
+              context);
         StringBuilder localPath = new StringBuilder();
         localPath.append("js").append("/");
         localPath.append("Plugins").append("/").append(path);

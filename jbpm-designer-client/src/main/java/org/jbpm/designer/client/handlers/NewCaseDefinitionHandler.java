@@ -53,9 +53,9 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
     }
 
     @Inject
-    public NewCaseDefinitionHandler( final Caller<DesignerAssetService> designerAssetService,
-                                     final PlaceManager placeManager,
-                                     final Bpmn2Type resourceType ) {
+    public NewCaseDefinitionHandler(final Caller<DesignerAssetService> designerAssetService,
+                                    final PlaceManager placeManager,
+                                    final Bpmn2Type resourceType) {
         this.designerAssetService = designerAssetService;
         this.placeManager = placeManager;
         this.resourceType = resourceType;
@@ -78,47 +78,51 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
 
     @PostConstruct
     private void setupExtensions() {
-        extensions.add( Pair.newPair( "CaseIdPrefixLabel", new HTMLPanel(DesignerEditorConstants.INSTANCE.CaseIdPrefix())) );
-        extensions.add( Pair.newPair( "CaseIdPrefixTextBox", caseIdPrefixTextBox ) );
+        extensions.add(Pair.newPair("CaseIdPrefixLabel",
+                                    new HTMLPanel(DesignerEditorConstants.INSTANCE.CaseIdPrefix())));
+        extensions.add(Pair.newPair("CaseIdPrefixTextBox",
+                                    caseIdPrefixTextBox));
     }
 
     @Override
-    public void create( final Package pkg,
-                        final String baseFileName,
-                        final NewResourcePresenter presenter ) {
+    public void create(final Package pkg,
+                       final String baseFileName,
+                       final NewResourcePresenter presenter) {
         String caseIdPrefix = caseIdPrefixTextBox.getValue();
         caseIdPrefixTextBox.clear();
 
-        designerAssetService.call( new RemoteCallback<Path>() {
-            @Override
-            public void callback( final Path path ) {
-                presenter.complete();
+        designerAssetService.call(new RemoteCallback<Path>() {
+                                      @Override
+                                      public void callback(final Path path) {
+                                          presenter.complete();
 
-                notifySuccess();
-                newResourceSuccessEvent.fire( new NewResourceSuccessEvent( path ) );
-                placeManager.goTo( path );
-            }
-        }, new DefaultErrorCallback()).createCaseDefinition(pkg.getPackageMainResourcesPath(), buildFileName(baseFileName,
-                resourceType ), caseIdPrefix );
+                                          notifySuccess();
+                                          newResourceSuccessEvent.fire(new NewResourceSuccessEvent(path));
+                                          placeManager.goTo(path);
+                                      }
+                                  },
+                                  new DefaultErrorCallback()).createCaseDefinition(pkg.getPackageMainResourcesPath(),
+                                                                                   buildFileName(baseFileName,
+                                                                                                 resourceType),
+                                                                                   caseIdPrefix);
     }
 
     @Override
-    public void acceptContext( final Callback<Boolean, Void> callback ) {
-        if ( context == null ) {
-            callback.onSuccess( false );
+    public void acceptContext(final Callback<Boolean, Void> callback) {
+        if (context == null) {
+            callback.onSuccess(false);
         } else {
-            if( context.getActiveProject() != null ) {
-                designerAssetService.call( new RemoteCallback<Boolean>() {
-                    @Override
-                    public void callback( final Boolean isCaseProject ) {
-                        callback.onSuccess( isCaseProject );
-                    }
-                }, new DefaultErrorCallback() ).isCaseProject( context.getActiveProject().getRootPath() );
-
+            if (context.getActiveProject() != null) {
+                designerAssetService.call(new RemoteCallback<Boolean>() {
+                                              @Override
+                                              public void callback(final Boolean isCaseProject) {
+                                                  callback.onSuccess(isCaseProject);
+                                              }
+                                          },
+                                          new DefaultErrorCallback()).isCaseProject(context.getActiveProject().getRootPath());
             } else {
-                callback.onSuccess( false );
+                callback.onSuccess(false);
             }
         }
     }
-
 }

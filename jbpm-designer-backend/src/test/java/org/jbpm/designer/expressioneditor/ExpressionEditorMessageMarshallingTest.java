@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,7 +26,6 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
-
 public class ExpressionEditorMessageMarshallingTest {
 
     @Test
@@ -35,25 +34,38 @@ public class ExpressionEditorMessageMarshallingTest {
         ExpressionEditorMessageJSONUnmarshaller unmarshaller = new ExpressionEditorMessageJSONUnmarshaller();
         ExpressionEditorMessage message = unmarshaller.unmarshall(ExpressionEditorMessageMarshallingTest.class.getResourceAsStream("condition_editor_message.json"));
 
-        assertNotNull("json message was not marshalled", message);
-        assertNotNull("condition expression was not marshalled", message.getExpression());
+        assertNotNull("json message was not marshalled",
+                      message);
+        assertNotNull("condition expression was not marshalled",
+                      message.getExpression());
 
-        assertEquals("OR", message.getExpression().getOperator());
-        assertEquals(2, message.getExpression().getConditions().size());
+        assertEquals("OR",
+                     message.getExpression().getOperator());
+        assertEquals(2,
+                     message.getExpression().getConditions().size());
 
-        assertEquals("isEquals", message.getExpression().getConditions().get(0).getFunction());
-        assertEquals("variableName1", message.getExpression().getConditions().get(0).getParameters().get(0));
-        assertEquals("param1.1", message.getExpression().getConditions().get(0).getParameters().get(1));
+        assertEquals("isEquals",
+                     message.getExpression().getConditions().get(0).getFunction());
+        assertEquals("variableName1",
+                     message.getExpression().getConditions().get(0).getParameters().get(0));
+        assertEquals("param1.1",
+                     message.getExpression().getConditions().get(0).getParameters().get(1));
 
-        assertEquals("isBetween", message.getExpression().getConditions().get(1).getFunction());
-        assertEquals("variableName2", message.getExpression().getConditions().get(1).getParameters().get(0));
-        assertEquals("param2.1", message.getExpression().getConditions().get(1).getParameters().get(1));
-        assertEquals("param2.2", message.getExpression().getConditions().get(1).getParameters().get(2));
+        assertEquals("isBetween",
+                     message.getExpression().getConditions().get(1).getFunction());
+        assertEquals("variableName2",
+                     message.getExpression().getConditions().get(1).getParameters().get(0));
+        assertEquals("param2.1",
+                     message.getExpression().getConditions().get(1).getParameters().get(1));
+        assertEquals("param2.2",
+                     message.getExpression().getConditions().get(1).getParameters().get(2));
 
-        assertEquals("return true;", message.getScript());
-        assertEquals("The error code", message.getErrorCode());
-        assertEquals("The error message", message.getErrorMessage());
-
+        assertEquals("return true;",
+                     message.getScript());
+        assertEquals("The error code",
+                     message.getErrorCode());
+        assertEquals("The error message",
+                     message.getErrorMessage());
     }
 
     @Test
@@ -71,7 +83,6 @@ public class ExpressionEditorMessageMarshallingTest {
         condition1.getParameters().add("param1.1");
 
         expression.getConditions().add(condition1);
-
 
         Condition condition2 = new Condition();
         condition2.setFunction("isBetween");
@@ -103,7 +114,7 @@ public class ExpressionEditorMessageMarshallingTest {
 
         String result = marshaller.marshall(message);
 
-        assertEquals(expectedResult, result);
-
+        assertEquals(expectedResult,
+                     result);
     }
 }

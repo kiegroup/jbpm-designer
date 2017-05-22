@@ -16,13 +16,14 @@
 
 package org.jbpm.designer.client.popup;
 
-import org.jbpm.designer.client.shared.AssignmentRow;
-
 import java.util.List;
+
+import org.jbpm.designer.client.shared.AssignmentRow;
 
 public interface ActivityDataIOEditorWidgetView {
 
     interface Presenter {
+
         void handleAddClick();
     }
 

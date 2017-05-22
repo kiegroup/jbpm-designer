@@ -19,8 +19,9 @@ import javax.enterprise.context.Dependent;
 
 @Dependent
 public class DesignerEditorParametersPublisherViewImpl implements DesignerEditorParametersPublisherView {
+
     @Override
-    public native void publishProcessSourcesInfo( String ps )/*-{
+    public native void publishProcessSourcesInfo(String ps)/*-{
 
         $wnd.designerprocesssources = function () {
             return ps;
@@ -28,14 +29,14 @@ public class DesignerEditorParametersPublisherViewImpl implements DesignerEditor
     }-*/;
 
     @Override
-    public native void publishActiveNodesInfo( String an )/*-{
+    public native void publishActiveNodesInfo(String an)/*-{
         $wnd.designeractivenodes = function () {
             return an;
         }
     }-*/;
 
     @Override
-    public native void publishCompletedNodesInfo( String cn )/*-{
+    public native void publishCompletedNodesInfo(String cn)/*-{
         $wnd.designercompletednodes = function () {
             return cn;
         }

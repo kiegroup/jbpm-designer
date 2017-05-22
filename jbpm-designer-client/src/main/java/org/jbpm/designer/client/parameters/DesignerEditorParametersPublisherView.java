@@ -15,11 +15,11 @@
 
 package org.jbpm.designer.client.parameters;
 
-
 public interface DesignerEditorParametersPublisherView {
-    void publishProcessSourcesInfo( String ps );
 
-    void publishActiveNodesInfo( String an );
+    void publishProcessSourcesInfo(String ps);
 
-    void publishCompletedNodesInfo( String cn );
+    void publishActiveNodesInfo(String an);
+
+    void publishCompletedNodesInfo(String cn);
 }

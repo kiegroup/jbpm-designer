@@ -19,23 +19,23 @@ package org.jbpm.designer.server.diagram;
  * @author Philipp Represents a Stencilset of a shape
  */
 public class StencilSet {
+
     String url;
     String namespace;
 
     /**
      * Constructs a stencilSet with url and namespace
-     * 
      * @param url
      * @param namespace
      */
-    public StencilSet(String url, String namespace) {
+    public StencilSet(String url,
+                      String namespace) {
         this.url = url;
         this.namespace = namespace;
     }
 
     /**
      * Minimal constructor of an stencilset, only expects an uri
-     * 
      * @param url
      */
     public StencilSet(String url) {
@@ -44,7 +44,6 @@ public class StencilSet {
 
     /**
      * Gice the specific url of an stencilset
-     * 
      * @return the url
      */
     public String getUrl() {
@@ -53,9 +52,7 @@ public class StencilSet {
 
     /**
      * Set a new specific url for an stencilset
-     * 
-     * @param url
-     *            the url to set
+     * @param url the url to set
      */
     public void setUrl(String url) {
         this.url = url;
@@ -63,7 +60,6 @@ public class StencilSet {
 
     /**
      * Give the namespace of a stencilset
-     * 
      * @return the namespace
      */
     public String getNamespace() {
@@ -72,12 +68,9 @@ public class StencilSet {
 
     /**
      * Set a new namespace for a stencil set
-     * 
-     * @param namespace
-     *            the namespace to set
+     * @param namespace the namespace to set
      */
     public void setNamespace(String namespace) {
         this.namespace = namespace;
     }
-
 }

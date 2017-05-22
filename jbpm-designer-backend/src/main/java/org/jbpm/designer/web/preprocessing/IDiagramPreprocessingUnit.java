@@ -23,14 +23,20 @@ import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.uberfire.io.IOService;
 
-
 /**
  * A service to perform pre-processing of data.
- * 
  * @author Tihomir Surdilovic
- *
  */
 public interface IDiagramPreprocessingUnit {
-    public void preprocess(HttpServletRequest request, HttpServletResponse response, IDiagramProfile profile, ServletContext serlvetContext, boolean readOnly, boolean viewLocked, IOService ioService, RepositoryDescriptor descriptor);
+
+    public void preprocess(HttpServletRequest request,
+                           HttpServletResponse response,
+                           IDiagramProfile profile,
+                           ServletContext serlvetContext,
+                           boolean readOnly,
+                           boolean viewLocked,
+                           IOService ioService,
+                           RepositoryDescriptor descriptor);
+
     public String getOutData();
 }

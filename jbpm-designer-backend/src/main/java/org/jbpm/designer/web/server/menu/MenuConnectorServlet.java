@@ -15,10 +15,10 @@
 
 package org.jbpm.designer.web.server.menu;
 
-import org.jbpm.designer.web.server.menu.connector.AbstractConnectorServlet;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+
+import org.jbpm.designer.web.server.menu.connector.AbstractConnectorServlet;
 
 public class MenuConnectorServlet extends AbstractConnectorServlet {
 
@@ -26,5 +26,4 @@ public class MenuConnectorServlet extends AbstractConnectorServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
     }
-
 }

@@ -51,17 +51,17 @@ public class NewCaseDefinitionHandlerTest {
 
     @Before
     public void setup() {
-        designerAssetServiceCaller = new CallerMock<>( designerAssetService );
-        newCaseDefinitionHandler = new NewCaseDefinitionHandler( designerAssetServiceCaller,
-                                                                 placeManager,
-                                                                 null ) {
+        designerAssetServiceCaller = new CallerMock<>(designerAssetService);
+        newCaseDefinitionHandler = new NewCaseDefinitionHandler(designerAssetServiceCaller,
+                                                                placeManager,
+                                                                null) {
             {
                 newResourceSuccessEvent = newResourceSuccessEventMock;
             }
 
             @Override
-            protected String buildFileName( final String baseFileName,
-                                            final ResourceTypeDefinition resourceType ) {
+            protected String buildFileName(final String baseFileName,
+                                           final ResourceTypeDefinition resourceType) {
                 return "fileName";
             }
 
@@ -73,18 +73,20 @@ public class NewCaseDefinitionHandlerTest {
 
     @Test
     public void createTest() {
-        final NewResourcePresenter presenter = mock( NewResourcePresenter.class );
-        final Path path = mock( Path.class );
-        doReturn( path ).when( designerAssetService ).createCaseDefinition( any( Path.class ),
-                                                                            anyString(),
-                                                                            anyString() );
+        final NewResourcePresenter presenter = mock(NewResourcePresenter.class);
+        final Path path = mock(Path.class);
+        doReturn(path).when(designerAssetService).createCaseDefinition(any(Path.class),
+                                                                       anyString(),
+                                                                       anyString());
 
-        newCaseDefinitionHandler.create( mock( Package.class ),
-                                         "",
-                                         presenter );
+        newCaseDefinitionHandler.create(mock(Package.class),
+                                        "",
+                                        presenter);
 
-        verify( presenter ).complete();
-        verify( newResourceSuccessEventMock, times( 1 ) ).fire( any( NewResourceSuccessEvent.class ) );
-        verify( placeManager, times( 1 ) ).goTo( path );
+        verify(presenter).complete();
+        verify(newResourceSuccessEventMock,
+               times(1)).fire(any(NewResourceSuccessEvent.class));
+        verify(placeManager,
+               times(1)).goTo(path);
     }
 }

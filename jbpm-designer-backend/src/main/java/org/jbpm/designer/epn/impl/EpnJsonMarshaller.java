@@ -25,18 +25,18 @@ import org.codehaus.jackson.JsonGenerator;
 import org.eclipse.dd.di.DiagramElement;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
-
 /**
  * a marshaller to transform EPN elements into JSON format.
  */
 public class EpnJsonMarshaller {
+
     private Map<String, DiagramElement> _diagramElements = new HashMap<String, DiagramElement>();
     private IDiagramProfile profile;
-    
+
     public void setProfile(IDiagramProfile profile) {
         this.profile = profile;
     }
-    
+
     public String marshall(String definitions) throws IOException { //TODO fix this when we have the EPN ecore model
         StringWriter writer = new StringWriter();
         JsonFactory f = new JsonFactory();

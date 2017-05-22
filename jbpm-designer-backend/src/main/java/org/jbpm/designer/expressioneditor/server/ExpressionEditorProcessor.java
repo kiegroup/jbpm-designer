@@ -1,12 +1,12 @@
 /**
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 package org.jbpm.designer.expressioneditor.server;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jbpm.designer.expressioneditor.marshalling.ExpressionEditorMessageJSONMarshaller;
 import org.jbpm.designer.expressioneditor.marshalling.ExpressionEditorMessageJSONUnmarshaller;
@@ -23,15 +32,6 @@ import org.jbpm.designer.expressioneditor.parser.ExpressionParser;
 import org.jbpm.designer.expressioneditor.parser.ExpressionScriptGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ExpressionEditorProcessor {
 
@@ -48,7 +48,8 @@ public class ExpressionEditorProcessor {
     public ExpressionEditorProcessor() {
     }
 
-    public void doProcess(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    public void doProcess(HttpServletRequest req,
+                          HttpServletResponse res) throws ServletException, IOException {
         res.setContentType("application/json");
         try {
 
@@ -68,14 +69,15 @@ public class ExpressionEditorProcessor {
 
             if (!isValidCommand(command)) {
                 logger.error("Invalid command: " + command + " was sent to the ExpressionsEditorProcessor, " +
-                        "request will be discarded.");
+                                     "request will be discarded.");
                 return;
             }
 
             try {
                 requestMessage = unmarshaller.unmarshall(message);
             } catch (Exception e) {
-                logger.error("It was not possible to unmarshall json message, request will be discarded. message: " + message, e);
+                logger.error("It was not possible to unmarshall json message, request will be discarded. message: " + message,
+                             e);
                 return;
             }
 
@@ -94,11 +96,13 @@ public class ExpressionEditorProcessor {
                     out.write(jsonResponse);
                 } catch (Exception e) {
                     //unexpected error.
-                    logger.error("It was not possible to marshal the responseMessage: " + responseMessage, e);
+                    logger.error("It was not possible to marshal the responseMessage: " + responseMessage,
+                                 e);
                 }
             }
         } catch (Exception e) {
-            logger.error("Unexpected error during request processing.", e);
+            logger.error("Unexpected error during request processing.",
+                         e);
         }
     }
 
@@ -108,7 +112,9 @@ public class ExpressionEditorProcessor {
         String script = requestMessage.getScript();
         ConditionExpression conditionExpression = null;
 
-        if (logger.isDebugEnabled()) logger.debug("parsing script: " + script);
+        if (logger.isDebugEnabled()) {
+            logger.debug("parsing script: " + script);
+        }
 
         try {
             ExpressionParser parser = new ExpressionParser(script);
@@ -130,9 +136,11 @@ public class ExpressionEditorProcessor {
         List<String> errors = new ArrayList<String>();
         ExpressionScriptGenerator generator = new ExpressionScriptGenerator();
 
-        if (isValidMessageForCommand(GENERATE_COMMAND, requestMessage)) {
+        if (isValidMessageForCommand(GENERATE_COMMAND,
+                                     requestMessage)) {
             ConditionExpression expression = requestMessage.getExpression();
-            String script = generator.generateScript(expression, errors);
+            String script = generator.generateScript(expression,
+                                                     errors);
 
             if (script == null) {
                 //process the errors.
@@ -140,14 +148,14 @@ public class ExpressionEditorProcessor {
                 responseMessage.setErrorMessage(concat(errors));
             }
             responseMessage.setScript(script);
-
         } else {
             responseMessage.setErrorCode(ExpressionEditorErrors.INVALID_MESSAGE_ERROR);
         }
         return responseMessage;
     }
 
-    private boolean isValidMessageForCommand(String command, ExpressionEditorMessage message) {
+    private boolean isValidMessageForCommand(String command,
+                                             ExpressionEditorMessage message) {
         if (GENERATE_COMMAND.equals(command)) {
             if (message.getExpression() == null) {
                 logger.error("No expression is present in message: " + message);
@@ -164,7 +172,9 @@ public class ExpressionEditorProcessor {
 
     private String concat(List<String> values) {
         StringBuilder result = new StringBuilder();
-        if (values == null || values.size() == 0) return result.toString();
+        if (values == null || values.size() == 0) {
+            return result.toString();
+        }
         boolean first = true;
         for (String value : values) {
             if (!first) {

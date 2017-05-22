@@ -17,7 +17,6 @@ package org.jbpm.designer.web.stencilset.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,19 +29,17 @@ import org.jbpm.designer.web.stencilset.IDiagramStencilSetService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * A servlet to serve stencilsets from the StencilSetService.
  * @author Antoine Toulme
- *
  */
 public class StencilSetServiceServlet extends HttpServlet {
 
-private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceServlet.class);
-    
+    private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceServlet.class);
+
     private static final long serialVersionUID = -2024110864538877629L;
     private String defaultName;
-    
+
     private IDiagramStencilSetService _pluginService;
 
     public void init(ServletConfig config) throws ServletException {
@@ -50,12 +47,13 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
         defaultName = config.getInitParameter("defaultName");
         _pluginService = new StencilSetServiceImpl(config.getServletContext());
     }
-    
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String requestURI = req.getRequestURI().replaceFirst(req.getContextPath(), "");
+
+    protected void doGet(HttpServletRequest req,
+                         HttpServletResponse resp) throws ServletException, IOException {
+        String requestURI = req.getRequestURI().replaceFirst(req.getContextPath(),
+                                                             "");
         // urls should be of type: stencilset/bpmn2.0
         // stencilset/{name}/{resource}
-
 
         String[] segments = requestURI.split("/");
         if (segments.length < 2) {
@@ -66,64 +64,74 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
         try {
             name = segments[2];
         } catch (Exception e) {
-            name = segments[segments.length-1];
+            name = segments[segments.length - 1];
         }
 
-        if(name.length() < 1) {
+        if (name.length() < 1) {
             name = defaultName;
         }
 
-        IDiagramStencilSet stencilset = _pluginService.findStencilSet(req, name);
-        
+        IDiagramStencilSet stencilset = _pluginService.findStencilSet(req,
+                                                                      name);
+
         if (stencilset == null) {
             throw new IllegalArgumentException("No stencilset by the name of " + name);
         }
-        String applicationContext = ConfigurationProvider.getInstance().getDesignerContext().replaceAll("/", "");
+        String applicationContext = ConfigurationProvider.getInstance().getDesignerContext().replaceAll("/",
+                                                                                                        "");
         InputStream input = null;
-        if (segments.length > 4) { 
+        if (segments.length > 4) {
             //looking for a resource under the stencilset.
             String path = requestURI.substring(requestURI.indexOf(segments[2]) + segments[2].length() + 1);
-            if(path.indexOf(applicationContext + "/stencilset/org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json") >= 0) {
+            if (path.indexOf(applicationContext + "/stencilset/org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json") >= 0) {
                 path = applicationContext + "/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json";
             }
 
-            if(path.indexOf(applicationContext + "/stencilset/bpmn2.0jbpm/stencilset/org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json") >= 0) {
+            if (path.indexOf(applicationContext + "/stencilset/bpmn2.0jbpm/stencilset/org.jbpm.designer.jBPMDesigner/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json") >= 0) {
                 path = applicationContext + "/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json";
             }
 
-            if(path.indexOf("stencilset//stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json") >= 0) {
+            if (path.indexOf("stencilset//stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json") >= 0) {
                 path = "/bpmn2.0jbpm.json";
             }
 
-            if(path.indexOf(applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0/") >= 0) {
-                path = path.substring((applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0/").length(), path.length());
+            if (path.indexOf(applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0/") >= 0) {
+                path = path.substring((applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0/").length(),
+                                      path.length());
             }
-            if(path.indexOf("stencilset//" + applicationContext + "/stencilsets/bpmn2.0jbpm/") >= 0) {
-                path = path.substring(("stencilset//" + applicationContext + "/stencilsets/bpmn2.0jbpm/").length(), path.length());
+            if (path.indexOf("stencilset//" + applicationContext + "/stencilsets/bpmn2.0jbpm/") >= 0) {
+                path = path.substring(("stencilset//" + applicationContext + "/stencilsets/bpmn2.0jbpm/").length(),
+                                      path.length());
             }
-            if(path.indexOf(applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0jbpm/") >= 0) {
-                path = path.substring((applicationContext + "/stencilset/" +applicationContext + "/stencilsets/bpmn2.0jbpm/").length(), path.length());
+            if (path.indexOf(applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0jbpm/") >= 0) {
+                path = path.substring((applicationContext + "/stencilset/" + applicationContext + "/stencilsets/bpmn2.0jbpm/").length(),
+                                      path.length());
             }
-            if(path.indexOf("bpmn2.0.json/") >= 0) {
-                path = path.substring("bpmn2.0.json".length(), path.length());
+            if (path.indexOf("bpmn2.0.json/") >= 0) {
+                path = path.substring("bpmn2.0.json".length(),
+                                      path.length());
             }
-            if(path.indexOf("bpmn2.0jbpm.json/") >= 0) {
-                path = path.substring("bpmn2.0jbpm.json".length(), path.length());
+            if (path.indexOf("bpmn2.0jbpm.json/") >= 0) {
+                path = path.substring("bpmn2.0jbpm.json".length(),
+                                      path.length());
             }
-            if(path.startsWith("/bpmn2.0jbpm/")) {
-                path = path.substring("/bpmn2.0jbpm/".length(), path.length());
+            if (path.startsWith("/bpmn2.0jbpm/")) {
+                path = path.substring("/bpmn2.0jbpm/".length(),
+                                      path.length());
             }
-            if(path.startsWith("stencilsets/bpmn2.0jbpm/")) {
-                path = path.substring("stencilsets/bpmn2.0jbpm/".length(), path.length());
+            if (path.startsWith("stencilsets/bpmn2.0jbpm/")) {
+                path = path.substring("stencilsets/bpmn2.0jbpm/".length(),
+                                      path.length());
             }
-            if(path.startsWith("2.0jbpm/bpmn2.0jbpm.json/")) {
-                path = path.substring("2.0jbpm/bpmn2.0jbpm.json/".length(), path.length());
+            if (path.startsWith("2.0jbpm/bpmn2.0jbpm.json/")) {
+                path = path.substring("2.0jbpm/bpmn2.0jbpm.json/".length(),
+                                      path.length());
             }
 
             input = stencilset.getResourceContents(path);
-            if(requestURI.endsWith(".svg")) {
+            if (requestURI.endsWith(".svg")) {
                 resp.setContentType("text/xml");
-            } else if(requestURI.endsWith(".png")) {
+            } else if (requestURI.endsWith(".png")) {
                 resp.setContentType("image/png");
             } else {
                 //default to not setting
@@ -132,17 +140,26 @@ private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceS
             input = stencilset.getContents();
             resp.setContentType("application/json");
         }
-        
+
         try {
             byte[] buffer = new byte[4096];
             int read;
             while ((read = input.read(buffer)) != -1) {
-                resp.getOutputStream().write(buffer, 0, read);
+                resp.getOutputStream().write(buffer,
+                                             0,
+                                             read);
             }
         } catch (IOException e) {
-            _logger.error(e.getMessage(), e);
+            _logger.error(e.getMessage(),
+                          e);
         } finally {
-            if (input != null) { try { input.close(); } catch(IOException e) {}};
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                }
+            }
+            ;
         }
-        }
+    }
 }

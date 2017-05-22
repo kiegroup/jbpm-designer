@@ -18,13 +18,13 @@ package org.jbpm.designer.client.util;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-import org.gwtbootstrap3.client.ui.TextBox;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import org.gwtbootstrap3.client.ui.TextBox;
 import org.uberfire.workbench.events.NotificationEvent;
 
 public abstract class AbstractValidatingTextBox extends TextBox {
@@ -65,10 +65,12 @@ public abstract class AbstractValidatingTextBox extends TextBox {
                 // Get new value and validate
                 int charCode = event.getCharCode();
                 String oldValue = me.getValue();
-                String newValue = oldValue.substring(0, me.getCursorPos());
+                String newValue = oldValue.substring(0,
+                                                     me.getCursorPos());
                 newValue = newValue + ((char) charCode);
                 newValue = newValue + oldValue.substring(me.getCursorPos() + me.getSelectionLength());
-                String validationError = isValidValue(newValue, false);
+                String validationError = isValidValue(newValue,
+                                                      false);
                 if (validationError != null) {
                     event.preventDefault();
                     fireValidationError(validationError);
@@ -82,12 +84,14 @@ public abstract class AbstractValidatingTextBox extends TextBox {
             @Override
             public void onBlur(BlurEvent event) {
                 String value = me.getText();
-                String validationError = isValidValue(value, true);
+                String validationError = isValidValue(value,
+                                                      true);
                 if (validationError != null) {
                     fireValidationError(validationError);
                     String validValue = makeValidValue(value);
                     me.setValue(validValue);
-                    ValueChangeEvent.fire(AbstractValidatingTextBox.this, validValue);
+                    ValueChangeEvent.fire(AbstractValidatingTextBox.this,
+                                          validValue);
                 }
             }
         });
@@ -95,12 +99,12 @@ public abstract class AbstractValidatingTextBox extends TextBox {
 
     /**
      * Tests whether a value is valid
-     *
      * @param value
      * @param isOnFocusLost
      * @return an error message to be reported
      */
-    public abstract String isValidValue(final String value, final boolean isOnFocusLost);
+    public abstract String isValidValue(final String value,
+                                        final boolean isOnFocusLost);
 
     /**
      * If validation fails (e.g. as a result of a user pasting a value) when the
@@ -112,7 +116,8 @@ public abstract class AbstractValidatingTextBox extends TextBox {
     protected abstract String makeValidValue(final String value);
 
     protected void fireValidationError(String validationError) {
-        notification.fire(new NotificationEvent(validationError, NotificationEvent.NotificationType.ERROR));
+        notification.fire(new NotificationEvent(validationError,
+                                                NotificationEvent.NotificationType.ERROR));
     }
 
     protected int getKeyCodeFromKeyPressEvent(KeyPressEvent event) {

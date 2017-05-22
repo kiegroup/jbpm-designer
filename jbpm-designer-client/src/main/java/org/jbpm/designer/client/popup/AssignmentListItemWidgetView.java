@@ -24,7 +24,7 @@ import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable.VariableType;
 import org.jbpm.designer.client.util.ListBoxValues;
 
-public interface AssignmentListItemWidgetView extends HasModel<AssignmentRow>  {
+public interface AssignmentListItemWidgetView extends HasModel<AssignmentRow> {
 
     String CUSTOM_PROMPT = DesignerEditorConstants.INSTANCE.Custom() + ListBoxValues.EDIT_SUFFIX;
     String ENTER_TYPE_PROMPT = DesignerEditorConstants.INSTANCE.Enter_type() + ListBoxValues.EDIT_SUFFIX;
@@ -41,9 +41,11 @@ public interface AssignmentListItemWidgetView extends HasModel<AssignmentRow>  {
 
     void setShowConstants(boolean showConstants);
 
-    void setDisallowedNames(Set<String> disallowedNames, String disallowedNameErrorMessage);
+    void setDisallowedNames(Set<String> disallowedNames,
+                            String disallowedNameErrorMessage);
 
-    void setAllowDuplicateNames(boolean allowDuplicateNames, String duplicateNameErrorMessage);
+    void setAllowDuplicateNames(boolean allowDuplicateNames,
+                                String duplicateNameErrorMessage);
 
     boolean isDuplicateName(String name);
 

@@ -16,13 +16,11 @@
 package org.jbpm.designer.web.stencilset;
 
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * A factory to plug and add stencilsets.
  * @author Antoine Toulme
- *
  */
 public interface IDiagramStencilSetFactory {
 

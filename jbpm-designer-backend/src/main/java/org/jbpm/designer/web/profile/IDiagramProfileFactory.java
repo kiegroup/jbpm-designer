@@ -16,14 +16,11 @@
 package org.jbpm.designer.web.profile;
 
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * An interface for other bundles to grab and register profiles.
- * 
  * @author Antoine Toulme
- *
  */
 public interface IDiagramProfileFactory {
 
@@ -31,5 +28,4 @@ public interface IDiagramProfileFactory {
      * @return a set of created profiles.
      */
     public Set<IDiagramProfile> getProfiles(HttpServletRequest request);
-
 }

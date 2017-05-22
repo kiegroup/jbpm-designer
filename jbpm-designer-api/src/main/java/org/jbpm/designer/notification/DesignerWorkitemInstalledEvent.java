@@ -21,6 +21,7 @@ import org.uberfire.workbench.events.ResourceEvent;
 
 @Portable
 public class DesignerWorkitemInstalledEvent implements ResourceEvent {
+
     private String message;
     private Path path;
     private String resolver;
@@ -30,11 +31,11 @@ public class DesignerWorkitemInstalledEvent implements ResourceEvent {
     public DesignerWorkitemInstalledEvent() {
     }
 
-    public DesignerWorkitemInstalledEvent( final Path path,
-                                           final String resolver,
-                                           final String value,
-                                           final String name,
-                                           final String message) {
+    public DesignerWorkitemInstalledEvent(final Path path,
+                                          final String resolver,
+                                          final String value,
+                                          final String name,
+                                          final String message) {
         this.path = path;
         this.resolver = resolver;
         this.value = value;

@@ -19,17 +19,15 @@ import java.io.InputStream;
 
 /**
  * An interface to define a stencilset in the editor
- * 
  * @author Antoine Toulme
- *
  */
 public interface IDiagramStencilSet {
-    
+
     /**
      * @return the name of the stencilset
      */
     public String getName();
-    
+
     /**
      * @return the contents of the stencilset file.
      */
@@ -41,5 +39,4 @@ public interface IDiagramStencilSet {
      * @return the contents of the resouce.
      */
     public InputStream getResourceContents(String path);
-
 }

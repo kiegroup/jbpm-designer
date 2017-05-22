@@ -22,8 +22,9 @@ public interface Stencil {
 
     /**
      * Gives the stencil id of an object
-     * 
      * @return the id of an associated stencil
      */
-    public String getStencilId();;
+    public String getStencilId();
+
+    ;
 }

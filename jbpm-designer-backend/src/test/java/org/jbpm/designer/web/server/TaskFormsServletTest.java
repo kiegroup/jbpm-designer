@@ -23,7 +23,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +58,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TaskFormsServletTest  extends RepositoryBaseTest {
+public class TaskFormsServletTest extends RepositoryBaseTest {
 
     @Mock
     private VFSService vfsServices;
@@ -81,13 +80,13 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
             @Override
             public Path answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();
-                return PathFactory.newPath((String) args[0], (String) args[0]);
+                return PathFactory.newPath((String) args[0],
+                                           (String) args[0]);
             }
         });
 
-        when( builderManager.getFormBuilders() ).thenReturn( Arrays.asList( formBuilderService ) );
-        when( builderManager.getBuilderByFormType( anyString() ) ).thenReturn( formBuilderService );
-
+        when(builderManager.getFormBuilders()).thenReturn(Arrays.asList(formBuilderService));
+        when(builderManager.getBuilderByFormType(anyString())).thenReturn(formBuilderService);
     }
 
     @After
@@ -97,10 +96,12 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
 
     @Test
     public void testTaskFormServletForFormType() throws Exception {
-        when( formBuilderService.buildFormContent( any(), any(), any())).thenReturn( "dummyform");
+        when(formBuilderService.buildFormContent(any(),
+                                                 any(),
+                                                 any())).thenReturn("dummyform");
 
         Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
@@ -110,29 +111,40 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         String uniqueId = repository.createAsset(builder.getAsset());
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
-        params.put("uuid", uniqueId);
-        params.put("json", readFile("BPMN2-DefaultProcess.json"));
-        params.put("profile", "jbpm");
-        params.put("ppdata", null);
-        params.put("formtype", "form");
+        params.put("uuid",
+                   uniqueId);
+        params.put("json",
+                   readFile("BPMN2-DefaultProcess.json"));
+        params.put("profile",
+                   "jbpm");
+        params.put("ppdata",
+                   null);
+        params.put("formtype",
+                   "form");
 
         taskFormsServlet.setProfile(profile);
 
-        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository, "org/jbpm/designer/public")));
+        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository,
+                                                                           "org/jbpm/designer/public")));
 
-        taskFormsServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
+        taskFormsServlet.doPost(new TestHttpServletRequest(params),
+                                new TestHttpServletResponse());
 
         // old ftl form should not be created
-        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
-        assertEquals(0, ftlForms.size());
+        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage",
+                                                           new FilterByExtension("ftl"));
+        assertEquals(0,
+                     ftlForms.size());
     }
 
     @Test
     public void testTaskFormServletForFrmType() throws Exception {
-        when( formBuilderService.buildFormContent( any(), any(), any())).thenReturn( "dummyform");
+        when(formBuilderService.buildFormContent(any(),
+                                                 any(),
+                                                 any())).thenReturn("dummyform");
 
         Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
@@ -142,29 +154,40 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         String uniqueId = repository.createAsset(builder.getAsset());
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
-        params.put("uuid", uniqueId);
-        params.put("json", readFile("BPMN2-DefaultProcess.json"));
-        params.put("profile", "jbpm");
-        params.put("ppdata", null);
-        params.put("formtype", "frm");
+        params.put("uuid",
+                   uniqueId);
+        params.put("json",
+                   readFile("BPMN2-DefaultProcess.json"));
+        params.put("profile",
+                   "jbpm");
+        params.put("ppdata",
+                   null);
+        params.put("formtype",
+                   "frm");
 
         taskFormsServlet.setProfile(profile);
 
-        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository, "org/jbpm/designer/public")));
+        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository,
+                                                                           "org/jbpm/designer/public")));
 
-        taskFormsServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
+        taskFormsServlet.doPost(new TestHttpServletRequest(params),
+                                new TestHttpServletResponse());
 
         // old ftl form should not be created
-        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
-        assertEquals(0, ftlForms.size());
+        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage",
+                                                           new FilterByExtension("ftl"));
+        assertEquals(0,
+                     ftlForms.size());
     }
 
     @Test
     public void testTaskFormServletWithUserTaskForFormType() throws Exception {
-        when( formBuilderService.buildFormContent( any(), any(), any())).thenReturn( "dummyform");
+        when(formBuilderService.buildFormContent(any(),
+                                                 any(),
+                                                 any())).thenReturn("dummyform");
 
         Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
@@ -174,29 +197,40 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         String uniqueId = repository.createAsset(builder.getAsset());
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
-        params.put("uuid", uniqueId);
-        params.put("json", readFile("BPMN2-UserTask.json"));
-        params.put("profile", "jbpm");
-        params.put("ppdata", null);
-        params.put("formtype", "form");
+        params.put("uuid",
+                   uniqueId);
+        params.put("json",
+                   readFile("BPMN2-UserTask.json"));
+        params.put("profile",
+                   "jbpm");
+        params.put("ppdata",
+                   null);
+        params.put("formtype",
+                   "form");
 
         taskFormsServlet.setProfile(profile);
 
-        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository, "org/jbpm/designer/public")));
+        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository,
+                                                                           "org/jbpm/designer/public")));
 
-        taskFormsServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
+        taskFormsServlet.doPost(new TestHttpServletRequest(params),
+                                new TestHttpServletResponse());
 
         // old ftl form should not be created
-        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
-        assertEquals(0, ftlForms.size());
+        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage",
+                                                           new FilterByExtension("ftl"));
+        assertEquals(0,
+                     ftlForms.size());
     }
 
     @Test
     public void testTaskFormServletWithUserTaskForFrmType() throws Exception {
-        when( formBuilderService.buildFormContent( any(), any(), any())).thenReturn( "dummyform");
+        when(formBuilderService.buildFormContent(any(),
+                                                 any(),
+                                                 any())).thenReturn("dummyform");
 
         Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
+        ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
@@ -206,21 +240,30 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         String uniqueId = repository.createAsset(builder.getAsset());
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
-        params.put("uuid", uniqueId);
-        params.put("json", readFile("BPMN2-UserTask.json"));
-        params.put("profile", "jbpm");
-        params.put("ppdata", null);
-        params.put("formtype", "frm");
+        params.put("uuid",
+                   uniqueId);
+        params.put("json",
+                   readFile("BPMN2-UserTask.json"));
+        params.put("profile",
+                   "jbpm");
+        params.put("ppdata",
+                   null);
+        params.put("formtype",
+                   "frm");
 
         taskFormsServlet.setProfile(profile);
 
-        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository, "org/jbpm/designer/public")));
+        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository,
+                                                                           "org/jbpm/designer/public")));
 
-        taskFormsServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
+        taskFormsServlet.doPost(new TestHttpServletRequest(params),
+                                new TestHttpServletResponse());
 
         // old ftl form should not be created
-        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
-        assertEquals(0, ftlForms.size());
+        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage",
+                                                           new FilterByExtension("ftl"));
+        assertEquals(0,
+                     ftlForms.size());
     }
 
     private String readFile(String fileName) throws Exception {
@@ -232,14 +275,13 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         ArrayList<Asset> arrAssets = new ArrayList<Asset>(assets);
         arrAssets.sort(new Comparator<Asset>() {
             @Override
-            public int compare(Asset a1, Asset a2) {
-                if (a1.getName() == null ) {
+            public int compare(Asset a1,
+                               Asset a2) {
+                if (a1.getName() == null) {
                     return -1;
-                }
-                else if (a2.getName() == null ) {
+                } else if (a2.getName() == null) {
                     return 1;
-                }
-                else {
+                } else {
                     return (a1.getName().compareTo(a2.getName()));
                 }
             }

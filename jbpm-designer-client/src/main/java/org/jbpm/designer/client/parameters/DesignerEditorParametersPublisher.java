@@ -15,11 +15,11 @@
 
 package org.jbpm.designer.client.parameters;
 
-import org.uberfire.rpc.SessionInfo;
-
+import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-import java.util.Map;
+
+import org.uberfire.rpc.SessionInfo;
 
 @Dependent
 public class DesignerEditorParametersPublisher {
@@ -50,13 +50,15 @@ public class DesignerEditorParametersPublisher {
     }
 
     protected Map<String, String> publishProcessSources(Map<String, String> editorParameters) {
-        if ( editorParameters.containsKey(PROCESS_SOURCE_KEY) ) {
+        if (editorParameters.containsKey(PROCESS_SOURCE_KEY)) {
             String processSources = editorParameters.get(PROCESS_SOURCE_KEY);
-            if ( processSources != null && processSources.length() > 0 ) {
+            if (processSources != null && processSources.length() > 0) {
                 view.publishProcessSourcesInfo(editorParameters.get(PROCESS_SOURCE_KEY));
-                editorParameters.put(INSTANCE_VIEWMODE_KEY, "true");
+                editorParameters.put(INSTANCE_VIEWMODE_KEY,
+                                     "true");
             } else {
-                editorParameters.put(INSTANCE_VIEWMODE_KEY, "false");
+                editorParameters.put(INSTANCE_VIEWMODE_KEY,
+                                     "false");
             }
             editorParameters.remove(PROCESS_SOURCE_KEY);
         }
@@ -90,9 +92,12 @@ public class DesignerEditorParametersPublisher {
     }
 
     protected void putTimeStampToParameters(Map<String, String> editorParameters) {
-        editorParameters.put( "ts", Long.toString( System.currentTimeMillis() ) );
+        editorParameters.put("ts",
+                             Long.toString(System.currentTimeMillis()));
     }
+
     protected void putSessionIdToParameters(Map<String, String> editorParameters) {
-        editorParameters.put( "sessionId", sessionInfo.getId() );
+        editorParameters.put("sessionId",
+                             sessionInfo.getId());
     }
 }

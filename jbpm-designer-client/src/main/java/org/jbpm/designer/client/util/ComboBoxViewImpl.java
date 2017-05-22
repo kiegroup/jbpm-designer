@@ -43,9 +43,10 @@ public class ComboBoxViewImpl implements ComboBoxView {
 
     @Override
     public void init(final ComboBoxView.ComboBoxPresenter presenter,
-            final ComboBoxView.ModelPresenter modelPresenter,
-            final ValueListBox<String> listBox, final TextBox textBox,
-            final String placeholder) {
+                     final ComboBoxView.ModelPresenter modelPresenter,
+                     final ValueListBox<String> listBox,
+                     final TextBox textBox,
+                     final String placeholder) {
         this.presenter = presenter;
         this.modelPresenter = modelPresenter;
         this.listBox = listBox;
@@ -54,42 +55,47 @@ public class ComboBoxViewImpl implements ComboBoxView {
 
         textBox.setVisible(false);
         listBox.addValueChangeHandler(new ValueChangeHandler<String>() {
-            @Override public void onValueChange(ValueChangeEvent<String> valueChangeEvent) {
+            @Override
+            public void onValueChange(ValueChangeEvent<String> valueChangeEvent) {
                 presenter.listBoxValueChanged(valueChangeEvent.getValue());
             }
         });
 
         // call  listBoxGotFocus in MouseDownHandler because IE11 doesn't handle FocusHandler correctly
         // this works for all browsers
-        listBox.addDomHandler( new MouseDownHandler() {
-            @Override
-            public void onMouseDown( MouseDownEvent mouseDownEvent ) {
-                if (! listBoxHasFocus) {
-                    listBoxHasFocus = true;
-                    listBoxGotFocus();
-                }
-            }
-        }, MouseDownEvent.getType() );
+        listBox.addDomHandler(new MouseDownHandler() {
+                                  @Override
+                                  public void onMouseDown(MouseDownEvent mouseDownEvent) {
+                                      if (!listBoxHasFocus) {
+                                          listBoxHasFocus = true;
+                                          listBoxGotFocus();
+                                      }
+                                  }
+                              },
+                              MouseDownEvent.getType());
 
         listBox.addDomHandler(new BlurHandler() {
-            @Override public void onBlur(BlurEvent blurEvent) {
-                listBoxHasFocus = false;
-            }
-        }, BlurEvent.getType());
+                                  @Override
+                                  public void onBlur(BlurEvent blurEvent) {
+                                      listBoxHasFocus = false;
+                                  }
+                              },
+                              BlurEvent.getType());
 
         textBox.addFocusHandler(new FocusHandler() {
-            @Override public void onFocus(FocusEvent focusEvent) {
+            @Override
+            public void onFocus(FocusEvent focusEvent) {
                 textBoxGotFocus();
             }
         });
 
         textBox.addBlurHandler(new BlurHandler() {
-            @Override public void onBlur(BlurEvent blurEvent) {
+            @Override
+            public void onBlur(BlurEvent blurEvent) {
                 // Update ListBoxValues and set model values when textBox loses focus
                 textBoxLostFocus();
             }
         });
-
     }
 
     @Override
@@ -99,12 +105,14 @@ public class ComboBoxViewImpl implements ComboBoxView {
 
     @Override
     public void setTextBoxModelValue(String value) {
-        modelPresenter.setTextBoxModelValue(textBox, value);
+        modelPresenter.setTextBoxModelValue(textBox,
+                                            value);
     }
 
     @Override
     public void setListBoxModelValue(String value) {
-        modelPresenter.setListBoxModelValue(listBox, value);
+        modelPresenter.setListBoxModelValue(listBox,
+                                            value);
     }
 
     @Override
@@ -161,10 +169,8 @@ public class ComboBoxViewImpl implements ComboBoxView {
     public String getValue() {
         if (textBox.isVisible()) {
             return textBox.getValue();
-        }
-        else {
+        } else {
             return listBox.getValue();
         }
     }
-
 }

@@ -16,19 +16,20 @@
 
 package org.jbpm.designer.client.popup;
 
-
-import com.google.gwt.dom.client.*;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.ui.Composite;
 import java.util.List;
-
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.HeadingElement;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.TableCellElement;
+import com.google.gwt.dom.client.TableElement;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.user.client.ui.Composite;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.constants.IconType;
-
 import org.jboss.errai.ui.client.widget.ListWidget;
 import org.jboss.errai.ui.client.widget.Table;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
@@ -39,7 +40,7 @@ import org.jbpm.designer.client.shared.AssignmentRow;
 import org.uberfire.workbench.events.NotificationEvent;
 
 @Dependent
-@Templated("ActivityDataIOEditorWidget.html#widget" )
+@Templated("ActivityDataIOEditorWidget.html#widget")
 public class ActivityDataIOEditorWidgetViewImpl extends Composite implements ActivityDataIOEditorWidgetView {
 
     private Presenter presenter;
@@ -68,7 +69,7 @@ public class ActivityDataIOEditorWidgetViewImpl extends Composite implements Act
      */
     @Inject
     @DataField
-    @Table(root="tbody")
+    @Table(root = "tbody")
     protected ListWidget<AssignmentRow, AssignmentListItemWidgetViewImpl> assignments;
 
     @Inject
@@ -85,7 +86,8 @@ public class ActivityDataIOEditorWidgetViewImpl extends Composite implements Act
 
     @Override
     public void showOnlySingleEntryAllowed() {
-        notification.fire(new NotificationEvent(DesignerEditorConstants.INSTANCE.Only_single_entry_allowed(), NotificationEvent.NotificationType.ERROR));
+        notification.fire(new NotificationEvent(DesignerEditorConstants.INSTANCE.Only_single_entry_allowed(),
+                                                NotificationEvent.NotificationType.ERROR));
     }
 
     @Override

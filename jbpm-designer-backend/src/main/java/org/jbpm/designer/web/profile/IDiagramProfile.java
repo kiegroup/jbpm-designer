@@ -16,27 +16,25 @@
 package org.jbpm.designer.web.profile;
 
 import java.util.Collection;
+import javax.servlet.ServletContext;
 
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.jbpm.designer.repository.Repository;
 
-import javax.servlet.ServletContext;
-
 /**
- * A profile for the editor to choose which stencilset 
+ * A profile for the editor to choose which stencilset
  * and which plugins should be loaded.
- * 
  * @author Antoine Toulme
- *
  */
 public interface IDiagramProfile {
-    
+
     /**
      * @return the name of the profile
      * it will be passed by the user when opening the editor.
      */
     public String getName();
+
     /**
      * @return the title of the profile.
      */
@@ -46,34 +44,34 @@ public interface IDiagramProfile {
      * @return the stencil set used by the profile.
      */
     public String getStencilSet();
-    
+
     /**
      * @return the stencil set extensions used by the profile
      */
     public Collection<String> getStencilSetExtensions();
-    
+
     public String getSerializedModelExtension();
-    
+
     /**
      * @return the stencil url used by the profile.
      */
     public String getStencilSetURL();
-    
+
     /**
      * @return stencil namespace url.
      */
     public String getStencilSetNamespaceURL();
-    
+
     /**
      * @return stencil set extension url used by the profile.
      */
     public String getStencilSetExtensionURL();
-    
+
     /**
      * @return the plugins to load for the profile.
      */
     public Collection<String> getPlugins();
-    
+
     /**
      * @return a marshaller to transform the json into the final model.
      */
@@ -117,38 +115,42 @@ public interface IDiagramProfile {
      * @return the repository.
      */
     public Repository getRepository();
-    
+
     /**
      * Parser to produce the final model to be saved.
      * @author Antoine Toulme
-     *
      */
     public interface IDiagramMarshaller {
-        
+
         /**
          * @param jsonModel the model
          * @return the string representation of the serialized model.
          */
-        public String parseModel(String jsonModel, String preProcessingData) throws Exception;
-        public Definitions getDefinitions(String jsonModel, String preProcessingData) throws Exception;
-        public Resource getResource(String jsonModel, String preProcessingData) throws Exception;
+        public String parseModel(String jsonModel,
+                                 String preProcessingData) throws Exception;
+
+        public Definitions getDefinitions(String jsonModel,
+                                          String preProcessingData) throws Exception;
+
+        public Resource getResource(String jsonModel,
+                                    String preProcessingData) throws Exception;
     }
-    
+
     /**
      * Parser to produce the final model to be saved.
      * @author Tihomir Surdilovic
-     *
      */
     public interface IDiagramUnmarshaller {
-        
+
         /**
          * @param xmlModel xml model
          * @param profile process profile.
          * @return the json model
          */
-        public String parseModel(String xmlModel, IDiagramProfile profile, String preProcessingData) throws Exception;
+        public String parseModel(String xmlModel,
+                                 IDiagramProfile profile,
+                                 String preProcessingData) throws Exception;
     }
 
     public void init(ServletContext context);
-
 }

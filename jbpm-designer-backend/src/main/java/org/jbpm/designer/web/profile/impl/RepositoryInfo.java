@@ -25,19 +25,19 @@ public class RepositoryInfo {
     private static final String REPOSITORY_USR = "designer.repository.usr";
     private static final String REPOSITORY_PWD = "designer.repository.pwd";
 
-
     public static String getRepositoryProtocol(IDiagramProfile profile) {
         return isEmpty(System.getProperty(REPOSITORY_PROTOCOL)) ? "http" : System.getProperty(REPOSITORY_PROTOCOL);
     }
 
     public static String getRepositoryHost(IDiagramProfile profile) {
-        if(!isEmpty(System.getProperty(REPOSITORY_HOST))) {
+        if (!isEmpty(System.getProperty(REPOSITORY_HOST))) {
             String retStr = System.getProperty(REPOSITORY_HOST);
-            if(retStr.startsWith("/")){
+            if (retStr.startsWith("/")) {
                 retStr = retStr.substring(1);
             }
-            if(retStr.endsWith("/")) {
-                retStr = retStr.substring(0,retStr.length() - 1);
+            if (retStr.endsWith("/")) {
+                retStr = retStr.substring(0,
+                                          retStr.length() - 1);
             }
             return retStr;
         } else {
@@ -58,11 +58,11 @@ public class RepositoryInfo {
     }
 
     private static boolean isEmpty(final CharSequence str) {
-        if ( str == null || str.length() == 0 ) {
+        if (str == null || str.length() == 0) {
             return true;
         }
-        for ( int i = 0, length = str.length(); i < length; i++ ) {
-            if ( str.charAt( i ) != ' ' )  {
+        for (int i = 0, length = str.length(); i < length; i++) {
+            if (str.charAt(i) != ' ') {
                 return false;
             }
         }

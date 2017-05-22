@@ -27,6 +27,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class InjectionConfig {
+
     private static final String DEFAULT_INJECTION_CONF_FILE = "/injection/designerinjection.xml";
     private static ServletContext context;
 
@@ -53,16 +54,18 @@ public class InjectionConfig {
             is = this.getClass().getResourceAsStream(DEFAULT_INJECTION_CONF_FILE);
             if (is == null) {
                 System.out.println("unable to find designer injection conf file "
-                        + DEFAULT_INJECTION_CONF_FILE);
+                                           + DEFAULT_INJECTION_CONF_FILE);
             } else {
                 Document doc = parser.parse(is);
                 NodeList rulesConf = doc.getElementsByTagName("rule");
                 rules = new InjectionRules();
                 for (int i = 0; i < rulesConf.getLength(); i++) {
                     Node ruleNode = rulesConf.item(i);
-                    InjectionRule rule = new InjectionRule(ruleNode, contextPath);
-                    if (rule.isEnabled())
+                    InjectionRule rule = new InjectionRule(ruleNode,
+                                                           contextPath);
+                    if (rule.isEnabled()) {
                         rules.add(rule);
+                    }
                 }
             }
         } catch (Exception e) {

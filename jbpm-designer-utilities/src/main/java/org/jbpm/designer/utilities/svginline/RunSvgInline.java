@@ -24,12 +24,12 @@ public class RunSvgInline {
     public static void main(String... args) {
         try {
             System.out.println("Adding svg images inline to file\n\t" + SS_IN_FILE);
-            SvgInline inliner = new SvgInline(SS_IN_FILE, SS_OUT_FILE);
+            SvgInline inliner = new SvgInline(SS_IN_FILE,
+                                              SS_OUT_FILE);
             inliner.processStencilSet();
             System.out.println("Output saved to file\n\t" + SS_OUT_FILE);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 }

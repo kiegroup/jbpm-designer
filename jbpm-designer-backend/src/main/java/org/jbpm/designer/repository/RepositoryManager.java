@@ -32,11 +32,13 @@ public class RepositoryManager {
         return this.availableRepositories.get(repositoryId);
     }
 
-    public void registerRepository(String repositoryId, Repository repository) {
+    public void registerRepository(String repositoryId,
+                                   Repository repository) {
         if (this.availableRepositories.containsKey(repositoryId)) {
             return;
         }
-        this.availableRepositories.put(repositoryId, repository);
+        this.availableRepositories.put(repositoryId,
+                                       repository);
     }
 
     public Repository unregisterRepository(String repositoryId) {

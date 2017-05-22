@@ -16,14 +16,12 @@
 package org.jbpm.designer.web.profile;
 
 import java.util.Collection;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 /**
  * The profile service gives access to profiles.
  * @author Antoine Toulme
- *
  */
 public interface IDiagramProfileService {
 
@@ -32,8 +30,9 @@ public interface IDiagramProfileService {
      * @param name the name of the profile
      * @return the profile with the name in the context of that request
      */
-    public IDiagramProfile findProfile(HttpServletRequest request, String name);
-    
+    public IDiagramProfile findProfile(HttpServletRequest request,
+                                       String name);
+
     /**
      * @param request the context
      * @return the profiles for the given context.

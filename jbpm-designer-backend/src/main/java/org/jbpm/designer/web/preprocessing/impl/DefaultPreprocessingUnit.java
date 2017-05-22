@@ -15,33 +15,30 @@
  */
 package org.jbpm.designer.web.preprocessing.impl;
 
-import javax.enterprise.event.Event;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.guvnor.common.services.project.service.POMService;
-import org.guvnor.common.services.project.service.ProjectService;
-import org.guvnor.common.services.shared.metadata.MetadataService;
-import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.repository.vfs.RepositoryDescriptor;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingUnit;
 import org.jbpm.designer.web.profile.IDiagramProfile;
-import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.io.IOService;
-import org.uberfire.workbench.events.NotificationEvent;
-
 
 /**
- * 
  * @author Tihomir Surdilovic
  */
 @Named("defaultPreprocessingUnit")
 public class DefaultPreprocessingUnit implements IDiagramPreprocessingUnit {
 
     public void preprocess(HttpServletRequest request,
-            HttpServletResponse response, IDiagramProfile profile, ServletContext servletContext, boolean readOnly, boolean viewLocked, IOService ioService, RepositoryDescriptor descriptor) {
+                           HttpServletResponse response,
+                           IDiagramProfile profile,
+                           ServletContext servletContext,
+                           boolean readOnly,
+                           boolean viewLocked,
+                           IOService ioService,
+                           RepositoryDescriptor descriptor) {
         // nothing to do
     }
 

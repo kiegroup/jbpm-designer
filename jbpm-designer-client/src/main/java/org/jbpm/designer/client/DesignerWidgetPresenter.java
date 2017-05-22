@@ -19,7 +19,6 @@ import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.uberfire.ext.widgets.common.client.common.HasBusyIndicator;
 
@@ -31,9 +30,9 @@ public class DesignerWidgetPresenter {
             HasBusyIndicator,
             IsWidget {
 
-        void setEditorID( final String id );
+        void setEditorID(final String id);
 
-        void setEditorParamters( final Map<String, String> editorParameters );
+        void setEditorParamters(final Map<String, String> editorParameters);
 
         String getEditorID();
 
@@ -60,8 +59,8 @@ public class DesignerWidgetPresenter {
         return view.getEditorID();
     }
 
-    public void askOpenInXMLEditor( String editorID ) {
-        view.raiseAskOpenInXMLEditor( editorID );
+    public void askOpenInXMLEditor(String editorID) {
+        view.raiseAskOpenInXMLEditor(editorID);
     }
 
     public boolean confirmClose() {
@@ -72,50 +71,51 @@ public class DesignerWidgetPresenter {
         view.raiseEventReload(editorID);
     }
 
-    public void raiseEventSave( final String editorID ) {
+    public void raiseEventSave(final String editorID) {
         view.raiseEventSave(editorID);
     }
 
-    public void raiseEventCheckSave( final String editorID , String pathURI) {
-        view.raiseEventCheckSave(editorID, pathURI);
+    public void raiseEventCheckSave(final String editorID,
+                                    String pathURI) {
+        view.raiseEventCheckSave(editorID,
+                                 pathURI);
     }
 
-    public void raiseEventSaveCancel( String editorID ) {
+    public void raiseEventSaveCancel(String editorID) {
         view.raiseEventSaveCancel(editorID);
     }
 
-    public void setProcessUnSaved( String editorID ) {
-        view.setProcessUnSaved( editorID );
+    public void setProcessUnSaved(String editorID) {
+        view.setProcessUnSaved(editorID);
     }
 
-    public boolean getIsReadOnly( String editorID ) {
+    public boolean getIsReadOnly(String editorID) {
         return view.getIsReadOnly(editorID);
     }
 
-    public boolean getIsViewLocked( String editorID ) {
-        return view.getIsViewLocked( editorID );
+    public boolean getIsViewLocked(String editorID) {
+        return view.getIsViewLocked(editorID);
     }
 
-    public void setProcessSaved( String editorID ) {
+    public void setProcessSaved(String editorID) {
         view.setProcessSaved(editorID);
-
     }
 
-    public void raiseEventUpdateLock( String editorID) {
+    public void raiseEventUpdateLock(String editorID) {
         view.raiseEventUpdateLock(editorID);
     }
 
-    public boolean canSaveDesignerModel( String editorID ) {
-        return view.canSaveDesignerModel( editorID );
+    public boolean canSaveDesignerModel(String editorID) {
+        return view.canSaveDesignerModel(editorID);
     }
 
-    public void setSize( final int width,
-                         final int height ) {
-        view.setSize( width, height );
+    public void setSize(final int width,
+                        final int height) {
+        view.setSize(width,
+                     height);
     }
 
     public IsWidget getView() {
         return view;
     }
-
 }
