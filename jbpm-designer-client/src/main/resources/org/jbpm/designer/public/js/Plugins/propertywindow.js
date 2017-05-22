@@ -5099,7 +5099,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                             cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
                                 id: 'name',
                                 header: ORYX.I18N.PropertyWindow.name,
-                                width: smallColWidth * 2,
+                                width: smallColWidth,
                                 dataIndex: 'name',
                                 editor: new Ext.form.TextField({ allowBlank: true, vtype: 'uniqueInputName', regex: /^[a-z0-9\-\.\_]*$/i }),
                                 renderer: Ext.util.Format.htmlEncode
@@ -5137,7 +5137,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField,  {
                             }, {
                                 id: 'ctype',
                                 header: ORYX.I18N.PropertyWindow.customType,
-                                width: smallColWidth * 2,
+                                width: smallColWidth,
                                 dataIndex: 'ctype',
                                 editor: new Ext.form.TextField({ allowBlank: true }),
                                 renderer: Ext.util.Format.htmlEncode
