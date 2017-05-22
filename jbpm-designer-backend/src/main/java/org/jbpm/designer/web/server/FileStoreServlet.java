@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
@@ -43,6 +44,7 @@ public class FileStoreServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private static final Logger _logger = LoggerFactory.getLogger(FileStoreServlet.class);
+    private String retData;
 
     protected IDiagramProfile profile;
 
@@ -75,11 +77,11 @@ public class FileStoreServlet extends HttpServlet {
         }
         Repository repository = profile.getRepository();
 
-        String retData;
+        retData = "";
         if (dataEncoded != null && dataEncoded.length() > 0) {
             retData = new String(Base64.decodeBase64(dataEncoded));
         } else {
-            retData = data;
+            retData = StringEscapeUtils.ESCAPE_XML11.translate(data);
         }
 
         if (fext != null && (fext.equals("bpmn2") || fext.equals("svg"))) {
@@ -153,5 +155,9 @@ public class FileStoreServlet extends HttpServlet {
         } catch (Exception e) {
             _logger.error(e.getMessage());
         }
+    }
+
+    public String getRetData() {
+        return this.retData;
     }
 }
