@@ -23,7 +23,6 @@ import javax.inject.Inject;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.notification.DesignerNotificationEvent;
 import org.uberfire.client.views.pfly.notifications.NotificationPopupView;
@@ -31,9 +30,6 @@ import org.uberfire.client.workbench.widgets.animations.LinearFadeOutAnimation;
 
 @ApplicationScoped
 public class DesignerNotificationPopupsManager {
-
-    @Inject
-    private SyncBeanManager iocManager;
 
     @Inject
     private User user;
@@ -54,8 +50,7 @@ public class DesignerNotificationPopupsManager {
         if (user.getIdentifier().equals(event.getUserId())) {
 
             if (event.getNotification() != null && !event.getNotification().equals("openinxmleditor")) {
-                //Create a Notification pop-up. Because it is instantiated with CDI we need to manually destroy it when finished
-                final NotificationPopupView view = iocManager.lookupBean(NotificationPopupView.class).getInstance();
+                final NotificationPopupView view = new NotificationPopupView();
                 activeNotifications.add(view);
                 view.setPopupPosition(getMargin(),
                                       activeNotifications.size() * SPACING);
@@ -116,7 +111,6 @@ public class DesignerNotificationPopupsManager {
                 view.hide();
                 deactiveNotifications.remove(view);
                 activeNotifications.remove(view);
-                iocManager.destroyBean(view);
                 removing = false;
                 remove();
             }
