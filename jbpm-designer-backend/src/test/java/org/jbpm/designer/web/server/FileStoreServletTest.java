@@ -15,9 +15,12 @@
 
 package org.jbpm.designer.web.server;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.repository.RepositoryBaseTest;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.junit.After;
@@ -29,6 +32,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
@@ -77,6 +81,27 @@ public class FileStoreServletTest extends RepositoryBaseTest {
         try {
             servlet.doPost(request,
                            mock(HttpServletResponse.class));
+        } catch (Exception e) {
+            // exception thrown due to mocked request and response
+        }
+        verify(profileService,
+               never()).findProfile(any(HttpServletRequest.class),
+                                    anyString());
+    }
+
+    @Test
+    public void testEsapeRetData() throws Exception {
+        Map<String, String> params = new HashMap<>();
+        params.put("data",
+                   "<hello>some value</hello>");
+
+        servlet.profile = profile;
+        try {
+            servlet.doPost(new TestHttpServletRequest(params),
+                           mock(HttpServletResponse.class));
+
+            assertNotNull(servlet.getRetData());
+            assertEquals("&lt;hello&gt;some value&lt;/hello&gt;", servlet.getRetData());
         } catch (Exception e) {
             // exception thrown due to mocked request and response
         }
