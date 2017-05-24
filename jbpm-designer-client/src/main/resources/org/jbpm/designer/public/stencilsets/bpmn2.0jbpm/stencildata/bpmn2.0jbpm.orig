@@ -3812,8 +3812,8 @@
 					"optional":true
 					 $if(workitemDefs.(k).customEditor)$
 					,
-					"hidden":true,
-					"visible":false
+					"hidden":false,
+					"visible":true
 					$endif$
 				$bclose$,
 				$bopen$

@@ -2139,7 +2139,7 @@ public class Bpmn2JsonMarshaller {
                             associationValue = "";
                         }
 
-                        // don't include properties that have their independent input editors
+                        // Handle properties that have their independent input editors
                         if (isCustomElement((String) properties.get("taskname"),
                                             preProcessingData)) {
                             if (!(rhsAssociation.equals("TaskName"))) {
@@ -2241,7 +2241,12 @@ public class Bpmn2JsonMarshaller {
                     if (lhsAssociation != null && lhsAssociation.length() > 0) {
                         associationBuff.append("[din]" + lhsAssociation).append("->").append(rhsAssociation);
                         associationBuff.append(",");
-                        uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
+                        // Handle properties that have their independent input editors
+                        if (isCustomElement((String) properties.get("taskname"),
+                                            preProcessingData)) {
+                            properties.put(rhsAssociation.toLowerCase(),
+                                           lhsAssociation);
+                        }
                     }
                     uniDirectionalAssociations.add(lhsAssociation + "," + rhsAssociation);
 

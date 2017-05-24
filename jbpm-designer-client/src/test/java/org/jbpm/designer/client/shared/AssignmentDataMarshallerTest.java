@@ -18,7 +18,10 @@ package org.jbpm.designer.client.shared;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.errai.marshalling.client.api.MarshallingSession;
 import org.jboss.errai.marshalling.client.api.json.EJValue;
@@ -44,6 +47,7 @@ public class AssignmentDataMarshallerTest extends AssignmentBaseTest {
     private List<AssignmentRow> outputs;
     private List<String> dataTypes;
     private List<String> dataTypesDisplayNames;
+    private Map<String, List<String>> mapCustomAssignmentProperties;
 
     @Mock
     private MarshallingSession session;
@@ -57,6 +61,7 @@ public class AssignmentDataMarshallerTest extends AssignmentBaseTest {
         outputs = new ArrayList<AssignmentRow>();
         dataTypes = new ArrayList<String>();
         dataTypesDisplayNames = new ArrayList<String>();
+        mapCustomAssignmentProperties = new HashMap<String, List<String>>();
 
         dataTypes.add("String");
         dataTypesDisplayNames.add("String");
@@ -309,11 +314,20 @@ public class AssignmentDataMarshallerTest extends AssignmentBaseTest {
         marshallAndDemarshall();
     }
 
-    private void marshallAndDemarshall() {
-        AssignmentData original = new AssignmentData(inputs,
-                                                     outputs,
-                                                     dataTypes,
-                                                     dataTypesDisplayNames);
+    @Test
+    public void testCustomAssignmentProperties() {
+        // "FaultToUri:Henry;Rod;Tony;,TruckType:Mazda;Tonka;Mercedes;,FromUri:,ReplyToUri:Jane;,"
+        mapCustomAssignmentProperties.put("FaultToUri",
+                                          Arrays.asList(new String[]{"Henry", "Rod", "Tony"}));
+        mapCustomAssignmentProperties.put("TruckType",
+                                          Arrays.asList(new String[]{"Mazda", "Tonka", "Mercedes"}));
+        mapCustomAssignmentProperties.put("FromUri",
+                                          Arrays.asList(new String[]{}));
+        mapCustomAssignmentProperties.put("ReplyToUri",
+                                          Arrays.asList(new String[]{"Jane"}));
+
+        AssignmentData original = new AssignmentData();
+        original.setCustomAssignmentProperties(mapCustomAssignmentProperties);
         String json = marshaller.marshall(original,
                                           session);
         EJValue jsonObject = new JSONStreamDecoder(new ByteArrayInputStream(json.getBytes())).parse();
@@ -321,5 +335,26 @@ public class AssignmentDataMarshallerTest extends AssignmentBaseTest {
                                                             session);
         assertEquals(original,
                      demarshalled);
+    }
+
+    private void marshallAndDemarshall(Map<String, List<String>> mapCustomAssignmentProperties) {
+        AssignmentData original = new AssignmentData(inputs,
+                                                     outputs,
+                                                     dataTypes,
+                                                     dataTypesDisplayNames);
+        if (mapCustomAssignmentProperties != null) {
+            original.setCustomAssignmentProperties(mapCustomAssignmentProperties);
+        }
+        String json = marshaller.marshall(original,
+                                          session);
+        EJValue jsonObject = new JSONStreamDecoder(new ByteArrayInputStream(json.getBytes())).parse();
+        AssignmentData demarshalled = marshaller.demarshall(jsonObject,
+                                                            session);
+        assertEquals(original,
+                     demarshalled);
+    }
+
+    private void marshallAndDemarshall() {
+        marshallAndDemarshall(null);
     }
 }

@@ -19,6 +19,7 @@ package org.jbpm.designer.client.popup;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
@@ -37,6 +38,7 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
 
     ListBoxValues dataTypeListBoxValues;
     ListBoxValues processVarListBoxValues;
+    Map<String, List<String>> customAssignmentsProperties;
 
     private VariableType variableType = VariableType.INPUT;
 
@@ -200,6 +202,13 @@ public class ActivityDataIOEditorWidget implements ActivityDataIOEditorWidgetVie
         for (int i = 0; i < view.getAssignmentsCount(); i++) {
             view.getAssignmentWidget(i).setDisallowedNames(disallowedNames,
                                                            disallowedNameErrorMessage);
+        }
+    }
+
+    public void setCustomAssignmentsProperties(final Map<String, List<String>> customAssignmentsProperties) {
+        this.customAssignmentsProperties = customAssignmentsProperties;
+        for (int i = 0; i < view.getAssignmentsCount(); i++) {
+            view.getAssignmentWidget(i).setCustomAssignmentsProperties(this.customAssignmentsProperties);
         }
     }
 

@@ -19,6 +19,7 @@ package org.jbpm.designer.client.popup;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.gwtmockito.GwtMock;
@@ -380,6 +381,20 @@ public class ActivityDataIOEditorWidgetTest {
         verify(assignWidgetOne).setProcessVariables(variables);
         verify(assignWidgetTwo).setProcessVariables(variables);
         verify(assignWidgetThree).setProcessVariables(variables);
+    }
+
+    @Test
+    public void testSetCustomAssignmentsProperties() {
+        Map<String, List<String>> customAssignmentsProperties = mock(Map.class);
+        widget.setCustomAssignmentsProperties(customAssignmentsProperties);
+
+        verify(view).getAssignmentWidget(0);
+        verify(view).getAssignmentWidget(1);
+        verify(view).getAssignmentWidget(2);
+
+        verify(assignWidgetOne).setCustomAssignmentsProperties(customAssignmentsProperties);
+        verify(assignWidgetTwo).setCustomAssignmentsProperties(customAssignmentsProperties);
+        verify(assignWidgetThree).setCustomAssignmentsProperties(customAssignmentsProperties);
     }
 
     @Test

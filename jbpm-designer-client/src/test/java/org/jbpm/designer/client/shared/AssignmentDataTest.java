@@ -16,6 +16,9 @@
 
 package org.jbpm.designer.client.shared;
 
+import java.util.List;
+import java.util.Map;
+
 import org.jbpm.designer.client.shared.util.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -48,7 +51,8 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                                                            "str1:String",
                                                            "[din]str1->inStr",
                                                            "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object",
-                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
+                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify",
+                                                           null);
 
         assignmentData.setVariableCountsString(true,
                                                true,
@@ -66,7 +70,8 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                                                            "str1:String",
                                                            null,
                                                            "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object",
-                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
+                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify",
+                                                           null);
 
         assignmentData.setVariableCountsString(true,
                                                true,
@@ -84,7 +89,8 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                                                            "str1:String,int1:Integer,custom1:org.jdl.Custom",
                                                            "[dout]outStr1->str1",
                                                            "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object",
-                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
+                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify",
+                                                           null);
 
         assignmentData.setVariableCountsString(false,
                                                false,
@@ -102,7 +108,8 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                                                            "str1:String,int1:Integer,custom1:org.jdl.Custom",
                                                            null,
                                                            "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object",
-                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
+                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify",
+                                                           null);
 
         assignmentData.setVariableCountsString(false,
                                                false,
@@ -120,7 +127,8 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                                                            "str1:String,int1:Integer,custom1:org.jdl.Custom",
                                                            null,
                                                            "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object",
-                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
+                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify",
+                                                           null);
 
         assignmentData.setVariableCountsString(true,
                                                false,
@@ -138,7 +146,8 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                                                            "str1:String,int1:Integer,custom1:org.jdl.Custom",
                                                            "[din]str1->inStr,[dout]outStr1->str1",
                                                            "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object",
-                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
+                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify",
+                                                           null);
 
         assignmentData.setVariableCountsString(true,
                                                false,
@@ -156,7 +165,8 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                                                            "str1:String,int1:Integer,custom1:org.jdl.Custom",
                                                            "[din]str1->inStr,[din]int1->inInt1,[din]custom1->inCustom1,[din]inStrConst=TheString,[dout]outStr1->str1,[dout]outInt1->int1,[dout]outCustom1->custom1",
                                                            "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object",
-                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
+                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify",
+                                                           null);
 
         assignmentData.setVariableCountsString(true,
                                                false,
@@ -174,7 +184,8 @@ public class AssignmentDataTest extends AssignmentBaseTest {
                                                            "str1:String,int1:Integer,custom1:org.jdl.Custom",
                                                            "[dout]outStr1->str1,[dout]outStr1->int1,[dout]outStr1->custom1",
                                                            "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object",
-                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify");
+                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify",
+                                                           null);
 
         assignmentData.setVariableCountsString(true,
                                                false,
@@ -183,4 +194,44 @@ public class AssignmentDataTest extends AssignmentBaseTest {
         assertEquals("0 Data_Inputs, 3 Data_Outputs",
                      assignmentData.getVariableCountsString());
     }
+
+    @Test
+    public void testSetCustomAssignmentProperties() {
+        AssignmentData assignmentData = new AssignmentData(null,
+                                                           "outStr1:String",
+                                                           "str1:String,int1:Integer,custom1:org.jdl.Custom",
+                                                           "[dout]outStr1->str1,[dout]outStr1->int1,[dout]outStr1->custom1",
+                                                           "String:String, Integer:Integer, Boolean:Boolean, Float:Float, Object:Object",
+                                                           "GroupId,Skippable,Comment,Description,Priority,Content,TaskName,Locale,CreatedBy,NotCompletedReassign,NotStartedReassign,NotCompletedNotify,NotStartedNotify",
+                                                           "FaultToUri:Henry;Rod;Tony;,TruckType:Mazda;Tonka;Mercedes;,FromUri:,ReplyToUri:Jane;,");
+
+        Map<String, List<String>> customAssignmentProperties = assignmentData.getCustomAssignmentProperties();
+        assertTrue(customAssignmentProperties.containsKey("FaultToUri"));
+        assertTrue(customAssignmentProperties.containsKey("TruckType"));
+        assertTrue(customAssignmentProperties.containsKey("FromUri"));
+        assertTrue(customAssignmentProperties.containsKey("ReplyToUri"));
+
+        List<String> truckTypeValues = customAssignmentProperties.get("TruckType");
+        assertNotNull(truckTypeValues);
+        assertEquals(3,
+                     truckTypeValues.size());
+        assertTrue(truckTypeValues.contains("Mazda"));
+        assertTrue(truckTypeValues.contains("Tonka"));
+        assertTrue(truckTypeValues.contains("Mercedes"));
+
+        List<String> replyToUriValues = customAssignmentProperties.get("ReplyToUri");
+        assertNotNull(replyToUriValues);
+        assertEquals(1,
+                     replyToUriValues.size());
+        assertTrue(replyToUriValues.contains("Jane"));
+
+        List<String> fromUriValues = customAssignmentProperties.get("FromUri");
+        assertNotNull(fromUriValues);
+        assertTrue(fromUriValues.isEmpty());
+
+        String customAssignmentPropertiesString = assignmentData.getCustomAssignmentPropertiesString();
+        assertEquals("TruckType:Mazda;Tonka;Mercedes;,FromUri:,FaultToUri:Henry;Rod;Tony;,ReplyToUri:Jane;,",
+                     customAssignmentPropertiesString);
+    }
+
 }

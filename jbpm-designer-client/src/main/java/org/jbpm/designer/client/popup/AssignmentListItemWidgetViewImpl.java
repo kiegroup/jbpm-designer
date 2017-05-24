@@ -17,6 +17,8 @@
 package org.jbpm.designer.client.popup;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Event;
@@ -43,6 +45,7 @@ import org.jboss.errai.ui.shared.api.annotations.Templated;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable.VariableType;
+import org.jbpm.designer.client.shared.util.StringUtils;
 import org.jbpm.designer.client.util.ComboBox;
 import org.jbpm.designer.client.util.ComboBoxView;
 import org.jbpm.designer.client.util.DataIOEditorNameTextBox;
@@ -78,6 +81,8 @@ public class AssignmentListItemWidgetViewImpl extends Composite implements Assig
     @DataField
     @DesignerSpecific
     protected DataIOEditorNameTextBox name;
+
+    protected ListBoxValues processVarListBoxValues;
 
     private boolean allowDuplicateNames = true;
     private String duplicateNameErrorMessage = "";
@@ -306,7 +311,9 @@ public class AssignmentListItemWidgetViewImpl extends Composite implements Assig
     @Override
     public void setProcessVariables(ListBoxValues processVarListBoxValues) {
         processVarComboBox.setCurrentTextValue("");
-        processVarComboBox.setListBoxValues(processVarListBoxValues);
+        this.processVarListBoxValues = new ListBoxValues(processVarListBoxValues,
+                                                         false);
+        processVarComboBox.setListBoxValues(this.processVarListBoxValues);
         String con = getConstant();
         // processVar set here because the ListBoxValues must already have been set
         if (con != null && !con.isEmpty()) {
@@ -327,6 +334,22 @@ public class AssignmentListItemWidgetViewImpl extends Composite implements Assig
         name.setInvalidValues(disallowedNames,
                               false,
                               disallowedNameErrorMessage);
+    }
+
+    @Override
+    public void setCustomAssignmentsProperties(final Map<String, List<String>> customAssignmentsProperties) {
+        String varName = name.getText();
+        if (customAssignmentsProperties.get(varName) != null) {
+            // It's a customAssignmentProperty, so make name read-only
+            name.setReadOnly(true);
+            List<String> customAssignmentValues = customAssignmentsProperties.get(varName);
+            if (!customAssignmentValues.isEmpty()) {
+                for (int i = customAssignmentValues.size() - 1; i >= 0; i--) {
+                    this.processVarListBoxValues.addCustomValue(StringUtils.createQuotedConstant(customAssignmentValues.get(i)),
+                                                                null);
+                }
+            }
+        }
     }
 
     @Override
