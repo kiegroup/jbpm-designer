@@ -5832,7 +5832,7 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
                 showScriptEditor(false, false);
             }
 
-            function showScriptEditor(state, resetSource, expression) {
+            function showScriptEditor(state, resetSource, expression, eTypeMode, eShowLineNumbers, eDoLineWrapping, eDoMatchBrackets) {
                 if (sourceEditor) {
                     sourceEditor.toTextArea();
                     sourceEditor = null;
@@ -5841,7 +5841,7 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
                 isSimpleEditor = state;
                 contentPanel.setActiveTab(scriptEditorLayout);
                 dialog.setTitle(ORYX.I18N.ConditionExpressionEditorField.sequenceFlowFullTitle);
-                initCodeEditor();
+                initCodeEditor(eTypeMode, eShowLineNumbers, eDoLineWrapping, eDoMatchBrackets);
             }
 
             function showSimpleEditor(state, cleanEditor) {
@@ -5863,7 +5863,7 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
                         if (tab.title == ORYX.I18N.ConditionExpressionEditorField.scriptTab) {
                             if (isSimpleEditor) {
                                 if (varsCombo.getValue() == "" || (varsCombo.getValue() != "" && actionsCombo.getValue() == "")) {
-                                   showScriptEditor(false, true, '');
+                                    showScriptEditor(false, true, '', "text/x-java", true, true, true);
                                 } else {
                                     var onsuccess = function(response) {
                                         isSimpleEditor = true;
@@ -5873,7 +5873,7 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField,  {
                                                 showScriptGenerationError(responseJson.errorMessage);
                                                 showSimpleEditor(true, false);
                                             } else {
-                                                showScriptEditor(false, true, responseJson.script);
+                                                showScriptEditor(false, true, responseJson.script, "text/x-java", true, true, true);
                                             }
                                         }
                                     }
@@ -6714,12 +6714,6 @@ Ext.form.ComplexVisualDataAssignmentField = Ext.extend(Ext.form.TriggerField,  {
         if(this.disabled){
             return;
         }
-
-        Ext.each(this.dataSource.data.items, function(item){
-            if((item.data.gridProperties.propId == "oryx-assignments")) {
-                //alert("value: " + item.data['value']);
-            }
-        });
 
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var processVars = jsonPath(processJSON.evalJSON(), "$.properties.vardefs");
