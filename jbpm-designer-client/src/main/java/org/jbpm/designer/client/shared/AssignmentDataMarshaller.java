@@ -36,6 +36,7 @@ public class AssignmentDataMarshaller
     public static final String DATA_TYPES = "dataTypes";
     public static final String DISALLOWED_PROPERTY_NAMES = "disallowedPropertyNames";
     public static final String VARIABLE_COUNTS_STRING = "variablecountsstring";
+    public static final String CUSTOM_ASSIGNMENTS_PROPERTIES = "customassignmentproperties";
 
     public AssignmentData doNotNullDemarshall(EJValue o,
                                               MarshallingSession ctx) {
@@ -47,12 +48,14 @@ public class AssignmentDataMarshaller
         String varCounts = obj.get(VARIABLE_COUNTS_STRING).isString().stringValue();
         String dataTypes = obj.get(DATA_TYPES).isString().stringValue();
         String disallowedPropertyNames = obj.get(DISALLOWED_PROPERTY_NAMES).isString().stringValue();
+        String customAssignmentProperties = obj.get(CUSTOM_ASSIGNMENTS_PROPERTIES).isString().stringValue();
         AssignmentData data = new AssignmentData(inputVariables,
                                                  outputVariables,
                                                  processVariables,
                                                  assignments,
                                                  dataTypes,
-                                                 disallowedPropertyNames);
+                                                 disallowedPropertyNames,
+                                                 customAssignmentProperties);
         data.setVariableCountsString(varCounts);
         return data;
     }
@@ -68,7 +71,8 @@ public class AssignmentDataMarshaller
                 "\"" + ASSIGNMENTS + "\":\"" + o.getAssignmentsString() + "\"," +
                 "\"" + VARIABLE_COUNTS_STRING + "\":\"" + o.getVariableCountsString() + "\"," +
                 "\"" + DATA_TYPES + "\":\"" + o.getDataTypesString() + "\"," +
-                "\"" + DISALLOWED_PROPERTY_NAMES + "\":\"" + o.getDisallowedPropertyNamesString() + "\"}";
+                "\"" + DISALLOWED_PROPERTY_NAMES + "\":\"" + o.getDisallowedPropertyNamesString() + "\"," +
+                "\"" + CUSTOM_ASSIGNMENTS_PROPERTIES + "\":\"" + o.getCustomAssignmentPropertiesString() + "\"}";
     }
 
     @Override

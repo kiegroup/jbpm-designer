@@ -103,6 +103,7 @@ public class ListBoxValuesTest {
                                                         null,
                                                         null,
                                                         sDataTypes1,
+                                                        null,
                                                         null);
 
     @Test
@@ -359,4 +360,39 @@ public class ListBoxValuesTest {
         assertEquals(displayValue,
                      value);
     }
+
+    @Test
+    public void testCopyConstructor() {
+        List<String> processVarStartValues = Arrays.asList(
+                "** Variable Definitions **",
+                "employee",
+                "reason",
+                "performance"
+        );
+        ListBoxValues listBoxValues = new ListBoxValues("Constant ...",
+                                                        "Edit ",
+                                                        null);
+        listBoxValues.addValues(processVarStartValues);
+        listBoxValues.addCustomValue("\"abc\"",
+                                     "");
+        listBoxValues.addCustomValue("\"def\"",
+                                     "");
+
+        // Copy custom values as well as non-custom
+        ListBoxValues copy1 = new ListBoxValues(listBoxValues,
+                                                true);
+        assertTrue(copy1.getAcceptableValuesWithCustomValues().size() == 8);
+        assertTrue(copy1.getAcceptableValuesWithoutCustomValues().size() == 4);
+        assertTrue(copy1.getAcceptableValuesWithCustomValues().contains("\"abc\""));
+        assertTrue(copy1.getAcceptableValuesWithCustomValues().contains("\"def\""));
+
+        // Don't copy custom values as well as non-custom
+        ListBoxValues copy2 = new ListBoxValues(listBoxValues,
+                                                false);
+        assertTrue(copy2.getAcceptableValuesWithCustomValues().size() == 6);
+        assertTrue(copy2.getAcceptableValuesWithoutCustomValues().size() == 4);
+        assertFalse(copy2.getAcceptableValuesWithCustomValues().contains("\"abc\""));
+        assertFalse(copy2.getAcceptableValuesWithCustomValues().contains("\"def\""));
+    }
 }
+

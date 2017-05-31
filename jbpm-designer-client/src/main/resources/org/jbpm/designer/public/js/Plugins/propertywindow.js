@@ -355,6 +355,11 @@ ORYX.Plugins.PropertyWindow = {
 			value: option.value
 			});
 
+		// set assignments property if it's a custom assignment property that has just been edited
+		if (selectedElements.length == 1 && selectedElements[0].getStencil().property(key).customassignment()) {
+			var oldValue = oldValues[selectedElements[0].getId()];
+			ORYX.DataIOEditorUtils.setAssignmentsPropertyForCustomAssignment(this.facade, selectedElements[0], key, oldValue, newValue);
+		}
 	},
 	
 	// Changes made in the property window will be shown directly

@@ -17,6 +17,7 @@
 package org.jbpm.designer.client.popup;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -216,6 +217,11 @@ public class ActivityDataIOEditorViewImpl extends BaseModal implements ActivityD
                                                                   presenter.processVarTester());
         processVarListBoxValues.addValues(processVariables);
         outputAssignmentsWidget.setProcessVariables(processVarListBoxValues);
+    }
+
+    @Override
+    public void setCustomAssignmentsProperties(final Map<String, List<String>> customAssignmentsProperties) {
+        inputAssignmentsWidget.setCustomAssignmentsProperties(customAssignmentsProperties);
     }
 
     @Override

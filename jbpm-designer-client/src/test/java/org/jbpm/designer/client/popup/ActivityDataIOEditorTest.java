@@ -17,8 +17,11 @@
 package org.jbpm.designer.client.popup;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jboss.errai.marshalling.client.api.MarshallingSession;
@@ -49,6 +52,9 @@ public class ActivityDataIOEditorTest {
 
     @Captor
     ArgumentCaptor<List<AssignmentRow>> listAssignmentCaptor;
+
+    @Captor
+    ArgumentCaptor<Map<String, List<String>>> mapCaptor;
 
     @Mock
     private ActivityDataIOEditorView ioEditorView;
@@ -254,6 +260,25 @@ public class ActivityDataIOEditorTest {
                      listCaptor.getValue().size());
         assertEquals(variables.get(0),
                      listCaptor.getValue().get(0));
+    }
+
+    @Test
+    public void testSetCustomAssignmentsProperties() {
+        Map<String, List<String>> customAssignmentsProperties = new HashMap<String, List<String>>();
+        customAssignmentsProperties.put("TruckType",
+                                        Arrays.asList(new String[]{"Hiace", "Mazda"}));
+        customAssignmentsProperties.put("To",
+                                        Arrays.asList(new String[]{"Donna", "Diana", "Julia"}));
+
+        ioEditor.setCustomAssignmentsProperties(customAssignmentsProperties);
+        verify(ioEditorView).setCustomAssignmentsProperties(mapCaptor.capture());
+        assertEquals(2,
+                     mapCaptor.getValue().keySet().size());
+        assertEquals(customAssignmentsProperties.get("TruckType"),
+                     mapCaptor.getValue().get("TruckType"));
+        assertEquals(customAssignmentsProperties.get("To"),
+                     mapCaptor.getValue().get("To"));
+
     }
 
     @Test

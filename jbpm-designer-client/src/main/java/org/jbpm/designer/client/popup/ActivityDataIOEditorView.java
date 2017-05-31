@@ -17,6 +17,7 @@
 package org.jbpm.designer.client.popup;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jbpm.designer.client.shared.AssignmentRow;
@@ -64,6 +65,8 @@ public interface ActivityDataIOEditorView {
     void setInputAssignmentsProcessVariables(List<String> processVariables);
 
     void setOutputAssignmentsProcessVariables(List<String> processVariables);
+
+    void setCustomAssignmentsProperties(final Map<String, List<String>> customAssignmentsProperties);
 
     void setInputAssignmentRows(List<AssignmentRow> inputAssignmentRows);
 

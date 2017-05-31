@@ -16,6 +16,11 @@
 
 package org.jbpm.designer.client.popup;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
@@ -30,6 +35,7 @@ import org.jboss.errai.databinding.client.api.DataBinder;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable;
+import org.jbpm.designer.client.shared.util.StringUtils;
 import org.jbpm.designer.client.util.ComboBox;
 import org.jbpm.designer.client.util.DataIOEditorNameTextBox;
 import org.jbpm.designer.client.util.ListBoxValues;
@@ -116,6 +122,7 @@ public class AssignmentListItemWidgetTest {
         Mockito.doCallRealMethod().when(widget).getProcessVar();
         Mockito.doCallRealMethod().when(widget).setDataTypes(any(ListBoxValues.class));
         Mockito.doCallRealMethod().when(widget).setProcessVariables(any(ListBoxValues.class));
+        Mockito.doCallRealMethod().when(widget).setCustomAssignmentsProperties(any(Map.class));
         Mockito.doCallRealMethod().when(widget).init();
         Mockito.doCallRealMethod().when(widget).setModel(any(AssignmentRow.class));
 
@@ -312,6 +319,25 @@ public class AssignmentListItemWidgetTest {
     }
 
     @Test
+    public void testSetCustomAssignmentsProperties() {
+        Map<String, List<String>> customAssignmentsProperties = new HashMap<String, List<String>>();
+        customAssignmentsProperties.put("Name",
+                                        Arrays.asList(new String[]{"George", "Anna", "Georgina"}));
+        customAssignmentsProperties.put("Role",
+                                        Arrays.asList(new String[]{"admin", "test"}));
+
+        when(name.getText()).thenReturn("Role");
+        ListBoxValues processVarListBoxValues = new ListBoxValues(AssignmentListItemWidgetView.CONSTANT_PROMPT,
+                                                                  DesignerEditorConstants.INSTANCE.Edit() + " ",
+                                                                  null);
+        widget.setProcessVariables(processVarListBoxValues);
+        widget.setCustomAssignmentsProperties(customAssignmentsProperties);
+
+        assertTrue(widget.processVarListBoxValues.isCustomValue("\"admin\""));
+        assertTrue(widget.processVarListBoxValues.isCustomValue("\"test\""));
+    }
+
+    @Test
     public void testSetProcessVariablesVar() {
         ListBoxValues.ValueTester processVarTester = new ListBoxValues.ValueTester() {
             public String getNonCustomValueForUserString(String userValue) {
@@ -328,7 +354,7 @@ public class AssignmentListItemWidgetTest {
         widget.setConstant(sConstant);
         widget.setProcessVariables(processVarListBoxValues);
         verify(processVarComboBox,
-               times(2)).setListBoxValues(processVarListBoxValues);
+               times(2)).setListBoxValues(any(ListBoxValues.class));
         verify(processVarComboBox).addCustomValueToListBoxValues(sConstant,
                                                                  "");
         verify(processVar).setValue(sConstant);
@@ -351,7 +377,7 @@ public class AssignmentListItemWidgetTest {
         widget.setConstant(sConstant);
         widget.setProcessVariables(processVarListBoxValues);
         verify(processVarComboBox,
-               times(2)).setListBoxValues(processVarListBoxValues);
+               times(2)).setListBoxValues(any(ListBoxValues.class));
         verify(processVarComboBox).addCustomValueToListBoxValues(sConstant,
                                                                  "");
         verify(processVar).setValue("\"abcdeabcde...\"");

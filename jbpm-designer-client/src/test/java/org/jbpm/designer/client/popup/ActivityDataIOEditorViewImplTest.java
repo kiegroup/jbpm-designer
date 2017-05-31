@@ -18,8 +18,10 @@ package org.jbpm.designer.client.popup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.gwtmockito.GwtMock;
@@ -50,6 +52,9 @@ public class ActivityDataIOEditorViewImplTest {
     @Captor
     private ArgumentCaptor<List<AssignmentRow>> listAssignmentCaptor;
 
+    @Captor
+    ArgumentCaptor<Map<String, List<String>>> mapCaptor;
+
     @GwtMock
     private ActivityDataIOEditorViewImpl view;
 
@@ -72,6 +77,7 @@ public class ActivityDataIOEditorViewImplTest {
         doCallRealMethod().when(view).setPossibleInputAssignmentsDataTypes(anyList());
         doCallRealMethod().when(view).setPossibleOutputAssignmentsDataTypes(anyList());
         doCallRealMethod().when(view).setInputAssignmentsProcessVariables(anyList());
+        doCallRealMethod().when(view).setCustomAssignmentsProperties(anyMap());
         doCallRealMethod().when(view).setOutputAssignmentsProcessVariables(anyList());
         doCallRealMethod().when(view).setInputAssignmentsDisallowedNames(anySet());
         doCallRealMethod().when(view).setIsInputAssignmentSingleVar(anyBoolean());
@@ -166,6 +172,29 @@ public class ActivityDataIOEditorViewImplTest {
         assertTrue(variablesWithCustomValue.containsAll(Arrays.asList("",
                                                                       "Constant ...",
                                                                       "variable")));
+    }
+
+    @Test
+    public void testSetCustomAssignmentsProperties() {
+        Map<String, List<String>> customAssignmentsProperties = new HashMap<String, List<String>>();
+        customAssignmentsProperties.put("From",
+                                        Arrays.asList(new String[]{"Mary", "Maria", "Melissa"}));
+        customAssignmentsProperties.put("To",
+                                        Arrays.asList(new String[]{"Tom"}));
+        customAssignmentsProperties.put("CC",
+                                        Arrays.asList(new String[]{"James", "John"}));
+
+        view.setCustomAssignmentsProperties(customAssignmentsProperties);
+        verify(inputAssignmentsWidget).setCustomAssignmentsProperties(mapCaptor.capture());
+        assertEquals(3,
+                     mapCaptor.getValue().keySet().size());
+        assertEquals(customAssignmentsProperties.get("From"),
+                     mapCaptor.getValue().get("From"));
+        assertEquals(customAssignmentsProperties.get("To"),
+                     mapCaptor.getValue().get("To"));
+        assertEquals(customAssignmentsProperties.get("CC"),
+                     mapCaptor.getValue().get("CC"));
+
     }
 
     @Test

@@ -19,6 +19,7 @@ package org.jbpm.designer.client.popup;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
@@ -141,6 +142,10 @@ public class ActivityDataIOEditor implements ActivityDataIOEditorView.Presenter 
     public void setProcessVariables(List<String> processVariables) {
         view.setInputAssignmentsProcessVariables(processVariables);
         view.setOutputAssignmentsProcessVariables(processVariables);
+    }
+
+    public void setCustomAssignmentsProperties(final Map<String, List<String>> customAssignmentsProperties) {
+        view.setCustomAssignmentsProperties(customAssignmentsProperties);
     }
 
     public void setInputAssignmentRows(List<AssignmentRow> inputAssignmentRows) {
