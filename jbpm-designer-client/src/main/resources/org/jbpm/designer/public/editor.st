@@ -38,11 +38,11 @@
         ORYX.PRESET_PERSPECTIVE = "$presetperspective$";
         ORYX.PROCESSDOC_RESOURCEID = "";
 
-
         ORYX.FULLSCREEN_MODE = false;
         ORYX.FORMSTYPE = "$formstype$";
 
         ORYX.SERVICE_REPO = "$servicerepo$";
+
         ORYX.SERVICE_REPO_TASKS = {
             "repotasks": [
                 $servicerepotasks:{k|
@@ -227,27 +227,7 @@
            }
        }
 
-       function setFullScreenListeners() {
-           parent.document.getElementById(ORYX.EDITORID).addEventListener('webkitfullscreenchange', function(e) {
-               fullScreenChangeHandler();
-           }, false);
-           parent.document.getElementById(ORYX.EDITORID).addEventListener('mozfullscreenchange', function(e) {
-               fullScreenChangeHandler();
-           }, false);
-           parent.document.getElementById(ORYX.EDITORID).addEventListener('fullscreenchange', function(e) {
-               fullScreenChangeHandler();
-           }, false);
-           parent.document.getElementById(ORYX.EDITORID).addEventListener('MSFullscreenChange', function(e) {
-               fullScreenChangeHandler();
-           }, false);
-       }
-
-       function fullScreenChangeHandler(e) {
-           ORYX.FULLSCREEN_MODE = !ORYX.FULLSCREEN_MODE;
-       }
-
        function startit() {
            startEditorInstance();
-           setFullScreenListeners();
            Kickstart.load();
        }
