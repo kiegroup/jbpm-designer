@@ -24,6 +24,8 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,11 +49,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.drools.compiler.kproject.ReleaseIdImpl;
 import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
 import org.drools.core.process.core.datatype.impl.type.EnumDataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
 import org.drools.core.util.MVELSafeHelper;
+import org.eclipse.aether.artifact.Artifact;
 import org.guvnor.common.services.project.model.Project;
 import org.guvnor.common.services.project.service.POMService;
 import org.guvnor.common.services.project.service.ProjectService;
@@ -75,6 +79,8 @@ import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.kie.scanner.ArtifactResolver;
+import org.kie.scanner.MavenClassLoaderResolver;
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.slf4j.Logger;
@@ -526,6 +532,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                         String assetLocation,
                                         Repository repository) throws Exception {
         List<Map<String, Object>> workDefinitionsMaps;
+        List<URL> dependencyURLs = null;
 
         try {
             workDefinitionsMaps = (List<Map<String, Object>>) MVELSafeHelper.getEvaluator().eval(widAsset.getAssetContent(),
@@ -591,6 +598,25 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 } else {
                     workDefinition.setCustomEditor(null);
                 }
+                
+                // Get URLs so that we can create a URL-based ClassLoader, if necessary
+                List<String> dependencies = (List<String>)workDefinitionMap.get("mavenDependencies");
+                if (dependencies != null && !dependencies.isEmpty()) {
+                    String[] dependArray = dependencies.toArray(new String[0]);
+                    workDefinition.setMavenDependencies(dependArray);
+                    ArtifactResolver resolver = new ArtifactResolver();
+                    dependencyURLs = new ArrayList<>();
+                    for (String depGAV: dependArray) {
+                        Artifact artifact = resolver.resolveArtifact(new ReleaseIdImpl(depGAV));
+                        if (artifact != null) {
+                            dependencyURLs.add(artifact.getFile().toURI().toURL());
+                            _logger.debug("Found URL for artifact - "
+                                    + artifact.getGroupId() + ":"
+                                    + artifact.getArtifactId() + ":"
+                                    + artifact.getVersion());
+                        }
+                    }
+                }
 
                 Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
                 if (workDefinitionMap.get("parameters") != null) {
@@ -618,9 +644,15 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 Map<String, Object> parameterValues = new HashMap<>();
                 if (workDefinitionMap.get("parameterValues") != null) {
+                    ClassLoader parentLoader = Thread.currentThread().getContextClassLoader();
                     try {
                         Map<String, Object> parameterValuesMap = (Map<String, Object>) workDefinitionMap.get("parameterValues");
                         if (parameterValuesMap != null) {
+                            ClassLoader contextLoader = null;
+                            if (dependencyURLs != null && !dependencyURLs.isEmpty()) {
+                                URL[] urls = dependencyURLs.toArray(new URL[0]);
+                                contextLoader = new URLClassLoader(urls, parentLoader);
+                            }
                             for (Map.Entry<String, Object> entry : parameterValuesMap.entrySet()) {
 
                                 Object paramValueObj = entry.getValue();
@@ -631,9 +663,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                     } else if (paramValueObj instanceof EnumDataType) {
                                         EnumDataType enumdt = (EnumDataType) entry.getValue();
                                         if (enumdt != null) {
-                                            parameterValues.put(entry.getKey(),
-                                                                String.join(",",
-                                                                            enumdt.getValueNames()));
+                                            String entryValue = 
+                                                   String.join(",", enumdt.getValueNames(contextLoader));
+                                            parameterValues.put(entry.getKey(), entryValue);
+                                        } else {
+                                            _logger.debug("Expected enum data not found!");
                                         }
                                     } else {
                                         _logger.warn("parameter value type not supported");
@@ -694,7 +728,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             }
         }
     }
-
+    
     private Collection<Asset> getWorkitemConfigContent(Collection<Asset> widAssets,
                                                        Repository repository) {
         List<Asset> loadedAssets = new ArrayList<Asset>();
