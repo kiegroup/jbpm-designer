@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLEncoder;
@@ -532,7 +533,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                         String assetLocation,
                                         Repository repository) throws Exception {
         List<Map<String, Object>> workDefinitionsMaps;
-        List<URL> dependencyURLs = null;
 
         try {
             workDefinitionsMaps = (List<Map<String, Object>>) MVELSafeHelper.getEvaluator().eval(widAsset.getAssetContent(),
@@ -599,25 +599,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     workDefinition.setCustomEditor(null);
                 }
                 
-                // Get URLs so that we can create a URL-based ClassLoader, if necessary
-                List<String> dependencies = (List<String>)workDefinitionMap.get("mavenDependencies");
-                if (dependencies != null && !dependencies.isEmpty()) {
-                    String[] dependArray = dependencies.toArray(new String[0]);
-                    workDefinition.setMavenDependencies(dependArray);
-                    ArtifactResolver resolver = new ArtifactResolver();
-                    dependencyURLs = new ArrayList<>();
-                    for (String depGAV: dependArray) {
-                        Artifact artifact = resolver.resolveArtifact(new ReleaseIdImpl(depGAV));
-                        if (artifact != null) {
-                            dependencyURLs.add(artifact.getFile().toURI().toURL());
-                            _logger.debug("Found URL for artifact - "
-                                    + artifact.getGroupId() + ":"
-                                    + artifact.getArtifactId() + ":"
-                                    + artifact.getVersion());
-                        }
-                    }
-                }
-
                 Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
                 if (workDefinitionMap.get("parameters") != null) {
                     Map<String, DataType> parameterMap = (Map<String, DataType>) workDefinitionMap.get("parameters");
@@ -648,11 +629,16 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     try {
                         Map<String, Object> parameterValuesMap = (Map<String, Object>) workDefinitionMap.get("parameterValues");
                         if (parameterValuesMap != null) {
+                            
+                            // Create a new class loader if there are defined maven dependencies and there is at least one parameter
+                            // value that is of type EnumDataType
                             ClassLoader contextLoader = null;
-                            if (dependencyURLs != null && !dependencyURLs.isEmpty()) {
-                                URL[] urls = dependencyURLs.toArray(new URL[0]);
-                                contextLoader = new URLClassLoader(urls, parentLoader);
+                            URL[] dependencyURLs  = this.getMavenDependencyURLs((List<String>)workDefinitionMap.get("mavenDependencies"));
+                            if (dependencyURLs.length > 0 
+                                    && parameterValuesMap.values().stream().filter( obj -> (obj instanceof EnumDataType) ).count() > 0) {
+                                contextLoader = new URLClassLoader(dependencyURLs, parentLoader);
                             }
+                            
                             for (Map.Entry<String, Object> entry : parameterValuesMap.entrySet()) {
 
                                 Object paramValueObj = entry.getValue();
@@ -727,6 +713,34 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                     workDefinition);
             }
         }
+    }
+    
+    /**
+     * Creates an array of URL objects that point to artifacts contained in the default maven repository.
+     * If the artifact for a dependency is not found, a warning will be logged, but the method should continue
+     * 
+     * @param mavenDependencies - a list of strings that represent the GAV for each maven dependency that is declared in the WID
+     * @return - the array of URL objects. The array will be empty if no URLs were found, or if mavenDependencies is empty
+     */
+    private URL[] getMavenDependencyURLs(List<String> mavenDependencies) {
+        List<URL> urls = new ArrayList<>();
+        if (mavenDependencies != null && !mavenDependencies.isEmpty()) {
+            ArtifactResolver resolver = new ArtifactResolver();
+            mavenDependencies.forEach(gav -> {
+                Artifact artifact = resolver.resolveArtifact(new ReleaseIdImpl(gav));
+                if (artifact != null) {
+                    try {
+                        urls.add(artifact.getFile().toURI().toURL());
+                    } catch (MalformedURLException e) {
+                        _logger.error("Maven dependency [{}] resolves to an invalid URL",gav);
+                    }
+                } else {
+                    _logger.warn("Unable to find an artifact {}",gav);
+                }
+            });
+        }
+        
+        return urls.toArray(new URL[0]);
     }
     
     private Collection<Asset> getWorkitemConfigContent(Collection<Asset> widAssets,
