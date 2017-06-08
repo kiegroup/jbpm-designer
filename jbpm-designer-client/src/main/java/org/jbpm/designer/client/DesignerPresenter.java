@@ -135,8 +135,9 @@ public class DesignerPresenter
         return menus;
     }
 
+    @Override
     protected void makeMenuBar() {
-        menus = menuBuilder
+        fileMenuBuilder
                 .addSave(versionRecordManager.newSaveMenuItem(new Command() {
                     @Override
                     public void execute() {
@@ -148,8 +149,7 @@ public class DesignerPresenter
                 .addRename(versionRecordManager.getPathToLatest(),
                            fileNameValidator)
                 .addDelete(versionRecordManager.getPathToLatest())
-                .addNewTopLevelMenu(versionRecordManager.buildMenu())
-                .build();
+                .addNewTopLevelMenu(versionRecordManager.buildMenu());
     }
 
     @OnClose
