@@ -24,6 +24,9 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,11 +50,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.drools.compiler.kproject.ReleaseIdImpl;
 import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
 import org.drools.core.process.core.datatype.impl.type.EnumDataType;
 import org.drools.core.process.core.impl.ParameterDefinitionImpl;
 import org.drools.core.util.MVELSafeHelper;
+import org.eclipse.aether.artifact.Artifact;
 import org.guvnor.common.services.project.model.Project;
 import org.guvnor.common.services.project.service.POMService;
 import org.guvnor.common.services.project.service.ProjectService;
@@ -75,6 +80,8 @@ import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.kie.scanner.ArtifactResolver;
+import org.kie.scanner.MavenClassLoaderResolver;
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.slf4j.Logger;
@@ -591,7 +598,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 } else {
                     workDefinition.setCustomEditor(null);
                 }
-
+                
                 Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
                 if (workDefinitionMap.get("parameters") != null) {
                     Map<String, DataType> parameterMap = (Map<String, DataType>) workDefinitionMap.get("parameters");
@@ -618,9 +625,20 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 Map<String, Object> parameterValues = new HashMap<>();
                 if (workDefinitionMap.get("parameterValues") != null) {
+                    ClassLoader parentLoader = Thread.currentThread().getContextClassLoader();
                     try {
                         Map<String, Object> parameterValuesMap = (Map<String, Object>) workDefinitionMap.get("parameterValues");
                         if (parameterValuesMap != null) {
+                            
+                            // Create a new class loader if there are defined maven dependencies and there is at least one parameter
+                            // value that is of type EnumDataType
+                            ClassLoader contextLoader = null;
+                            URL[] dependencyURLs  = this.getMavenDependencyURLs((List<String>)workDefinitionMap.get("mavenDependencies"));
+                            if (dependencyURLs.length > 0 
+                                    && parameterValuesMap.values().stream().filter( obj -> (obj instanceof EnumDataType) ).count() > 0) {
+                                contextLoader = new URLClassLoader(dependencyURLs, parentLoader);
+                            }
+                            
                             for (Map.Entry<String, Object> entry : parameterValuesMap.entrySet()) {
 
                                 Object paramValueObj = entry.getValue();
@@ -631,9 +649,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                     } else if (paramValueObj instanceof EnumDataType) {
                                         EnumDataType enumdt = (EnumDataType) entry.getValue();
                                         if (enumdt != null) {
-                                            parameterValues.put(entry.getKey(),
-                                                                String.join(",",
-                                                                            enumdt.getValueNames()));
+                                            String entryValue = 
+                                                   String.join(",", enumdt.getValueNames(contextLoader));
+                                            parameterValues.put(entry.getKey(), entryValue);
+                                        } else {
+                                            _logger.debug("Expected enum data not found!");
                                         }
                                     } else {
                                         _logger.warn("parameter value type not supported");
@@ -694,7 +714,35 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             }
         }
     }
-
+    
+    /**
+     * Creates an array of URL objects that point to artifacts contained in the default maven repository.
+     * If the artifact for a dependency is not found, a warning will be logged, but the method should continue
+     * 
+     * @param mavenDependencies - a list of strings that represent the GAV for each maven dependency that is declared in the WID
+     * @return - the array of URL objects. The array will be empty if no URLs were found, or if mavenDependencies is empty
+     */
+    private URL[] getMavenDependencyURLs(List<String> mavenDependencies) {
+        List<URL> urls = new ArrayList<>();
+        if (mavenDependencies != null && !mavenDependencies.isEmpty()) {
+            ArtifactResolver resolver = new ArtifactResolver();
+            mavenDependencies.forEach(gav -> {
+                Artifact artifact = resolver.resolveArtifact(new ReleaseIdImpl(gav));
+                if (artifact != null) {
+                    try {
+                        urls.add(artifact.getFile().toURI().toURL());
+                    } catch (MalformedURLException e) {
+                        _logger.error("Maven dependency [{}] resolves to an invalid URL",gav);
+                    }
+                } else {
+                    _logger.warn("Unable to find an artifact {}",gav);
+                }
+            });
+        }
+        
+        return urls.toArray(new URL[0]);
+    }
+    
     private Collection<Asset> getWorkitemConfigContent(Collection<Asset> widAssets,
                                                        Repository repository) {
         List<Asset> loadedAssets = new ArrayList<Asset>();

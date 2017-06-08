@@ -67,6 +67,7 @@
       <artifactId>kie-wb-common-services-api</artifactId>
     </dependency>
 
+
     <!-- start forms integration -->
     <dependency>
       <groupId>org.kie.workbench.forms</groupId>
@@ -556,6 +557,14 @@
       <artifactId>kie-wb-common-forms-fields</artifactId>
       <scope>test</scope>
       <type>test-jar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.aether</groupId>
+      <artifactId>aether-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-ci</artifactId>
     </dependency>
   </dependencies>
 
