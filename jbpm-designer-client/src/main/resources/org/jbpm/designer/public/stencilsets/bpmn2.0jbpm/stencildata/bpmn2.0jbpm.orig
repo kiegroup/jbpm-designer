@@ -3724,45 +3724,32 @@
 					"readonly":true,
 					"optional":true
 				$bclose$,
-				$if(workitemDefs.(k).customEditor)$
-					$workitemDefs.(k).parameters:{k1|
-						$if(customParams.(k).(k1))$
-							$bopen$
-								"id":"$k1.name$",
-								"type":"Choice",
-								"title":"$k1.name$",
-								"value":"",
-								"description":"",
-								"description_ja":"",
-								"readonly":false,
-								"optional":true,
-								"customassignment":true,
-								"items": [
-									$customParams.(k).(k1):{k2|
-										$bopen$
-											"id": "$k2$",
-											"title":"$k2$",
-											"value":"$k2$"
-										$bclose$
-									}; separator=","$
-								]
-							$bclose$,
-						$else$
-							$bopen$
-								"id":"$k1.name$",
-								"type":"Encodedtext",
-								"title":"$k1.name$",
-								"value":"",
-								"description":"",
-								"description_ja":"",
-								"readonly":false,
-								"optional":true,
-								"customassignment":true
-							$bclose$,
-						$endif$
-
-					}$
+                $workitemDefs.(k).parameters:{k1|
+                    $if(customParams.(k).(k1))$
+                        $bopen$
+                            "id":"$k1.name$",
+                            "type":"Choice",
+                            "title":"$k1.name$",
+                            "value":"",
+                            "description":"",
+                            "description_ja":"",
+                            "readonly":false,
+                            "optional":true,
+                            "customassignment":true,
+                            "items": [
+                                $customParams.(k).(k1):{k2|
+                                    $bopen$
+                                        "id": "$k2$",
+                                        "title":"$k2$",
+                                        "value":"$k2$"
+                                    $bclose$
+                                }; separator=","$
+                            ],
+                            "hidden":true,
+                            "visible":false
+                        $bclose$,
                     $endif$
+                }$
 				$bopen$
 					"id":"datainputset",
 					"type":"Datainput",
@@ -3809,12 +3796,9 @@
 					"value":"",
 					"description":"",
 					"readonly":false,
-					"optional":true
-					 $if(workitemDefs.(k).customEditor)$
-					,
-					"hidden":true,
-					"visible":false
-					$endif$
+					"optional":true,
+					"hidden":false,
+					"visible":true
 				$bclose$,
 				$bopen$
 					"id":"onEntryActions",

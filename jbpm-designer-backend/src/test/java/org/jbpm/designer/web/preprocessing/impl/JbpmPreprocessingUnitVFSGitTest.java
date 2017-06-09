@@ -175,6 +175,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                                 "        ],\n" +
                                 "        \"parameterValues\" : [\n" +
                                 "            \"param1\" : new EnumDataType(\"org.jbpm.designer.web.preprocessing.impl.CarsEnum\"),\n" +
+                                "            \"param2\" : \"\",\n" +
                                 "            \"param3\" : \"one,two,three\"\n" +
                                 "        ],\n" +
                                 "        \"results\" : [\n" +
@@ -221,6 +222,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         Map<String, Object> paramValues = (workDefinitions.get("TestServiceWithParamValues").getParameterValues());
         assertTrue(paramValues.containsKey("param1"));
         assertTrue(paramValues.containsKey("param3"));
+        assertFalse(paramValues.containsKey("param2"));
 
         assertEquals("TOYOTA,MAZDA,FORD,NISSAN,HONDA",
                      paramValues.get("param1"));

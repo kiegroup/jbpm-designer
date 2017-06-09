@@ -19,6 +19,7 @@ package org.jbpm.designer.client.shared;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +48,7 @@ public class AssignmentData {
     private Map<String, String> mapDisplayNameToDataType = new HashMap<String, String>();
     private Map<String, String> mapDataTypeToDisplayName = new HashMap<String, String>();
     private Map<String, String> mapSimpleDataTypeToDisplayName = new HashMap<String, String>();
+    private Map<String, List<String>> mapCustomAssignmentProperties = new HashMap<String, List<String>>();
 
     private List<String> disallowedPropertyNames = new ArrayList<String>();
 
@@ -61,7 +63,8 @@ public class AssignmentData {
                           String sProcessVariables,
                           String sAssignments,
                           String sDataTypes,
-                          String sDisallowedPropertyNames) {
+                          String sDisallowedPropertyNames,
+                          String customassignmentproperties) {
         // setDataTypes before variables because these determine whether variable datatypes are custom or not
         setDataTypes(sDataTypes);
         setProcessVariables(sProcessVariables);
@@ -69,6 +72,7 @@ public class AssignmentData {
         setOutputVariables(sOutputVariables);
         setAssignments(sAssignments);
         setDisallowedPropertyNames(sDisallowedPropertyNames);
+        setCustomAssignmentProperties(customassignmentproperties);
     }
 
     public AssignmentData(String sInputVariables,
@@ -81,7 +85,8 @@ public class AssignmentData {
              sProcessVariables,
              sAssignments,
              null,
-             sDisallowedPropertyNames);
+             sDisallowedPropertyNames,
+             null);
     }
 
     /**
@@ -351,6 +356,68 @@ public class AssignmentData {
         }
     }
 
+    public Map<String, List<String>> getCustomAssignmentProperties() {
+        return mapCustomAssignmentProperties;
+    }
+
+    protected void setCustomAssignmentProperties(final String customassignmentproperties) {
+        this.mapCustomAssignmentProperties.clear();
+        if (customassignmentproperties != null && !customassignmentproperties.isEmpty()) {
+            String[] caps = customassignmentproperties.split(",");
+            for (String cap : caps) {
+                if (!cap.isEmpty()) {
+                    String[] capParts = cap.split(":");
+                    if (capParts.length > 0 && !capParts[0].isEmpty()) {
+                        String propName = capParts[0].trim();
+                        List<String> listPropValues = new ArrayList<String>();
+                        if (capParts.length > 1) {
+                            String propValues = capParts[1].trim();
+                            String[] pvs = propValues.split(";");
+                            if (pvs.length > 0) {
+                                for (String pv : pvs) {
+                                    pv = pv.trim();
+                                    if (!pv.isEmpty()) {
+                                        listPropValues.add(pv);
+                                    }
+                                }
+                            }
+                        }
+                        this.mapCustomAssignmentProperties.put(propName,
+                                                               listPropValues);
+                    }
+                }
+            }
+        }
+    }
+
+    public String getCustomAssignmentPropertiesString() {
+        StringBuilder sb = new StringBuilder();
+        if (!mapCustomAssignmentProperties.isEmpty()) {
+            Iterator<String> itPropNames = mapCustomAssignmentProperties.keySet().iterator();
+            while (itPropNames.hasNext()) {
+                String propName = itPropNames.next();
+                sb.append(propName).append(':');
+                List<String> propValues = mapCustomAssignmentProperties.get(propName);
+                if (!propValues.isEmpty()) {
+                    Iterator<String> itPropValues = propValues.iterator();
+                    while (itPropValues.hasNext()) {
+                        String propValue = itPropValues.next();
+                        if (!propValue.isEmpty()) {
+                            sb.append(propValue).append(';');
+                        }
+                    }
+                }
+                sb.append(',');
+            }
+        }
+        return sb.toString();
+    }
+
+    protected void setCustomAssignmentProperties(Map<String, List<String>> mapCustomAssignmentProperties) {
+        this.mapCustomAssignmentProperties = mapCustomAssignmentProperties;
+    }
+
+
     public Variable findProcessVariable(String processVarName) {
         if (processVarName == null || processVarName.isEmpty()) {
             return null;
@@ -596,6 +663,7 @@ public class AssignmentData {
         sb.append("\"assignments\":\"").append(getAssignmentsString()).append("\"").append(",\n");
         sb.append("\"dataTypes\":\"").append(getDataTypesString()).append("\"").append(",\n");
         sb.append("\"disallowedPropertyNames\":\"").append(getDisallowedPropertyNamesString()).append("\"");
+        sb.append("\"customAssignmentProperties\":\"").append(getCustomAssignmentPropertiesString()).append("\"");
 
         return sb.toString();
     }
@@ -632,7 +700,13 @@ public class AssignmentData {
         if (getDataTypeDisplayNames() != null ? !getDataTypeDisplayNames().equals(that.getDataTypeDisplayNames()) : that.getDataTypeDisplayNames() != null) {
             return false;
         }
-        return getDisallowedPropertyNames() != null ? getDisallowedPropertyNames().equals(that.getDisallowedPropertyNames()) : that.getDisallowedPropertyNames() == null;
+        if (getDisallowedPropertyNames() != null ? !getDisallowedPropertyNames().equals(that.getDisallowedPropertyNames()) : that.getDisallowedPropertyNames() != null) {
+            return false;
+        }
+        if (getCustomAssignmentProperties() != null ? !getCustomAssignmentProperties().equals(that.getCustomAssignmentProperties()) : that.getCustomAssignmentProperties() != null) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -645,6 +719,7 @@ public class AssignmentData {
         result = 31 * result + (getDataTypes() != null ? getDataTypes().hashCode() : 0);
         result = 31 * result + (getDataTypeDisplayNames() != null ? getDataTypeDisplayNames().hashCode() : 0);
         result = 31 * result + (getDisallowedPropertyNames() != null ? getDisallowedPropertyNames().hashCode() : 0);
+        result = 31 * result + (getCustomAssignmentProperties() != null ? getCustomAssignmentProperties().hashCode() : 0);
         return result;
     }
 
