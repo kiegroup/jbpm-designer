@@ -281,7 +281,8 @@ public class BPMN2SyntaxCheckerTest {
     @Test
     public void testServiceTaskInterfaceAndOperation() throws Exception {
         JSONObject process = loader.loadProcessFromXml("serviceTaskInterfaceAndOperation.bpmn2",
-                                                       Bpmn2JsonMarshallerTest.class);
+                                                       Bpmn2JsonMarshallerTest.class,
+                                                       null);
         JSONObject serviceTask = loader.getChildByName(process,
                                                        "Send PO");
         String processJson = loader.getProcessJson();
@@ -298,7 +299,8 @@ public class BPMN2SyntaxCheckerTest {
     @Test
     public void testServiceTaskNoInterfaceNoOperation() throws Exception {
         JSONObject process = loader.loadProcessFromXml("serviceTaskNoInterfaceNoOperation.bpmn2",
-                                                       Bpmn2JsonMarshallerTest.class);
+                                                       Bpmn2JsonMarshallerTest.class,
+                                                       null);
         JSONObject serviceTask = loader.getChildByName(process,
                                                        "Send PO");
         String processJson = loader.getProcessJson();
@@ -364,7 +366,8 @@ public class BPMN2SyntaxCheckerTest {
     @Test
     public void testReceiveTask() throws Exception {
         loader.loadProcessFromXml("receiveTask.bpmn2",
-                                  Bpmn2JsonMarshallerTest.class);
+                                  Bpmn2JsonMarshallerTest.class,
+                                  null);
         String processJson = loader.getProcessJson();
         BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson,
                                                                   "",
@@ -389,7 +392,8 @@ public class BPMN2SyntaxCheckerTest {
     @Test
     public void testSendTask() throws Exception {
         loader.loadProcessFromXml("sendTask.bpmn2",
-                                  Bpmn2JsonMarshallerTest.class);
+                                  Bpmn2JsonMarshallerTest.class,
+                                  null);
         String processJson = loader.getProcessJson();
         BPMN2SyntaxChecker syntaxChecker = new BPMN2SyntaxChecker(processJson,
                                                                   "",
@@ -428,7 +432,8 @@ public class BPMN2SyntaxCheckerTest {
     @Test
     public void testEmptyDMNBusinessRule() throws Exception {
         JSONObject process = loader.loadProcessFromXml("emptyDmnBusinessRule.bpmn2",
-                                                       BPMN2SyntaxCheckerTest.class);
+                                                       BPMN2SyntaxCheckerTest.class,
+                                                       null);
         JSONObject ruleTask = loader.getChildByName(process,
                                                     "test");
         String processJson = loader.getProcessJson();

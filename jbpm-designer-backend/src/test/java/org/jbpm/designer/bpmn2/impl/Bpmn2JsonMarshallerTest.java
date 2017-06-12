@@ -1,6 +1,7 @@
 package org.jbpm.designer.bpmn2.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jbpm.designer.bpmn2.BpmnMarshallerHelper;
@@ -488,7 +489,8 @@ public class Bpmn2JsonMarshallerTest {
     @Test
     public void testUserTaskAndTaskName() throws Exception {
         JSONObject process = loader.loadProcessFromXml("userTaskWithTaskName.bpmn2",
-                                                       BPMN2SyntaxCheckerTest.class);
+                                                       BPMN2SyntaxCheckerTest.class,
+                                                       null);
         JSONObject userTask = getChildByName(process,
                                              "User Task");
         JSONObject properties = userTask.getJSONObject("properties");
@@ -501,7 +503,8 @@ public class Bpmn2JsonMarshallerTest {
     @Test
     public void testCallActivity() throws Exception {
         JSONObject process = loader.loadProcessFromXml("callActivity.bpmn2",
-                                                       BPMN2SyntaxCheckerTest.class);
+                                                       BPMN2SyntaxCheckerTest.class,
+                                                       null);
         JSONObject callActivity = getChildByName(process,
                                                  "callActivity");
         JSONObject properties = callActivity.getJSONObject("properties");
@@ -514,7 +517,8 @@ public class Bpmn2JsonMarshallerTest {
     @Test
     public void testNoCalledElementCallActivity() throws Exception {
         JSONObject process = loader.loadProcessFromXml("noCalledElementCallActivity.bpmn2",
-                                                       BPMN2SyntaxCheckerTest.class);
+                                                       BPMN2SyntaxCheckerTest.class,
+                                                       null);
         JSONObject callActivity = getChildByName(process,
                                                  "callActivity");
         JSONObject properties = callActivity.getJSONObject("properties");
@@ -524,7 +528,8 @@ public class Bpmn2JsonMarshallerTest {
     @Test
     public void testErrorBoundaryEvent() throws Exception {
         JSONObject process = loader.loadProcessFromXml("errorBoundaryEvent.bpmn2",
-                                                       BPMN2SyntaxCheckerTest.class);
+                                                       BPMN2SyntaxCheckerTest.class,
+                                                       null);
         JSONObject lane = getChildByName(process,
                                          "myLane");
         JSONObject error = getChildByName(lane,
@@ -537,7 +542,8 @@ public class Bpmn2JsonMarshallerTest {
     @Test
     public void testErrorBoundaryEventMissingDefinition() throws Exception {
         JSONObject process = loader.loadProcessFromXml("errorBoundaryEventMissingDefinition.bpmn2",
-                                                       BPMN2SyntaxCheckerTest.class);
+                                                       BPMN2SyntaxCheckerTest.class,
+                                                       null);
         JSONObject lane = getChildByName(process,
                                          "myLane");
         JSONObject error = getChildByName(lane,
@@ -618,7 +624,8 @@ public class Bpmn2JsonMarshallerTest {
     @Test
     public void testBusinessRuleTask() throws Exception {
         JSONObject process = loader.loadProcessFromXml("businessRule.bpmn2",
-                                                       BPMN2SyntaxCheckerTest.class);
+                                                       BPMN2SyntaxCheckerTest.class,
+                                                       null);
         JSONObject ruleTask = getChildByName(process,
                                              "businessRuleTask");
         JSONObject properties = ruleTask.getJSONObject("properties");
@@ -787,5 +794,22 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject properties = callActivity.getJSONObject("properties");
         assertEquals(false,
                      properties.getBoolean("isabortparent"));
+    }
+
+    @Test
+    public void testCustomWorkitemAssignments() throws Exception {
+        List<String> testWorkItemNames = Arrays.asList("SampleUserWorkitem");
+        JSONObject process = loader.loadProcessFromXml("customWorkitemAssignments.bpmn2",
+                                                       testWorkItemNames);
+
+        JSONObject workitem = getChildByName(process,
+                                             "SampleUserWorkitem");
+        JSONObject workItemPropertiesProperties = workitem.getJSONObject("properties");
+        assertEquals("lastNameIn:String,firstNameIn:String",
+                     workItemPropertiesProperties.getString("datainputset"));
+        assertEquals("lastNameOut:String,firstNameOut:String",
+                     workItemPropertiesProperties.getString("dataoutputset"));
+        assertEquals("[din]lastName->lastNameIn,[din]firstName->firstNameIn,[dout]lastNameOut->lastName,[dout]firstNameOut->firstName",
+                     workItemPropertiesProperties.getString("assignments"));
     }
 }

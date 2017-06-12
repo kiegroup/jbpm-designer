@@ -4,6 +4,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import bpsim.impl.BpsimPackageImpl;
@@ -24,13 +25,28 @@ public class Bpmn2Loader {
     // It is by design (Unmarshaller = marshaller and vice versa)
     IDiagramProfile.IDiagramUnmarshaller marshaller = profile.createUnmarshaller();
 
+    // list of base workitem names
+    private static final List<String> baseWorkItemNames = new ArrayList<String>(Arrays.asList("Email",
+                                                                         "HelloWorkItemHandler",
+                                                                         "Log",
+                                                                         "Rest",
+                                                                         "WebService"));
+
     public Bpmn2Loader(Class testClass) {
         this.testClass = testClass;
     }
 
     public Definitions loadProcessFromJson(String fileName,
                                            String zOrderEnabled,
-                                           String bpsimDisplay) throws Exception {
+                                           String bpsimDisplay,
+                                           List<String> workItemNames) throws Exception {
+
+        List<String> workItemNamesList = new ArrayList<>();
+        workItemNamesList.addAll(baseWorkItemNames);
+
+        if (workItemNames != null) {
+            workItemNamesList.addAll(workItemNames);
+        }
 
         profile.setZOrder(zOrderEnabled);
         profile.setBpsimDisplay(bpsimDisplay);
@@ -42,25 +58,43 @@ public class Bpmn2Loader {
         String json = new String(Files.readAllBytes(Paths.get(fileURL.toURI())));
 
         return unmarshaller.getDefinitions(json,
-                                           "Email,HelloWorkItemHandler,Log,Rest,WebService");
+                                           String.join(",",
+                                                       workItemNamesList));
     }
 
     public Definitions loadProcessFromJson(String fileName) throws Exception {
         return loadProcessFromJson(fileName,
                                    "false",
-                                   "true");
+                                   "true",
+                                   null);
+    }
+
+    public Definitions loadProcessFromJson(String fileName, List<String> workItemNames) throws Exception {
+        return loadProcessFromJson(fileName,
+                                   "false",
+                                   "true",
+                                   workItemNames);
     }
 
     public JSONObject loadProcessFromXml(String fileName,
-                                         Class nonDefaultTestClass) throws Exception {
+                                         Class nonDefaultTestClass,
+                                         List<String> workItemNames) throws Exception {
         URL fileURL = nonDefaultTestClass.getResource(fileName);
         String definition = new String(Files.readAllBytes(Paths.get(fileURL.toURI())));
+
+        List<String> workItemNamesList = new ArrayList<>();
+        workItemNamesList.addAll(baseWorkItemNames);
+
+        if (workItemNames != null) {
+            workItemNamesList.addAll(workItemNames);
+        }
 
         DroolsPackageImpl.init();
         BpsimPackageImpl.init();
         processJson = marshaller.parseModel(definition,
                                             profile,
-                                            "Email,HelloWorkItemHandler,Log,Rest,WebService");
+                                            String.join(",",
+                                                        workItemNamesList));
 
         JSONObject process = new JSONObject(processJson);
         if ("BPMNDiagram".equals(process.getJSONObject("stencil").getString("id"))) {
@@ -72,7 +106,15 @@ public class Bpmn2Loader {
 
     public JSONObject loadProcessFromXml(String fileName) throws Exception {
         return loadProcessFromXml(fileName,
-                                  testClass);
+                                  testClass,
+                                  null);
+    }
+
+    public JSONObject loadProcessFromXml(String fileName,
+                                         List<String> workItemNames) throws Exception {
+        return loadProcessFromXml(fileName,
+                                  testClass,
+                                  workItemNames);
     }
 
     public static JSONObject getChildByName(JSONObject parent,
