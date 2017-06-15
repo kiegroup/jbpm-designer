@@ -32,6 +32,8 @@ import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.server.EditorHandler;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingService;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,12 +49,16 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EditorHandlerBaseTest extends RepositoryBaseTest {
+
+    @Mock
+    JbpmProfileImpl mockProfile;
 
     @Mock
     IDiagramProfileService profileService;
@@ -90,6 +96,7 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
         System.clearProperty(EditorHandler.SERVICE_REPO_TASKS);
         System.clearProperty(EditorHandler.BPSIM_DISPLAY);
         System.clearProperty(EditorHandler.FORMS_TYPE);
+        System.clearProperty(EditorHandler.STORE_SVG_ON_SAVE);
     }
 
     @Test
@@ -143,7 +150,9 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testDoGetFindProfile() {
+    public void testDoGetFindProfile() throws Exception {
+        // start off with null profile
+        editorHandler.setProfile(null);
         HttpServletRequest request = mock(HttpServletRequest.class);
         try {
             editorHandler.doGet(request,
@@ -238,6 +247,70 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
         TestServletConfig config = new TestServletConfig(new TestServletContext(repository));
         verifyServiceRepoAndTasks(config,
                                   false);
+    }
+
+    @Test
+    public void testStoreSVGOnSave() throws Exception {
+        when(editorHandler.getProfile()).thenReturn(mockProfile);
+
+        // default the profile svg on save to true
+        when(mockProfile.getStoreSVGonSaveOption()).thenReturn("true");
+
+        TestServletConfig config = new TestServletConfig(new TestServletContext(repository));
+        PrintWriter writer = mock(PrintWriter.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        when(response.getWriter()).thenReturn(writer);
+
+        // default from profile setting, no system prop set
+        editorHandler.init(config);
+        editorHandler.doGet(mock(HttpServletRequest.class),
+                            response);
+        assertEquals("true",
+                     editorHandler.getEditorTemplate().getAttribute("storesvgonsave"));
+
+        // overwrite with system prop
+        System.setProperty(EditorHandler.STORE_SVG_ON_SAVE,
+                           "false");
+        editorHandler.init(config);
+        editorHandler.doGet(mock(HttpServletRequest.class),
+                            response);
+        assertEquals("false",
+                     editorHandler.getEditorTemplate().getAttribute("storesvgonsave"));
+
+        // set profile store on svg to false and overwrite with system prop true
+        when(mockProfile.getStoreSVGonSaveOption()).thenReturn("false");
+        System.setProperty(EditorHandler.STORE_SVG_ON_SAVE,
+                           "true");
+        editorHandler.init(config);
+        editorHandler.doGet(mock(HttpServletRequest.class),
+                            response);
+        assertEquals("true",
+                     editorHandler.getEditorTemplate().getAttribute("storesvgonsave"));
+
+        //overwrite with incorrect system prop  -- should be true (default to the profile value)
+        when(mockProfile.getStoreSVGonSaveOption()).thenReturn("true");
+        System.setProperty(EditorHandler.STORE_SVG_ON_SAVE,
+                           "invalidValue");
+        editorHandler.init(config);
+        editorHandler.doGet(mock(HttpServletRequest.class),
+                            response);
+        assertEquals("true",
+                     editorHandler.getEditorTemplate().getAttribute("storesvgonsave"));
+
+        when(editorHandler.getProfile()).thenReturn(profile);
+
+        //overwrite with incorrect system prop  -- should be false (default to the profile value)
+        when(mockProfile.getStoreSVGonSaveOption()).thenReturn("false");
+        System.setProperty(EditorHandler.STORE_SVG_ON_SAVE,
+                           "anotherInvalidValue");
+        editorHandler.init(config);
+        editorHandler.doGet(mock(HttpServletRequest.class),
+                            response);
+        assertEquals("false",
+                     editorHandler.getEditorTemplate().getAttribute("storesvgonsave"));
+
+        when(editorHandler.getProfile()).thenReturn(profile);
+
     }
 
     private void verifyServiceRepoAndTasks(ServletConfig config,

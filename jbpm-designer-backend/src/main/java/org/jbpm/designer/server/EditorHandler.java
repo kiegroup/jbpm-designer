@@ -64,14 +64,14 @@ public class EditorHandler extends HttpServlet {
 
     private static final long serialVersionUID = -7439613152623067053L;
 
-    private static final Logger _logger =
+    private static final Logger logger =
             LoggerFactory.getLogger(EditorHandler.class);
 
     /**
      * The base path under which the application will be made available at runtime.
      * This constant should be used throughout the application.
      */
-    public static final String designer_path = ConfigurationProvider.getInstance().getDesignerContext();
+    public static final String DESIGNER_PATH = ConfigurationProvider.getInstance().getDesignerContext();
 
     /**
      * The designer DEV flag looked up from system properties.
@@ -111,14 +111,19 @@ public class EditorHandler extends HttpServlet {
     public static final String BUNDLE_VERSION = "Bundle-Version";
 
     /**
+     * Used to enable/disable storing of SVG when process is saved.
+     */
+    public static final String STORE_SVG_ON_SAVE = "org.jbpm.designer.storesvgonsave";
+
+    /**
      * The designer dev mode setting.
      */
-    private boolean _devMode;
+    private boolean devMode;
 
     /**
      * The designer use old data assignments setting.
      */
-    private boolean _useOldDataAssignments;
+    private boolean useOldDataAssignments;
 
     /**
      * Show / Hide PDF Documentation display option
@@ -128,19 +133,19 @@ public class EditorHandler extends HttpServlet {
     /**
      * The designer preprocess mode setting.
      */
-    private boolean _preProcess;
+    private boolean preProcess;
 
     /**
      * The designer skin setting.
      */
-    private String _skin;
+    private String skin;
 
     /**
      * The designer version setting.
      */
-    private String _designerVersion;
+    private String designerVersion;
 
-    private String _doc;
+    private String doc;
 
     private IDiagramProfile profile;
 
@@ -152,7 +157,7 @@ public class EditorHandler extends HttpServlet {
      * profiles.
      */
     @Inject
-    private IDiagramProfileService _profileService = null;
+    private IDiagramProfileService profileService = null;
 
     @Inject
     private VFSService vfsServices;
@@ -169,52 +174,54 @@ public class EditorHandler extends HttpServlet {
      * the pre-processing units.
      */
     @Inject
-    private IDiagramPreprocessingService _preProcessingService;
+    private IDiagramPreprocessingService preProcessingService;
 
     /**
      * The plugin service, a global registry for all plugins.
      */
-    private IDiagramPluginService _pluginService = null;
+    private IDiagramPluginService pluginservice = null;
 
-    private List<String> _envFiles = new ArrayList<String>();
+    private List<String> envFiles = new ArrayList<String>();
 
-    private Map<String, List<IDiagramPlugin>> _pluginfiles =
+    private Map<String, List<IDiagramPlugin>> pluginFiles =
             new HashMap<String, List<IDiagramPlugin>>();
 
-    private Map<String, List<IDiagramPlugin>> _uncompressedPlugins =
+    private Map<String, List<IDiagramPlugin>> uncompressedPlugins =
             new WeakHashMap<String, List<IDiagramPlugin>>();
+
+    private ST editorTemplate;
 
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         DroolsFactoryImpl.init();
         BpsimFactoryImpl.init();
-        _profileService.init(config.getServletContext());
-        _pluginService = PluginServiceImpl.getInstance(
+        profileService.init(config.getServletContext());
+        pluginservice = PluginServiceImpl.getInstance(
                 config.getServletContext());
-        _preProcessingService.init(config.getServletContext(),
-                                   vfsServices);
+        preProcessingService.init(config.getServletContext(),
+                                  vfsServices);
 
-        _devMode = Boolean.parseBoolean(System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV));
-        _useOldDataAssignments = Boolean.parseBoolean(System.getProperty(USEOLDDATAASSIGNMENTS) == null ? config.getInitParameter(USEOLDDATAASSIGNMENTS) : System.getProperty(USEOLDDATAASSIGNMENTS));
-        _preProcess = Boolean.parseBoolean(System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS));
-        _skin = System.getProperty(SKIN) == null ? config.getInitParameter(SKIN) : System.getProperty(SKIN);
-        _designerVersion = readDesignerVersion(config.getServletContext());
+        devMode = Boolean.parseBoolean(System.getProperty(DEV) == null ? config.getInitParameter(DEV) : System.getProperty(DEV));
+        useOldDataAssignments = Boolean.parseBoolean(System.getProperty(USEOLDDATAASSIGNMENTS) == null ? config.getInitParameter(USEOLDDATAASSIGNMENTS) : System.getProperty(USEOLDDATAASSIGNMENTS));
+        preProcess = Boolean.parseBoolean(System.getProperty(PREPROCESS) == null ? config.getInitParameter(PREPROCESS) : System.getProperty(PREPROCESS));
+        skin = System.getProperty(SKIN) == null ? config.getInitParameter(SKIN) : System.getProperty(SKIN);
+        designerVersion = readDesignerVersion(config.getServletContext());
         showPDFDoc = doShowPDFDoc(config);
         serviceRepo = System.getProperty(SERVICE_REPO) == null ? config.getInitParameter(SERVICE_REPO) : System.getProperty(SERVICE_REPO);
         serviceRepoTasks = System.getProperty(SERVICE_REPO_TASKS) == null ? config.getInitParameter(SERVICE_REPO_TASKS) : System.getProperty(SERVICE_REPO_TASKS);
 
         String editor_file = config.
-                getServletContext().getRealPath(designer_path + "editor.st");
+                getServletContext().getRealPath(DESIGNER_PATH + "editor.st");
         try {
-            _doc = readFile(editor_file);
+            doc = readFile(editor_file);
         } catch (Exception e) {
             throw new ServletException(
                     "Error while parsing editor.st",
                     e);
         }
-        if (_doc == null) {
-            _logger.error("Invalid editor.st, " +
-                                  "could not be read as a document.");
+        if (doc == null) {
+            logger.error("Invalid editor.st, " +
+                                 "could not be read as a document.");
             throw new ServletException("Invalid editor.st, " +
                                                "could not be read as a document.");
         }
@@ -260,26 +267,26 @@ public class EditorHandler extends HttpServlet {
         }
 
         if (profile == null) {
-            profile = _profileService.findProfile(request,
-                                                  profileName);
+            profile = profileService.findProfile(request,
+                                                 profileName);
         }
 
         if (profile == null) {
-            _logger.error("No profile with the name " + profileName
-                                  + " was registered");
+            logger.error("No profile with the name " + profileName
+                                 + " was registered");
             throw new IllegalArgumentException(
                     "No profile with the name " + profileName +
                             " was registered");
         }
 
         IDiagramPreprocessingUnit preprocessingUnit = null;
-        if (_preProcess) {
-            if (_logger.isInfoEnabled()) {
-                _logger.info(
+        if (preProcess) {
+            if (logger.isInfoEnabled()) {
+                logger.info(
                         "Performing diagram information pre-processing steps. ");
             }
-            preprocessingUnit = _preProcessingService.findPreprocessingUnit(request,
-                                                                            profile);
+            preprocessingUnit = preProcessingService.findPreprocessingUnit(request,
+                                                                           profile);
             preprocessingUnit.preprocess(request,
                                          response,
                                          profile,
@@ -292,32 +299,32 @@ public class EditorHandler extends HttpServlet {
 
         //output env javascript files
         JSONArray scriptsArray;
-        if (_devMode) {
+        if (devMode) {
             scriptsArray = new JSONArray();
-            for (String nextScript : _envFiles) {
-                scriptsArray.put(designer_path + nextScript);
+            for (String nextScript : envFiles) {
+                scriptsArray.put(DESIGNER_PATH + nextScript);
             }
         } else {
             scriptsArray = new JSONArray();
-            scriptsArray.put(designer_path + "jsc/env_combined.js");
+            scriptsArray.put(DESIGNER_PATH + "jsc/env_combined.js");
         }
 
         // generate script tags for plugins.
         // they are located after the initialization script.
 
-        if (_pluginfiles.get(profileName) == null) {
+        if (pluginFiles.get(profileName) == null) {
             List<IDiagramPlugin> compressed = new ArrayList<IDiagramPlugin>();
             List<IDiagramPlugin> uncompressed = new ArrayList<IDiagramPlugin>();
-            _pluginfiles.put(profileName,
-                             compressed);
-            _uncompressedPlugins.put(profileName,
-                                     uncompressed);
+            pluginFiles.put(profileName,
+                            compressed);
+            uncompressedPlugins.put(profileName,
+                                    uncompressed);
             for (String pluginName : profile.getPlugins()) {
-                IDiagramPlugin plugin = _pluginService.findPlugin(request,
-                                                                  pluginName);
+                IDiagramPlugin plugin = pluginservice.findPlugin(request,
+                                                                 pluginName);
                 if (plugin == null) {
-                    _logger.warn("Could not find the plugin " + pluginName +
-                                         " requested by the profile " + profile.getName());
+                    logger.warn("Could not find the plugin " + pluginName +
+                                        " requested by the profile " + profile.getName());
                     continue;
                 }
                 if (plugin.isCompressable()) {
@@ -329,22 +336,22 @@ public class EditorHandler extends HttpServlet {
         }
 
         JSONArray pluginsArray = new JSONArray();
-        if (_devMode) {
-            for (IDiagramPlugin jsFile : _pluginfiles.get(profileName)) {
+        if (devMode) {
+            for (IDiagramPlugin jsFile : pluginFiles.get(profileName)) {
                 pluginsArray.put("/plugin/" + jsFile.getName() + ".js");
             }
         } else {
-            pluginsArray.put(designer_path + "jsc/plugins_" + profileName + ".js");
+            pluginsArray.put(DESIGNER_PATH + "jsc/plugins_" + profileName + ".js");
         }
 
         for (IDiagramPlugin uncompressed :
-                _uncompressedPlugins.get(profileName)) {
-            pluginsArray.put(designer_path + "plugin/" + uncompressed.getName() + ".js");
+                uncompressedPlugins.get(profileName)) {
+            pluginsArray.put(DESIGNER_PATH + "plugin/" + uncompressed.getName() + ".js");
         }
 
-        ST editorTemplate = new ST(_doc,
-                                   '$',
-                                   '$');
+        editorTemplate = new ST(doc,
+                                '$',
+                                '$');
         editorTemplate.add("bopen",
                            "{");
         editorTemplate.add("bclose",
@@ -375,9 +382,9 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("stencilset",
                            profile.getStencilSet());
         editorTemplate.add("debug",
-                           _devMode);
+                           devMode);
         editorTemplate.add("useolddataassignments",
-                           _useOldDataAssignments);
+                           useOldDataAssignments);
         editorTemplate.add("preprocessing",
                            preprocessingUnit == null ? "" : preprocessingUnit.getOutData());
         editorTemplate.add("externalprotocol",
@@ -394,13 +401,13 @@ public class EditorHandler extends HttpServlet {
         editorTemplate.add("localhistorytimeout",
                            profile.getLocalHistoryTimeout());
         editorTemplate.add("designerversion",
-                           _designerVersion);
+                           designerVersion);
         editorTemplate.add("showpdfdoc",
                            showPDFDoc);
         editorTemplate.add("storesvgonsave",
-                           profile.getStoreSVGonSaveOption());
+                           getCheckedStoreSVGOnSaveOption(profile));
         editorTemplate.add("defaultSkin",
-                           designer_path + "css/theme-default.css");
+                           DESIGNER_PATH + "css/theme-default.css");
         editorTemplate.add("presetperspective",
                            System.getProperty(PRESET_PERSPECTIVE) == null ? "" : System.getProperty(PRESET_PERSPECTIVE));
         editorTemplate.add("bpsimdisplay",
@@ -409,8 +416,8 @@ public class EditorHandler extends HttpServlet {
                            profile.getFormsType());
 
         String overlaySkin = "";
-        if (_skin != null && !_skin.equals("default")) {
-            overlaySkin = designer_path + "css/theme-" + _skin + ".css";
+        if (skin != null && !skin.equals("default")) {
+            overlaySkin = DESIGNER_PATH + "css/theme-" + skin + ".css";
         }
         editorTemplate.add("overlaySkin",
                            overlaySkin);
@@ -459,7 +466,7 @@ public class EditorHandler extends HttpServlet {
      * @param context
      * @return version
      */
-    private static String readDesignerVersion(ServletContext context) {
+    public static String readDesignerVersion(ServletContext context) {
         String retStr = "";
         BufferedReader br = null;
         try {
@@ -475,8 +482,8 @@ public class EditorHandler extends HttpServlet {
             }
             inputStream.close();
         } catch (Exception e) {
-            _logger.error(e.getMessage(),
-                          e);
+            logger.error(e.getMessage(),
+                         e);
         } finally {
             if (br != null) {
                 IOUtils.closeQuietly(br);
@@ -517,5 +524,17 @@ public class EditorHandler extends HttpServlet {
         return profile;
     }
 
-    ;
+    public ST getEditorTemplate() {
+        return editorTemplate;
+    }
+
+    private String getCheckedStoreSVGOnSaveOption(IDiagramProfile profile) {
+        String sysPropOption = System.getProperty(STORE_SVG_ON_SAVE);
+        if(sysPropOption != null) {
+            if("true".equalsIgnoreCase(sysPropOption) || "false".equalsIgnoreCase(sysPropOption)) {
+                return String.valueOf(Boolean.parseBoolean(sysPropOption));
+            }
+        }
+        return profile.getStoreSVGonSaveOption();
+    }
 }
