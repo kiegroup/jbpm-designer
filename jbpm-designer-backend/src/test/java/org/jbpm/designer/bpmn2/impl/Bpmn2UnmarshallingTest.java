@@ -187,7 +187,8 @@ public class Bpmn2UnmarshallingTest {
     public void testLaneUnmarshallingOrdering() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("lane.json",
                                                              "true",
-                                                             "true");
+                                                             "true",
+                                                             null);
         assertTrue(definitions.getRootElements().size() == 1);
         assertTrue(definitions.getRootElements().get(0) instanceof Process);
         Process process = getRootProcess(definitions);
@@ -217,7 +218,8 @@ public class Bpmn2UnmarshallingTest {
     public void testLaneUnmarshallingWithoutOrdering() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("lane.json",
                                                              "false",
-                                                             "true");
+                                                             "true",
+                                                             null);
         Process process = getRootProcess(definitions);
         Lane lane = process.getLaneSets().get(0).getLanes().get(0);
         verifyBpmnShapePresent(lane,
@@ -240,7 +242,8 @@ public class Bpmn2UnmarshallingTest {
     public void testNestedElementsOrdering() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("nestedElements.json",
                                                              "true",
-                                                             "true");
+                                                             "true",
+                                                             null);
         Process process = getRootProcess(definitions);
         Lane lane = process.getLaneSets().get(0).getLanes().get(0);
         assertEquals(0,
@@ -2311,7 +2314,8 @@ public class Bpmn2UnmarshallingTest {
     public void testDisableBpsimDisplayViaProfileSetting() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("userTask.json",
                                                              "false",
-                                                             "false");
+                                                             "false",
+                                                             null);
         assertEquals(0,
                      definitions.getRelationships().size());
     }
@@ -2322,7 +2326,8 @@ public class Bpmn2UnmarshallingTest {
                            "false");
         Definitions definitions = loader.loadProcessFromJson("userTask.json",
                                                              "false",
-                                                             "true");
+                                                             "true",
+                                                             null);
         // should still be 0 even tho "true" is passed for bpsimDisplay
         assertEquals(0,
                      definitions.getRelationships().size());
@@ -2335,7 +2340,8 @@ public class Bpmn2UnmarshallingTest {
                            "true");
         Definitions definitions = loader.loadProcessFromJson("userTask.json",
                                                              "false",
-                                                             "false");
+                                                             "false",
+                                                             null);
         // should still be 1 even tho "false" is passed for bpsimDisplay
         assertEquals(1,
                      definitions.getRelationships().size());
@@ -2381,6 +2387,46 @@ public class Bpmn2UnmarshallingTest {
             counter++;
         }
         return -1;
+    }
+
+    @Test
+    public void testWorkitemAssignments() throws Exception {
+        List<String> testWorkItemNames = Arrays.asList("SampleUserWorkitem");
+        Definitions definitions = loader.loadProcessFromJson("workitemAssignments.json",
+                                                             testWorkItemNames);
+        Process process = getRootProcess(definitions);
+        FlowElement element = getFlowElement(process.getFlowElements(),
+                                             "SampleUserWorkitem");
+        assertNotNull(element);
+        assertTrue(element instanceof Task);
+        Task workitemTask = (Task) element;
+        InputOutputSpecification iospec = workitemTask.getIoSpecification();
+        assertNotNull(iospec);
+
+        List<InputSet> inSet = iospec.getInputSets();
+        List<OutputSet> outSet = iospec.getOutputSets();
+        assertNotNull(inSet);
+        assertNotNull(outSet);
+        assertEquals(1, inSet.size());
+        assertEquals(1, outSet.size());
+
+        InputSet firstInSet = inSet.get(0);
+        assertNotNull(firstInSet);
+        assertNotNull(firstInSet.getDataInputRefs());
+        assertEquals(3, firstInSet.getDataInputRefs().size());
+
+        OutputSet firstOutSet = outSet.get(0);
+        assertNotNull(firstOutSet);
+        assertNotNull(firstOutSet.getDataOutputRefs());
+        assertEquals(2, firstOutSet.getDataOutputRefs().size());
+
+        List<DataInputAssociation> workItemDataInputAssociations = workitemTask.getDataInputAssociations();
+        List<DataOutputAssociation> workItemDataOutputAssociations = workitemTask.getDataOutputAssociations();
+
+        assertNotNull(workItemDataInputAssociations);
+        assertNotNull(workItemDataOutputAssociations);
+        assertEquals(3, workItemDataInputAssociations.size());
+        assertEquals(2, workItemDataOutputAssociations.size());
     }
 }
 

@@ -45,10 +45,8 @@ public class ListBoxValues {
 
     public interface ValueTester {
 
-        String getNonCustomValueForUserString(String userValue);
+        String getNonCustomValueForUserString(final String userValue);
     }
-
-    ;
 
     ValueTester valueTester = null;
 
@@ -71,11 +69,26 @@ public class ListBoxValues {
         this.maxDisplayLength = DEFAULT_MAX_DISPLAY_LENGTH;
     }
 
+    public ListBoxValues(final ListBoxValues copy,
+                         final boolean copyCustomValues) {
+        this.customPrompt = copy.customPrompt;
+        this.editPrefix = copy.editPrefix;
+        this.valueTester = copy.valueTester;
+        this.maxDisplayLength = copy.maxDisplayLength;
+        this.addValues(copy.acceptableValuesWithoutCustomValues);
+        if(copy.customValues != null) {
+            for (String copyCustomValue : copy.customValues) {
+                this.addCustomValue(copyCustomValue,
+                                    null);
+            }
+        }
+    }
+
     public String getEditPrefix() {
         return editPrefix;
     }
 
-    public void addValues(List<String> acceptableValues) {
+    public void addValues(final List<String> acceptableValues) {
         clear();
 
         if (acceptableValues != null) {
@@ -89,8 +102,8 @@ public class ListBoxValues {
         }
     }
 
-    public String addCustomValue(String newValue,
-                                 String oldValue) {
+    public String addCustomValue(final String newValue,
+                                 final String oldValue) {
         if (oldValue != null && !oldValue.isEmpty()) {
             if (acceptableValuesWithCustomValues.contains(oldValue)) {
                 acceptableValuesWithCustomValues.remove(oldValue);
@@ -120,7 +133,7 @@ public class ListBoxValues {
         }
     }
 
-    public List<String> update(String currentValue) {
+    public List<String> update(final String currentValue) {
         String currentEditValuePrompt = getEditValuePrompt(editPrefix);
         String newEditValuePrompt = editPrefix + currentValue + EDIT_SUFFIX;
         if (isCustomValue(currentValue)) {
@@ -154,7 +167,7 @@ public class ListBoxValues {
         return acceptableValuesWithoutCustomValues;
     }
 
-    public boolean isCustomValue(String value) {
+    public boolean isCustomValue(final String value) {
         if (value == null || value.isEmpty()) {
             return false;
         } else {
@@ -169,7 +182,7 @@ public class ListBoxValues {
         mapDisplayValuesToValues.clear();
     }
 
-    protected String getEditValuePrompt(String editPrefix) {
+    protected String getEditValuePrompt(final String editPrefix) {
         if (acceptableValuesWithCustomValues.size() > 0) {
             for (int i = 0; i < acceptableValuesWithCustomValues.size(); i++) {
                 String value = acceptableValuesWithCustomValues.get(i);
@@ -181,7 +194,7 @@ public class ListBoxValues {
         return null;
     }
 
-    protected List<String> createDisplayValues(List<String> acceptableValues) {
+    protected List<String> createDisplayValues(final List<String> acceptableValues) {
         List<String> displayValues = new ArrayList<String>();
         for (String value : acceptableValues) {
             if (value != null) {
@@ -202,7 +215,7 @@ public class ListBoxValues {
      * @param value the value
      * @return the displayValue for value
      */
-    protected String addDisplayValue(String value) {
+    protected String addDisplayValue(final String value) {
         if (mapDisplayValuesToValues.containsValue(value)) {
             for (Map.Entry<String, String> entry : mapDisplayValuesToValues.entrySet()) {
                 if (value.equals(entry.getValue())) {
@@ -259,14 +272,14 @@ public class ListBoxValues {
      * @param key
      * @return
      */
-    public String getValueForDisplayValue(String key) {
+    public String getValueForDisplayValue(final String key) {
         if (mapDisplayValuesToValues.containsKey(key)) {
             return mapDisplayValuesToValues.get(key);
         }
         return key;
     }
 
-    public String getNonCustomValueForUserString(String userValue) {
+    public String getNonCustomValueForUserString(final String userValue) {
         if (valueTester != null) {
             return valueTester.getNonCustomValueForUserString(userValue);
         } else {

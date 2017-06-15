@@ -16,6 +16,8 @@
 
 package org.jbpm.designer.client.popup;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jboss.errai.ui.client.widget.HasModel;
@@ -43,6 +45,8 @@ public interface AssignmentListItemWidgetView extends HasModel<AssignmentRow> {
 
     void setDisallowedNames(Set<String> disallowedNames,
                             String disallowedNameErrorMessage);
+
+    void setCustomAssignmentsProperties(final Map<String, List<String>> customAssignmentsProperties);
 
     void setAllowDuplicateNames(boolean allowDuplicateNames,
                                 String duplicateNameErrorMessage);

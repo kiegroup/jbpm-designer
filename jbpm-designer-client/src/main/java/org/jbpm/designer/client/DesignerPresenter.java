@@ -135,8 +135,9 @@ public class DesignerPresenter
         return menus;
     }
 
+    @Override
     protected void makeMenuBar() {
-        menus = menuBuilder
+        fileMenuBuilder
                 .addSave(versionRecordManager.newSaveMenuItem(new Command() {
                     @Override
                     public void execute() {
@@ -148,8 +149,7 @@ public class DesignerPresenter
                 .addRename(versionRecordManager.getPathToLatest(),
                            fileNameValidator)
                 .addDelete(versionRecordManager.getPathToLatest())
-                .addNewTopLevelMenu(versionRecordManager.buildMenu())
-                .build();
+                .addNewTopLevelMenu(versionRecordManager.buildMenu());
     }
 
     @OnClose
@@ -235,8 +235,8 @@ public class DesignerPresenter
     }-*/;
 
     private native void publishShowDataIOEditor(DesignerPresenter dp)/*-{
-        $wnd.designersignalshowdataioeditor = function (taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, disallowedpropertynames, jscallback) {
-            dp.@org.jbpm.designer.client.DesignerPresenter::showDataIOEditor(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, disallowedpropertynames, jscallback);
+        $wnd.designersignalshowdataioeditor = function (taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, disallowedpropertynames, customassignmentproperties, jscallback) {
+            dp.@org.jbpm.designer.client.DesignerPresenter::showDataIOEditor(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lcom/google/gwt/core/client/JavaScriptObject;)(taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, disallowedpropertynames, customassignmentproperties, jscallback);
         }
     }-*/;
 
@@ -304,6 +304,7 @@ public class DesignerPresenter
                                  final String assignments,
                                  final String datatypes,
                                  final String disallowedpropertynames,
+                                 final String customassignmentproperties,
                                  final JavaScriptObject jscallback) {
 
         //getDataIOEditorData("{ \"a\":\"hello\" }", jscallback);
@@ -351,7 +352,8 @@ public class DesignerPresenter
                                                            processvars,
                                                            assignments,
                                                            datatypes,
-                                                           disallowedpropertynames);
+                                                           disallowedpropertynames,
+                                                           customassignmentproperties);
         assignmentData.setVariableCountsString(hasInputVars,
                                                isSingleInputVar,
                                                hasOutputVars,
@@ -363,6 +365,7 @@ public class DesignerPresenter
         activityDataIOEditor.setDataTypes(assignmentData.getDataTypes(),
                                           assignmentData.getDataTypeDisplayNames());
         activityDataIOEditor.setProcessVariables(assignmentData.getProcessVariableNames());
+        activityDataIOEditor.setCustomAssignmentsProperties(assignmentData.getCustomAssignmentProperties());
 
         activityDataIOEditor.configureDialog(taskName,
                                              hasInputVars,

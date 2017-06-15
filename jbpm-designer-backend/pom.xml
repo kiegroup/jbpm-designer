@@ -566,6 +566,14 @@
       <groupId>org.kie</groupId>
       <artifactId>kie-ci</artifactId>
     </dependency>
+    <dependency>
+    	<groupId>org.uberfire</groupId>
+    	<artifactId>uberfire-maven-support</artifactId>
+    </dependency>
+    <dependency>
+    	<groupId>org.uberfire</groupId>
+    	<artifactId>uberfire-maven-integration</artifactId>
+    </dependency>
   </dependencies>
 
 

@@ -112,6 +112,9 @@ ORYX.Plugins.DataIOEditorPlugin = {
 
         var stencil = element.getStencil();
 
+        // Get customassignment properties for service tasks with customeditor
+        var customassignmentproperties = this.getCustomAssignmentProperties(stencil.properties());
+
         var taskname = undefined;
         if (stencil.property('oryx-name') !== undefined) {
             taskname = element.properties['oryx-name'];
@@ -149,7 +152,8 @@ ORYX.Plugins.DataIOEditorPlugin = {
 
         var disallowedPropertyNames = ORYX.DataIOEditorUtils.getDisallowedPropertyNames(element);
 
-        parent.designersignalshowdataioeditor(taskname, datainput, datainputset, dataoutput, dataoutputset, processvars, assignments, datatypes, disallowedPropertyNames,
+        parent.designersignalshowdataioeditor(taskname, datainput, datainputset, dataoutput, dataoutputset, processvars,
+                assignments, datatypes, disallowedPropertyNames, customassignmentproperties,
                 function (data) {
                     //window.alert("passed back to dataioeditor: " + data);
                     var obj = JSON.parse(data);
@@ -202,62 +206,96 @@ ORYX.Plugins.DataIOEditorPlugin = {
                         newProperties['oryx-dataoutputassociationsview'] = obj['variablecountsstring'];
                         oldProperties['oryx-dataoutputassociationsview'] = element.properties['oryx-dataoutputassociationsview'];
                     }
-                    this.setElementProperties(element, newProperties, oldProperties);
+                    // Add custom assignment properties to the properties which will be set
+                    this.addCustomAssignmentProperties(element, newProperties, oldProperties);
+                    // Set the properties which have been edited
+                    ORYX.DataIOEditorUtils.setElementProperties(this.facade, element, newProperties, oldProperties);
 
                 }.bind(this)
         );
     },
 
-    setElementProperties: function (element, newProperties, oldProperties) {
-
-        var facade = this.facade;
-
-        // Implement the specific command for property change
-        var commandClass = ORYX.Core.Command.extend({
-            construct: function () {
-                this.newProperties = newProperties;
-                this.oldProperties = oldProperties;
-                this.selectedElements = [element];
-                this.facade = facade;
-            },
-            execute: function () {
-                this.newProperties.each(function (pair) {
-                    if (!element.getStencil().property(pair.key).readonly()) {
-                        element.setProperty(pair.key, pair.value);
+    getCustomAssignmentProperties: function(properties) {
+        var customassignmentproperties = "";
+        for (i = 0; i < properties.length; i++) {
+            var property = properties[i]
+            if (property.customassignment()) {
+                customassignmentproperties = customassignmentproperties + property.title() + ":";
+                var items = property.items();
+                if (items.length > 0) {
+                    for (j = 0; j < items.length; j++) {
+                        customassignmentproperties = customassignmentproperties + items[j].value() + ";";
                     }
-                }.bind(this));
-                this.facade.setSelection(this.selectedElements);
-                this.facade.getCanvas().update();
-                this.facade.updateSelection();
-            },
-            rollback: function () {
-                this.oldProperties.each(function (pair) {
-                    if (!element.getStencil().property(pair.key).readonly()) {
-                        element.setProperty(pair.key, pair.value);
-                    }
-                }.bind(this));
-                this.facade.setSelection(this.selectedElements);
-                this.facade.getCanvas().update();
-                this.facade.updateSelection();
+                }
+                customassignmentproperties = customassignmentproperties + ",";
             }
-        })
-        // Instantiate the class
-        var command = new commandClass();
+        }
+        return customassignmentproperties;
+    },
 
-        // Execute the command
-        this.facade.executeCommands([command]);
+    addCustomAssignmentProperties: function(element, newProperties, oldProperties) {
+        var asHash = new Object();
+        if (newProperties['oryx-assignments'] !== undefined) {
+            asHash = this.parseCustomAssignments(newProperties['oryx-assignments']);
+        }
+        var stencil = element.getStencil();
+        var properties = stencil.properties();
+        for (i = 0; i < properties.length; i++) {
+            var property = properties[i];
+            var propName = 'oryx-' + property.id();
+            if (property.customassignment()) {
+                var oldVal = element.properties[propName];
+                var newVal = "";
+                if (asHash[property.id()] !== undefined) {
+                    newVal = asHash[property.id()];
+                }
+                oldProperties[propName] = oldVal;
+                newProperties[propName] = newVal;
+            }
+        }
+    },
 
-        newProperties.each(function (pair) {
-            this.facade.raiseEvent({
-                type: ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED,
-                elements: [element],
-                key: pair.key,
-                value: pair.value
-            });
-        }.bind(this));
-
+    parseCustomAssignments: function(assignments) {
+        var asHash = new Object();
+        if (assignments !== undefined) {
+            var as = assignments.split(',');
+            if (as.length > 0) {
+                for (i = 0; i < as.length; i++) {
+                    var a = as[i];
+                    if (a.startsWith('[din]')) {
+                        a = a.substring(5, a.length);
+                        // note that constant assignments '=' and variable assignments '->'
+                        // are treated the same here for display purposes. Serialization
+                        // and deserialization in the marshallers is done from the
+                        // 'assignments' property rather than from custom assignments properties.
+                        if (a.includes('=')) {
+                            var aparts = a.split('=');
+                            var aValue;
+                            var aName;
+                            if (aparts.length > 1) {
+                                aValue = aparts[1];
+                            }
+                            if (aparts.length > 0) {
+                                aName = aparts[0].toLowerCase();
+                                asHash[aName] = aValue;
+                            }
+                        }
+                        else if (a.includes('->')) {
+                            var aparts = a.split('->');
+                            var aValue;
+                            var aName;
+                            if (aparts.length > 1) {
+                                aValue = aparts[0];
+                                aName = aparts[1].toLowerCase();
+                                asHash[aName] = aValue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return asHash;
     }
-
 }
 
 ORYX.Plugins.DataIOEditorPlugin = ORYX.Plugins.AbstractPlugin.extend(ORYX.Plugins.DataIOEditorPlugin);
@@ -439,5 +477,82 @@ ORYX.DataIOEditorUtils = {
             }
         }
 
+    },
+
+    setElementProperties: function (facade, element, newProperties, oldProperties) {
+        this.facade = facade;
+
+        // Implement the specific command for property change
+        var commandClass = ORYX.Core.Command.extend({
+            construct: function () {
+                this.newProperties = newProperties;
+                this.oldProperties = oldProperties;
+                this.selectedElements = [element];
+                this.facade = facade;
+            },
+            execute: function () {
+                this.newProperties.each(function (pair) {
+                    if (!element.getStencil().property(pair.key).readonly()) {
+                        element.setProperty(pair.key, pair.value);
+                    }
+                }.bind(this));
+                this.facade.setSelection(this.selectedElements);
+                this.facade.getCanvas().update();
+                this.facade.updateSelection();
+            },
+            rollback: function () {
+                this.oldProperties.each(function (pair) {
+                    if (!element.getStencil().property(pair.key).readonly()) {
+                        element.setProperty(pair.key, pair.value);
+                    }
+                }.bind(this));
+                this.facade.setSelection(this.selectedElements);
+                this.facade.getCanvas().update();
+                this.facade.updateSelection();
+            }
+        })
+        // Instantiate the class
+        var command = new commandClass();
+
+        // Execute the command
+        this.facade.executeCommands([command]);
+
+        newProperties.each(function (pair) {
+            this.facade.raiseEvent({
+                type: ORYX.CONFIG.EVENT_PROPWINDOW_PROP_CHANGED,
+                elements: [element],
+                key: pair.key,
+                value: pair.value
+            });
+        }.bind(this));
+    },
+
+    setAssignmentsPropertyForCustomAssignment: function(facade, element, key, oldValue, newValue){
+        var propName = element.getStencil().property(key).title();
+        var oldAssignments = element.properties['oryx-assignments'];
+        var testConstAssignment1 = '[din]' + propName + '=' + oldValue;
+        var testConstAssignment2 = propName + '=' + oldValue;
+        var testVarAssignment = '[din]' + oldValue + '->' + propName;
+        var newConstAssignment = '[din]' + propName + '=' + newValue;
+        var newAssignments;
+        if (oldAssignments !== undefined && oldAssignments.length > 0) {
+            if (oldAssignments.includes(testConstAssignment1)) {
+                newAssignments = oldAssignments.replace(testConstAssignment1, newConstAssignment);
+            } else if (oldAssignments.includes(testConstAssignment2 + ',') || oldAssignments.endsWith(testConstAssignment2)) {
+                newAssignments = oldAssignments.replace(testConstAssignment2, newConstAssignment);
+            } else if (oldAssignments.includes(testVarAssignment)) {
+                newAssignments = oldAssignments.replace(testVarAssignment, newConstAssignment);
+            } else {
+                newAssignments = oldAssignments + ',' + newConstAssignment;
+            }
+        } else {
+            newAssignments = newConstAssignment;
+        }
+        var newProperties = new Hash();
+        var oldProperties = new Hash();
+        newProperties['oryx-assignments'] = newAssignments;
+        oldProperties['oryx-assignments'] = newAssignments;
+
+        this.setElementProperties(facade, element, newProperties, oldProperties);
     }
 }

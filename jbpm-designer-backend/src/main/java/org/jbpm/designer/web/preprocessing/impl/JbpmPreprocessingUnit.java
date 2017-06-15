@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -50,6 +51,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.appformer.maven.integration.ArtifactResolver;
 import org.drools.compiler.kproject.ReleaseIdImpl;
 import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.datatype.DataType;
@@ -80,7 +83,6 @@ import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.kie.scanner.ArtifactResolver;
 import org.kie.scanner.MavenClassLoaderResolver;
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.kie.workbench.common.services.shared.project.KieProjectService;
@@ -643,14 +645,16 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                                 Object paramValueObj = entry.getValue();
                                 if (paramValueObj != null) {
-                                    if (paramValueObj instanceof String) {
+                                    if (paramValueObj instanceof String
+                                            && ((String) paramValueObj).trim().length() > 0) {
                                         parameterValues.put(entry.getKey(),
-                                                            (String) entry.getValue());
+                                                            entry.getValue());
                                     } else if (paramValueObj instanceof EnumDataType) {
                                         EnumDataType enumdt = (EnumDataType) entry.getValue();
                                         if (enumdt != null) {
-                                            String entryValue = 
-                                                   String.join(",", enumdt.getValueNames(contextLoader));
+                                            List<String> enumValuesList = Arrays.asList(enumdt.getValueNames(contextLoader));
+                                            String entryValue = enumValuesList.stream().filter(StringUtils::isNotBlank)
+                                                    .collect(Collectors.joining(","));
                                             parameterValues.put(entry.getKey(), entryValue);
                                         } else {
                                             _logger.debug("Expected enum data not found!");
