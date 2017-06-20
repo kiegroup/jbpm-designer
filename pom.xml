@@ -31,9 +31,11 @@
 
   <modules>
     <module>jbpm-designer-api</module>
+    <module>jbpm-designer-test-util</module>
     <module>jbpm-designer-backend</module>
     <module>jbpm-designer-client</module>
     <module>jbpm-designer-utilities</module>
+    
   </modules>
 
   <dependencyManagement>
