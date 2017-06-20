@@ -1949,8 +1949,8 @@ ORYX.Plugins.View = {
 
                             var fdataInput = document.createElement("input");
                             fdataInput.setAttribute("type", "hidden");
-                            fdataInput.setAttribute("name", "data");
-                            fdataInput.setAttribute("value", toStoreValue);
+                            fdataInput.setAttribute("name", "data_encoded");
+                            fdataInput.setAttribute("value", Base64.encode(toStoreValue));
                             form.appendChild(fdataInput);
                             document.body.appendChild(form);
                             form.submit();
