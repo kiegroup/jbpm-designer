@@ -12,12 +12,6 @@
 <i18n:bundle id="bundle" baseName="org.jbpm.designer.resources.i18n.DesignerConstants"
              locale='<%= locale%>' />
 <script type="text/javascript">
-/**
- * @author nicolas.peters
- * 
- * Contains all strings for the default language (en-us).
- * Version 1 - 08/29/08
- */
 if(!ORYX) var ORYX = {};
 
 if(!ORYX.I18N) ORYX.I18N = {};
@@ -688,7 +682,7 @@ ORYX.I18N.View.migratejPDLDesc = '<i18n:message key="ORYX.I18N.View.migratejPDLD
 ORYX.I18N.View.viewDiff = '<i18n:message key="ORYX.I18N.View.viewDiff">View diff</i18n:message>';
 ORYX.I18N.View.viewDiffDesc = '<i18n:message key="ORYX.I18N.View.viewDiffDesc">View diff between different versions of the process</i18n:message>';
 ORYX.I18N.View.viewDiffLoadingVersions = '<i18n:message key="ORYX.I18N.View.viewDiffLoadingVersions">Loading process versions...</i18n:message>';
-ORYX.I18N.View.connectServiceRepo = '<i18n:message key="ORYX.I18N.View.connectServiceRepo">Connect to jBPM service repository</i18n:message>';
+ORYX.I18N.View.connectServiceRepo = '<i18n:message key="ORYX.I18N.View.connectServiceRepo">Connect to service repository</i18n:message>';
 ORYX.I18N.View.connectServiceRepoDesc = '<i18n:message key="ORYX.I18N.View.connectServiceRepoDesc">Connect to a Service Repository</i18n:message>';
 ORYX.I18N.View.connectServiceRepoDataTitle = '<i18n:message key="ORYX.I18N.View.connectServiceRepoDataTitle">Service Repository Connection</i18n:message>';
 ORYX.I18N.View.connectServiceRepoConnecting = '<i18n:message key="ORYX.I18N.View.connectServiceRepoConnecting">Connecting to a Service Repository...</i18n:message>';
@@ -1339,8 +1333,8 @@ if(!ORYX.I18N.view) ORYX.I18N.view = {};
 ORYX.I18N.view.showFullScreen='<i18n:message key="ORYX.I18N.view.showFullScreen">Show in full screen</i18n:message>';
 ORYX.I18N.view.showFullScreen_desc='<i18n:message key="ORYX.I18N.view.showFullScreen_desc">Show in full screen mode</i18n:message>';
 ORYX.I18N.view.failShowFullScreen='<i18n:message key="ORYX.I18N.view.failShowFullScreen">Browser does not support full screen mode.</i18n:message>';
-ORYX.I18N.view.toggleFullScreen='<i18n:message key="ORYX.I18N.view.toggleFullScreen">Toggle full screen mode</i18n:message>';
-ORYX.I18N.view.toggleFullScreen_desc='<i18n:message key="ORYX.I18N.view.toggleFullScreen_desc">Toggle full screen mode</i18n:message>';
+ORYX.I18N.view.toggleFullScreen='<i18n:message key="ORYX.I18N.view.toggleFullScreen">Full screen mode</i18n:message>';
+ORYX.I18N.view.toggleFullScreen_desc='<i18n:message key="ORYX.I18N.view.toggleFullScreen_desc">Full screen mode</i18n:message>';
 
 
 ORYX.I18N.view.shareProcessImg='<i18n:message key="ORYX.I18N.view.shareProcessImg">Share Process Image</i18n:message>';
@@ -1446,7 +1440,7 @@ ORYX.I18N.View.sim.errorUnknownPathId='<i18n:message key="ORYX.I18N.View.sim.err
 
 if(!ORYX.I18N.Dictionary) ORYX.I18N.Dictionary = {}
 
-ORYX.I18N.Dictionary.dictionary='<i18n:message key="ORYX.I18N.Dictionary.dictionary">Dictionary</i18n:message>';
+ORYX.I18N.Dictionary.dictionary='<i18n:message key="ORYX.I18N.Dictionary.dictionary">Edit Dictionary</i18n:message>';
 ORYX.I18N.Dictionary.processDictionary='<i18n:message key="ORYX.I18N.Dictionary.processDictionary">Process dictionary</i18n:message>';
 ORYX.I18N.Dictionary.errorReadingProcDic='<i18n:message key="ORYX.I18N.Dictionary.errorReadingProcDic">Error reading Process Dictionary. Invalid item</i18n:message>';
 ORYX.I18N.Dictionary.errorLoadingProcDic='<i18n:message key="ORYX.I18N.Dictionary.errorLoadingProcDic">Error loading Process Dictionary</i18n:message>';
@@ -2114,5 +2108,23 @@ ORYX.I18N.propertyNames['RuleFlow'] = '<i18n:message key="ORYX.I18N.propertyName
 ORYX.I18N.SortAscending = '<i18n:message key="ORYX.I18N.SortAscending">Sort Ascending</i18n:message>';
 ORYX.I18N.SortDescending = '<i18n:message key="ORYX.I18N.SortDescending">Sort Descending</i18n:message>';
 ORYX.I18N.Columns = '<i18n:message key="ORYX.I18N.Columns">Columns</i18n:message>';
+
+// menu
+if(!ORYX.I18N.menuItems) ORYX.I18N.menuItems = {}
+ORYX.I18N.menuItems['File'] = '<i18n:message key="ORYX.I18N.menuItems_File">File</i18n:message>';
+ORYX.I18N.menuItems['Edit'] = '<i18n:message key="ORYX.I18N.menuItems_Edit">Edit</i18n:message>';
+ORYX.I18N.menuItems['Arrange'] = '<i18n:message key="ORYX.I18N.menuItems_Arrange">Arrange</i18n:message>';
+ORYX.I18N.menuItems['Tools'] = '<i18n:message key="ORYX.I18N.menuItems_Tools">Tools</i18n:message>';
+ORYX.I18N.menuItems['View'] = '<i18n:message key="ORYX.I18N.menuItems_View">View</i18n:message>';
+ORYX.I18N.menuItems['Simulate'] = '<i18n:message key="ORYX.I18N.menuItems_Simulate">Simulate</i18n:message>';
+ORYX.I18N.menuItems['Validate'] = '<i18n:message key="ORYX.I18N.menuItems_Validate">Validate</i18n:message>';
+ORYX.I18N.menuItems['ImportExport'] = '<i18n:message key="ORYX.I18N.menuItems_ImportExport">Import/Export</i18n:message>';
+ORYX.I18N.menuItems['Forms'] = '<i18n:message key="ORYX.I18N.menuItems_Forms">Forms</i18n:message>';
+ORYX.I18N.menuItems['Services'] = '<i18n:message key="ORYX.I18N.menuItems_Services">Services</i18n:message>';
+ORYX.I18N.menuItems['Themes'] = '<i18n:message key="ORYX.I18N.menuItems_Themes">Extra</i18n:message>';
+ORYX.I18N.menuItems['Extra'] = '<i18n:message key="ORYX.I18N.menuItems_Extra">Extra</i18n:message>';
+
+
+
 
 </script>

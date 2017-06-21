@@ -15,10 +15,10 @@ ORYX.Plugins.ServiceRepoIntegration = Clazz.extend({
             this.facade.offer({
                 'name':ORYX.I18N.View.connectServiceRepo,
                 'functionality': this.jbpmServiceRepoConnect.bind(this),
-                'group': "servicerepogroup",
                 'icon': ORYX.BASE_FILE_PATH + "images/repository_rep.gif",
-                'description': ORYX.I18N.View.connectServiceRepoDesc,
-                'index': 4,
+                group: ORYX.I18N.menuItems['Services'],
+                dropdownGroupText : ORYX.I18N.menuItems['Services'],
+                'index': 1,
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
