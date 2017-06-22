@@ -15,19 +15,25 @@
 
 package org.jbpm.designer.web.preprocessing.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
+import org.guvnor.common.services.project.events.NewProjectEvent;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestIDiagramProfile;
 import org.jbpm.designer.helper.TestServletContext;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
+import org.jbpm.designer.repository.Directory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
+import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.repository.VFSFileSystemProducer;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
@@ -37,12 +43,18 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kie.api.runtime.KieContainer;
+import org.kie.workbench.common.services.backend.builder.core.Builder;
+import org.kie.workbench.common.services.backend.builder.core.LRUBuilderCache;
+import org.kie.workbench.common.services.shared.project.KieProject;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.stringtemplate.v4.ST;
+import org.uberfire.backend.server.util.Paths;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
@@ -158,8 +170,11 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     @Test
     public void testWorkitemParameterValues() throws Exception {
         Repository repository = createRepository();
-        repository.createDirectory("/myprocesses");
+        Directory testProjectDir = repository.createDirectory("/myprocesses");
         repository.createDirectory("/global");
+
+        KieProject mockProject = mock(KieProject.class);
+        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content(        "[\n" +
@@ -200,15 +215,18 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
+        preprocessingUnitVFS.setBuilderCache(getBuilderCache(mockProject));
         preprocessingUnitVFS.init(new TestServletContext(),
                                   "/",
                                   null);
         Asset<String> widAsset = repository.loadAsset(uniqueWidID);
         Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+
         preprocessingUnitVFS.evaluateWorkDefinitions(workDefinitions,
                                                      widAsset,
                                                      widAsset.getAssetLocation(),
-                                                     repository);
+                                                     repository,
+                                                     mockProject);
 
         assertNotNull(workDefinitions);
         assertEquals(1,
@@ -285,8 +303,11 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     public void testEmptyCustomEditor() throws Exception {
         Repository repository = createRepository();
         //prepare folders that will be used
-        repository.createDirectory("/myprocesses");
+        Directory testProjectDir = repository.createDirectory("/myprocesses");
         repository.createDirectory("/global");
+
+        KieProject mockProject = mock(KieProject.class);
+        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content(        "\n" +
@@ -316,15 +337,18 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
+        preprocessingUnitVFS.setBuilderCache(getBuilderCache(mockProject));
         preprocessingUnitVFS.init(new TestServletContext(),
                                   "/",
                                   null);
         Asset<String> widAsset = repository.loadAsset(uniqueWidID);
         Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+
         preprocessingUnitVFS.evaluateWorkDefinitions(workDefinitions,
                                                      widAsset,
                                                      widAsset.getAssetLocation(),
-                                                     repository);
+                                                     repository,
+                                                     mockProject);
         // $workitemDefs:{k| $if(workitemDefs.(k).customEditor)$ HAVE CUSTOM EDITOR $endif$ }$
 
         assertNotNull(workDefinitions);
@@ -358,8 +382,11 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     public void testCaseProjectSetting() throws Exception {
         Repository repository = createRepository();
         //prepare folders that will be used
-        repository.createDirectory("/myprocesses");
+        Directory testProjectDir = repository.createDirectory("/myprocesses");
         repository.createDirectory("/global");
+
+        KieProject mockProject = mock(KieProject.class);
+        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content(        "\n" +
@@ -389,15 +416,18 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
+        preprocessingUnitVFS.setBuilderCache(getBuilderCache(mockProject));
         preprocessingUnitVFS.init(new TestServletContext(),
                                   "/",
                                   null);
         Asset<String> widAsset = repository.loadAsset(uniqueWidID);
         Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+
         preprocessingUnitVFS.evaluateWorkDefinitions(workDefinitions,
                                                      widAsset,
                                                      widAsset.getAssetLocation(),
-                                                     repository);
+                                                     repository,
+                                                     mockProject);
 
         assertNotNull(workDefinitions);
         assertEquals(1,
@@ -417,8 +447,11 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     public void testEmptyIcon() throws Exception {
         Repository repository = createRepository();
         //prepare folders that will be used
-        repository.createDirectory("/myprocesses");
+        Directory testProjectDir = repository.createDirectory("/myprocesses");
         repository.createDirectory("/global");
+
+        KieProject mockProject = mock(KieProject.class);
+        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content(        "\n" +
@@ -448,6 +481,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
+        preprocessingUnitVFS.setBuilderCache(getBuilderCache(mockProject));
         preprocessingUnitVFS.init(new TestServletContext(),
                                   "/",
                                   null);
@@ -456,10 +490,12 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         preprocessingUnitVFS.setGlobalDir(new TestIDiagramProfile(repository).getRepositoryGlobalDir());
 
         Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+
         preprocessingUnitVFS.evaluateWorkDefinitions(workDefinitions,
                                                      widAsset,
                                                      widAsset.getAssetLocation(),
-                                                     repository);
+                                                     repository,
+                                                     mockProject);
 
         assertNotNull(workDefinitions);
         assertEquals(1,
@@ -468,5 +504,36 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         assertNotNull(workDefinitions.get("Rewardsystem").getIcon());
         assertEquals("/global/defaultservicenodeicon.png",
                      workDefinitions.get("Rewardsystem").getIcon());
+    }
+
+    private String decodeUniqueId(String uniqueId) {
+        if (Base64.isBase64(uniqueId)) {
+            byte[] decoded = Base64.decodeBase64(uniqueId);
+            try {
+                String uri = new String(decoded,
+                                        "UTF-8");
+
+                return UriUtils.encode(uri);
+            } catch (UnsupportedEncodingException e) {
+
+            }
+        }
+
+        return UriUtils.encode(uniqueId);
+    }
+
+    private LRUBuilderCache getBuilderCache(KieProject kieProject) {
+        NewProjectEvent event = mock(NewProjectEvent.class);
+        when(event.getProject()).thenReturn(kieProject);
+
+        LRUBuilderCache builderCache = mock(LRUBuilderCache.class);
+        KieContainer kieContainer = mock(KieContainer.class);
+        when(kieContainer.getClassLoader()).thenReturn(this.getClass().getClassLoader());
+
+        Builder workbenchBuilder = mock(Builder.class);
+        when(workbenchBuilder.getKieContainer()).thenReturn(kieContainer);
+        when(builderCache.getBuilder(anyObject())).thenReturn(workbenchBuilder);
+
+        return builderCache;
     }
 }
