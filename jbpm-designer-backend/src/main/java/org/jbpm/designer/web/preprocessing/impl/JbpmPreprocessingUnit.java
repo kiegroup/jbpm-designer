@@ -49,7 +49,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.drools.core.util.MVELSafeHelper;
 import org.guvnor.common.services.project.model.Project;
 import org.guvnor.common.services.project.service.POMService;
 import org.guvnor.common.services.project.service.ProjectService;
@@ -75,6 +74,7 @@ import org.jbpm.process.core.datatype.impl.type.EnumDataType;
 import org.jbpm.process.core.impl.ParameterDefinitionImpl;
 import org.jbpm.process.workitem.WorkDefinitionImpl;
 import org.jbpm.process.workitem.WorkItemRepository;
+import org.jbpm.util.WidMVELEvaluator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.kie.workbench.common.services.shared.project.KieProject;
@@ -530,8 +530,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         List<Map<String, Object>> workDefinitionsMaps;
 
         try {
-            workDefinitionsMaps = (List<Map<String, Object>>) MVELSafeHelper.getEvaluator().eval(widAsset.getAssetContent(),
-                                                                                                 new HashMap());
+            workDefinitionsMaps = (List<Map<String, Object>>) WidMVELEvaluator.eval(widAsset.getAssetContent());
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }

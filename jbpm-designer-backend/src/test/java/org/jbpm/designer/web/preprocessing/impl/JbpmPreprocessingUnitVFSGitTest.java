@@ -162,9 +162,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         repository.createDirectory("/global");
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content("import org.jbpm.process.core.datatype.impl.type.StringDataType;\n" +
-                                "import org.jbpm.process.core.datatype.impl.type.EnumDataType;\n" +
-                                "[\n" +
+        builder.content(        "[\n" +
                                 "    [\n" +
                                 "        \"name\" : \"TestServiceWithParamValues\",\n" +
                                 "        \"description\" : \"TestServiceWithParamValues\",\n" +
@@ -291,8 +289,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         repository.createDirectory("/global");
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content("import org.jbpm.process.core.datatype.impl.type.StringDataType;\n" +
-                                "\n" +
+        builder.content(        "\n" +
                                 "[\n" +
                                 "\n" +
                                 "  [\n" +
@@ -365,8 +362,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         repository.createDirectory("/global");
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content("import org.jbpm.process.core.datatype.impl.type.StringDataType;\n" +
-                                "\n" +
+        builder.content(        "\n" +
                                 "[\n" +
                                 "\n" +
                                 "  [\n" +
@@ -425,8 +421,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         repository.createDirectory("/global");
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content("import org.jbpm.process.core.datatype.impl.type.StringDataType;\n" +
-                                "\n" +
+        builder.content(        "\n" +
                                 "[\n" +
                                 "\n" +
                                 "  [\n" +
