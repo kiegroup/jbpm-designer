@@ -1,6 +1,3 @@
-import org.jbpm.process.core.datatype.impl.type.StringDataType;
-import org.jbpm.process.core.datatype.impl.type.ObjectDataType;
-
 [
   [
     "name" : "Email",
