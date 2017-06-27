@@ -77,6 +77,8 @@ import org.jbpm.process.workitem.WorkItemRepository;
 import org.jbpm.util.WidMVELEvaluator;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.kie.workbench.common.services.backend.builder.core.Builder;
+import org.kie.workbench.common.services.backend.builder.core.LRUBuilderCache;
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.slf4j.Logger;
@@ -156,6 +158,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
     @Inject
     KieProjectService kieProjectService;
+
+    @Inject
+    private LRUBuilderCache builderCache;
 
     public JbpmPreprocessingUnit() {
     }
@@ -318,6 +323,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                                                           repository);
 
             // evaluate all configs
+            KieProject kieProject = kieProjectService.resolveProject(vfsService.get(uuid));
             Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
             for (Asset entry : workItemsContent) {
 
@@ -325,7 +331,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     evaluateWorkDefinitions(workDefinitions,
                                             entry,
                                             asset.getAssetLocation(),
-                                            repository);
+                                            repository, kieProject);
                 } catch (Exception e) {
                     _logger.error("Unable to parse a workitem definition: " + e.getMessage());
                 }
@@ -388,7 +394,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             workItemTemplate.add("includedo",
                                  includeDataObjects);
 
-            KieProject kieProject = kieProjectService.resolveProject(vfsService.get(uuid));
             if (kieProject != null && kieProject.getRootPath() != null && defaultDesignerAssetService.isCaseProject(kieProject.getRootPath())) {
                 workItemTemplate.add("caseproject",
                                      true);
@@ -526,7 +531,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions,
                                         Asset<String> widAsset,
                                         String assetLocation,
-                                        Repository repository) throws Exception {
+                                        Repository repository, KieProject kieProject) throws Exception {
         List<Map<String, Object>> workDefinitionsMaps;
 
         try {
@@ -631,14 +636,19 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                         parameterValues.put(entry.getKey(),
                                                             entry.getValue());
                                     } else if (paramValueObj instanceof EnumDataType) {
+                                        Builder builder = builderCache.getBuilder(kieProject);
                                         EnumDataType enumdt = (EnumDataType) entry.getValue();
                                         if (enumdt != null) {
-                                            List<String> enumValuesList = Arrays.asList(enumdt.getValueNames());
-                                            String enumValuesStr = enumValuesList.stream().filter(StringUtils::isNotBlank)
-                                                    .collect(Collectors.joining(","));
+                                            try {
+                                                List<String> enumValuesList = Arrays.asList(enumdt.getValueNames(builder.getKieContainer().getClassLoader()));
+                                                String enumValuesStr = enumValuesList.stream().filter(StringUtils::isNotBlank)
+                                                        .collect(Collectors.joining(","));
 
-                                            parameterValues.put(entry.getKey(),
-                                                                enumValuesStr);
+                                                parameterValues.put(entry.getKey(),
+                                                                    enumValuesStr);
+                                            } catch (Throwable t) {
+                                                _logger.error("Error retrieving enum: " + t.getMessage());
+                                            }
                                         }
                                     } else {
                                         _logger.warn("parameter value type not supported");
@@ -1263,5 +1273,9 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
     public void setGlobalDir(String globalDir) {
         this.globalDir = globalDir;
+    }
+
+    public void setBuilderCache(LRUBuilderCache builderCache) {
+        this.builderCache = builderCache;
     }
 }
