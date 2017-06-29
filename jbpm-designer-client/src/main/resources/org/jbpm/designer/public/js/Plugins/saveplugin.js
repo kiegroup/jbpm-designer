@@ -338,6 +338,10 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     },
 
     doSave : function(usePathURI, commitMessage) {
+        // turn off validation
+        ORYX.IS_VALIDATING_PROCESS = false;
+        ORYX.EDITOR._pluginFacade.resetAllShapeColors();
+
         Ext.Ajax.request({
             url: ORYX.PATH + 'assetservice',
             method: 'POST',

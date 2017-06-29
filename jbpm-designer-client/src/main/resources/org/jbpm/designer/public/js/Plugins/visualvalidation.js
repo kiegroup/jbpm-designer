@@ -56,6 +56,7 @@ ORYX.Plugins.VisualValidation = ORYX.Plugins.AbstractPlugin.extend({
         }
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_CLICK, this.displayErrorsOnNode.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.ORYX.CONFIG.EVENT_DISABLE_VALIDATION, this.disableValidation.bind(this));
 
     },
 
