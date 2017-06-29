@@ -957,7 +957,9 @@ ORYX.Editor = {
 				eventCoordinates:		this.eventCoordinates.bind(this),
 				addToRegion:			this.addToRegion.bind(this),
 				
-				getModelMetaData:		this.getModelMetaData.bind(this)
+				getModelMetaData:		this.getModelMetaData.bind(this),
+
+				resetAllShapeColors:    this.resetAllShapeColors.bind(this)
 			};
 
 		// return it.
@@ -992,6 +994,30 @@ ORYX.Editor = {
 		    return ret;
 		}
 	},
+
+    resetAllShapeColors: function() {
+        this.getCanvas().children.each(function(shape) {
+            this.resetShapeColors(shape);
+        }.bind(this));
+
+        this.getCanvas().update();
+	},
+
+    resetShapeColors: function(shape) {
+        if(shape) {
+            if(shape instanceof ORYX.Core.Node || shape instanceof ORYX.Core.Edge) {
+                shape.setProperty("oryx-bordercolor", shape.properties["oryx-origbordercolor"]);
+                shape.refresh();
+            }
+            if(shape.getChildren().size() > 0) {
+                for (var i = 0; i < shape.getChildren().size(); i++) {
+                    if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
+                        this.resetShapeColor(shape.getChildren()[i]);
+                    }
+                }
+            }
+        }
+    },
 	
     /**
      * Returns JSON of underlying canvas (calls ORYX.Canvas#toJSON()).

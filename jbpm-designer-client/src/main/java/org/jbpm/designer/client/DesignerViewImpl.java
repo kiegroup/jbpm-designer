@@ -98,9 +98,11 @@ public class DesignerViewImpl
 
     @Override
     public boolean canClose() {
-        if (!designerWidget.canSaveDesignerModel(designerWidget.getEditorID())) {
+        if (!designerWidget.canSaveDesignerModel(designerWidget.getEditorID()) ||
+                designerWidget.isProcessValidating(designerWidget.getEditorID())) {
             boolean canClose = designerWidget.confirmClose();
             if (canClose) {
+                designerWidget.turnOffValidation(designerWidget.getEditorID());
                 designerWidget.setProcessSaved(designerWidget.getEditorID());
                 return canClose;
             } else {

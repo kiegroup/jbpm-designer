@@ -101,12 +101,21 @@ public class DesignerWidgetPresenter {
         view.setProcessSaved(editorID);
     }
 
+    public void turnOffValidation(String editorID) {
+        view.turnOffValidation(editorID);
+    }
+
     public void raiseEventUpdateLock(String editorID) {
         view.raiseEventUpdateLock(editorID);
     }
 
+
     public boolean canSaveDesignerModel(String editorID) {
         return view.canSaveDesignerModel(editorID);
+    }
+
+    public boolean isProcessValidating(String editorID) {
+        return view.isProcessValidating(editorID);
     }
 
     public void setSize(final int width,
