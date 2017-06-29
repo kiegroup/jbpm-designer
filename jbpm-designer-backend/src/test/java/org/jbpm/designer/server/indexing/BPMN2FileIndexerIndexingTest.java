@@ -16,13 +16,16 @@
 package org.jbpm.designer.server.indexing;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.guvnor.common.services.project.model.GAV;
 import org.guvnor.common.services.project.model.POM;
 import org.guvnor.common.services.project.model.Package;
+import org.jbpm.designer.query.FindBpmn2ProcessIdsQuery;
 import org.jbpm.designer.type.Bpmn2TypeDefinition;
 import org.junit.Test;
 import org.kie.workbench.common.services.refactoring.backend.server.BaseIndexingTest;
@@ -33,7 +36,6 @@ import org.kie.workbench.common.services.refactoring.backend.server.query.respon
 import org.kie.workbench.common.services.refactoring.backend.server.query.standard.FindAllChangeImpactQuery;
 import org.kie.workbench.common.services.refactoring.backend.server.query.standard.FindResourcesQuery;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm.TermSearchType;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueResourceIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRequest;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
@@ -51,6 +53,20 @@ import static org.mockito.Mockito.*;
 
 public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefinition> {
 
+    private final static List<String> PROCESS_IDS = Arrays.asList(new String[]{"hiring", "ParentProcess", "SubProcess", "multiple-rule-tasks", "org.jbpm.signal", "org.jbpm.broken"});
+
+    private final static String[] BPMN_FILES = {
+            "callActivity.bpmn2",
+            "callActivityByName.bpmn2",
+            "callActivityCalledSubProcess.bpmn2",
+            "hiring.bpmn2",
+            "multipleRuleTasksWithDataInput.bpmn2",
+            "signal.bpmn2",
+            "brokenSignal.bpmn2",
+    };
+
+    private static final String DEPLOYMENT_ID = "org.kjar:test:1.0";
+
     protected Set<NamedQuery> getQueries() {
         return new HashSet<NamedQuery>() {{
             add(new FindResourcesQuery() {
@@ -65,64 +81,59 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
                     return new DefaultResponseBuilder(ioService());
                 }
             });
+            add(new FindBpmn2ProcessIdsQuery() {
+                @Override
+                public ResponseBuilder getResponseBuilder() {
+                    return new FindBpmn2ProcessIdsQuery.Bpmn2ProcessIdsResponseBuilder(ioService());
+                }
+            });
         }};
     }
 
-    private static final String DEPLOYMENT_ID = "org.kjar:test:1.0";
+    private static final long WAIT_TIME_MILLIS = 2000;
+
+    private static final int MAX_WAIT_TIMES = 8;
 
     @Test
-    public void testBPMN2Indexing() throws Exception {
-
-        String[] bpmn2Files = {
-                "callActivity.bpmn2",
-                "callActivityByName.bpmn2",
-                "callActivityCalledSubProcess.bpmn2",
-                "hiring.bpmn2",
-                "multipleRuleTasksWithDataInput.bpmn2",
-                "signal.bpmn2",
-                "brokenSignal.bpmn2",
-        };
+    public void testBpmnIndexing() throws Exception {
 
         List<Path> pathList = new ArrayList<>();
-        for (int i = 0; i < bpmn2Files.length; ++i) {
-            String bpmn2File = bpmn2Files[i];
-            if (bpmn2File.endsWith("bpmn2")) {
-                Path path = basePath.resolve(bpmn2File);
+        for (int i = 0; i < BPMN_FILES.length; ++i) {
+            String bpmnFile = BPMN_FILES[i];
+            if (bpmnFile.endsWith("bpmn2")) {
+                Path path = basePath.resolve(bpmnFile);
                 pathList.add(path);
-                String bpmn2Str = loadText(bpmn2File);
+                String bpmnStr = loadText(bpmnFile);
                 ioService().write(path,
-                                  bpmn2Str);
+                                  bpmnStr);
             }
         }
-        Path[] path = pathList.toArray(new Path[pathList.size()]);
-
-        Thread.sleep(5000); //wait for events to be consumed from jgit -> (notify changes -> watcher -> index) -> lucene index
+        Path[] paths = pathList.toArray(new Path[pathList.size()]);
 
         {
-            final RefactoringPageRequest request = new RefactoringPageRequest(FindResourcesQuery.NAME,
-                                                                              new HashSet<ValueIndexTerm>() {{
-                                                                                  add(new ValueResourceIndexTerm("*",
-                                                                                                                 ResourceType.BPMN2,
-                                                                                                                 TermSearchType.WILDCARD));
-                                                                              }},
-                                                                              0,
-                                                                              10);
-
+            PageResponse<RefactoringPageRow> response = null;
             try {
-                final PageResponse<RefactoringPageRow> response = service.query(request);
-                assertNotNull(response);
-                assertEquals(path.length,
-                             response.getPageRowList().size());
+                for (int i = 0; i < MAX_WAIT_TIMES; i++) {
+                    Thread.sleep(WAIT_TIME_MILLIS);
+                    response = queryBPMN2Resources();
+                    if (response != null && response.getPageRowList() != null && response.getPageRowList().size() >= paths.length) {
+                        break;
+                    }
+                }
             } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
+
+            assertNotNull(response);
+            assertEquals(paths.length,
+                         response.getPageRowList().size());
         }
 
         {
             QueryOperationRequest request = QueryOperationRequest
                     .referencesSharedPart("*",
                                           PartType.RULEFLOW_GROUP,
-                                          TermSearchType.WILDCARD)
+                                          ValueIndexTerm.TermSearchType.WILDCARD)
                     .inAllProjects().onAllBranches();
 
             try {
@@ -131,7 +142,7 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
                 assertEquals(1,
                              response.size());
                 assertResponseContains(response,
-                                       path[4]);
+                                       paths[4]);
             } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
@@ -149,7 +160,7 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
                 assertEquals(1,
                              response.size());
                 assertResponseContains(response,
-                                       path[5]);
+                                       paths[5]);
             } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
@@ -167,7 +178,7 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
                 assertEquals(1,
                              response.size());
                 assertResponseContains(response,
-                                       path[6]);
+                                       paths[6]);
             } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
@@ -184,13 +195,58 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
                 assertEquals(2,
                              response.size());
                 assertResponseContains(response,
-                                       path[5]);
+                                       paths[5]);
                 assertResponseContains(response,
-                                       path[6]);
+                                       paths[6]);
             } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
         }
+        {
+
+            final Set<ValueIndexTerm> queryTerms = new HashSet<ValueIndexTerm>() {{
+                add(new ValueResourceIndexTerm("*",
+                                               ResourceType.BPMN2,
+                                               ValueIndexTerm.TermSearchType.WILDCARD));
+            }};
+            try {
+                List<RefactoringPageRow> response = service.query(
+                        FindBpmn2ProcessIdsQuery.NAME,
+                        queryTerms);
+                assertNotNull(response);
+                assertEquals(paths.length,
+                             response.size());
+
+                for (String expectedId : PROCESS_IDS) {
+                    boolean foundId = false;
+                    for (RefactoringPageRow row : response) {
+                        Map<String, org.uberfire.backend.vfs.Path> mapRow = (Map<String, org.uberfire.backend.vfs.Path>) row.getValue();
+                        for (String rKey : mapRow.keySet()) {
+                            assertTrue(PROCESS_IDS.contains(rKey));
+                            foundId = true;
+                        }
+                    }
+                    if (!foundId) {
+                        fail("Process with ID <" + expectedId + " not found in results for " + FindBpmn2ProcessIdsQuery.NAME);
+                    }
+                }
+            } catch (IllegalArgumentException e) {
+                fail("Exception thrown: " + e.getMessage());
+            }
+        }
+    }
+
+    private PageResponse<RefactoringPageRow> queryBPMN2Resources() throws IllegalArgumentException {
+        final RefactoringPageRequest request = new RefactoringPageRequest(FindResourcesQuery.NAME,
+                                                                          new HashSet<ValueIndexTerm>() {{
+                                                                              add(new ValueResourceIndexTerm("*",
+                                                                                                             ResourceType.BPMN2,
+                                                                                                             ValueIndexTerm.TermSearchType.WILDCARD));
+                                                                          }},
+                                                                          0,
+                                                                          10);
+
+        return service.query(request);
     }
 
     @Override

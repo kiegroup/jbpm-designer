@@ -843,9 +843,10 @@ public class VFSRepositoryGitFileSystemTest {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
         Directory sourceDir = repository.createDirectory("/source");
+        Directory targetDir = repository.createDirectory("/target");
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content("simple content")
+        builder.content("simpleContent")
                 .type("bpmn2")
                 .name("process")
                 .location("/source");
@@ -885,6 +886,7 @@ public class VFSRepositoryGitFileSystemTest {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
         Directory sourceDir = repository.createDirectory("/source");
+        Directory targetDir = repository.createDirectory("/target");
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("simple content")
@@ -928,6 +930,7 @@ public class VFSRepositoryGitFileSystemTest {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
         Directory sourceDir = repository.createDirectory("/source");
+        Directory targetDir = repository.createDirectory("/target");
 
         boolean directoryExists = repository.directoryExists(sourceDir.getLocation() + sourceDir.getName());
         assertTrue(directoryExists);
