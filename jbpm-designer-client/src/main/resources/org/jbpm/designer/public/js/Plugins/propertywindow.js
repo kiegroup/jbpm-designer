@@ -3078,10 +3078,6 @@ Ext.form.ComplexImportsField = Ext.extend(Ext.form.TriggerField, {
                         objectType.push("Object");
                         objectType.push("Object");
                         customTypeData.push(objectType);
-                        var dividerType = new Array();
-                        dividerType.push("**********");
-                        dividerType.push("**********");
-                        customTypeData.push(dividerType);
 
                         var unsortedData = new Array();
                         for (var key in responseJson) {
@@ -4951,10 +4947,6 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField, {
                         objectType.push("Object");
                         objectType.push("Object");
                         customTypeData.push(objectType);
-                        var dividerType = new Array();
-                        dividerType.push("**********");
-                        dividerType.push("**********");
-                        customTypeData.push(dividerType);
 
                         var unsortedData = new Array();
                         for (var key in responseJson) {

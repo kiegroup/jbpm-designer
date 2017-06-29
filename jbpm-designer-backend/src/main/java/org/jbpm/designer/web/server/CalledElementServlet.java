@@ -233,8 +233,6 @@ public class CalledElementServlet extends HttpServlet {
         }
         Collections.sort(otherRuleFlowGroupNames);
 
-        // divider between asset project/branch ruleflowgroup names and all ruleflowgroup names
-        ruleFlowGroupNames.add("********");
         ruleFlowGroupNames.addAll(otherRuleFlowGroupNames);
 
         return ruleFlowGroupNames;
@@ -281,8 +279,6 @@ public class CalledElementServlet extends HttpServlet {
         }
         Collections.sort(otherDataTypeNames);
 
-        // divider between asset project/branch ruleflowgroup names and all ruleflowgroup names
-        dataTypeNames.add("********");
         dataTypeNames.addAll(otherDataTypeNames);
 
         return dataTypeNames;
