@@ -113,12 +113,8 @@ ORYX.Plugins.Edit = Clazz.extend({
                 description: ORYX.I18N.Edit.delDesc,
                 icon: ORYX.BASE_FILE_PATH + "images/cross.png",
                 keyCodes: [{
-                        metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
-                        keyCode: 8,
-                        keyAction: ORYX.CONFIG.KEY_ACTION_DOWN
-                    },
-                    {
-                        keyCode: 46,
+                        metaKeys: [ORYX.CONFIG.META_KEY_ALT],
+                        keyCode: ORYX.CONFIG.KEY_CODE_D,
                         keyAction: ORYX.CONFIG.KEY_ACTION_DOWN
                     }
                 ],
