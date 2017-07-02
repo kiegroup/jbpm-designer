@@ -1,3 +1,18 @@
+/*
+ * Copyright 2017 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.jbpm.designer.taskforms.builder;
 
 import org.apache.commons.io.IOUtils;
@@ -8,10 +23,10 @@ import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kie.workbench.common.forms.commons.layout.impl.StaticFormLayoutTemplateGenerator;
-import org.kie.workbench.common.forms.editor.service.backend.FormModelHandler;
+import org.kie.workbench.common.forms.commons.shared.layout.impl.StaticFormLayoutTemplateGenerator;
 import org.kie.workbench.common.forms.editor.service.backend.FormModelHandlerManager;
 import org.kie.workbench.common.forms.editor.service.shared.VFSFormFinderService;
+import org.kie.workbench.common.forms.editor.service.shared.model.impl.FormModelSynchronizationUtilImpl;
 import org.kie.workbench.common.forms.fields.test.TestFieldManager;
 import org.kie.workbench.common.forms.jbpm.model.authoring.process.BusinessProcessFormModel;
 import org.kie.workbench.common.forms.jbpm.model.authoring.task.TaskFormModel;
@@ -19,15 +34,18 @@ import org.kie.workbench.common.forms.jbpm.server.service.formGeneration.impl.au
 import org.kie.workbench.common.forms.jbpm.server.service.impl.BPMNFormModelGeneratorImpl;
 import org.kie.workbench.common.forms.jbpm.server.service.impl.BusinessProcessFormModelHandler;
 import org.kie.workbench.common.forms.jbpm.server.service.impl.TaskFormModelHandler;
+import org.kie.workbench.common.forms.jbpm.service.shared.BPMFinderService;
 import org.kie.workbench.common.forms.model.FormDefinition;
 import org.kie.workbench.common.forms.serialization.FormDefinitionSerializer;
 import org.kie.workbench.common.forms.serialization.impl.FieldSerializer;
 import org.kie.workbench.common.forms.serialization.impl.FormDefinitionSerializerImpl;
 import org.kie.workbench.common.forms.serialization.impl.FormModelSerializer;
+import org.kie.workbench.common.forms.service.shared.FieldManager;
+import org.kie.workbench.common.services.backend.project.ProjectClassLoaderHelper;
+import org.kie.workbench.common.services.shared.project.KieProject;
+import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.base.options.CommentedOption;
@@ -60,10 +78,31 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
 
     private BPMNKieWorkbenchFormBuilderService builderService;
 
+    @Mock
+    private KieProject project;
+
+    @Mock
+    private KieProjectService projectService;
+
+    @Mock
+    private ProjectClassLoaderHelper projectClassLoaderHelper;
+
+    @Mock
+    private BPMFinderService bpmFinderService;
+
+    private FieldManager fieldManager = new TestFieldManager();
+
+    private StaticFormLayoutTemplateGenerator formLayoutTemplateGenerator = new StaticFormLayoutTemplateGenerator();
+
     private FormDefinitionSerializer formSerializer;
 
     @Before
     public void initTest() throws Exception {
+        when(projectService.resolveProject(any())).thenReturn(project);
+        when(project.getRootPath()).thenReturn(formPath);
+
+        when(projectClassLoaderHelper.getProjectClassLoader(any())).thenReturn(getClass().getClassLoader());
+
         when(formPath.toURI()).thenReturn("file://fakepath.frm");
         when(ioService.exists(any())).thenReturn(false);
 
@@ -75,29 +114,35 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
         formSerializer = new FormDefinitionSerializerImpl(new FieldSerializer(),
                                                           new FormModelSerializer());
 
-        when(formModelHandlerManager.getFormModelHandler(any())).then(new Answer<FormModelHandler>() {
-            @Override
-            public FormModelHandler answer(InvocationOnMock invocationOnMock) throws Throwable {
-                if (BusinessProcessFormModel.class.equals(invocationOnMock.getArguments()[0])) {
-                    return new BusinessProcessFormModelHandler(new TestFieldManager());
-                } else {
-                    return new TaskFormModelHandler(new TestFieldManager());
-                }
+        when(formModelHandlerManager.getFormModelHandler(any())).then(invocationOnMock -> {
+            if (BusinessProcessFormModel.class.equals(invocationOnMock.getArguments()[0])) {
+                return new BusinessProcessFormModelHandler(projectService,
+                                                           projectClassLoaderHelper,
+                                                           new TestFieldManager(),
+                                                           bpmFinderService);
+            } else {
+                return new TaskFormModelHandler(projectService,
+                                                projectClassLoaderHelper,
+                                                new TestFieldManager(),
+                                                bpmFinderService);
             }
         });
 
         builderService = new BPMNKieWorkbenchFormBuilderService(ioService,
                                                                 formModelHandlerManager,
-                                                                new BPMNFormModelGeneratorImpl(),
+                                                                new BPMNFormModelGeneratorImpl(projectService,
+                                                                                               projectClassLoaderHelper),
                                                                 formSerializer,
                                                                 new StaticFormLayoutTemplateGenerator(),
-                                                                new BPMNVFSFormDefinitionGeneratorService(new TestFieldManager(),
-                                                                                                          new StaticFormLayoutTemplateGenerator(),
+                                                                new BPMNVFSFormDefinitionGeneratorService(fieldManager,
+                                                                                                          formLayoutTemplateGenerator,
                                                                                                           formModelHandlerManager,
                                                                                                           vfsFormFinderService,
                                                                                                           formSerializer,
                                                                                                           ioService,
-                                                                                                          commentedOptionFactory));
+                                                                                                          commentedOptionFactory,
+                                                                                                          new FormModelSynchronizationUtilImpl(fieldManager,
+                                                                                                                                               formLayoutTemplateGenerator)));
     }
 
     @Test

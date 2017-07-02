@@ -24,7 +24,7 @@ import javax.inject.Named;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.bpmn2.Definitions;
 import org.kie.workbench.common.forms.bpmn.BPMNFormBuilderService;
-import org.kie.workbench.common.forms.commons.layout.FormLayoutTemplateGenerator;
+import org.kie.workbench.common.forms.commons.shared.layout.FormLayoutTemplateGenerator;
 import org.kie.workbench.common.forms.editor.service.backend.FormModelHandlerManager;
 import org.kie.workbench.common.forms.jbpm.model.authoring.JBPMFormModel;
 import org.kie.workbench.common.forms.jbpm.server.service.BPMNFormModelGenerator;
@@ -74,10 +74,10 @@ public class BPMNKieWorkbenchFormBuilderService implements BPMNFormBuilderServic
         JBPMFormModel model;
 
         if (StringUtils.isEmpty(taskId)) {
-            model = generator.generateProcessFormModel(definition);
+            model = generator.generateProcessFormModel(definition, formPath);
         } else {
             model = generator.generateTaskFormModel(definition,
-                                                    taskId);
+                                                    taskId, formPath);
         }
 
         if (model == null) {
