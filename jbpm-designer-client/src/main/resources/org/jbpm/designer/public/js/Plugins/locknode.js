@@ -13,41 +13,27 @@ ORYX.Plugins.LockNode = Clazz.extend({
             this.facade.offer({
                 'name': ORYX.I18N.lockNode.lock,
                 'functionality': this.locknodes.bind(this),
-                'group': 'lockunlockgroup',
                 'icon': ORYX.BASE_FILE_PATH + "images/lock.png",
-                'description': ORYX.I18N.lockNode.lock_desc,
+                group: ORYX.I18N.menuItems['Tools'],
+                dropdownGroupText : ORYX.I18N.menuItems['Tools'],
                 'index': 1,
                 'minShape': 1,
                 'maxShape': 0,
                 'isEnabled': function(){
                     return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //				profileParamName = "profile";
-    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //		        regexa = new RegExp( regexSa );
-    //		        profileParams = regexa.exec( window.location.href );
-    //		        profileParamValue = profileParams[1];
-    //				return profileParamValue == "jbpm";
                 }.bind(this)
             });
             this.facade.offer({
                 'name': ORYX.I18N.lockNode.unlock,
                 'functionality': this.unlocknodes.bind(this),
-                'group': 'lockunlockgroup',
                 'icon': ORYX.BASE_FILE_PATH + "images/unlock.png",
-                'description': ORYX.I18N.lockNode.unlock_desc,
+                group: ORYX.I18N.menuItems['Tools'],
+                dropdownGroupText : ORYX.I18N.menuItems['Tools'],
                 'index': 2,
                 'minShape': 1,
                 'maxShape': 0,
                 'isEnabled': function(){
                     return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //				profileParamName = "profile";
-    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //		        regexa = new RegExp( regexSa );
-    //		        profileParams = regexa.exec( window.location.href );
-    //		        profileParamValue = profileParams[1];
-    //				return profileParamValue == "jbpm";
                 }.bind(this)
             });
         }

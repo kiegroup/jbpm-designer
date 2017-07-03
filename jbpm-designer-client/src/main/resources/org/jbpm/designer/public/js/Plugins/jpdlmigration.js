@@ -12,22 +12,14 @@ ORYX.Plugins.JPDLMigration = Clazz.extend({
             this.facade.offer({
                 'name':ORYX.I18N.View.migratejPDL,
                 'functionality': this.migrateJPDL.bind(this),
-                'group': 'importgroup',
                 'icon': ORYX.BASE_FILE_PATH + "images/jpdl_import_icon.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/import.png",
-                'description': ORYX.I18N.View.migratejPDLDesc,
+                group: ORYX.I18N.menuItems['Tools'],
+                dropdownGroupText : ORYX.I18N.menuItems['Tools'],
                 'index': 3,
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
                     return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //				profileParamName = "profile";
-    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //		        regexa = new RegExp( regexSa );
-    //		        profileParams = regexa.exec( window.location.href );
-    //		        profileParamValue = profileParams[1];
-    //				return profileParamValue == "jbpm";
                 }.bind(this)
             });
         }

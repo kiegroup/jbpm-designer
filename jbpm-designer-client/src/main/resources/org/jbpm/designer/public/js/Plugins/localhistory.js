@@ -19,117 +19,76 @@ ORYX.Plugins.LocalHistory = Clazz.extend({
         if(this.haveSupportForLocalHistory()) {
             this.setupAndLoadHistoryData();
             this.enableLocalHistory();
-            //this.startStoring();
         }
 
         if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             this.facade.offer({
                 'name': ORYX.I18N.LocalHistory.display,
                 'functionality': this.displayLocalHistory.bind(this),
-                'group': "localstorage",
+                'group': ORYX.I18N.menuItems['File'],
                 'icon': ORYX.BASE_FILE_PATH + "images/view.png",
-                 dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-                'description': ORYX.I18N.LocalHistory.display_desc,
-                'index': 1,
+                dropdownGroupText : ORYX.I18N.menuItems['File'],
+                'index': 3,
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
                     return ORYX.LOCAL_HISTORY_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
                 }.bind(this)
             });
 
             this.facade.offer({
                 'name': ORYX.I18N.LocalHistory.clear,
                 'functionality': this.clearLocalHistory.bind(this),
-                'group': "localstorage",
+                'group': ORYX.I18N.menuItems['File'],
                 'icon': ORYX.BASE_FILE_PATH + "images/clear.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-                'description': ORYX.I18N.LocalHistory.clear_desc,
-                'index': 2,
+                dropdownGroupText : ORYX.I18N.menuItems['File'],
+                'index': 4,
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
                     return ORYX.LOCAL_HISTORY_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
                 }.bind(this)
             });
 
             this.facade.offer({
                 'name': ORYX.I18N.LocalHistory.config,
                 'functionality': this.configureSnapshotInterval.bind(this),
-                'group': "localstorage",
+                'group': ORYX.I18N.menuItems['File'],
                 'icon': ORYX.BASE_FILE_PATH + "images/clock.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-                'description': ORYX.I18N.LocalHistory.config_desc,
-                'index': 3,
+                dropdownGroupText : ORYX.I18N.menuItems['File'],
+                'index': 5,
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
                     return ORYX.LOCAL_HISTORY_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
                 }.bind(this)
             });
 
             this.facade.offer({
                 'name': ORYX.I18N.LocalHistory.enable,
                 'functionality': this.enableLocalHistory.bind(this),
-                'group': "localstorage",
+                'group': ORYX.I18N.menuItems['File'],
                 'icon': ORYX.BASE_FILE_PATH + "images/enable.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-                'description': ORYX.I18N.LocalHistory.enable_desc,
-                'index': 3,
+                dropdownGroupText : ORYX.I18N.menuItems['File'],
+                'index': 6,
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
                     return !ORYX.LOCAL_HISTORY_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
                 }.bind(this)
             });
 
             this.facade.offer({
                 'name': ORYX.I18N.LocalHistory.disable,
                 'functionality': this.disableLocalHistory.bind(this),
-                'group': "localstorage",
+                'group': ORYX.I18N.menuItems['File'],
                 'icon': ORYX.BASE_FILE_PATH + "images/disable.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/localhistory.png",
-                'description': ORYX.I18N.LocalHistory.disable_desc,
-                'index': 4,
+                dropdownGroupText : ORYX.I18N.menuItems['File'],
+                'index': 7,
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
                     return ORYX.LOCAL_HISTORY_ENABLED && !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //                profileParamName = "profile";
-    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //                regexa = new RegExp( regexSa );
-    //                profileParams = regexa.exec( window.location.href );
-    //                profileParamValue = profileParams[1];
-    //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
                 }.bind(this)
             });
         }

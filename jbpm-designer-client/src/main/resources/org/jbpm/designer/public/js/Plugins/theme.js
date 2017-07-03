@@ -22,22 +22,14 @@ ORYX.Plugins.Theme = Clazz.extend({
                      this.facade.offer({
                         'name': themeNamesArray[i],
                         'functionality': this.applyTheme.bind(this, themeNamesArray[i]),
-                        'group': 'colorpickergroup',
-                        dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/colorpicker.gif",
+                         group: ORYX.I18N.menuItems['Themes'],
+                         dropdownGroupText : ORYX.I18N.menuItems['Themes'],
                         'icon': ORYX.BASE_FILE_PATH + "images/colorize.png",
-                        'description':ORYX.I18N.theme.Apply +' '+ themeNamesArray[i] + " "+ ORYX.I18N.theme.ColorTheme,
                         'index': 10,
                         'minShape': 0,
                         'maxShape': 0,
                         'isEnabled': function(){
                                return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //	   					profileParamName = "profile";
-    //	   					profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //	   					regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //	   			        regexa = new RegExp( regexSa );
-    //	   			        profileParams = regexa.exec( window.location.href );
-    //	   			        profileParamValue = profileParams[1];
-    //	   					return profileParamValue == "jbpm";
                         }.bind(this)
                     });
                 }

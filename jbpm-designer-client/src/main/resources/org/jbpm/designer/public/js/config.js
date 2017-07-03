@@ -19,9 +19,20 @@ if(!ORYX.CONFIG) ORYX.CONFIG = {};
 
 ORYX.CONFIG.WEB_URL = "org.jbpm.designer.jBPMDesigner";
 
-
-
-ORYX.CONFIG.MENU_INDEX = {"File" : 1, "Edit" : 2, "Undo": 3, "localstorage": 4, "Z-Order" : 5,  "Alignment": 6, "Grouping": 7, "lockunlockgroup": 8, "Docker" : 9, "colorpickergroup": 'AAA', "editprocessforms": 'BBB', 'sharegroup': 'CCC', "importgroup": 'DDD', "validationandsimulation": 'EEE', "servicerepogroup": 'FFF', "paintgroup": 'GGG', "fullscreengroup": 'HHH', "Help" : "ZZZZZZ"};
+// menu config (for sorting)
+ORYX.CONFIG.MENU_INDEX = {};
+ORYX.CONFIG.MENU_INDEX["File"] = 1;
+ORYX.CONFIG.MENU_INDEX["Edit"] = 2;
+ORYX.CONFIG.MENU_INDEX["Arrange"] = 3;
+ORYX.CONFIG.MENU_INDEX["Tools"] = 4;
+ORYX.CONFIG.MENU_INDEX["View"] = 5;
+ORYX.CONFIG.MENU_INDEX["Simulate"] = 6;
+ORYX.CONFIG.MENU_INDEX["Validate"] = 7;
+ORYX.CONFIG.MENU_INDEX["Import/Export"] = 8;
+ORYX.CONFIG.MENU_INDEX["Forms"] = 9;
+ORYX.CONFIG.MENU_INDEX["Services"] = 'AAA';
+ORYX.CONFIG.MENU_INDEX["Themes"] = 'BBB';
+ORYX.CONFIG.MENU_INDEX["Extra"] = 'CCC';
 
 ORYX.CONFIG.UUID_URL = function(uuid, profile) {
   if (uuid === undefined) {

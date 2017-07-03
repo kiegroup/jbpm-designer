@@ -149,30 +149,52 @@ ORYX.Plugins.Toolbar = Clazz.extend({
 				return tmp.apply(this, arguments);
 
 			}
-            // If an drop down group icon is provided, a split button should be used
-            if(value.dropDownGroupIcon){
-                var splitButton = currentGroupsDropDownButton[value.dropDownGroupIcon];
+			
+            // If an drop down group text is provided, a split button should be used
+            if(value.dropdownGroupText){
+                var splitButton = currentGroupsDropDownButton[value.dropdownGroupText];
                 
                 // Create a new split button if this is the first plugin using it - drop-down toolbar button
                 if(splitButton === undefined){
-                    splitButton = currentGroupsDropDownButton[value.dropDownGroupIcon] = new Ext.Toolbar.SplitButton({
-                        //cls: "x-btn-icon", //show icon only
-                        //icon: value.dropDownGroupIcon,
-                        iconCls: window.SpriteUtils.toUniqueId(value.dropDownGroupIcon), // set iconCls to sprite css class
-                        menu: new Ext.menu.Menu({
-                            items: [] // items are added later on
-                        }),
-                        listeners: {
-                          click: function(button, event){
-                            // The "normal" button should behave like the arrow button
-                            if(!button.menu.isVisible() && !button.ignoreNextClick){
-                                button.showMenu();
-                            } else {
-                                button.hideMenu();
+                    if(value.dropdownGroupText) {
+                        splitButton = currentGroupsDropDownButton[value.dropdownGroupText] = new Ext.Toolbar.SplitButton({
+                            //cls: "x-btn-icon", //show icon only
+                            //icon: value.dropDownGroupIcon,
+                            text: value.dropdownGroupText,
+                            menu: new Ext.menu.Menu({
+                                items: [] // items are added later on
+                            }),
+                            listeners: {
+                                click: function(button, event){
+                                    // The "normal" button should behave like the arrow button
+                                    if(!button.menu.isVisible() && !button.ignoreNextClick){
+                                        button.showMenu();
+                                    } else {
+                                        button.hideMenu();
+                                    }
+                                }
                             }
-                          } 
-                        }
-                    });
+                        });
+                    } else {
+                        splitButton = currentGroupsDropDownButton[value.dropdownGroupText] = new Ext.Toolbar.SplitButton({
+                            //cls: "x-btn-icon", //show icon only
+                            //icon: value.dropDownGroupIcon,
+                            iconCls: window.SpriteUtils.toUniqueId(value.dropDownGroupIcon), // set iconCls to sprite css class
+                            menu: new Ext.menu.Menu({
+                                items: [] // items are added later on
+                            }),
+                            listeners: {
+                                click: function(button, event){
+                                    // The "normal" button should behave like the arrow button
+                                    if(!button.menu.isVisible() && !button.ignoreNextClick){
+                                        button.showMenu();
+                                    } else {
+                                        button.hideMenu();
+                                    }
+                                }
+                            }
+                        });
+                    }
                     
                     this.toolbar.add(splitButton);
                 }
@@ -180,8 +202,6 @@ ORYX.Plugins.Toolbar = Clazz.extend({
                 // General config button which will be used either to create a normal button
                 // or a check button (if toggling is enabled) - used for menu items in drop-down list
                 var buttonCfg = {
-                    //icon: value.icon,
-                    iconCls: window.SpriteUtils.toUniqueId(value.icon), // set iconCls to sprite css class
                     text: value.name,
                     itemId: value.id,
                     handler: value.toggle ? undefined : value.functionality,
@@ -210,9 +230,6 @@ ORYX.Plugins.Toolbar = Clazz.extend({
                 
             } else { // create normal, simple button - used by top level toolbar buttons
                 var button = new Ext.Toolbar.Button({
-                    //icon:           value.icon,         // icons can also be specified inline
-                    //cls:            'x-btn-icon',       // Class who shows only the icon
-                    iconCls: window.SpriteUtils.toUniqueId(value.icon), // set iconCls to sprite css class
                     itemId:         value.id,
 					tooltip:        value.description,  // Set the tooltip
                     tooltipType:    'title',            // Tooltip will be shown as in the html-title attribute
@@ -375,15 +392,15 @@ Ext.ux.SlicedToolbar = Ext.extend(Ext.Toolbar, {
     
     // type => next or prev
     insertSlicingButton: function(type, slice, index){
-        var nextHandler = function(){this.setCurrentSlice(this.currentSlice+1)}.bind(this);
-        var prevHandler = function(){this.setCurrentSlice(this.currentSlice-1)}.bind(this);
-        var button = new Ext.Toolbar.Button({
-            cls: "x-btn-icon",
-            icon: ORYX.BASE_FILE_PATH + "images/toolbar_"+type+".png",
-            handler: (type === "next") ? nextHandler : prevHandler
-        });
-        
-        this.insertSlicedHelperButton(button, slice, index);
+        // var nextHandler = function(){this.setCurrentSlice(this.currentSlice+1)}.bind(this);
+        // var prevHandler = function(){this.setCurrentSlice(this.currentSlice-1)}.bind(this);
+        // var button = new Ext.Toolbar.Button({
+        //     cls: "x-btn-icon",
+        //     icon: ORYX.BASE_FILE_PATH + "images/toolbar_"+type+".png",
+        //     handler: (type === "next") ? nextHandler : prevHandler
+        // });
+        //
+        // this.insertSlicedHelperButton(button, slice, index);
     },
     
     setCurrentSlice: function(slice){

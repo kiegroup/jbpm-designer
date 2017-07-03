@@ -45,7 +45,6 @@ ORYX.Plugins.Edit = Clazz.extend({
         if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
             this.facade.offer({
              name: ORYX.I18N.Edit.cut,
-             description: ORYX.I18N.Edit.cutDesc,
              icon: ORYX.BASE_FILE_PATH + "images/cut.png",
              keyCodes: [{
                     metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
@@ -54,14 +53,14 @@ ORYX.Plugins.Edit = Clazz.extend({
                 }
              ],
              functionality: this.callEdit.bind(this, this.editCut),
-             group: ORYX.I18N.Edit.group,
-             index: 1,
+             group: ORYX.I18N.menuItems['Edit'],
+             dropdownGroupText : ORYX.I18N.menuItems['Edit'],
+             index: 4,
              minShape: 1
              });
 
             this.facade.offer({
              name: ORYX.I18N.Edit.copy,
-             description: ORYX.I18N.Edit.copyDesc,
              icon: ORYX.BASE_FILE_PATH + "images/page_copy.png",
              keyCodes: [{
                     metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
@@ -70,16 +69,15 @@ ORYX.Plugins.Edit = Clazz.extend({
                 }
              ],
              functionality: this.callEdit.bind(this, this.editCopy, [true, false]),
-             group: ORYX.I18N.Edit.group,
-             index: 2,
+             group: ORYX.I18N.menuItems['Edit'],
+             dropdownGroupText : ORYX.I18N.menuItems['Edit'],
+             index: 5,
              minShape: 1
              });
 
             this.facade.offer({
              name: ORYX.I18N.Edit.pasteClipboard,
-             description: ORYX.I18N.Edit.pasteClipboardDesc,
              icon: ORYX.BASE_FILE_PATH + "images/page_paste.png",
-             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/page_paste.png",
              keyCodes: [{
                  metaKeys: [ORYX.CONFIG.META_KEY_META_CTRL],
                  keyCode: 86,
@@ -87,20 +85,20 @@ ORYX.Plugins.Edit = Clazz.extend({
              }
              ],
              functionality: this.callEdit.bind(this, this.editPaste),
-             group: ORYX.I18N.Edit.group,
-             index: 3,
+             group: ORYX.I18N.menuItems['Edit'],
+             dropdownGroupText : ORYX.I18N.menuItems['Edit'],
+             index: 6,
              minShape: 0,
              maxShape: 0
              });
 
             this.facade.offer({
                 name: ORYX.I18N.Edit.pasteLocalStorage,
-                description: ORYX.I18N.Edit.pasteLocalStorageDesc,
                 icon: ORYX.BASE_FILE_PATH + "images/page_paste.png",
-                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/page_paste.png",
                 functionality: this.callEdit.bind(this, this.editPasteLocalStore),
-                group: ORYX.I18N.Edit.group,
-                index: 3,
+                group: ORYX.I18N.menuItems['Edit'],
+                dropdownGroupText : ORYX.I18N.menuItems['Edit'],
+                index: 6,
                 minShape: 0,
                 maxShape: 0,
                 'isEnabled': function(){
@@ -110,7 +108,6 @@ ORYX.Plugins.Edit = Clazz.extend({
 
             this.facade.offer({
                 name: ORYX.I18N.Edit.del,
-                description: ORYX.I18N.Edit.delDesc,
                 icon: ORYX.BASE_FILE_PATH + "images/cross.png",
                 keyCodes: [{
                         metaKeys: [ORYX.CONFIG.META_KEY_ALT],
@@ -119,8 +116,9 @@ ORYX.Plugins.Edit = Clazz.extend({
                     }
                 ],
                 functionality: this.callEdit.bind(this, this.editDelete),
-                group: ORYX.I18N.Edit.group,
-                index: 4,
+                group: ORYX.I18N.menuItems['Edit'],
+                dropdownGroupText : ORYX.I18N.menuItems['Edit'],
+                index: 7,
                 minShape: 1
             });
         }

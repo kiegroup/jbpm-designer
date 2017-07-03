@@ -78,10 +78,10 @@ ORYX.Plugins.View = {
         this.facade.offer({
             'name':ORYX.I18N.View.zoomIn,
             'functionality': this.zoom.bind(this, [1.0 + ORYX.CONFIG.ZOOM_OFFSET]),
-            'group': ORYX.I18N.View.group,
             'icon': ORYX.BASE_FILE_PATH + "images/magnifier_zoom_in.png",
-            'description': ORYX.I18N.View.zoomInDesc,
-            'index': 1,
+            group: ORYX.I18N.menuItems['View'],
+            dropdownGroupText : ORYX.I18N.menuItems['View'],
+            'index': 3,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){return this.zoomLevel < this.maxZoomLevel }.bind(this)});
@@ -90,10 +90,10 @@ ORYX.Plugins.View = {
         this.facade.offer({
             'name':ORYX.I18N.View.zoomOut,
             'functionality': this.zoom.bind(this, [1.0 - ORYX.CONFIG.ZOOM_OFFSET]),
-            'group': ORYX.I18N.View.group,
             'icon': ORYX.BASE_FILE_PATH + "images/magnifier_zoom_out.png",
-            'description': ORYX.I18N.View.zoomOutDesc,
-            'index': 2,
+            group: ORYX.I18N.menuItems['View'],
+            dropdownGroupText : ORYX.I18N.menuItems['View'],
+            'index': 4,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){ return this._checkSize() }.bind(this)});
@@ -102,11 +102,11 @@ ORYX.Plugins.View = {
         this.facade.offer({
             'name':ORYX.I18N.View.zoomStandard,
             'functionality': this.setAFixZoomLevel.bind(this, 1),
-            'group': ORYX.I18N.View.group,
             'icon': ORYX.BASE_FILE_PATH + "images/zoom_standard.png",
             'cls' : 'icon-large',
-            'description': ORYX.I18N.View.zoomStandardDesc,
-            'index': 3,
+            group: ORYX.I18N.menuItems['View'],
+            dropdownGroupText : ORYX.I18N.menuItems['View'],
+            'index': 5,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){return this.zoomLevel != 1}.bind(this)
@@ -116,34 +116,14 @@ ORYX.Plugins.View = {
         this.facade.offer({
             'name':ORYX.I18N.View.zoomFitToModel,
             'functionality': this.zoomFitToModel.bind(this),
-            'group': ORYX.I18N.View.group,
             'icon': ORYX.BASE_FILE_PATH + "images/image.png",
-            'description': ORYX.I18N.View.zoomFitToModelDesc,
-            'index': 4,
+            group: ORYX.I18N.menuItems['View'],
+            dropdownGroupText : ORYX.I18N.menuItems['View'],
+            'index': 6,
             'minShape': 0,
             'maxShape': 0
         });
 
-        /* Register popout to model */
-//		this.facade.offer({
-//			'name':ORYX.I18N.View.showInPopout,
-//			'functionality': this.showInPopout.bind(this),
-//			'group': ORYX.I18N.View.jbpmgroup,
-//			'icon': ORYX.BASE_FILE_PATH + "images/popup.gif",
-//			'description': ORYX.I18N.View.showInPopoutDesc,
-//			'index': 1,
-//			'minShape': 0,
-//			'maxShape': 0,
-//			'isEnabled': function(){
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1]; 
-//				return profileParamValue == "jbpm";
-//			}.bind(this)
-//		});
 
         if(!(ORYX.READONLY == true || ORYX.VIEWLOCKED == true)) {
         /* Register full screen to model */
@@ -203,21 +183,15 @@ ORYX.Plugins.View = {
                     }
                 }
             }.bind(this),
-            'group': 'fullscreengroup',
             'icon': ORYX.BASE_FILE_PATH + "images/fullscreen.png",
-            'description': ORYX.I18N.view.toggleFullScreen_desc,
+            group: ORYX.I18N.menuItems['View'],
+            dropdownGroupText : ORYX.I18N.menuItems['View'],
+            'toggle': true,
             'index': 2,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
                 return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
             }.bind(this)
         });
 
@@ -226,22 +200,14 @@ ORYX.Plugins.View = {
         this.facade.offer({
             'name': ORYX.I18N.view.shareProcessImg,
             'functionality': this.shareProcessImage.bind(this),
-            'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': ORYX.I18N.view.shareProcessImg_desc,
-            'index': 1,
+            group: ORYX.I18N.menuItems['ImportExport'],
+            dropdownGroupText : ORYX.I18N.menuItems['ImportExport'],
+            'index': 3,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
                 return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
             }.bind(this)
         });
 
@@ -249,22 +215,14 @@ ORYX.Plugins.View = {
         this.facade.offer({
             'name': ORYX.I18N.view.shareProcessPDF,
             'functionality': this.shareProcessPdf.bind(this),
-            'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': ORYX.I18N.view.shareProcessPDF_desc,
-            'index': 2,
+            group: ORYX.I18N.menuItems['ImportExport'],
+            dropdownGroupText : ORYX.I18N.menuItems['ImportExport'],
+            'index': 4,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
                 return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
             }.bind(this)
         });
 
@@ -272,22 +230,14 @@ ORYX.Plugins.View = {
         this.facade.offer({
             'name': ORYX.I18N.view.importFromBPMN2,
             'functionality': this.importFromBPMN2.bind(this),
-            'group': 'importgroup',
             'icon': ORYX.BASE_FILE_PATH + "images/import.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/import.png",
-            'description': ORYX.I18N.view.importFromBPMN2_desc,
+            group: ORYX.I18N.menuItems['ImportExport'],
+            dropdownGroupText : ORYX.I18N.menuItems['ImportExport'],
             'index': 1,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
                 return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
             }.bind(this)
         });
 
@@ -295,243 +245,70 @@ ORYX.Plugins.View = {
         this.facade.offer({
             'name': ORYX.I18N.view.importFromJSON,
             'functionality': this.importFromJSON.bind(this),
-            'group': 'importgroup',
             'icon': ORYX.BASE_FILE_PATH + "images/import.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/import.png",
-            'description': ORYX.I18N.view.importFromJSON_desc,
+            group: ORYX.I18N.menuItems['ImportExport'],
+            dropdownGroupText : ORYX.I18N.menuItems['ImportExport'],
             'index': 2,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
                 return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
             }.bind(this)
         });
-
-        /* Register sharing to model 3*/
-//		this.facade.offer({
-//			'name': "Share Embeddable Process",
-//			'functionality': this.shareEmbeddableProcess.bind(this),
-//			'group': ORYX.I18N.View.jbpmgroup,
-//			'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-//			dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-//			'description': "Share Embeddable Process",
-//			'index': 3,
-//			'minShape': 0,
-//			'maxShape': 0,
-//			'isEnabled': function(){
-//                return true;
-////				profileParamName = "profile";
-////				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-////				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-////		        regexa = new RegExp( regexSa );
-////		        profileParams = regexa.exec( window.location.href );
-////		        profileParamValue = profileParams[1];
-////				return profileParamValue == "jbpm";
-//			}.bind(this)
-//		});
-
-        /* Register diff to model */
-//		this.facade.offer({
-//			'name':ORYX.I18N.View.viewDiff,
-//			'functionality': this.diffprocess.bind(this),
-//			'group': ORYX.I18N.View.jbpmgroup,
-//			'icon': ORYX.BASE_FILE_PATH + "images/diff.gif",
-//			'description': ORYX.I18N.View.viewDiffDesc,
-//			'index': 5,
-//			'minShape': 0,
-//			'maxShape': 0,
-//			'isEnabled': function(){
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-//			}.bind(this)
-//		});
-
-        /* Register information view to model */
-//        this.facade.offer({
-//            'name': "View Process BPMN2",
-//            'functionality': this.showProcessBPMN.bind(this),
-//            'group': 'sharegroup',
-//            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-//            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-//            'description': "View BPMN2 Source",
-//            'index': 3,
-//            'minShape': 0,
-//            'maxShape': 0,
-//            'isEnabled': function(){
-//                return true;
-////				profileParamName = "profile";
-////				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-////				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-////		        regexa = new RegExp( regexSa );
-////		        profileParams = regexa.exec( window.location.href );
-////		        profileParamValue = profileParams[1];
-////				return profileParamValue == "jbpm";
-//            }.bind(this)
-//        });
-
-//        this.facade.offer({
-//            'name': "View Process JSON",
-//            'functionality': this.showProcessJSON.bind(this),
-//            'group': 'sharegroup',
-//            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-//            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-//            'description': "View JSON Source",
-//            'index': 4,
-//            'minShape': 0,
-//            'maxShape': 0,
-//            'isEnabled': function(){
-//                return true;
-////				profileParamName = "profile";
-////				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-////				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-////		        regexa = new RegExp( regexSa );
-////		        profileParams = regexa.exec( window.location.href );
-////		        profileParamValue = profileParams[1];
-////				return profileParamValue == "jbpm";
-//            }.bind(this)
-//        });
-
-//        this.facade.offer({
-//            'name': "View Process SVG",
-//            'functionality': this.showProcessSVG.bind(this),
-//            'group': 'sharegroup',
-//            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-//            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-//            'description': "View SVG Source",
-//            'index': 5,
-//            'minShape': 0,
-//            'maxShape': 0,
-//            'isEnabled': function(){
-//                return true;
-////				profileParamName = "profile";
-////				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-////				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-////		        regexa = new RegExp( regexSa );
-////		        profileParams = regexa.exec( window.location.href );
-////		        profileParamValue = profileParams[1];
-////				return profileParamValue == "jbpm";
-//            }.bind(this)
-//        });
-
-//        this.facade.offer({
-//            'name': "View Process ERDF",
-//            'functionality': this.showProcessERDF.bind(this),
-//            'group': 'sharegroup',
-//            'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-//            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-//            'description': "View ERDF Source",
-//            'index': 6,
-//            'minShape': 0,
-//            'maxShape': 0,
-//            'isEnabled': function(){
-//                return true;
-////				profileParamName = "profile";
-////				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-////				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-////		        regexa = new RegExp( regexSa );
-////		        profileParams = regexa.exec( window.location.href );
-////		        profileParamValue = profileParams[1];
-////				return profileParamValue == "jbpm";
-//            }.bind(this)
-//        });
 
         this.facade.offer({
             'name': ORYX.I18N.view.downloadProcPDF,
             'functionality': this.showAsPDF.bind(this),
-            'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': ORYX.I18N.view.downloadProcPDF_desc,
+            group: ORYX.I18N.menuItems['ImportExport'],
+            dropdownGroupText : ORYX.I18N.menuItems['ImportExport'],
             'index': 4,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
                 return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
             }.bind(this)
         });
 
         this.facade.offer({
             'name': ORYX.I18N.view.downloadProcPNG,
             'functionality': this.showAsPNG.bind(this),
-            'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': ORYX.I18N.view.downloadProcPNG_desc,
-            'index': 3,
+            group: ORYX.I18N.menuItems['ImportExport'],
+            dropdownGroupText : ORYX.I18N.menuItems['ImportExport'],
+            'index': 5,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
                 return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
             }.bind(this)
         });
 
         this.facade.offer({
             'name': ORYX.I18N.view.downloadProcSVG,
             'functionality': this.showAsSVG.bind(this),
-            'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': ORYX.I18N.view.downloadProcSVG_desc,
-            'index': 5,
+            group: ORYX.I18N.menuItems['ImportExport'],
+            dropdownGroupText : ORYX.I18N.menuItems['ImportExport'],
+            'index': 6,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
                 return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
             }.bind(this)
         });
 
         this.facade.offer({
             'name': ORYX.I18N.view.viewProcSources,
             'functionality': this.showProcessSources.bind(this),
-            'group': 'sharegroup',
             'icon': ORYX.BASE_FILE_PATH + "images/share.png",
-            dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/share.png",
-            'description': ORYX.I18N.view.viewProcSources_desc,
-            'index': 6,
+            group: ORYX.I18N.menuItems['View'],
+            dropdownGroupText : ORYX.I18N.menuItems['View'],
+            'index': 1,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){
                 return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
             }.bind(this)
         });
         }

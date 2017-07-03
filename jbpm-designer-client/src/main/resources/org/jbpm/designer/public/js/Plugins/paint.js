@@ -206,12 +206,12 @@ ORYX.Plugins.Paint = ORYX.Plugins.AbstractPlugin.extend({
 
         ORYX.EDITOR._pluginFacade.offer({
             name: ORYX.I18N.paint_name,
-            description: ORYX.I18N.paint_desc,
+            group: ORYX.I18N.menuItems['Tools'],
+            dropdownGroupText : ORYX.I18N.menuItems['Tools'],
             'icon': ORYX.BASE_FILE_PATH + "images/paint.png",
             functionality: this._togglePaint.bind(this),
-            group: "paintgroup",
             toggle: true,
-            index: 1,
+            index: 4,
             'minShape': 0,
             'maxShape': 0,
             'isEnabled': function(){

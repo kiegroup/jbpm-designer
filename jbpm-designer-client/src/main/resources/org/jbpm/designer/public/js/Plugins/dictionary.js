@@ -47,21 +47,14 @@ ORYX.Plugins.Dictionary = Clazz.extend({
             this.facade.offer({
                 'name': ORYX.I18N.Dictionary.dictionary,
                 'functionality': this.initAndShowDictionary.bind(this),
-                'group': ORYX.I18N.View.jbpmgroup,
                 'icon': ORYX.BASE_FILE_PATH + "images/dictionary.png",
-                'description': ORYX.I18N.Dictionary.processDictionary,
+                group: ORYX.I18N.menuItems['Services'],
+                dropdownGroupText : ORYX.I18N.menuItems['Services'],
                 'index': 8,
                 'minShape': 0,
                 'maxShape': 0,
                 'isEnabled': function(){
                     return !(ORYX.READONLY == true || ORYX.VIEWLOCKED == true);
-    //				profileParamName = "profile";
-    //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    //		        regexa = new RegExp( regexSa );
-    //		        profileParams = regexa.exec( window.location.href );
-    //		        profileParamValue = profileParams[1];
-    //				return profileParamValue == "jbpm";
                 }.bind(this)
             });
         }
