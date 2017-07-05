@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2017 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,17 +60,20 @@ import static org.mockito.Mockito.*;
 public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
 
     // TODO change it to generic independent path
-    private static final String REPOSITORY_ROOT = "designer-playground";
-    private static final String VFS_REPOSITORY_ROOT = "git://" + REPOSITORY_ROOT;
-    private static final String USERNAME = "guvnorngtestuser1";
-    private static final String PASSWORD = "test1234";
-    private static final String ORIGIN_URL = "https://github.com/mswiderski/designer-playground.git";
-    private static final String FETCH_COMMAND = "?fetch";
+    protected static final String REPOSITORY_ROOT = "designer-playground";
+    protected static final String VFS_REPOSITORY_ROOT = "git://" + REPOSITORY_ROOT;
+    protected static final String USERNAME = "guvnorngtestuser1";
+    protected static final String PASSWORD = "test1234";
+    protected static final String ORIGIN_URL = "https://github.com/mswiderski/designer-playground.git";
+    protected static final String FETCH_COMMAND = "?fetch";
 
-    private static String gitLocalClone = System.getProperty("java.io.tmpdir") + "git-repo";
-    private static Map<String, String> env = new HashMap<String, String>();
+    protected static String gitLocalClone = System.getProperty("java.io.tmpdir") + "git-repo";
+    protected static Map<String, String> env = new HashMap<String, String>();
 
-    private VFSFileSystemProducer producer = new VFSFileSystemProducer();
+    protected VFSFileSystemProducer producer = new VFSFileSystemProducer();
+
+    protected String dirName = "myprocesses";
+    protected String processFileName = "process";
 
     @Spy
     @InjectMocks
@@ -110,15 +113,15 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     public void testProprocess() {
         Repository repository = createRepository();
         //prepare folders that will be used
-        repository.createDirectory("/myprocesses");
+        repository.createDirectory("/" + dirName);
         repository.createDirectory("/global");
 
         // prepare process asset that will be used to preprocess
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
                 .type("bpmn2")
-                .name("process")
-                .location("/myprocesses");
+                .name(processFileName)
+                .location("/" + dirName);
         String uniqueId = repository.createAsset(builder.getAsset());
 
         // create instance of preprocessing unit
@@ -157,20 +160,23 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         repository.assetExists("/global/patterns.json");
         repository.assetExists("/global/.gitignore");
 
-        Collection<Asset> defaultStuff = repository.listAssets("/myprocesses");
+        Collection<Asset> defaultStuff = repository.listAssets("/"  + dirName);
         assertNotNull(defaultStuff);
         assertEquals(2,
                      defaultStuff.size());
-        repository.assetExists("/myprocesses/WorkDefinitions.wid");
+        repository.assetExists("/" + dirName.replaceAll("\\s",
+                                                        "%20") + "/WorkDefinitions.wid");
         // this is the process asset that was created for the test but let's check it anyway
-        repository.assetExists("/myprocesses/process.bpmn2");
-        repository.assetExists("/myprocesses/.gitignore");
+        repository.assetExists("/" + dirName.replaceAll("\\s",
+                                                        "%20") + "/process.bpmn2");
+        repository.assetExists("/" + dirName.replaceAll("\\s",
+                                                        "%20") + "/.gitignore");
     }
 
     @Test
     public void testWorkitemParameterValues() throws Exception {
         Repository repository = createRepository();
-        Directory testProjectDir = repository.createDirectory("/myprocesses");
+        Directory testProjectDir = repository.createDirectory("/" + dirName);
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
@@ -204,14 +210,14 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                                 "]\n")
                 .type("wid")
                 .name("processwid")
-                .location("/myprocesses");
+                .location("/"  + dirName);
         String uniqueWidID = repository.createAsset(builder.getAsset());
 
         AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
         builder2.content("".getBytes())
                 .type("png")
                 .name("widicon")
-                .location("/myprocesses");
+                .location("/"  + dirName);
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
@@ -303,7 +309,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     public void testEmptyCustomEditor() throws Exception {
         Repository repository = createRepository();
         //prepare folders that will be used
-        Directory testProjectDir = repository.createDirectory("/myprocesses");
+        Directory testProjectDir = repository.createDirectory("/"  + dirName);
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
@@ -326,14 +332,14 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                                 "]")
                 .type("wid")
                 .name("processwid")
-                .location("/myprocesses");
+                .location("/"  + dirName);
         String uniqueWidID = repository.createAsset(builder.getAsset());
 
         AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
         builder2.content("".getBytes())
                 .type("png")
                 .name("widicon")
-                .location("/myprocesses");
+                .location("/"  + dirName);
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
@@ -382,7 +388,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     public void testCaseProjectSetting() throws Exception {
         Repository repository = createRepository();
         //prepare folders that will be used
-        Directory testProjectDir = repository.createDirectory("/myprocesses");
+        Directory testProjectDir = repository.createDirectory("/"  + dirName);
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
@@ -405,14 +411,14 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                                 "]")
                 .type("wid")
                 .name("processwid")
-                .location("/myprocesses");
+                .location("/" + dirName);
         String uniqueWidID = repository.createAsset(builder.getAsset());
 
         AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
         builder2.content("".getBytes())
                 .type("png")
                 .name("widicon")
-                .location("/myprocesses");
+                .location("/"  + dirName);
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
@@ -447,7 +453,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     public void testEmptyIcon() throws Exception {
         Repository repository = createRepository();
         //prepare folders that will be used
-        Directory testProjectDir = repository.createDirectory("/myprocesses");
+        Directory testProjectDir = repository.createDirectory("/"  + dirName);
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
@@ -470,7 +476,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                                 "]")
                 .type("wid")
                 .name("processwid")
-                .location("/myprocesses");
+                .location("/"  + dirName);
         String uniqueWidID = repository.createAsset(builder.getAsset());
 
         AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);

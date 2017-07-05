@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2017 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,31 +64,31 @@ import static org.mockito.Mockito.*;
 public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
     @Mock
-    private VFSService vfsServices;
+    protected VFSService vfsServices;
 
     @Mock
-    private IOService ioService;
+    protected IOService ioService;
 
     @Mock
-    private KieProjectService projectService;
+    protected KieProjectService projectService;
 
     @Mock
-    private POMService pomService;
+    protected POMService pomService;
 
     @Mock
-    private MetadataService metadataService;
+    protected MetadataService metadataService;
 
     @Captor
-    private ArgumentCaptor<NotificationEvent> notificationCaptor;
+    protected ArgumentCaptor<NotificationEvent> notificationCaptor;
 
     @Captor
-    private ArgumentCaptor<DesignerWorkitemInstalledEvent> widinstallCaptor;
+    protected ArgumentCaptor<DesignerWorkitemInstalledEvent> widinstallCaptor;
 
     protected Event<NotificationEvent> notification = mock(EventSourceMock.class);
 
-    private final List<Object> receivedWidInstallEvents = new ArrayList<Object>();
+    protected final List<Object> receivedWidInstallEvents = new ArrayList<Object>();
 
-    private Event<DesignerWorkitemInstalledEvent> widinstall = new EventSourceMock<DesignerWorkitemInstalledEvent>() {
+    protected Event<DesignerWorkitemInstalledEvent> widinstall = new EventSourceMock<DesignerWorkitemInstalledEvent>() {
 
         @Override
         public void fire(DesignerWorkitemInstalledEvent event) {
@@ -96,11 +96,14 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         }
     };
 
-    private Repository repository;
+    protected Repository repository;
 
-    private String uuid;
+    protected String uuid;
 
-    private POM projectPOM;
+    protected POM projectPOM;
+
+    protected String dirName = "/src/main/resources";
+    protected String processFileName = "samplebpmn2process";
 
     @Before
     public void setup() {
@@ -124,8 +127,8 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         AssetBuilder bpmn2builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         bpmn2builder.content("bpmn2 content")
                 .type("bpmn2")
-                .name("samplebpmn2process")
-                .location("/src/main/resources");
+                .name(processFileName)
+                .location(dirName);
         String bpmn2AssetID = repository.createAsset(bpmn2builder.getAsset());
         assertNotNull(bpmn2AssetID);
 
@@ -138,7 +141,7 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         String pomAssetID = repository.createAsset(pomBuilder.getAsset());
         assertNotNull(pomAssetID);
 
-        Collection<Asset> foundAsset = repository.listAssets("/src/main/resources",
+        Collection<Asset> foundAsset = repository.listAssets(dirName,
                                                              new FilterByExtension("bpmn2"));
         assertNotNull(foundAsset);
         assertEquals(1,
@@ -146,7 +149,7 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
         Path rootPath = Paths.convert(((VFSRepository) repository).getDescriptor().getRepositoryRootPath());
 
-        uuid = rootPath.toURI() + "/src/main/resources/samplebpmn2process.bpmn2";
+        uuid = rootPath.toURI() + dirName + "/" + processFileName + ".bpmn2";
         String pomuuid = rootPath.toURI() + "/pom.xml";
 
         KieProject project = Mockito.mock(KieProject.class);

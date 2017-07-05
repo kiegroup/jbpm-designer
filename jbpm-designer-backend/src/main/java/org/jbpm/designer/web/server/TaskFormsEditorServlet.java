@@ -210,7 +210,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
                         Definitions def = ((Definitions) unmarshaller.unmarshall(json,
                                                                                  preprocessingData).getContents().get(0));
 
-                        Path myPath = vfsServices.get(uuid);
+                        Path myPath = vfsServices.get(uuid.replaceAll("\\s", "%20"));
 
                         org.uberfire.java.nio.file.Path kiePath = Paths.convert(myPath);
                         Path formPath = Paths.convert(kiePath.getParent().resolve(taskName + TASKFORM_NAME_EXTENSION + "." + formType));
