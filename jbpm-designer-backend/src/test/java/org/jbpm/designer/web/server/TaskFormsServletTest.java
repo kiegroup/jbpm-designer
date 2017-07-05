@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2017 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,16 +61,19 @@ import static org.mockito.Mockito.*;
 public class TaskFormsServletTest extends RepositoryBaseTest {
 
     @Mock
-    private VFSService vfsServices;
+    protected VFSService vfsServices;
 
     @Mock
-    private BPMNFormBuilderService<Definitions> formBuilderService;
+    protected BPMNFormBuilderService<Definitions> formBuilderService;
 
     @Mock
-    private BPMNFormBuilderManager builderManager;
+    protected BPMNFormBuilderManager builderManager;
 
     @InjectMocks
     TaskFormsServlet taskFormsServlet;
+
+    protected String dirName = "defaultPackage";
+    protected String processFileName = "process";
 
     @Before
     public void setup() {
@@ -106,8 +109,8 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
                 .type("bpmn2")
-                .name("hello")
-                .location("/defaultPackage");
+                .name(processFileName)
+                .location("/" + dirName);
         String uniqueId = repository.createAsset(builder.getAsset());
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -131,7 +134,7 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
                                 new TestHttpServletResponse());
 
         // old ftl form should not be created
-        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage",
+        Collection<Asset> ftlForms = repository.listAssets("/" + dirName,
                                                            new FilterByExtension("ftl"));
         assertEquals(0,
                      ftlForms.size());
@@ -149,8 +152,8 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
                 .type("bpmn2")
-                .name("hello")
-                .location("/defaultPackage");
+                .name(processFileName)
+                .location("/" + dirName);
         String uniqueId = repository.createAsset(builder.getAsset());
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -174,7 +177,7 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
                                 new TestHttpServletResponse());
 
         // old ftl form should not be created
-        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage",
+        Collection<Asset> ftlForms = repository.listAssets("/" + dirName,
                                                            new FilterByExtension("ftl"));
         assertEquals(0,
                      ftlForms.size());
@@ -192,8 +195,8 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
                 .type("bpmn2")
-                .name("userTask")
-                .location("/defaultPackage");
+                .name(processFileName)
+                .location("/" + dirName);
         String uniqueId = repository.createAsset(builder.getAsset());
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -217,7 +220,7 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
                                 new TestHttpServletResponse());
 
         // old ftl form should not be created
-        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage",
+        Collection<Asset> ftlForms = repository.listAssets("/" + dirName,
                                                            new FilterByExtension("ftl"));
         assertEquals(0,
                      ftlForms.size());
@@ -235,8 +238,8 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
                 .type("bpmn2")
-                .name("userTask")
-                .location("/defaultPackage");
+                .name(processFileName)
+                .location("/" + dirName);
         String uniqueId = repository.createAsset(builder.getAsset());
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -260,7 +263,7 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
                                 new TestHttpServletResponse());
 
         // old ftl form should not be created
-        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage",
+        Collection<Asset> ftlForms = repository.listAssets("/" + dirName,
                                                            new FilterByExtension("ftl"));
         assertEquals(0,
                      ftlForms.size());

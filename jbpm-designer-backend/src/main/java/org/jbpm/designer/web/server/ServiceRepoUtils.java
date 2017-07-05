@@ -99,7 +99,7 @@ public class ServiceRepoUtils {
         }
 
         if (vfsServices != null) {
-            Path assetPath = vfsServices.get(uuid);
+            Path assetPath = vfsServices.get(uuid.replaceAll("\\s", "%20"));
 
             if (canUpdateConfigForWorkitem(workitemsFromRepo.get(key))) {
                 workitemInstalledEventEvent.fire(new DesignerWorkitemInstalledEvent(

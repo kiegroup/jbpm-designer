@@ -323,7 +323,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                                                           repository);
 
             // evaluate all configs
-            KieProject kieProject = kieProjectService.resolveProject(vfsService.get(uuid));
+            KieProject kieProject = kieProjectService.resolveProject(vfsService.get(uuid.replaceAll("\\s", "%20")));
             Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
             for (Asset entry : workItemsContent) {
 
@@ -560,7 +560,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 boolean iconFound = false;
                 // Look for icon located relative to the asset
                 String absoluteIcon = createAbsoluteIconPath(assetLocation,
-                                                             icon);
+                                                             icon).replaceAll("\\s", "%20");
                 if (repository.assetExists(absoluteIcon)) {
                     icon = absoluteIcon;
                     iconFound = true;
@@ -993,7 +993,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 }
             }
             if (vfsService != null && createdUUID != null) {
-                Path newWidAssetPath = vfsService.get(UriUtils.encode(createdUUID));
+                Path newWidAssetPath = vfsService.get(createdUUID.replaceAll("\\s", "%20"));
             }
         } catch (Exception e) {
             e.printStackTrace();

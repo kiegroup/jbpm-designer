@@ -287,7 +287,7 @@ public class CalledElementServlet extends HttpServlet {
     private String[] getProjectAndBranchNames(HttpServletRequest req) {
         // Get info about project and branch
         String uuid = Utils.getUUID(req);
-        Path myPath = vfsServices.get(uuid);
+        Path myPath = vfsServices.get(uuid.replaceAll("\\s", "%20"));
         KieProject project = projectService.resolveProject(myPath);
         final String projectName = project.getProjectName();
         String branchName = null;

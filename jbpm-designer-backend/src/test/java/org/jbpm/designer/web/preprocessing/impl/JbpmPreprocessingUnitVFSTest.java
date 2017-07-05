@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2017 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,29 +58,32 @@ import static org.junit.Assert.*;
 public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
 
     @Mock
-    private Event<DesignerWorkitemInstalledEvent> workitemInstalledEvent;
+    protected Event<DesignerWorkitemInstalledEvent> workitemInstalledEvent;
 
     @Mock
-    private Event<NotificationEvent> notificationEvent;
+    protected Event<NotificationEvent> notificationEvent;
 
     @Mock
-    private POMService pomService;
+    protected POMService pomService;
 
     @Mock
-    private ProjectService<? extends Project> projectService;
+    protected ProjectService<? extends Project> projectService;
 
     @Mock
-    private MetadataService metadataService;
+    protected MetadataService metadataService;
 
     @Spy
     @InjectMocks
-    private JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
+    protected JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
 
-    private Repository repository;
+    protected Repository repository;
 
-    private String uniqueId;
+    protected String uniqueId;
 
-    private Map<String, String> params;
+    protected Map<String, String> params;
+
+    protected String dirName = "myprocesses";
+    protected String processFileName = "process";
 
     @Before
     public void setup() {
@@ -93,15 +96,15 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         profile.setRepository(repository);
 
         //prepare folders that will be used
-        repository.createDirectory("/myprocesses");
+        repository.createDirectory("/" + dirName);
         repository.createDirectory("/global");
 
         // prepare process asset that will be used to preprocess
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
                 .type("bpmn2")
-                .name("process")
-                .location("/myprocesses");
+                .name(processFileName)
+                .location("/" + dirName);
         uniqueId = repository.createAsset(builder.getAsset());
 
         preprocessingUnitVFS.init(new TestServletContext(),
@@ -148,13 +151,16 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         repository.assetExists("/global/defaultbusinessrulesicon.png");
         repository.assetExists("/global/defaultdecisionicon.png");
 
-        Collection<Asset> defaultStuff = repository.listAssets("/myprocesses");
+        Collection<Asset> defaultStuff = repository.listAssets("/" + dirName);
         assertNotNull(defaultStuff);
         assertEquals(2,
                      defaultStuff.size());
-        repository.assetExists("/myprocesses/WorkDefinitions.wid");
+        repository.assetExists("/" + dirName.replaceAll("\\s",
+                                                        "%20") + "/WorkDefinitions.wid");
         // this is the process asset that was created for the test but let's check it anyway
-        repository.assetExists("/myprocesses/process.bpmn2");
+        repository.assetExists("/" + dirName.replaceAll("\\s",
+                                                        "%20") + "/" + processFileName.replaceAll("\\s",
+                                                                                                  "%20") + ".bpmn2");
     }
 
     @Test
@@ -174,16 +180,16 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                                         null,
                                         null);
 
-        verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid",
-                                            "/myprocesses/SwitchYardService.wid",
-                                            "/myprocesses/Rewardsystem.wid"),
-                              Arrays.asList("/myprocesses/defaultservicenodeicon.png",
-                                            "/myprocesses/defaultmilestoneicon.png",
-                                            "/myprocesses/defaultbusinessrulesicon.png",
-                                            "/myprocesses/defaultdecisionicon.png"),
-                              Arrays.asList("/myprocesses/switchyard.gif",
-                                            "/myprocesses/defaultemailicon.gif",
-                                            "/myprocesses/defaultlogicon.gif"));
+        verifyWidsPngsAndGifs(Arrays.asList("/" + dirName + "/WorkDefinitions.wid",
+                                            "/" + dirName + "/SwitchYardService.wid",
+                                            "/" + dirName + "/Rewardsystem.wid"),
+                              Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
+                                            "/" + dirName + "/defaultmilestoneicon.png",
+                                            "/" + dirName + "/defaultbusinessrulesicon.png",
+                                            "/" + dirName + "/defaultdecisionicon.png"),
+                              Arrays.asList("/" + dirName + "/switchyard.gif",
+                                            "/" + dirName + "/defaultemailicon.gif",
+                                            "/" + dirName + "/defaultlogicon.gif"));
 
         Mockito.verify(workitemInstalledEvent,
                        Mockito.times(2)).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -204,13 +210,13 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                                         null,
                                         null);
 
-        verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid"),
-                              Arrays.asList("/myprocesses/defaultservicenodeicon.png",
-                                            "/myprocesses/defaultmilestoneicon.png",
-                                            "/myprocesses/defaultbusinessrulesicon.png",
-                                            "/myprocesses/defaultdecisionicon.png"),
-                              Arrays.asList("/myprocesses/defaultemailicon.gif",
-                                            "/myprocesses/defaultlogicon.gif"));
+        verifyWidsPngsAndGifs(Arrays.asList("/" + dirName + "/WorkDefinitions.wid"),
+                              Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
+                                            "/" + dirName + "/defaultmilestoneicon.png",
+                                            "/" + dirName + "/defaultbusinessrulesicon.png",
+                                            "/" + dirName + "/defaultdecisionicon.png"),
+                              Arrays.asList("/" + dirName + "/defaultemailicon.gif",
+                                            "/" + dirName + "/defaultlogicon.gif"));
 
         Mockito.verify(workitemInstalledEvent,
                        Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -231,13 +237,13 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                                         null,
                                         null);
 
-        verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid"),
-                              Arrays.asList("/myprocesses/defaultservicenodeicon.png",
-                                            "/myprocesses/defaultmilestoneicon.png",
-                                            "/myprocesses/defaultbusinessrulesicon.png",
-                                            "/myprocesses/defaultdecisionicon.png"),
-                              Arrays.asList("/myprocesses/defaultemailicon.gif",
-                                            "/myprocesses/defaultlogicon.gif"));
+        verifyWidsPngsAndGifs(Arrays.asList("/" + dirName + "/WorkDefinitions.wid"),
+                              Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
+                                            "/" + dirName + "/defaultmilestoneicon.png",
+                                            "/" + dirName + "/defaultbusinessrulesicon.png",
+                                            "/" + dirName + "/defaultdecisionicon.png"),
+                              Arrays.asList("/" + dirName + "/defaultemailicon.gif",
+                                            "/" + dirName + "/defaultlogicon.gif"));
 
         Mockito.verify(workitemInstalledEvent,
                        Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -260,13 +266,13 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                                         null,
                                         null);
 
-        verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid"),
-                              Arrays.asList("/myprocesses/defaultservicenodeicon.png",
-                                            "/myprocesses/defaultmilestoneicon.png",
-                                            "/myprocesses/defaultbusinessrulesicon.png",
-                                            "/myprocesses/defaultdecisionicon.png"),
-                              Arrays.asList("/myprocesses/defaultemailicon.gif",
-                                            "/myprocesses/defaultlogicon.gif"));
+        verifyWidsPngsAndGifs(Arrays.asList("/" + dirName + "/WorkDefinitions.wid"),
+                              Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
+                                            "/" + dirName + "/defaultmilestoneicon.png",
+                                            "/" + dirName + "/defaultbusinessrulesicon.png",
+                                            "/" + dirName + "/defaultdecisionicon.png"),
+                              Arrays.asList("/" + dirName + "/defaultemailicon.gif",
+                                            "/" + dirName + "/defaultlogicon.gif"));
 
         Mockito.verify(workitemInstalledEvent,
                        Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -297,15 +303,15 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                                         null,
                                         null);
 
-        verifyWidsPngsAndGifs(Arrays.asList("/myprocesses/WorkDefinitions.wid",
-                                            "/myprocesses/MicrosoftAcademy.wid"),
-                              Arrays.asList("/myprocesses/microsoftacademy.png",
-                                            "/myprocesses/defaultservicenodeicon.png",
-                                            "/myprocesses/defaultmilestoneicon.png",
-                                            "/myprocesses/defaultbusinessrulesicon.png",
-                                            "/myprocesses/defaultdecisionicon.png"),
-                              Arrays.asList("/myprocesses/defaultemailicon.gif",
-                                            "/myprocesses/defaultlogicon.gif"));
+        verifyWidsPngsAndGifs(Arrays.asList("/" + dirName + "/WorkDefinitions.wid",
+                                            "/" + dirName + "/MicrosoftAcademy.wid"),
+                              Arrays.asList("/" + dirName + "/microsoftacademy.png",
+                                            "/" + dirName + "/defaultservicenodeicon.png",
+                                            "/" + dirName + "/defaultmilestoneicon.png",
+                                            "/" + dirName + "/defaultbusinessrulesicon.png",
+                                            "/" + dirName + "/defaultdecisionicon.png"),
+                              Arrays.asList("/" + dirName + "/defaultemailicon.gif",
+                                            "/" + dirName + "/defaultlogicon.gif"));
 
         Mockito.verify(workitemInstalledEvent,
                        Mockito.times(2)).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -320,7 +326,9 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
             assertEquals(wids.size(),
                          storedWids.size());
             for (String wid : wids) {
-                repository.assetExists(wid);
+                wid.replaceAll("\\s",
+                               "%20");
+                repository.assetExists(wid.replaceAll("\\s", "%20"));
             }
         }
 
@@ -330,7 +338,9 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
             assertEquals(pngs.size(),
                          storedPngs.size());
             for (String png : pngs) {
-                repository.assetExists(png);
+                png.replaceAll("\\s",
+                               "%20");
+                repository.assetExists(png.replaceAll("\\s", "%20"));
             }
         }
 
@@ -340,7 +350,9 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
             assertEquals(gifs.size(),
                          storedGifs.size());
             for (String gif : gifs) {
-                repository.assetExists(gif);
+                gif.replaceAll("\\s",
+                               "%20");
+                repository.assetExists(gif.replaceAll("\\s", "%20"));
             }
         }
     }
