@@ -105,7 +105,7 @@ public class DesignerPresenter
     private ActivityDataIOEditor activityDataIOEditor;
 
     @Inject
-    private DesignerEditorParametersPublisher designerEditorParametersPublisher;
+    DesignerEditorParametersPublisher designerEditorParametersPublisher;
 
     private DesignerView view;
 
@@ -137,18 +137,22 @@ public class DesignerPresenter
 
     @Override
     protected void makeMenuBar() {
+        if (canUpdateProject()) {
+            fileMenuBuilder
+                    .addSave(versionRecordManager.newSaveMenuItem(new Command() {
+                        @Override
+                        public void execute() {
+                            onSave();
+                        }
+                    }))
+                    .addCopy(versionRecordManager.getCurrentPath(),
+                             fileNameValidator)
+                    .addRename(versionRecordManager.getPathToLatest(),
+                               fileNameValidator)
+                    .addDelete(versionRecordManager.getPathToLatest());
+        }
+
         fileMenuBuilder
-                .addSave(versionRecordManager.newSaveMenuItem(new Command() {
-                    @Override
-                    public void execute() {
-                        onSave();
-                    }
-                }))
-                .addCopy(versionRecordManager.getCurrentPath(),
-                         fileNameValidator)
-                .addRename(versionRecordManager.getPathToLatest(),
-                           fileNameValidator)
-                .addDelete(versionRecordManager.getPathToLatest())
                 .addNewTopLevelMenu(versionRecordManager.buildMenu());
     }
 
