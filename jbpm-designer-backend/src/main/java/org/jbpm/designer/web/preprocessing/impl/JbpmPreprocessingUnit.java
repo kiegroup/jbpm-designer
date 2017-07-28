@@ -36,6 +36,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -113,6 +115,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public static final String THEME_COOKIE_NAME = "designercolortheme";
     public static final String DEFAULT_CATEGORY_NAME = "Service Tasks";
     public static final String INCLUDE_DATA_OBJECT = "designerdataobjects";
+    public static final Pattern UNICODE_WORDS_PATTERN = Pattern.compile("\\p{L}+",
+                                                                        Pattern.UNICODE_CHARACTER_CLASS);
 
     private String designer_path;
     private String stencilPath;
@@ -323,7 +327,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                                                           repository);
 
             // evaluate all configs
-            KieProject kieProject = kieProjectService.resolveProject(vfsService.get(uuid.replaceAll("\\s", "%20")));
+            KieProject kieProject = kieProjectService.resolveProject(vfsService.get(uuid.replaceAll("\\s",
+                                                                                                    "%20")));
             Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
             for (Asset entry : workItemsContent) {
 
@@ -331,7 +336,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     evaluateWorkDefinitions(workDefinitions,
                                             entry,
                                             asset.getAssetLocation(),
-                                            repository, kieProject);
+                                            repository,
+                                            kieProject);
                 } catch (Exception e) {
                     _logger.error("Unable to parse a workitem definition: " + e.getMessage());
                 }
@@ -531,7 +537,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public void evaluateWorkDefinitions(Map<String, WorkDefinitionImpl> workDefinitions,
                                         Asset<String> widAsset,
                                         String assetLocation,
-                                        Repository repository, KieProject kieProject) throws Exception {
+                                        Repository repository,
+                                        KieProject kieProject) throws Exception {
         List<Map<String, Object>> workDefinitionsMaps;
 
         try {
@@ -543,169 +550,179 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         for (Map<String, Object> workDefinitionMap : workDefinitionsMaps) {
             if (workDefinitionMap != null) {
                 WorkDefinitionImpl workDefinition = new WorkDefinitionImpl();
-                workDefinition.setName(((String) workDefinitionMap.get("name")).replaceAll("\\s",
-                                                                                           ""));
-                workDefinition.setDisplayName((String) workDefinitionMap.get("displayName"));
-                String category = (String) workDefinitionMap.get("category");
-                if (category == null || category.length() < 1) {
-                    category = DEFAULT_CATEGORY_NAME;
-                }
-                workDefinition.setCategory(category);
 
-                String icon = (String) workDefinitionMap.get("icon");
-                if (icon == null || icon.trim().length() < 1) {
-                    icon = this.globalDir + "/defaultservicenodeicon.png";
-                }
-                Asset<byte[]> iconAsset;
-                boolean iconFound = false;
-                // Look for icon located relative to the asset
-                String absoluteIcon = createAbsoluteIconPath(assetLocation,
-                                                             icon).replaceAll("\\s", "%20");
-                if (repository.assetExists(absoluteIcon)) {
-                    icon = absoluteIcon;
-                    iconFound = true;
-                }
-                // Icon not found relative to asset, look for it relative to globalDir
-                if (!iconFound) {
-                    if (!icon.startsWith(this.globalDir)) {
-                        if (icon.startsWith("/")) {
-                            icon = this.globalDir + icon;
-                        } else {
-                            icon = this.globalDir + "/" + icon;
-                        }
+                String origWidName = ((String) workDefinitionMap.get("name")).replaceAll("\\s",
+                                                                                         "");
+                Matcher widNameMatcher = UNICODE_WORDS_PATTERN.matcher(origWidName);
+                if(widNameMatcher.matches()) {
+                    workDefinition.setName(widNameMatcher.group());
+
+                    workDefinition.setDisplayName((String) workDefinitionMap.get("displayName"));
+
+                    String category = (String) workDefinitionMap.get("category");
+                    if (category == null || category.length() < 1) {
+                        category = DEFAULT_CATEGORY_NAME;
                     }
-                }
+                    workDefinition.setCategory(category);
 
-                try {
-                    if (!repository.assetExists(icon)) {
+                    String icon = (String) workDefinitionMap.get("icon");
+                    if (icon == null || icon.trim().length() < 1) {
                         icon = this.globalDir + "/defaultservicenodeicon.png";
                     }
-                } catch (Exception e) {
-                    _logger.error(e.getMessage());
-                    icon = this.globalDir + "/defaultservicenodeicon.png";
-                }
-                iconAsset = repository.loadAssetFromPath(icon);
-                workDefinition.setIcon(icon);
-
-                String iconEncoded = "data:image/png;base64," + javax.xml.bind.DatatypeConverter.printBase64Binary(iconAsset.getAssetContent());
-                workDefinition.setIconEncoded(URLEncoder.encode(iconEncoded,
-                                                                "UTF-8"));
-
-                if (workDefinitionMap.get("customEditor") != null
-                        && ((String) workDefinitionMap.get("customEditor")).length() > 0) {
-                    workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
-                } else {
-                    workDefinition.setCustomEditor(null);
-                }
-
-                Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
-                if (workDefinitionMap.get("parameters") != null) {
-                    Map<String, DataType> parameterMap = (Map<String, DataType>) workDefinitionMap.get("parameters");
-                    if (parameterMap != null) {
-                        for (Map.Entry<String, DataType> entry : parameterMap.entrySet()) {
-                            parameters.add(new ParameterDefinitionImpl(entry.getKey(),
-                                                                       entry.getValue()));
+                    Asset<byte[]> iconAsset;
+                    boolean iconFound = false;
+                    // Look for icon located relative to the asset
+                    String absoluteIcon = createAbsoluteIconPath(assetLocation,
+                                                                 icon).replaceAll("\\s",
+                                                                                  "%20");
+                    if (repository.assetExists(absoluteIcon)) {
+                        icon = absoluteIcon;
+                        iconFound = true;
+                    }
+                    // Icon not found relative to asset, look for it relative to globalDir
+                    if (!iconFound) {
+                        if (!icon.startsWith(this.globalDir)) {
+                            if (icon.startsWith("/")) {
+                                icon = this.globalDir + icon;
+                            } else {
+                                icon = this.globalDir + "/" + icon;
+                            }
                         }
                     }
-                }
-                workDefinition.setParameters(parameters);
 
-                Set<ParameterDefinition> results = new HashSet<ParameterDefinition>();
-                if (workDefinitionMap.get("results") != null) {
-                    Map<String, DataType> resultMap = (Map<String, DataType>) workDefinitionMap.get("results");
-                    if (resultMap != null) {
-                        for (Map.Entry<String, DataType> entry : resultMap.entrySet()) {
-                            results.add(new ParameterDefinitionImpl(entry.getKey(),
-                                                                    entry.getValue()));
-                        }
-                    }
-                }
-                workDefinition.setResults(results);
-
-                Map<String, Object> parameterValues = new HashMap<>();
-                if (workDefinitionMap.get("parameterValues") != null) {
                     try {
-                        Map<String, Object> parameterValuesMap = (Map<String, Object>) workDefinitionMap.get("parameterValues");
-                        if (parameterValuesMap != null) {
-                            for (Map.Entry<String, Object> entry : parameterValuesMap.entrySet()) {
+                        if (!repository.assetExists(icon)) {
+                            icon = this.globalDir + "/defaultservicenodeicon.png";
+                        }
+                    } catch (Exception e) {
+                        _logger.error(e.getMessage());
+                        icon = this.globalDir + "/defaultservicenodeicon.png";
+                    }
+                    iconAsset = repository.loadAssetFromPath(icon);
+                    workDefinition.setIcon(icon);
 
-                                Object paramValueObj = entry.getValue();
-                                if (paramValueObj != null) {
-                                    if (paramValueObj instanceof String
-                                            && ((String) paramValueObj).trim().length() > 0) {
-                                        parameterValues.put(entry.getKey(),
-                                                            entry.getValue());
-                                    } else if (paramValueObj instanceof EnumDataType) {
-                                        Builder builder = builderCache.getBuilder(kieProject);
-                                        EnumDataType enumdt = (EnumDataType) entry.getValue();
-                                        if (enumdt != null) {
-                                            try {
-                                                List<String> enumValuesList = Arrays.asList(enumdt.getValueNames(builder.getKieContainer().getClassLoader()));
-                                                String enumValuesStr = enumValuesList.stream().filter(StringUtils::isNotBlank)
-                                                        .collect(Collectors.joining(","));
+                    String iconEncoded = "data:image/png;base64," + javax.xml.bind.DatatypeConverter.printBase64Binary(iconAsset.getAssetContent());
+                    workDefinition.setIconEncoded(URLEncoder.encode(iconEncoded,
+                                                                    "UTF-8"));
 
-                                                parameterValues.put(entry.getKey(),
-                                                                    enumValuesStr);
-                                            } catch (Throwable t) {
-                                                _logger.error("Error retrieving enum: " + t.getMessage());
+                    if (workDefinitionMap.get("customEditor") != null
+                            && ((String) workDefinitionMap.get("customEditor")).length() > 0) {
+                        workDefinition.setCustomEditor((String) workDefinitionMap.get("customEditor"));
+                    } else {
+                        workDefinition.setCustomEditor(null);
+                    }
+
+                    Set<ParameterDefinition> parameters = new HashSet<ParameterDefinition>();
+                    if (workDefinitionMap.get("parameters") != null) {
+                        Map<String, DataType> parameterMap = (Map<String, DataType>) workDefinitionMap.get("parameters");
+                        if (parameterMap != null) {
+                            for (Map.Entry<String, DataType> entry : parameterMap.entrySet()) {
+                                parameters.add(new ParameterDefinitionImpl(entry.getKey(),
+                                                                           entry.getValue()));
+                            }
+                        }
+                    }
+                    workDefinition.setParameters(parameters);
+
+                    Set<ParameterDefinition> results = new HashSet<ParameterDefinition>();
+                    if (workDefinitionMap.get("results") != null) {
+                        Map<String, DataType> resultMap = (Map<String, DataType>) workDefinitionMap.get("results");
+                        if (resultMap != null) {
+                            for (Map.Entry<String, DataType> entry : resultMap.entrySet()) {
+                                results.add(new ParameterDefinitionImpl(entry.getKey(),
+                                                                        entry.getValue()));
+                            }
+                        }
+                    }
+                    workDefinition.setResults(results);
+
+                    Map<String, Object> parameterValues = new HashMap<>();
+                    if (workDefinitionMap.get("parameterValues") != null) {
+                        try {
+                            Map<String, Object> parameterValuesMap = (Map<String, Object>) workDefinitionMap.get("parameterValues");
+                            if (parameterValuesMap != null) {
+                                for (Map.Entry<String, Object> entry : parameterValuesMap.entrySet()) {
+
+                                    Object paramValueObj = entry.getValue();
+                                    if (paramValueObj != null) {
+                                        if (paramValueObj instanceof String
+                                                && ((String) paramValueObj).trim().length() > 0) {
+                                            parameterValues.put(entry.getKey(),
+                                                                entry.getValue());
+                                        } else if (paramValueObj instanceof EnumDataType) {
+                                            Builder builder = builderCache.getBuilder(kieProject);
+                                            EnumDataType enumdt = (EnumDataType) entry.getValue();
+                                            if (enumdt != null) {
+                                                try {
+                                                    List<String> enumValuesList = Arrays.asList(enumdt.getValueNames(builder.getKieContainer().getClassLoader()));
+                                                    String enumValuesStr = enumValuesList.stream().filter(StringUtils::isNotBlank)
+                                                            .collect(Collectors.joining(","));
+
+                                                    parameterValues.put(entry.getKey(),
+                                                                        enumValuesStr);
+                                                } catch (Throwable t) {
+                                                    _logger.error("Error retrieving enum: " + t.getMessage());
+                                                }
                                             }
+                                        } else {
+                                            _logger.warn("parameter value type not supported");
                                         }
-                                    } else {
-                                        _logger.warn("parameter value type not supported");
                                     }
                                 }
                             }
+                        } catch (Exception e) {
+                            _logger.error("Error parsing parameter values: " + e.getMessage());
                         }
-                    } catch (Exception e) {
-                        _logger.error("Error parsing parameter values: " + e.getMessage());
                     }
-                }
-                workDefinition.setParameterValues(parameterValues);
+                    workDefinition.setParameterValues(parameterValues);
 
-                if (workDefinitionMap.get("defaultHandler") != null) {
-                    workDefinition.setDefaultHandler((String) workDefinitionMap.get("defaultHandler"));
+                    if (workDefinitionMap.get("defaultHandler") != null) {
+                        workDefinition.setDefaultHandler((String) workDefinitionMap.get("defaultHandler"));
+                    } else {
+                        workDefinition.setDefaultHandler("");
+                    }
+
+                    if (workDefinitionMap.get("dependencies") != null) {
+                        workDefinition.setDependencies(((List<String>) workDefinitionMap.get("dependencies")).toArray(new String[0]));
+                    } else {
+                        workDefinition.setDependencies(new String[]{});
+                    }
+
+                    if (workDefinitionMap.get("documentation") != null) {
+                        workDefinition.setDocumentation((String) workDefinitionMap.get("documentation"));
+                    } else {
+                        workDefinition.setDocumentation("");
+                    }
+
+                    if (workDefinitionMap.get("defaultHandler") != null) {
+                        workDefinition.setDefaultHandler((String) workDefinitionMap.get("defaultHandler"));
+                    } else {
+                        workDefinition.setDefaultHandler("");
+                    }
+
+                    if (workDefinitionMap.get("version") != null) {
+                        workDefinition.setVersion((String) workDefinitionMap.get("version"));
+                    } else {
+                        workDefinition.setVersion("");
+                    }
+
+                    if (workDefinitionMap.get("description") != null) {
+                        workDefinition.setDescription((String) workDefinitionMap.get("description"));
+                    } else {
+                        workDefinition.setDescription("");
+                    }
+
+                    if (workDefinitionMap.get("mavenDependencies") != null) {
+                        workDefinition.setMavenDependencies(((List<String>) workDefinitionMap.get("mavenDependencies")).toArray(new String[0]));
+                    } else {
+                        workDefinition.setMavenDependencies(new String[]{});
+                    }
+
+                    workDefinitions.put(workDefinition.getName(),
+                                        workDefinition);
                 } else {
-                    workDefinition.setDefaultHandler("");
+                    _logger.error("Workitem has invalid name: " + workDefinitionMap.get("name") + " and will not be added. Name must contain words only");
                 }
-
-                if (workDefinitionMap.get("dependencies") != null) {
-                    workDefinition.setDependencies(((List<String>) workDefinitionMap.get("dependencies")).toArray(new String[0]));
-                } else {
-                    workDefinition.setDependencies(new String[]{});
-                }
-
-                if (workDefinitionMap.get("documentation") != null) {
-                    workDefinition.setDocumentation((String) workDefinitionMap.get("documentation"));
-                } else {
-                    workDefinition.setDocumentation("");
-                }
-
-                if (workDefinitionMap.get("defaultHandler") != null) {
-                    workDefinition.setDefaultHandler((String) workDefinitionMap.get("defaultHandler"));
-                } else {
-                    workDefinition.setDefaultHandler("");
-                }
-
-                if (workDefinitionMap.get("version") != null) {
-                    workDefinition.setVersion((String) workDefinitionMap.get("version"));
-                } else {
-                    workDefinition.setVersion("");
-                }
-
-                if (workDefinitionMap.get("description") != null) {
-                    workDefinition.setDescription((String) workDefinitionMap.get("description"));
-                } else {
-                    workDefinition.setDescription("");
-                }
-
-                if (workDefinitionMap.get("mavenDependencies") != null) {
-                    workDefinition.setMavenDependencies(((List<String>) workDefinitionMap.get("mavenDependencies")).toArray(new String[0]));
-                } else {
-                    workDefinition.setMavenDependencies(new String[]{});
-                }
-
-                workDefinitions.put(workDefinition.getName(),
-                                    workDefinition);
             }
         }
     }
@@ -993,7 +1010,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 }
             }
             if (vfsService != null && createdUUID != null) {
-                Path newWidAssetPath = vfsService.get(createdUUID.replaceAll("\\s", "%20"));
+                Path newWidAssetPath = vfsService.get(createdUUID.replaceAll("\\s",
+                                                                             "%20"));
             }
         } catch (Exception e) {
             e.printStackTrace();
