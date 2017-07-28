@@ -17,6 +17,7 @@ package org.jbpm.designer.web.preprocessing.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -160,7 +161,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         repository.assetExists("/global/patterns.json");
         repository.assetExists("/global/.gitignore");
 
-        Collection<Asset> defaultStuff = repository.listAssets("/"  + dirName);
+        Collection<Asset> defaultStuff = repository.listAssets("/" + dirName);
         assertNotNull(defaultStuff);
         assertEquals(2,
                      defaultStuff.size());
@@ -183,7 +184,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content(        "[\n" +
+        builder.content("[\n" +
                                 "    [\n" +
                                 "        \"name\" : \"TestServiceWithParamValues\",\n" +
                                 "        \"description\" : \"TestServiceWithParamValues\",\n" +
@@ -210,14 +211,14 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                                 "]\n")
                 .type("wid")
                 .name("processwid")
-                .location("/"  + dirName);
+                .location("/" + dirName);
         String uniqueWidID = repository.createAsset(builder.getAsset());
 
         AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
         builder2.content("".getBytes())
                 .type("png")
                 .name("widicon")
-                .location("/"  + dirName);
+                .location("/" + dirName);
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
@@ -309,14 +310,14 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     public void testEmptyCustomEditor() throws Exception {
         Repository repository = createRepository();
         //prepare folders that will be used
-        Directory testProjectDir = repository.createDirectory("/"  + dirName);
+        Directory testProjectDir = repository.createDirectory("/" + dirName);
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
         when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content(        "\n" +
+        builder.content("\n" +
                                 "[\n" +
                                 "\n" +
                                 "  [\n" +
@@ -332,14 +333,14 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                                 "]")
                 .type("wid")
                 .name("processwid")
-                .location("/"  + dirName);
+                .location("/" + dirName);
         String uniqueWidID = repository.createAsset(builder.getAsset());
 
         AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
         builder2.content("".getBytes())
                 .type("png")
                 .name("widicon")
-                .location("/"  + dirName);
+                .location("/" + dirName);
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
@@ -388,14 +389,14 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     public void testCaseProjectSetting() throws Exception {
         Repository repository = createRepository();
         //prepare folders that will be used
-        Directory testProjectDir = repository.createDirectory("/"  + dirName);
+        Directory testProjectDir = repository.createDirectory("/" + dirName);
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
         when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content(        "\n" +
+        builder.content("\n" +
                                 "[\n" +
                                 "\n" +
                                 "  [\n" +
@@ -418,7 +419,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         builder2.content("".getBytes())
                 .type("png")
                 .name("widicon")
-                .location("/"  + dirName);
+                .location("/" + dirName);
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
@@ -453,14 +454,14 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
     public void testEmptyIcon() throws Exception {
         Repository repository = createRepository();
         //prepare folders that will be used
-        Directory testProjectDir = repository.createDirectory("/"  + dirName);
+        Directory testProjectDir = repository.createDirectory("/" + dirName);
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
         when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
-        builder.content(        "\n" +
+        builder.content("\n" +
                                 "[\n" +
                                 "\n" +
                                 "  [\n" +
@@ -476,7 +477,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                                 "]")
                 .type("wid")
                 .name("processwid")
-                .location("/"  + dirName);
+                .location("/" + dirName);
         String uniqueWidID = repository.createAsset(builder.getAsset());
 
         AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
@@ -510,6 +511,130 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         assertNotNull(workDefinitions.get("Rewardsystem").getIcon());
         assertEquals("/global/defaultservicenodeicon.png",
                      workDefinitions.get("Rewardsystem").getIcon());
+    }
+
+    @Test
+    public void testEmptyAndInvalidWidNames() throws Exception {
+        Repository repository = createRepository();
+        //prepare folders that will be used
+        Directory testProjectDir = repository.createDirectory("/" + dirName);
+        repository.createDirectory("/global");
+
+        KieProject mockProject = mock(KieProject.class);
+        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("\n" +
+                                "[\n" +
+                                "\n" +
+                                "  [\n" +
+                                "    \"name\" : \"12~!#!@$#@$#@%$#^$%&^%&^&(&)()()+_)|}{|';';/.,:{|}\",\n" +
+                                "    \"description\" : \"Invalid Name\",\n" +
+                                "    \"displayName\" : \"Invalid Name\",\n" +
+                                "    \"defaultHandler\": \"\",\n" +
+                                "    \"category\" : \"Invalid Names Category\",\n" +
+                                "    \"customEditor\" : \"false\",\n" +
+                                "    \"icon\" : \"\",\n" +
+                                "  ],\n" +
+                                "  [\n" +
+                                "    \"name\" : \"\",\n" +
+                                "    \"description\" : \"Empty Name\",\n" +
+                                "    \"displayName\" : \"Empty Name\",\n" +
+                                "    \"defaultHandler\": \"\",\n" +
+                                "    \"category\" : \"Empty Names Category\",\n" +
+                                "    \"customEditor\" : \"false\",\n" +
+                                "    \"icon\" : \"\",\n" +
+                                "  ],\n" +
+                                "  [\n" +
+                                "    \"name\" : \"      \",\n" +
+                                "    \"description\" : \"Spaces Only Name\",\n" +
+                                "    \"displayName\" : \"Spaces Only Name\",\n" +
+                                "    \"defaultHandler\": \"\",\n" +
+                                "    \"category\" : \"Spaces Only Names Category\",\n" +
+                                "    \"customEditor\" : \"false\",\n" +
+                                "    \"icon\" : \"\",\n" +
+                                "  ],\n" +
+                                "  [\n" +
+                                "    \"name\" : \"金江止ハオユヘ手報でゃゆ掲悩フチ経壁否訃嗅けぽ\",\n" +
+                                "    \"description\" : \"Unicode Name\",\n" +
+                                "    \"displayName\" : \"Unicode Name\",\n" +
+                                "    \"defaultHandler\": \"\",\n" +
+                                "    \"category\" : \"Unicode Names Category\",\n" +
+                                "    \"customEditor\" : \"false\",\n" +
+                                "    \"icon\" : \"\",\n" +
+                                "  ],\n" +
+                                "  [\n" +
+                                "    \"name\" : \"金江止ハオユヘ手報 金江止ハオユヘ手報 金江止ハオユヘ手報\",\n" +
+                                "    \"description\" : \"Unicode Name With Spaces\",\n" +
+                                "    \"displayName\" : \"Unicode Name With Spaces\",\n" +
+                                "    \"defaultHandler\": \"\",\n" +
+                                "    \"category\" : \"Unicode Names With Spaces Category\",\n" +
+                                "    \"customEditor\" : \"false\",\n" +
+                                "    \"icon\" : \"\",\n" +
+                                "  ],\n" +
+                                "  [\n" +
+                                "    \"name\" : \"ThisIsASampleWidName\",\n" +
+                                "    \"description\" : \"Non Unicode Name\",\n" +
+                                "    \"displayName\" : \"NonUnicode Name\",\n" +
+                                "    \"defaultHandler\": \"\",\n" +
+                                "    \"category\" : \"NonUnicode Names Category\",\n" +
+                                "    \"customEditor\" : \"false\",\n" +
+                                "    \"icon\" : \"\",\n" +
+                                "  ],\n" +
+                                "  [\n" +
+                                "    \"name\" : \"This is some other sample Name\",\n" +
+                                "    \"description\" : \"Non Unicode Name with spaces\",\n" +
+                                "    \"displayName\" : \"NonUnicode Name with spaces\",\n" +
+                                "    \"defaultHandler\": \"\",\n" +
+                                "    \"category\" : \"NonUnicode Names with spaces Category\",\n" +
+                                "    \"customEditor\" : \"false\",\n" +
+                                "    \"icon\" : \"\",\n" +
+                                "  ],\n" +
+                                "\n" +
+                                "]")
+                .type("wid")
+                .name("processwid")
+                .location("/" + dirName);
+        String uniqueWidID = repository.createAsset(builder.getAsset());
+
+        AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+        builder2.content("".getBytes())
+                .type("png")
+                .name("defaultservicenodeicon")
+                .location("/global");
+        String uniqueIconID = repository.createAsset(builder2.getAsset());
+
+        JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
+        preprocessingUnitVFS.setBuilderCache(getBuilderCache(mockProject));
+        preprocessingUnitVFS.init(new TestServletContext(),
+                                  "/",
+                                  null);
+        Asset<String> widAsset = repository.loadAsset(uniqueWidID);
+
+        preprocessingUnitVFS.setGlobalDir(new TestIDiagramProfile(repository).getRepositoryGlobalDir());
+
+        Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+
+        preprocessingUnitVFS.evaluateWorkDefinitions(workDefinitions,
+                                                     widAsset,
+                                                     widAsset.getAssetLocation(),
+                                                     repository,
+                                                     mockProject);
+
+        assertNotNull(workDefinitions);
+        assertEquals(4,
+                     workDefinitions.size());
+
+        ArrayList<String> validWidNames = new ArrayList<String>(
+                Arrays.asList("金江止ハオユヘ手報でゃゆ掲悩フチ経壁否訃嗅けぽ",
+                              "金江止ハオユヘ手報金江止ハオユヘ手報金江止ハオユヘ手報",
+                              "ThisIsASampleWidName",
+                              "ThisissomeothersampleName"));
+
+        for(Map.Entry<String, WorkDefinitionImpl> entry : workDefinitions.entrySet()) {
+            assertTrue(validWidNames.contains(entry.getKey()));
+            assertTrue(validWidNames.contains(entry.getValue().getName()));
+        }
     }
 
     private String decodeUniqueId(String uniqueId) {
