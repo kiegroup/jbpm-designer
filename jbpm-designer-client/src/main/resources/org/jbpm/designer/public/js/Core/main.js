@@ -959,7 +959,8 @@ ORYX.Editor = {
 				
 				getModelMetaData:		this.getModelMetaData.bind(this),
 
-				resetAllShapeColors:    this.resetAllShapeColors.bind(this)
+				resetAllShapeColors:    this.resetAllShapeColors.bind(this),
+				resetShapeColors:       this.resetShapeColors.bind(this)
 			};
 
 		// return it.
@@ -1012,7 +1013,7 @@ ORYX.Editor = {
             if(shape.getChildren().size() > 0) {
                 for (var i = 0; i < shape.getChildren().size(); i++) {
                     if(shape.getChildren()[i] instanceof ORYX.Core.Node || shape.getChildren()[i] instanceof ORYX.Core.Edge) {
-                        this.resetShapeColor(shape.getChildren()[i]);
+                        this.resetShapeColors(shape.getChildren()[i]);
                     }
                 }
             }
