@@ -37,9 +37,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.guvnor.common.services.project.model.Project;
+import org.guvnor.common.services.project.model.Module;
+import org.guvnor.common.services.project.service.ModuleService;
 import org.guvnor.common.services.project.service.POMService;
-import org.guvnor.common.services.project.service.ProjectService;
 import org.guvnor.common.services.shared.metadata.MetadataService;
 import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.repository.Repository;
@@ -89,7 +89,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
     private POMService pomService;
 
     @Inject
-    private ProjectService<? extends Project> projectService;
+    private ModuleService<? extends Module> moduleService;
 
     @Inject
     private MetadataService metadataService;
@@ -235,7 +235,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
                                                              workitemInstalledEventEvent,
                                                              notification,
                                                              pomService,
-                                                             projectService,
+                                                             moduleService,
                                                              metadataService);
                         } catch (FileAlreadyExistsException e) {
                             _logger.warn("Workitem already installed.");

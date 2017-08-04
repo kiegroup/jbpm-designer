@@ -43,8 +43,8 @@ import org.kie.workbench.common.services.refactoring.model.query.RefactoringPage
 import org.kie.workbench.common.services.refactoring.service.PartType;
 import org.kie.workbench.common.services.refactoring.service.ResourceType;
 import org.kie.workbench.common.services.refactoring.service.impact.QueryOperationRequest;
-import org.kie.workbench.common.services.shared.project.KieProject;
-import org.kie.workbench.common.services.shared.project.KieProjectService;
+import org.kie.workbench.common.services.shared.project.KieModule;
+import org.kie.workbench.common.services.shared.project.KieModuleService;
 import org.uberfire.java.nio.file.Path;
 import org.uberfire.paging.PageResponse;
 
@@ -71,6 +71,8 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
     };
 
     private static final String DEPLOYMENT_ID = "org.kjar:test:1.0";
+    private static final long WAIT_TIME_MILLIS = 2000;
+    private static final int MAX_WAIT_TIMES = 8;
 
     protected Set<NamedQuery> getQueries() {
         return new HashSet<NamedQuery>() {{
@@ -94,10 +96,6 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
             });
         }};
     }
-
-    private static final long WAIT_TIME_MILLIS = 2000;
-
-    private static final int MAX_WAIT_TIMES = 8;
 
     @Test
     public void testBpmnIndexing() throws Exception {
@@ -139,7 +137,7 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
                     .referencesSharedPart("*",
                                           PartType.RULEFLOW_GROUP,
                                           ValueIndexTerm.TermSearchType.WILDCARD)
-                    .inAllProjects().onAllBranches();
+                    .inAllModules().onAllBranches();
 
             try {
                 final List<RefactoringPageRow> response = service.queryToList(request);
@@ -157,7 +155,7 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
             QueryOperationRequest request = QueryOperationRequest
                     .referencesSharedPart("MySignal",
                                           PartType.SIGNAL)
-                    .inAllProjects().onAllBranches();
+                    .inAllModules().onAllBranches();
 
             try {
                 final List<RefactoringPageRow> response = service.queryToList(request);
@@ -175,7 +173,7 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
             QueryOperationRequest request = QueryOperationRequest
                     .referencesSharedPart("BrokenSignal",
                                           PartType.SIGNAL)
-                    .inAllProjects().onAllBranches();
+                    .inAllModules().onAllBranches();
 
             try {
                 final List<RefactoringPageRow> response = service.queryToList(request);
@@ -192,7 +190,7 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
             QueryOperationRequest request = QueryOperationRequest
                     .referencesSharedPart("name",
                                           PartType.GLOBAL)
-                    .inAllProjects().onAllBranches();
+                    .inAllModules().onAllBranches();
 
             try {
                 final List<RefactoringPageRow> response = service.queryToList(request);
@@ -255,16 +253,16 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
     }
 
     @Override
-    protected KieProjectService getProjectService() {
+    protected KieModuleService getModuleService() {
         final org.uberfire.backend.vfs.Path mockRoot = mock(org.uberfire.backend.vfs.Path.class);
-        when(mockRoot.toURI()).thenReturn(TEST_PROJECT_ROOT);
+        when(mockRoot.toURI()).thenReturn(TEST_MODULE_ROOT);
 
-        final KieProject mockProject = mock(KieProject.class);
-        when(mockProject.getRootPath()).thenReturn(mockRoot);
-        when(mockProject.getProjectName()).thenReturn(TEST_PROJECT_NAME);
+        final KieModule kieModule = mock(KieModule.class);
+        when(kieModule.getRootPath()).thenReturn(mockRoot);
+        when(kieModule.getModuleName()).thenReturn(TEST_MODULE_NAME);
 
         POM mockPom = mock(POM.class);
-        when(mockProject.getPom()).thenReturn(mockPom);
+        when(kieModule.getPom()).thenReturn(mockPom);
         GAV mockGAV = mock(GAV.class);
         when(mockPom.getGav()).thenReturn(mockGAV);
         when(mockGAV.toString()).thenReturn(DEPLOYMENT_ID);
@@ -272,11 +270,11 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
         final Package mockPackage = mock(Package.class);
         when(mockPackage.getPackageName()).thenReturn(TEST_PACKAGE_NAME);
 
-        final KieProjectService mockProjectService = mock(KieProjectService.class);
-        when(mockProjectService.resolveProject(any(org.uberfire.backend.vfs.Path.class))).thenReturn(mockProject);
-        when(mockProjectService.resolvePackage(any(org.uberfire.backend.vfs.Path.class))).thenReturn(mockPackage);
+        final KieModuleService mockKieModuleService = mock(KieModuleService.class);
+        when(mockKieModuleService.resolveModule(any(org.uberfire.backend.vfs.Path.class))).thenReturn(kieModule);
+        when(mockKieModuleService.resolvePackage(any(org.uberfire.backend.vfs.Path.class))).thenReturn(mockPackage);
 
-        return mockProjectService;
+        return mockKieModuleService;
     }
 
     @Override

@@ -24,9 +24,9 @@ import java.util.Map;
 
 import javax.enterprise.event.Event;
 
-import org.guvnor.common.services.project.model.Project;
+import org.guvnor.common.services.project.model.Module;
+import org.guvnor.common.services.project.service.ModuleService;
 import org.guvnor.common.services.project.service.POMService;
-import org.guvnor.common.services.project.service.ProjectService;
 import org.guvnor.common.services.shared.metadata.MetadataService;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestIDiagramProfile;
@@ -45,6 +45,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kie.workbench.common.services.shared.project.KieModuleService;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
@@ -70,7 +71,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
     protected POMService pomService;
 
     @Mock
-    protected ProjectService<? extends Project> projectService;
+    protected KieModuleService moduleService;
 
     @Mock
     protected MetadataService metadataService;
