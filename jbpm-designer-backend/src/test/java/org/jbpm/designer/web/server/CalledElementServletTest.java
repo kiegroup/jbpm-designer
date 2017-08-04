@@ -118,7 +118,7 @@ public class CalledElementServletTest extends RepositoryBaseTest {
     @Test
     public void testGetJavaTypeNames() throws Exception {
         final PackageDataModelOracle oracle = mock(PackageDataModelOracle.class);
-        when(oracle.getProjectPackageNames()).thenReturn(Arrays.asList("org"));
+        when(oracle.getModulePackageNames()).thenReturn(Arrays.asList("org"));
 
         ModelField[] modelFields = new ModelField[]{
                 new ModelField("this",
@@ -150,7 +150,7 @@ public class CalledElementServletTest extends RepositoryBaseTest {
         fields.put("org.Address",
                    modelFields);
 
-        when(oracle.getProjectModelFields()).thenReturn(fields);
+        when(oracle.getModuleModelFields()).thenReturn(fields);
 
         CalledElementServlet servlet = new CalledElementServlet();
         List<String> javatypeNameList = servlet.getJavaTypeNames(oracle);

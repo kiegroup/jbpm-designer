@@ -27,7 +27,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
-import org.guvnor.common.services.project.events.NewProjectEvent;
+import org.guvnor.common.services.project.events.NewModuleEvent;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.filters.FilterByFileName;
 import org.jbpm.designer.repository.impl.AssetBuilder;
@@ -39,7 +39,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.kie.workbench.common.services.shared.project.KieProject;
+import org.kie.workbench.common.services.shared.project.KieModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
@@ -56,8 +56,6 @@ import static org.mockito.Mockito.when;
 
 public class VFSRepositoryGitFileSystemTest {
 
-    Logger logger = LoggerFactory.getLogger(VFSRepositoryGitFileSystemTest.class);
-
     // TODO change it to generic independent path
     private static final String REPOSITORY_ROOT = "designer-playground";
     private static final String VFS_REPOSITORY_ROOT = "git://" + REPOSITORY_ROOT;
@@ -65,13 +63,11 @@ public class VFSRepositoryGitFileSystemTest {
     private static final String PASSWORD = "test1234";
     private static final String ORIGIN_URL = "https://github.com/mswiderski/designer-playground.git";
     private static final String FETCH_COMMAND = "?fetch";
-    private JbpmProfileImpl profile;
-
     private static String gitLocalClone = System.getProperty("java.io.tmpdir") + File.separator + "git-repo";
     private static Map<String, String> env = new HashMap<String, String>();
-
     private static int counter = 0;
-
+    Logger logger = LoggerFactory.getLogger(VFSRepositoryGitFileSystemTest.class);
+    private JbpmProfileImpl profile;
     private RepositoryDescriptor descriptor;
     private VFSFileSystemProducer producer;
 
@@ -982,11 +978,11 @@ public class VFSRepositoryGitFileSystemTest {
 
         Directory testProjectDir = repository.createDirectory("/mytestproject");
 
-        final KieProject mockProject = mock(KieProject.class);
-        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
+        final KieModule mockModule = mock(KieModule.class);
+        when(mockModule.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
-        NewProjectEvent event = mock(NewProjectEvent.class);
-        when(event.getProject()).thenReturn(mockProject);
+        final NewModuleEvent event = mock(NewModuleEvent.class);
+        when(event.getModule()).thenReturn(mockModule);
 
         repository.createGlobalDirOnNewProject(event);
 

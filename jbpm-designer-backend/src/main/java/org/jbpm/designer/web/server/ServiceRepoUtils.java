@@ -27,10 +27,10 @@ import org.apache.commons.io.IOUtils;
 import org.drools.core.util.ConfFileUtils;
 import org.guvnor.common.services.project.model.Dependencies;
 import org.guvnor.common.services.project.model.Dependency;
+import org.guvnor.common.services.project.model.Module;
 import org.guvnor.common.services.project.model.POM;
-import org.guvnor.common.services.project.model.Project;
+import org.guvnor.common.services.project.service.ModuleService;
 import org.guvnor.common.services.project.service.POMService;
-import org.guvnor.common.services.project.service.ProjectService;
 import org.guvnor.common.services.shared.metadata.MetadataService;
 import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.repository.Asset;
@@ -58,7 +58,7 @@ public class ServiceRepoUtils {
                                        Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent,
                                        Event<NotificationEvent> notification,
                                        POMService pomService,
-                                       ProjectService projectService,
+                                       ModuleService moduleService,
                                        MetadataService metadataService) throws IOException, FileAlreadyExistsException {
 
         String workitemDefinitionURL = workitemsFromRepo.get(key).getPath() + "/" + workitemsFromRepo.get(key).getName() + ".wid";
@@ -117,8 +117,8 @@ public class ServiceRepoUtils {
             }
 
             if (canUpdateProjectPomForWorkitem(workitemsFromRepo.get(key))) {
-                Project assetProject = projectService.resolveProject(assetPath);
-                POM projectPOM = pomService.load(assetProject.getPomXMLPath());
+                Module module = moduleService.resolveModule(assetPath);
+                POM projectPOM = pomService.load(module.getPomXMLPath());
                 if (projectPOM != null) {
                     Dependencies projectDepends = projectPOM.getDependencies();
                     Dependencies validDependsFromWorkitem = getValidDependenciesForWorkitem(projectDepends,
@@ -128,9 +128,9 @@ public class ServiceRepoUtils {
                             projectPOM.getDependencies().add(workitemDependency);
                         }
 
-                        pomService.save(assetProject.getPomXMLPath(),
+                        pomService.save(module.getPomXMLPath(),
                                         projectPOM,
-                                        metadataService.getMetadata(assetProject.getPomXMLPath()),
+                                        metadataService.getMetadata(module.getPomXMLPath()),
                                         "System updated dependencies from workitem configuration.",
                                         false);
                     }

@@ -43,9 +43,9 @@ import org.kie.workbench.common.forms.serialization.impl.FieldSerializer;
 import org.kie.workbench.common.forms.serialization.impl.FormDefinitionSerializerImpl;
 import org.kie.workbench.common.forms.serialization.impl.FormModelSerializer;
 import org.kie.workbench.common.forms.service.shared.FieldManager;
-import org.kie.workbench.common.services.backend.project.ProjectClassLoaderHelper;
-import org.kie.workbench.common.services.shared.project.KieProject;
-import org.kie.workbench.common.services.shared.project.KieProjectService;
+import org.kie.workbench.common.services.backend.project.ModuleClassLoaderHelper;
+import org.kie.workbench.common.services.shared.project.KieModule;
+import org.kie.workbench.common.services.shared.project.KieModuleService;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.uberfire.backend.vfs.Path;
@@ -85,13 +85,13 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
     private BPMNKieWorkbenchFormBuilderService builderService;
 
     @Mock
-    private KieProject project;
+    private KieModule module;
 
     @Mock
-    private KieProjectService projectService;
+    private KieModuleService moduleService;
 
     @Mock
-    private ProjectClassLoaderHelper projectClassLoaderHelper;
+    private ModuleClassLoaderHelper moduleClassLoaderHelper;
 
     @Mock
     private BPMFinderService bpmFinderService;
@@ -104,10 +104,10 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
 
     @Before
     public void initTest() throws Exception {
-        when(projectService.resolveProject(any())).thenReturn(project);
-        when(project.getRootPath()).thenReturn(formPath);
+        when(moduleService.resolveModule(any())).thenReturn(module);
+        when(module.getRootPath()).thenReturn(formPath);
 
-        when(projectClassLoaderHelper.getProjectClassLoader(any())).thenReturn(getClass().getClassLoader());
+        when(moduleClassLoaderHelper.getModuleClassLoader(any())).thenReturn(getClass().getClassLoader());
 
         when(formPath.toURI()).thenReturn("file://fakepath.frm");
         when(ioService.exists(any())).thenReturn(false);
@@ -123,13 +123,13 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
 
         when(formModelHandlerManager.getFormModelHandler(any())).then(invocationOnMock -> {
             if (BusinessProcessFormModel.class.equals(invocationOnMock.getArguments()[0])) {
-                return new BusinessProcessFormModelHandler(projectService,
-                                                           projectClassLoaderHelper,
+                return new BusinessProcessFormModelHandler(moduleService,
+                                                           moduleClassLoaderHelper,
                                                            new TestFieldManager(),
                                                            bpmFinderService);
             } else {
-                return new TaskFormModelHandler(projectService,
-                                                projectClassLoaderHelper,
+                return new TaskFormModelHandler(moduleService,
+                                                moduleClassLoaderHelper,
                                                 new TestFieldManager(),
                                                 bpmFinderService);
             }
@@ -137,8 +137,8 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
 
         builderService = new BPMNKieWorkbenchFormBuilderService(ioService,
                                                                 formModelHandlerManager,
-                                                                new BPMNFormModelGeneratorImpl(projectService,
-                                                                                               projectClassLoaderHelper),
+                                                                new BPMNFormModelGeneratorImpl(moduleService,
+                                                                                               moduleClassLoaderHelper),
                                                                 formSerializer,
                                                                 new StaticFormLayoutTemplateGenerator(),
                                                                 new BPMNVFSFormDefinitionGeneratorService(fieldManager,
