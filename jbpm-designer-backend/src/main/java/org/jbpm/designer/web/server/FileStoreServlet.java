@@ -22,6 +22,7 @@ import java.io.OutputStreamWriter;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,9 +39,8 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Used to store sources to local file system.
- */
+@WebServlet(displayName = "FileStore", name = "FileStoreServlet",
+        urlPatterns = "/filestore")
 public class FileStoreServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

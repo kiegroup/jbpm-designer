@@ -33,6 +33,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,10 +84,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Servlet for simulation actions.
- */
-
+@WebServlet(displayName = "Simulation", name = "SimulationServlet",
+        urlPatterns = "/simulation")
 public class SimulationServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,10 +62,8 @@ import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.java.nio.base.SegmentedPath;
 
-/**
- * Sevlet for resolving called elements.
- * @author Tihomir Surdilovic
- */
+@WebServlet(displayName = "CalledElement", name = "CalledElementServlet",
+        urlPatterns = "/calledelement")
 public class CalledElementServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -288,7 +287,8 @@ public class CalledElementServlet extends HttpServlet {
     private String[] getProjectAndBranchNames(HttpServletRequest req) {
         // Get info about project and branch
         String uuid = Utils.getUUID(req);
-        Path myPath = vfsServices.get(uuid.replaceAll("\\s", "%20"));
+        Path myPath = vfsServices.get(uuid.replaceAll("\\s",
+                                                      "%20"));
         KieProject project = projectService.resolveProject(myPath);
         final String projectName = project.getProjectName();
         String branchName = null;

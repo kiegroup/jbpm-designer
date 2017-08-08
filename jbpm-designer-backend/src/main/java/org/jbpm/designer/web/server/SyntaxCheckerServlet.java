@@ -20,6 +20,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,9 +30,8 @@ import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 
-/**
- * Check syntax of a BPMN2 process.
- */
+@WebServlet(displayName = "SyntaxChecker", name = "SyntaxCheckerServlet",
+        urlPatterns = "/syntaxcheck")
 public class SyntaxCheckerServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

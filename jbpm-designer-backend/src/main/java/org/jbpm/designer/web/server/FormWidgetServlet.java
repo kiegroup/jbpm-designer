@@ -22,6 +22,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +36,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@WebServlet(displayName = "FormWidget", name = "FormWidgetServlet",
+        urlPatterns = "/formwidget")
 public class FormWidgetServlet extends HttpServlet {
 
     private static final Logger _logger = LoggerFactory.getLogger(FormWidgetServlet.class);

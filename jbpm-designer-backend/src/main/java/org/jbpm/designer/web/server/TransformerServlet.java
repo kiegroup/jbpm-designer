@@ -28,6 +28,7 @@ import java.util.StringTokenizer;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -87,11 +88,8 @@ import org.jbpm.migration.JbpmMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Transformer for svg process representation to
- * various formats.
- * @author Tihomir Surdilovic
- */
+@WebServlet(displayName = "Transformer", name = "TransformerServlet",
+        urlPatterns = "/transformer")
 public class TransformerServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

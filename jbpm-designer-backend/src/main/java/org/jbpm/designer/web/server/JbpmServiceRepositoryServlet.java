@@ -30,6 +30,7 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,9 +55,8 @@ import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.workbench.events.NotificationEvent;
 
-/**
- * Servlet for interaction with the jbpm service repository.
- */
+@WebServlet(displayName = "JbpmServiceRepository", name = "JbpmServiceRepositoryServlet",
+        urlPatterns = "/jbpmservicerepo")
 public class JbpmServiceRepositoryServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

@@ -26,6 +26,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,9 +51,8 @@ import org.jbpm.designer.web.profile.impl.RepositoryInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Queries repository to get the process information.
- */
+@WebServlet(displayName = "ProcessInfo", name = "ProcessInfoServlet",
+        urlPatterns = "/processinfo")
 public class ProcessInfoServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
