@@ -18,9 +18,12 @@ package org.jbpm.designer.web.server.menu;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 
 import org.jbpm.designer.web.server.menu.connector.AbstractConnectorServlet;
 
+@WebServlet(displayName = "Menu Connector Servlet", name = "MenuConnectorServlet",
+        urlPatterns = "/menuconnector/*")
 public class MenuConnectorServlet extends AbstractConnectorServlet {
 
     @Override

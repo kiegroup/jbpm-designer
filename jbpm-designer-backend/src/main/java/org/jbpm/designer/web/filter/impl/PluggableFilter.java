@@ -28,11 +28,6 @@ import javax.servlet.ServletResponse;
 import org.jbpm.designer.web.filter.ConfigurableFilterConfig;
 import org.jbpm.designer.web.filter.IFilterFactory;
 
-/**
- * @author Antoine Toulme
- *         <p>
- *         a filter that can delegate to other filters detected via an OSGi declarative service.
- */
 public class PluggableFilter implements Filter {
 
     private static List<IFilterFactory> _registeredFilters = new ArrayList<IFilterFactory>();

@@ -23,6 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,9 +39,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Queries Guvnor for process version info.
- */
+@WebServlet(displayName = "ProcessDiffService", name = "ProcessDiffServiceServlet",
+        urlPatterns = "/processdiff")
 public class ProcessDiffServiceServlet extends HttpServlet {
 
     private static final Logger _logger = LoggerFactory

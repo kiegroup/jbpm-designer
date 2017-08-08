@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,10 +36,8 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Sevlet for custom editors.
- */
-
+@WebServlet(displayName = "CustomEditors", name = "CustomEditorsServlet",
+        urlPatterns = "/customeditors")
 public class CustomEditorsServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

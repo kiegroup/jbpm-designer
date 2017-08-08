@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.util.Map.Entry;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,16 +34,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * This servlet exposes the plugins registered against the platforms.
- * <p>
- * The servlet has this contract:
- * /plugins will return the information about the registered plugins in json format:
- * [{"name":ORYX.Save, "core":false}]
- * /plugin?name=ORYX.Save
- * will return the contents of the ORYX.Save plugin.
- * @author Antoine Toulme
- */
+@WebServlet(displayName = "Plugin Service Servlet", name = "PluginServiceServlet",
+        urlPatterns = {"/plugins", "/plugin", "/plugin/*"},
+        initParams = {
+                @WebInitParam(name = "factoryName", value = "jbpm")})
 public class PluginServiceServlet extends HttpServlet {
 
     private static final Logger _logger = LoggerFactory.getLogger(

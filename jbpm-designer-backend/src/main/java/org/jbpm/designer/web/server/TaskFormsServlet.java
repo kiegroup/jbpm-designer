@@ -23,6 +23,7 @@ import java.util.function.BiConsumer;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,9 +51,8 @@ import org.slf4j.LoggerFactory;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 
-/**
- * Creates/updates task forms for a specific process.
- */
+@WebServlet(displayName = "Taskforms", name = "TaskformsServlet",
+        urlPatterns = "/taskforms")
 public class TaskFormsServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -113,7 +113,8 @@ public class TaskFormsServlet extends HttpServlet {
             Definitions def = ((Definitions) unmarshaller.unmarshall(json,
                                                                      preprocessingData).getContents().get(0));
 
-            Path myPath = vfsServices.get(uuid.replaceAll("\\s", "%20"));
+            Path myPath = vfsServices.get(uuid.replaceAll("\\s",
+                                                          "%20"));
 
             TaskFormTemplateManager templateManager = new TaskFormTemplateManager(myPath,
                                                                                   formBuilderManager,

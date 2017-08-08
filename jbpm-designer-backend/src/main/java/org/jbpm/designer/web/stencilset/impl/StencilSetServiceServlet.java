@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,10 +31,10 @@ import org.jbpm.designer.web.stencilset.IDiagramStencilSetService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * A servlet to serve stencilsets from the StencilSetService.
- * @author Antoine Toulme
- */
+@WebServlet(displayName = "StencilSet Service Servlet", name = "StencilSetServiceServlet",
+        urlPatterns = "/stencilset/*",
+        initParams = {
+                @WebInitParam(name = "defaultName", value = "bpmn2.0jbpm")})
 public class StencilSetServiceServlet extends HttpServlet {
 
     private static final Logger _logger = LoggerFactory.getLogger(StencilSetServiceServlet.class);

@@ -22,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,9 +51,8 @@ import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.java.nio.file.NoSuchFileException;
 import org.uberfire.rpc.SessionInfo;
 
-/**
- * Interaction with task forms for inline editor.
- */
+@WebServlet(displayName = "TaskformsEditor", name = "TaskFormsEditorServlet",
+        urlPatterns = "/taskformseditor")
 public class TaskFormsEditorServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -211,7 +211,8 @@ public class TaskFormsEditorServlet extends HttpServlet {
                         Definitions def = ((Definitions) unmarshaller.unmarshall(json,
                                                                                  preprocessingData).getContents().get(0));
 
-                        Path myPath = vfsServices.get(uuid.replaceAll("\\s", "%20"));
+                        Path myPath = vfsServices.get(uuid.replaceAll("\\s",
+                                                                      "%20"));
 
                         org.uberfire.java.nio.file.Path kiePath = Paths.convert(myPath);
                         Path formPath = Paths.convert(kiePath.getParent().resolve(taskName + TASKFORM_NAME_EXTENSION + "." + formType));

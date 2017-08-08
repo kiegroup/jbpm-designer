@@ -21,6 +21,7 @@ import java.io.PrintWriter;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,9 +34,8 @@ import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Deals with stencil patterns data.
- */
+@WebServlet(displayName = "StencilPatterns", name = "StencilPatternsServlet",
+        urlPatterns = "/stencilpatterns")
 public class StencilPatternsServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

@@ -22,6 +22,7 @@ import java.util.StringTokenizer;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +38,8 @@ import org.jdom.output.XMLOutputter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@WebServlet(displayName = "Menu Servlet", name = "MenuServlet",
+        urlPatterns = "/menu/*")
 public class MenuServlet extends HttpServlet {
 
     private Document _doc = null;

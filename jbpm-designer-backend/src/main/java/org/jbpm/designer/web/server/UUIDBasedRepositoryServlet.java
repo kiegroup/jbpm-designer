@@ -24,6 +24,8 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,10 +44,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @author Antoine Toulme
- *         a file based repository that uses the UUID element to save files in individual spots on the file system.
- */
+@WebServlet(displayName = "UUID Based Repository", name = "UUIDBasedRepositoryServlet",
+        urlPatterns = "/uuidRepository",
+        initParams = {
+                @WebInitParam(name = "factoryName", value = "jbpm")})
 public class UUIDBasedRepositoryServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

@@ -32,6 +32,8 @@ import javax.inject.Named;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,9 +59,13 @@ import org.stringtemplate.v4.ST;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.io.IOService;
 
-/**
- * Servlet to load plugin and Oryx stencilset
- */
+@WebServlet(displayName = "Oryx Editor Handler", name = "EditorHandler",
+        urlPatterns = {"/editor", "/editor/*"},
+        initParams = {
+                @WebInitParam(name = "designer.dev", value = "true"),
+                @WebInitParam(name = "designer.preprocess", value = "true"),
+                @WebInitParam(name = "designer.locale", value = "en"),
+                @WebInitParam(name = "designer.skin", value = "default")})
 public class EditorHandler extends HttpServlet {
 
     private static final long serialVersionUID = -7439613152623067053L;
@@ -530,8 +536,8 @@ public class EditorHandler extends HttpServlet {
 
     private String getCheckedStoreSVGOnSaveOption(IDiagramProfile profile) {
         String sysPropOption = System.getProperty(STORE_SVG_ON_SAVE);
-        if(sysPropOption != null) {
-            if("true".equalsIgnoreCase(sysPropOption) || "false".equalsIgnoreCase(sysPropOption)) {
+        if (sysPropOption != null) {
+            if ("true".equalsIgnoreCase(sysPropOption) || "false".equalsIgnoreCase(sysPropOption)) {
                 return String.valueOf(Boolean.parseBoolean(sysPropOption));
             }
         }
