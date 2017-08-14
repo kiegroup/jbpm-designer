@@ -2,7 +2,7 @@
 <config xmlns="http://zanata.org/namespace/config/">
   <url>https://translate.jboss.org/</url>
   <project>jbpm-designer</project>
-  <project-version>7.2.0</project-version>
+  <project-version>7.3.0</project-version>
   <project-type>properties</project-type>
 
   <locales>
