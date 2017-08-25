@@ -275,7 +275,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
             }
 
             if (ioService != null) {
-                ioService.startBatch(new FileSystem[]{descriptor.getFileSystem()});
+                ioService.startBatch(descriptor.getFileSystem());
             }
 
             Repository repository = profile.getRepository();
