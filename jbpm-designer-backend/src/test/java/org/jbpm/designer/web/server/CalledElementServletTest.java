@@ -15,8 +15,18 @@
 
 package org.jbpm.designer.web.server;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.drools.workbench.models.datamodel.oracle.DataType;
+import org.drools.workbench.models.datamodel.oracle.FieldAccessorsAndMutators;
+import org.drools.workbench.models.datamodel.oracle.ModelField;
+import org.drools.workbench.models.datamodel.oracle.PackageDataModelOracle;
 import org.jbpm.designer.repository.RepositoryBaseTest;
-import org.jbpm.designer.server.EditorHandler;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.junit.After;
 import org.junit.Before;
@@ -27,9 +37,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
@@ -78,6 +87,57 @@ public class CalledElementServletTest extends RepositoryBaseTest {
             // exception thrown due to mocked request and response
         }
         verify(profileService, never()).findProfile(any(HttpServletRequest.class), anyString());
+
+    }
+
+    @Test
+    public void testGetJavaTypes() throws Exception {
+
+        ModelField[] modelFields = new ModelField[]{
+                new ModelField("this",
+                               "org.Address",
+                               ModelField.FIELD_CLASS_TYPE.REGULAR_CLASS,
+                               ModelField.FIELD_ORIGIN.SELF,
+                               FieldAccessorsAndMutators.ACCESSOR,
+                               DataType.TYPE_THIS),
+                new ModelField("street",
+                               String.class.getName(),
+                               ModelField.FIELD_CLASS_TYPE.REGULAR_CLASS,
+                               ModelField.FIELD_ORIGIN.DECLARED,
+                               FieldAccessorsAndMutators.BOTH,
+                               DataType.TYPE_STRING),
+                new ModelField("homeAddress",
+                               Boolean.class.getName(),
+                               ModelField.FIELD_CLASS_TYPE.REGULAR_CLASS,
+                               ModelField.FIELD_ORIGIN.DECLARED,
+                               FieldAccessorsAndMutators.BOTH,
+                               DataType.TYPE_BOOLEAN),
+                new ModelField("number",
+                               Integer.class.getName(),
+                               ModelField.FIELD_CLASS_TYPE.REGULAR_CLASS,
+                               ModelField.FIELD_ORIGIN.DECLARED,
+                               FieldAccessorsAndMutators.BOTH,
+                               DataType.TYPE_NUMERIC_INTEGER)};
+
+
+        PackageDataModelOracle oracle = mock(PackageDataModelOracle.class);
+        when(oracle.getProjectPackageNames()).thenReturn(Arrays.asList("org"));
+
+        Map<String, ModelField[]> fields = new HashMap<>();
+        fields.put("org.Address",
+                   modelFields);
+
+        when(oracle.getProjectModelFields()).thenReturn(fields);
+
+        CalledElementServlet servlet = new CalledElementServlet();
+        List<String> javatypeNameList = servlet.getJavaTypeNames(oracle);
+
+        assertNotNull(javatypeNameList);
+        assertEquals(1,
+                     javatypeNameList.size());
+        assertEquals("org.Address",
+                     javatypeNameList.get(0));
+
 
     }
 }
