@@ -19,6 +19,7 @@ package org.jbpm.designer.web.server;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,23 +38,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
-import org.jbpm.designer.query.DesignerFindDataTypesQuery;
+import org.drools.workbench.models.datamodel.oracle.PackageDataModelOracle;
 import org.jbpm.designer.query.DesignerFindRuleFlowNamesQuery;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.json.JSONObject;
+import org.kie.workbench.common.services.datamodel.backend.server.DataModelOracleUtilities;
+import org.kie.workbench.common.services.datamodel.backend.server.service.DataModelService;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueBranchNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm.TermSearchType;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueProjectNameIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueResourceIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueSharedPartIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
 import org.kie.workbench.common.services.refactoring.service.PartType;
 import org.kie.workbench.common.services.refactoring.service.RefactoringQueryService;
-import org.kie.workbench.common.services.refactoring.service.ResourceType;
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.slf4j.Logger;
@@ -82,6 +83,9 @@ public class CalledElementServlet extends HttpServlet {
 
     @Inject
     protected KieProjectService projectService;
+
+    @Inject
+    private DataModelService dataModelService;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -150,8 +154,12 @@ public class CalledElementServlet extends HttpServlet {
             resp.setContentType("application/json");
             resp.getWriter().write(getRuleFlowGroupsInfoAsJSON(ruleFlowGroupNames).toString());
         } else if (action != null && action.equals("showdatatypes")) {
+            String uuid = Utils.getUUID(req);
+            Path myPath = vfsServices.get(uuid.replaceAll("\\s",
+                                                          "%20"));
+            PackageDataModelOracle oracle = dataModelService.getDataModel(myPath);
 
-            List<String> dataTypeNames = getJavaTypeNames(req);
+            List<String> dataTypeNames = getJavaTypeNames(oracle);
 
             resp.setCharacterEncoding("UTF-8");
             resp.setContentType("application/json");
@@ -238,50 +246,9 @@ public class CalledElementServlet extends HttpServlet {
         return ruleFlowGroupNames;
     }
 
-    // package scope in order to test the method
-    List<String> getJavaTypeNames(HttpServletRequest req) {
-        final String[] projectAndBranch = getProjectAndBranchNames(req);
-
-        // Query RuleFlowGroups for asset project and branch
-        List<RefactoringPageRow> results = queryService.query(
-                DesignerFindDataTypesQuery.NAME,
-                new HashSet<ValueIndexTerm>() {{
-                    add(new ValueResourceIndexTerm("*",
-                                                   ResourceType.JAVA,
-                                                   TermSearchType.WILDCARD));
-                    add(new ValueProjectNameIndexTerm(projectAndBranch[0]));
-                    if (projectAndBranch[1] != null) {
-                        add(new ValueBranchNameIndexTerm(projectAndBranch[1]));
-                    }
-                }});
-
-        final List<String> dataTypeNames = new ArrayList<String>();
-        for (RefactoringPageRow row : results) {
-            dataTypeNames.add((String) row.getValue());
-        }
-        Collections.sort(dataTypeNames);
-
-        // Query RuleFlowGroups for all projects and branches
-        results = queryService.query(
-                DesignerFindDataTypesQuery.NAME,
-                new HashSet<ValueIndexTerm>() {{
-                    add(new ValueResourceIndexTerm("*",
-                                                   ResourceType.JAVA,
-                                                   TermSearchType.WILDCARD));
-                }});
-        final List<String> otherDataTypeNames = new LinkedList<String>();
-        for (RefactoringPageRow row : results) {
-            String ruleFlowGroupName = (String) row.getValue();
-            if (!dataTypeNames.contains(ruleFlowGroupName)) {
-                // but only add the new ones
-                otherDataTypeNames.add(ruleFlowGroupName);
-            }
-        }
-        Collections.sort(otherDataTypeNames);
-
-        dataTypeNames.addAll(otherDataTypeNames);
-
-        return dataTypeNames;
+    protected List<String> getJavaTypeNames(PackageDataModelOracle oracle) {
+        final String[] fullyQualifiedClassNames = DataModelOracleUtilities.getFactTypes(oracle);
+        return Arrays.asList(fullyQualifiedClassNames);
     }
 
     private String[] getProjectAndBranchNames(HttpServletRequest req) {
