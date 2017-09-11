@@ -79,6 +79,8 @@ public class DesignerProcessDataEventListener
         return process;
     }
 
+    private Set<String> uniqueVariables;
+
     // ProcessDataEventListener methods -------------------------------------------------------------------------------------------
 
     @Override
@@ -235,8 +237,22 @@ public class DesignerProcessDataEventListener
         // process unqualified classes
         resolveUnqualifiedClasses();
 
-        // process variables
+        // distinct process variables (in case of duplicates)
+        addDistinctProcessVariables(variables,
+                                    resource);
+
+        // process signals, messages, etc.
+        visitSignals(signals);
+        visitSignals(messages);
+
+        // (DRL) function imports
+        visitFunctionImports(((RuleFlowProcess) process).getFunctionImports());
+    }
+
+    public void addDistinctProcessVariables(List<Variable> variables,
+                                            Resource resource) {
         if (variables != null) {
+            uniqueVariables = new HashSet<>();
             for (Variable data : variables) {
                 String type = data.getType().getStringType();
                 String itemSubjectRef = (String) data.getMetaData("ItemSubjectRef");
@@ -245,8 +261,11 @@ public class DesignerProcessDataEventListener
                     type = itemDef.getStructureRef();
                 }
 
-                resource.addPart(data.getName(),
-                                 PartType.VARIABLE);
+                // add only if unique
+                if (uniqueVariables.add(data.getName())) {
+                    resource.addPart(data.getName(),
+                                     PartType.VARIABLE);
+                }
                 if (type.contains(".")) {
                     getReferencedClasses().add(type);
                 } else {
@@ -254,13 +273,6 @@ public class DesignerProcessDataEventListener
                 }
             }
         }
-
-        // process signals, messages, etc.
-        visitSignals(signals);
-        visitSignals(messages);
-
-        // (DRL) function imports
-        visitFunctionImports(((RuleFlowProcess) process).getFunctionImports());
     }
 
     private void visitFunctionImports(List<String> functionImports) {
@@ -323,5 +335,9 @@ public class DesignerProcessDataEventListener
             unqualifiedClasses = new HashSet<>(4);
         }
         return unqualifiedClasses;
+    }
+
+    public Set<String> getUniqueVariables() {
+        return uniqueVariables;
     }
 }
