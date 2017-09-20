@@ -16,6 +16,7 @@
 package org.jbpm.designer.web.plugin;
 
 import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**

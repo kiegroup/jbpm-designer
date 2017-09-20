@@ -26,7 +26,9 @@ import org.junit.Test;
 import org.kie.workbench.common.services.refactoring.Resource;
 import org.kie.workbench.common.services.refactoring.service.ResourceType;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 public class ProcessDataEventListenerTest {
 

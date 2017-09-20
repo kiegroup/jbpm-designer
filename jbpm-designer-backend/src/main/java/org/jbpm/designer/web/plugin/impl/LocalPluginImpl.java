@@ -17,6 +17,7 @@ package org.jbpm.designer.web.plugin.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.ServletContext;
 
 import org.jbpm.designer.web.plugin.IDiagramPlugin;

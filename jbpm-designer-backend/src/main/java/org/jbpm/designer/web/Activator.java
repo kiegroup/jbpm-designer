@@ -16,6 +16,7 @@
 package org.jbpm.designer.web;
 
 import java.util.Hashtable;
+
 import javax.inject.Inject;
 
 import org.jbpm.designer.web.filter.IFilterFactory;

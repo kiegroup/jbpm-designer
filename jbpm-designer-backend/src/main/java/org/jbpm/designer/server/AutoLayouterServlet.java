@@ -23,13 +23,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 //Thread for continuously reading a process' InputStream
-//needed because java processes can deadlock, when InputStream exceeds a certain threshold 
+//needed because java processes can deadlock, when InputStream exceeds a certain threshold
 class StreamReadThread extends Thread {
 
     InputStream is;

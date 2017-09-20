@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -56,7 +57,6 @@ import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import org.jbpm.designer.notification.DesignerNotificationEvent;
 import org.jbpm.designer.repository.Repository;
-import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.server.EditorHandler;
 import org.jbpm.designer.server.service.DefaultDesignerAssetService;
 import org.jbpm.designer.util.ConfigurationProvider;

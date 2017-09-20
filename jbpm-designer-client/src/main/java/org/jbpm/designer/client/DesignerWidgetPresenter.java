@@ -17,6 +17,7 @@
 package org.jbpm.designer.client;
 
 import java.util.Map;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 

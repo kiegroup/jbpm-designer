@@ -16,6 +16,7 @@
 package org.jbpm.designer.web.profile;
 
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**

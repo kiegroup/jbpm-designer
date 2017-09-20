@@ -18,6 +18,7 @@ package org.jbpm.designer.filter;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 

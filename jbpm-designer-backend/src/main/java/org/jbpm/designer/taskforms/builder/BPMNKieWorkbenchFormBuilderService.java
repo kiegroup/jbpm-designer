@@ -17,6 +17,7 @@
 package org.jbpm.designer.taskforms.builder;
 
 import java.util.UUID;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;

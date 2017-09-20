@@ -22,7 +22,9 @@ import org.jbpm.designer.client.popup.ActivityDataIOEditorViewImpl;
 import org.jbpm.designer.client.shared.AssignmentData;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ListBoxValuesTest {
 
