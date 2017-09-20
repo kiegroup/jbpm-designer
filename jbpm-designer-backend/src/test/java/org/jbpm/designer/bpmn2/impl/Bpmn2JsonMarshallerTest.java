@@ -520,4 +520,15 @@ public class Bpmn2JsonMarshallerTest {
 
     }
 
+    @Test
+    public void testOnEntryOnExitActionsEscaping() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("onEntryonExitActionsEscaping.bpmn2");
+        JSONObject task = getChildByName(process, "task");
+        JSONObject properties = task.getJSONObject("properties");
+
+        assertEquals("myVariable = \"\\\\\"text in quotes\\\\\"\";\\nSystem.out.println(myVariable);\\n", properties.getString("onentryactions"));
+        assertEquals("myVariable = \"\\\\\"another text in quotes\\\\\"\";\\nSystem.out.println(myVariable);\\n", properties.getString("onexitactions"));
+
+    }
+
 }

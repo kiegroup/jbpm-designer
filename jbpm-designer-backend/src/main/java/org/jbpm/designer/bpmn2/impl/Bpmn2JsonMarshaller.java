@@ -1096,77 +1096,7 @@ public class Bpmn2JsonMarshaller {
         properties.put("assignments", assignmentString);
 
         // on-entry and on-exit actions
-        if(callActivity.getExtensionValues() != null && callActivity.getExtensionValues().size() > 0) {
-
-            String onEntryStr = "";
-            String onExitStr = "";
-            for(ExtensionAttributeValue extattrval : callActivity.getExtensionValues()) {
-
-                FeatureMap extensionElements = extattrval.getValue();
-
-                @SuppressWarnings("unchecked")
-                List<OnEntryScriptType> onEntryExtensions = (List<OnEntryScriptType>) extensionElements
-                                                     .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
-
-                @SuppressWarnings("unchecked")
-                List<OnExitScriptType> onExitExtensions = (List<OnExitScriptType>) extensionElements
-                                                  .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
-
-                for(OnEntryScriptType onEntryScript : onEntryExtensions) {
-                    onEntryStr += onEntryScript.getScript();
-                    onEntryStr += "\n";
-
-                    if(onEntryScript.getScriptFormat() != null) {
-                        String format = onEntryScript.getScriptFormat();
-                        String formatToWrite = "";
-                        if(format.equals("http://www.java.com/java")) {
-                            formatToWrite = "java";
-                        } else if(format.equals("http://www.mvel.org/2.0")) {
-                            formatToWrite = "mvel";
-                        } else if(format.equals("http://www.javascript.com/javascript")) {
-                            formatToWrite = "javascript";
-                        } else {
-                            formatToWrite = "java";
-                        }
-                        properties.put("script_language", formatToWrite);
-                    }
-                }
-
-                for(OnExitScriptType onExitScript : onExitExtensions) {
-                    onExitStr += onExitScript.getScript();
-                    onExitStr += "\n";
-
-                    if(onExitScript.getScriptFormat() != null) {
-                        String format = onExitScript.getScriptFormat();
-                        String formatToWrite = "";
-                        if(format.equals("http://www.java.com/java")) {
-                            formatToWrite = "java";
-                        } else if(format.equals("http://www.mvel.org/2.0")) {
-                            formatToWrite = "mvel";
-                        } else if(format.equals("http://www.javascript.com/javascript")) {
-                            formatToWrite = "javascript";
-                        } else {
-                            formatToWrite = "java";
-                        }
-                        if(properties.get("script_language") == null) {
-                            properties.put("script_language", formatToWrite);
-                        }
-                    }
-                }
-            }
-            if(onEntryStr.length() > 0) {
-                if(onEntryStr.endsWith("|")) {
-                    onEntryStr = onEntryStr.substring(0, onEntryStr.length() - 1);
-                }
-                properties.put("onentryactions", onEntryStr);
-            }
-            if(onExitStr.length() > 0) {
-                if(onExitStr.endsWith("|")) {
-                    onExitStr = onExitStr.substring(0, onExitStr.length() - 1);
-                }
-                properties.put("onexitactions", onExitStr);
-            }
-        }
+        marshallEntryExitActions(callActivity, properties);
 
         // simulation properties
         setSimulationProperties(callActivity.getId(), properties);
@@ -1191,17 +1121,7 @@ public class Bpmn2JsonMarshaller {
     		properties.put("script", scriptTask.getScript() != null ? scriptTask.getScript().replace("\\", "\\\\").replace("\n", "\\n") : "");
     		String format = scriptTask.getScriptFormat();
     		if(format != null && format.length() > 0) {
-    			String formatToWrite = "";
-                if(format.equals("http://www.java.com/java")) {
-                    formatToWrite = "java";
-                } else if(format.equals("http://www.mvel.org/2.0")) {
-                    formatToWrite = "mvel";
-                } else if(format.equals("http://www.javascript.com/javascript")) {
-                    formatToWrite = "javascript";
-                } else {
-                	// default to java
-                    formatToWrite = "java";
-                }
+    			String formatToWrite = getScriptLanguageFormat(format);
                 properties.put("script_language", formatToWrite);
     		}
     		taskType = "Script";
@@ -1674,58 +1594,58 @@ public class Bpmn2JsonMarshaller {
         properties.put("assignments", assignmentString);
 
         // on-entry and on-exit actions
-        if(task.getExtensionValues() != null && task.getExtensionValues().size() > 0) {
+        marshallEntryExitActions(task, properties);
+
+        // simulation properties
+        setSimulationProperties(task.getId(), properties);
+
+        // marshall the node out
+        if(isCustomElement((String) properties.get("taskname"), preProcessingData)) {
+            marshallNode(task, properties, (String) properties.get("taskname"), plane, generator, xOffset, yOffset);
+        } else {
+            marshallNode(task, properties, "Task", plane, generator, xOffset, yOffset);
+        }
+    }
+
+    private void marshallEntryExitActions(BaseElement element, Map<String, Object> properties) {
+        if(element.getExtensionValues() != null && element.getExtensionValues().size() > 0) {
 
             String onEntryStr = "";
             String onExitStr = "";
-            for(ExtensionAttributeValue extattrval : task.getExtensionValues()) {
+            for(ExtensionAttributeValue extattrval : element.getExtensionValues()) {
 
                 FeatureMap extensionElements = extattrval.getValue();
 
                 @SuppressWarnings("unchecked")
                 List<OnEntryScriptType> onEntryExtensions = (List<OnEntryScriptType>) extensionElements
-                                                     .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
 
                 @SuppressWarnings("unchecked")
                 List<OnExitScriptType> onExitExtensions = (List<OnExitScriptType>) extensionElements
-                                                  .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
+                        .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
 
                 for(OnEntryScriptType onEntryScript : onEntryExtensions) {
-                    onEntryStr += onEntryScript.getScript();
-                    onEntryStr += "\n";
+                    onEntryStr += onEntryScript.getScript().replace("\\", "\\\\").replace("\n", "\\n");
+                    if(!onEntryStr.endsWith("\\n")) {
+                        onEntryStr += "\n";
+                    }
 
                     if(onEntryScript.getScriptFormat() != null) {
                         String format = onEntryScript.getScriptFormat();
-                        String formatToWrite = "";
-                        if(format.equals("http://www.java.com/java")) {
-                            formatToWrite = "java";
-                        } else if(format.equals("http://www.mvel.org/2.0")) {
-                            formatToWrite = "mvel";
-                        } else if(format.equals("http://www.javascript.com/javascript")) {
-                            formatToWrite = "javascript";
-                        } else {
-                            formatToWrite = "java";
-                        }
+                        String formatToWrite = getScriptLanguageFormat(format);
                         properties.put("script_language", formatToWrite);
                     }
                 }
 
                 for(OnExitScriptType onExitScript : onExitExtensions) {
-                    onExitStr += onExitScript.getScript();
-                    onExitStr += "\n";
+                    onExitStr += onExitScript.getScript().replace("\\", "\\\\").replace("\n", "\\n");
+                    if(!onExitStr.endsWith("\\n")) {
+                        onExitStr += "\n";
+                    }
 
                     if(onExitScript.getScriptFormat() != null) {
                         String format = onExitScript.getScriptFormat();
-                        String formatToWrite = "";
-                        if(format.equals("http://www.java.com/java")) {
-                            formatToWrite = "java";
-                        } else if(format.equals("http://www.mvel.org/2.0")) {
-                            formatToWrite = "mvel";
-                        } else if(format.equals("http://www.javascript.com/javascript")) {
-                            formatToWrite = "javascript";
-                        } else {
-                            formatToWrite = "java";
-                        }
+                        String formatToWrite = getScriptLanguageFormat(format);
                         if(properties.get("script_language") == null) {
                             properties.put("script_language", formatToWrite);
                         }
@@ -1745,15 +1665,19 @@ public class Bpmn2JsonMarshaller {
                 properties.put("onexitactions", onExitStr);
             }
         }
+    }
 
-        // simulation properties
-        setSimulationProperties(task.getId(), properties);
-
-        // marshall the node out
-        if(isCustomElement((String) properties.get("taskname"), preProcessingData)) {
-            marshallNode(task, properties, (String) properties.get("taskname"), plane, generator, xOffset, yOffset);
+    private String getScriptLanguageFormat(String fullQualifiedFormat) {
+        if(fullQualifiedFormat == null) {
+            return "";
+        } else if(fullQualifiedFormat.equals("http://www.java.com/java")) {
+            return  "java";
+        } else if(fullQualifiedFormat.equals("http://www.mvel.org/2.0")) {
+            return "mvel";
+        } else if(fullQualifiedFormat.equals("http://www.javascript.com/javascript")) {
+            return "javascript";
         } else {
-            marshallNode(task, properties, "Task", plane, generator, xOffset, yOffset);
+            return "java";
         }
     }
 
@@ -2151,77 +2075,7 @@ public class Bpmn2JsonMarshaller {
         properties.put("assignments", assignmentString);
 
         // on-entry and on-exit actions
-        if(subProcess.getExtensionValues() != null && subProcess.getExtensionValues().size() > 0) {
-
-            String onEntryStr = "";
-            String onExitStr = "";
-            for(ExtensionAttributeValue extattrval : subProcess.getExtensionValues()) {
-
-                FeatureMap extensionElements = extattrval.getValue();
-
-                @SuppressWarnings("unchecked")
-                List<OnEntryScriptType> onEntryExtensions = (List<OnEntryScriptType>) extensionElements
-                                                     .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_ENTRY_SCRIPT, true);
-
-                @SuppressWarnings("unchecked")
-                List<OnExitScriptType> onExitExtensions = (List<OnExitScriptType>) extensionElements
-                                                  .get(DroolsPackage.Literals.DOCUMENT_ROOT__ON_EXIT_SCRIPT, true);
-
-                for(OnEntryScriptType onEntryScript : onEntryExtensions) {
-                    onEntryStr += onEntryScript.getScript();
-                    onEntryStr += "\n";
-
-                    if(onEntryScript.getScriptFormat() != null) {
-                        String format = onEntryScript.getScriptFormat();
-                        String formatToWrite = "";
-                        if(format.equals("http://www.java.com/java")) {
-                            formatToWrite = "java";
-                        } else if(format.equals("http://www.mvel.org/2.0")) {
-                            formatToWrite = "mvel";
-                        } else if(format.equals("http://www.javascript.com/javascript")) {
-                            formatToWrite = "javascript";
-                        } else {
-                            formatToWrite = "java";
-                        }
-                        properties.put("script_language", formatToWrite);
-                    }
-                }
-
-                for(OnExitScriptType onExitScript : onExitExtensions) {
-                    onExitStr += onExitScript.getScript();
-                    onExitStr += "\n";
-
-                    if(onExitScript.getScriptFormat() != null) {
-                        String format = onExitScript.getScriptFormat();
-                        String formatToWrite = "";
-                        if(format.equals("http://www.java.com/java")) {
-                            formatToWrite = "java";
-                        } else if(format.equals("http://www.mvel.org/2.0")) {
-                            formatToWrite = "mvel";
-                        } else if(format.equals("http://www.javascript.com/javascript")) {
-                            formatToWrite = "javascript";
-                        } else {
-                            formatToWrite = "java";
-                        }
-                        if(properties.get("script_language") == null) {
-                            properties.put("script_language", formatToWrite);
-                        }
-                    }
-                }
-            }
-            if(onEntryStr.length() > 0) {
-                if(onEntryStr.endsWith("|")) {
-                    onEntryStr = onEntryStr.substring(0, onEntryStr.length() - 1);
-                }
-                properties.put("onentryactions", onEntryStr);
-            }
-            if(onExitStr.length() > 0) {
-                if(onExitStr.endsWith("|")) {
-                    onExitStr = onExitStr.substring(0, onExitStr.length() - 1);
-                }
-                properties.put("onexitactions", onExitStr);
-            }
-        }
+        marshallEntryExitActions(subProcess, properties);
 
         // loop characteristics
         boolean haveValidLoopCharacteristics = false;
