@@ -16,6 +16,7 @@
 package org.jbpm.designer.web.stencilset;
 
 import java.util.Collection;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
