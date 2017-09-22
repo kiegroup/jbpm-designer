@@ -18,6 +18,7 @@ package org.jbpm.designer.filter;
 
 import java.io.IOException;
 import java.io.StringReader;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,7 +29,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class DesignerInjectionFilterTest {
 

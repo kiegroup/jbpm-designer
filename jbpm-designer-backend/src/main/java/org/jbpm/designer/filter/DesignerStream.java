@@ -17,6 +17,7 @@
 package org.jbpm.designer.filter;
 
 import java.io.StringWriter;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 

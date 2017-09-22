@@ -35,7 +35,6 @@ import org.jboss.errai.databinding.client.api.DataBinder;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentRow;
 import org.jbpm.designer.client.shared.Variable;
-import org.jbpm.designer.client.shared.util.StringUtils;
 import org.jbpm.designer.client.util.ComboBox;
 import org.jbpm.designer.client.util.DataIOEditorNameTextBox;
 import org.jbpm.designer.client.util.ListBoxValues;
@@ -47,8 +46,16 @@ import org.mockito.Captor;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyBoolean;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests the data get/set behaviour of AssignmentListItemWidget

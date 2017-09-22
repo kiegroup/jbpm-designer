@@ -17,6 +17,7 @@
 package org.jbpm.designer.client.util;
 
 import java.util.List;
+
 import javax.inject.Inject;
 
 import org.gwtbootstrap3.client.ui.TextBox;

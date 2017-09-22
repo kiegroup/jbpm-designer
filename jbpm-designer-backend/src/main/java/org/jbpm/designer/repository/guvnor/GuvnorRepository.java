@@ -17,6 +17,7 @@
 package org.jbpm.designer.repository.guvnor;
 
 import java.util.Collection;
+
 import javax.enterprise.inject.Alternative;
 
 import org.jbpm.designer.repository.Asset;
