@@ -41,6 +41,7 @@
   [
     "name" : "Rest",
     "parameters" : [
+        "ContentData" : new StringDataType(),
         "Url" : new StringDataType(),
         "Method" : new StringDataType(),
         "ConnectTimeout" : new StringDataType(),
