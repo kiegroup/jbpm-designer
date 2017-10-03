@@ -5111,6 +5111,29 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField, {
                                     uniqueNameVal = false;
                                 }
                             });
+                            // check the same against existing process vars in case of
+                            // subprocess variables
+                            var processJSON = ORYX.EDITOR.getSerializedJSON();
+                            var processVars = jsonPath(processJSON.evalJSON(), "$.properties.vardefs");
+
+                            if (processVars && uniqueNameVal) {
+                                processVars.forEach(function (item) {
+                                    if(item.length > 0) {
+                                        var valueParts = item.split(",");
+                                        for (var i = 0; i < valueParts.length; i++) {
+                                            var nextPart = valueParts[i];
+                                            if (nextPart.indexOf(":") > 0) {
+                                                var innerParts = nextPart.split(":");
+                                                var varName = innerParts[0].trim();
+                                                if (y == varName) {
+                                                    uniqueNameVal = false;
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+
                             return validInputNameVal && uniqueNameVal;
                         };
 
@@ -6776,12 +6799,6 @@ Ext.form.ComplexVisualDataAssignmentField = Ext.extend(Ext.form.TriggerField, {
         if (this.disabled) {
             return;
         }
-
-        Ext.each(this.dataSource.data.items, function (item) {
-            if ((item.data.gridProperties.propId == "oryx-assignments")) {
-                //alert("value: " + item.data['value']);
-            }
-        });
 
         var processJSON = ORYX.EDITOR.getSerializedJSON();
         var processVars = jsonPath(processJSON.evalJSON(), "$.properties.vardefs");
