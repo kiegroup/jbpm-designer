@@ -29,6 +29,7 @@ import org.kie.workbench.common.forms.editor.service.backend.FormModelHandlerMan
 import org.kie.workbench.common.forms.editor.service.shared.VFSFormFinderService;
 import org.kie.workbench.common.forms.editor.service.shared.model.impl.FormModelSynchronizationUtilImpl;
 import org.kie.workbench.common.forms.fields.test.TestFieldManager;
+import org.kie.workbench.common.forms.fields.test.TestMetaDataEntryManager;
 import org.kie.workbench.common.forms.jbpm.model.authoring.process.BusinessProcessFormModel;
 import org.kie.workbench.common.forms.jbpm.model.authoring.task.TaskFormModel;
 import org.kie.workbench.common.forms.jbpm.server.service.formGeneration.impl.authoring.BPMNVFSFormDefinitionGeneratorService;
@@ -117,7 +118,8 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
         definitions = loader.loadProcessFromJson("userTask.json");
 
         formSerializer = new FormDefinitionSerializerImpl(new FieldSerializer(),
-                                                          new FormModelSerializer());
+                                                          new FormModelSerializer(),
+                                                          new TestMetaDataEntryManager());
 
         when(formModelHandlerManager.getFormModelHandler(any())).then(invocationOnMock -> {
             if (BusinessProcessFormModel.class.equals(invocationOnMock.getArguments()[0])) {
@@ -140,7 +142,6 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
                                                                 formSerializer,
                                                                 new StaticFormLayoutTemplateGenerator(),
                                                                 new BPMNVFSFormDefinitionGeneratorService(fieldManager,
-                                                                                                          formLayoutTemplateGenerator,
                                                                                                           formModelHandlerManager,
                                                                                                           vfsFormFinderService,
                                                                                                           formSerializer,
