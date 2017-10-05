@@ -111,7 +111,8 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                             json: ORYX.EDITOR.getSerializedJSON(),
                             ppdata: ORYX.PREPROCESSING,
                             taskid: options.taskid,
-                            formtype: formType
+                            formtype: formType,
+                            sessionid: ORYX.SESSION_ID
                         }
                     });
                 } else {
@@ -170,7 +171,8 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                 uuid :  window.btoa(encodeURI(ORYX.UUID)),
                 json : ORYX.EDITOR.getSerializedJSON(),
                 ppdata: ORYX.PREPROCESSING,
-                formtype: formType
+                formtype: formType,
+                sessionid: ORYX.SESSION_ID
             }
         });
 
@@ -221,7 +223,8 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                     uuid :  window.btoa(encodeURI(ORYX.UUID)),
                     json : ORYX.EDITOR.getSerializedJSON(),
                     ppdata: ORYX.PREPROCESSING,
-                    taskid : options.taskid
+                    taskid : options.taskid,
+                    sessionid: ORYX.SESSION_ID
                 }
             });
         } else {
