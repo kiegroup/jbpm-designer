@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -16,6 +16,7 @@
 package org.jbpm.designer.repository.guvnor;
 
 import java.util.Collection;
+
 import javax.enterprise.inject.Alternative;
 
 import org.jbpm.designer.repository.Asset;

@@ -2,6 +2,7 @@ package org.jbpm.designer.server.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.enterprise.event.Event;
 
 import org.jbpm.designer.repository.RepositoryBaseTest;
@@ -15,10 +16,11 @@ import org.uberfire.mocks.EventSourceMock;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DesignerAssetServiceTest extends RepositoryBaseTest {
 

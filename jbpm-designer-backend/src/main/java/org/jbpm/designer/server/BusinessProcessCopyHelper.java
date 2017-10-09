@@ -17,6 +17,7 @@ package org.jbpm.designer.server;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;

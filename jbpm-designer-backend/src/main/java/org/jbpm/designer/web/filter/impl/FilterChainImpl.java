@@ -18,6 +18,7 @@ package org.jbpm.designer.web.filter.impl;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

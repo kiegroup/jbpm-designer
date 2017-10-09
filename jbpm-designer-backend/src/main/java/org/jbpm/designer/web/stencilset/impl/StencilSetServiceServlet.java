@@ -17,6 +17,7 @@ package org.jbpm.designer.web.stencilset.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
