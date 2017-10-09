@@ -103,6 +103,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
         String json = req.getParameter("json");
         String preprocessingData = req.getParameter("ppdata");
         String taskId = req.getParameter("taskid");
+        String sessionId = req.getParameter("sessionid");
 
         if (profile == null) {
             profile = _profileService.findProfile(req,
@@ -136,7 +137,8 @@ public class TaskFormsEditorServlet extends HttpServlet {
                                                        taskName,
                                                        processAsset.getAssetLocation(),
                                                        taskFormValue,
-                                                       repository).toString());
+                                                       repository,
+                                                       sessionId).toString());
                 } catch (Exception e) {
                     _logger.error("Exception during saving form: " + e.getMessage());
                     pw.write(new JSONObject().toString());
@@ -152,20 +154,35 @@ public class TaskFormsEditorServlet extends HttpServlet {
                                                  String taskName,
                                                  String packageName,
                                                  String formValue,
-                                                 Repository repository) throws Exception {
+                                                 Repository repository,
+                                                 String sessionId) throws Exception {
         if (formType.equals(FORMMODELER_FILE_EXTENSION) || formType.equals(FORMMODELER_PREVIEW_FILE_EXTENSION)) {
-            repository.deleteAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
 
-            AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
-            builder.location(packageName)
-                    .name(taskName + TASKFORM_NAME_EXTENSION)
-                    .type(formType)
-                    .content(formValue.getBytes("UTF-8"));
+            if (repository.assetExists(packageName.replaceAll("\\s", "%20") + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType)) {
+                Asset currentAsset = repository.loadAssetFromPath(packageName.replaceAll("\\s", "%20") + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
+                AssetBuilder formBuilder = AssetBuilderFactory.getAssetBuilder(currentAsset);
+                formBuilder.content(formValue);
+                String updatedFormId = repository.updateAsset(formBuilder.getAsset(),
+                                                              "",
+                                                              sessionId);
 
-            repository.createAsset(builder.getAsset());
+                if (updatedFormId == null) {
+                    _logger.error("Unable to update form: " + packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
+                }
+            } else {
+                AssetBuilder modelerBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+                modelerBuilder.name(taskName + TASKFORM_NAME_EXTENSION)
+                        .location(packageName.replaceAll("\\s", "%20"))
+                        .type(formType)
+                        .content(formValue.getBytes("UTF-8"));
+
+                String createdFormId = repository.createAsset(modelerBuilder.getAsset());
+                if (createdFormId == null) {
+                    _logger.error("Unable to create form: " + packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
+                }
+            }
 
             Asset newFormAsset = repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
-
             JSONObject retObj = new JSONObject();
             try {
                 retObj.put("formid",
