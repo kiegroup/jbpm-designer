@@ -55,7 +55,89 @@ public class TaskFormsEditorServletTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testSaveFormAsset() throws Exception {
+    public void testSaveFrlFormAsset() throws Exception {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository) repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("bpmn2 content")
+                .type("bpmn2")
+                .name("testprocess")
+                .location("/defaultPackage");
+        String uniqueId = repository.createAsset(builder.getAsset());
+        // setup parameters
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("uuid",
+                   uniqueId);
+        params.put("action",
+                   "save");
+        params.put("profile",
+                   "jbpm");
+        params.put("taskname",
+                   Base64.encodeBase64String(UriUtils.encode("evaluate").getBytes()));
+        params.put("tfvalue",
+                   "this is simple task content");
+        params.put("formtype",
+                   "frm");
+
+        TaskFormsEditorServlet taskFormsEditorServlet = new TaskFormsEditorServlet();
+        taskFormsEditorServlet.setProfile(profile);
+
+        taskFormsEditorServlet.init(new TestServletConfig(new TestServletContext(repository)));
+
+        taskFormsEditorServlet.doPost(new TestHttpServletRequest(params),
+                                      new TestHttpServletResponse());
+
+        Collection<Asset> forms = repository.listAssets("/defaultPackage",
+                                                        new FilterByExtension("frm"));
+        assertNotNull(forms);
+        assertEquals(1,
+                     forms.size());
+    }
+
+    @Test
+    public void testSaveFormFormAsset() throws Exception {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository) repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("bpmn2 content")
+                .type("bpmn2")
+                .name("testprocess")
+                .location("/defaultPackage");
+        String uniqueId = repository.createAsset(builder.getAsset());
+        // setup parameters
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("uuid",
+                   uniqueId);
+        params.put("action",
+                   "save");
+        params.put("profile",
+                   "jbpm");
+        params.put("taskname",
+                   Base64.encodeBase64String(UriUtils.encode("evaluate").getBytes()));
+        params.put("tfvalue",
+                   "this is simple task content");
+        params.put("formtype",
+                   "form");
+
+        TaskFormsEditorServlet taskFormsEditorServlet = new TaskFormsEditorServlet();
+        taskFormsEditorServlet.setProfile(profile);
+
+        taskFormsEditorServlet.init(new TestServletConfig(new TestServletContext(repository)));
+
+        taskFormsEditorServlet.doPost(new TestHttpServletRequest(params),
+                                      new TestHttpServletResponse());
+
+        Collection<Asset> forms = repository.listAssets("/defaultPackage",
+                                                        new FilterByExtension("form"));
+        assertNotNull(forms);
+        assertEquals(1,
+                     forms.size());
+    }
+
+    @Test
+    public void testSaveFtlFormAsset() throws Exception {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
@@ -97,7 +179,101 @@ public class TaskFormsEditorServletTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testLoadFormAsset() throws Exception {
+    public void testLoadFrmFormAsset() throws Exception {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository) repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("bpmn2 content")
+                .type("bpmn2")
+                .name("testprocess")
+                .location("/defaultPackage");
+        String uniqueId = repository.createAsset(builder.getAsset());
+
+        AssetBuilder builderForm = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builderForm.content("this is simple task content")
+                .type("frm")
+                .name("evaluate-taskform")
+                .location("/defaultPackage");
+        String uniqueIdForm = repository.createAsset(builderForm.getAsset());
+
+        // setup parameters
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("uuid",
+                   uniqueId);
+        params.put("action",
+                   "load");
+        params.put("profile",
+                   "jbpm");
+        params.put("taskname",
+                   Base64.encodeBase64String(UriUtils.encode("evaluate").getBytes()));
+        params.put("tfvalue",
+                   "this is simple task content");
+        params.put("formtype",
+                   "frm");
+
+        TaskFormsEditorServlet taskFormsEditorServlet = new TaskFormsEditorServlet();
+        taskFormsEditorServlet.setProfile(profile);
+
+        taskFormsEditorServlet.init(new TestServletConfig(new TestServletContext(repository)));
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        taskFormsEditorServlet.doPost(new TestHttpServletRequest(params),
+                                      response);
+
+        String formData = new String(response.getContent());
+        logger.debug(formData);
+        assertNotNull(formData);
+    }
+
+    @Test
+    public void testLoadFormFormAsset() throws Exception {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository) repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("bpmn2 content")
+                .type("bpmn2")
+                .name("testprocess")
+                .location("/defaultPackage");
+        String uniqueId = repository.createAsset(builder.getAsset());
+
+        AssetBuilder builderForm = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builderForm.content("this is simple task content")
+                .type("form")
+                .name("evaluate-taskform")
+                .location("/defaultPackage");
+        String uniqueIdForm = repository.createAsset(builderForm.getAsset());
+
+        // setup parameters
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("uuid",
+                   uniqueId);
+        params.put("action",
+                   "load");
+        params.put("profile",
+                   "jbpm");
+        params.put("taskname",
+                   Base64.encodeBase64String(UriUtils.encode("evaluate").getBytes()));
+        params.put("tfvalue",
+                   "this is simple task content");
+        params.put("formtype",
+                   "form");
+
+        TaskFormsEditorServlet taskFormsEditorServlet = new TaskFormsEditorServlet();
+        taskFormsEditorServlet.setProfile(profile);
+
+        taskFormsEditorServlet.init(new TestServletConfig(new TestServletContext(repository)));
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        taskFormsEditorServlet.doPost(new TestHttpServletRequest(params),
+                                      response);
+
+        String formData = new String(response.getContent());
+        logger.debug(formData);
+        assertNotNull(formData);
+    }
+
+    @Test
+    public void testLoadFtlFormAsset() throws Exception {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
@@ -147,7 +323,7 @@ public class TaskFormsEditorServletTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testLoadForm_i18nName() throws Exception {
+    public void testSaveForm_i18nName() throws Exception {
 
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
@@ -165,7 +341,7 @@ public class TaskFormsEditorServletTest extends RepositoryBaseTest {
         params.put("uuid",
                    uniqueId);
         params.put("action",
-                   "load");
+                   "save");
         params.put("profile",
                    "jbpm");
         params.put("taskname",
@@ -173,7 +349,7 @@ public class TaskFormsEditorServletTest extends RepositoryBaseTest {
         params.put("tfvalue",
                    "this is simple task content");
         params.put("formtype",
-                   "ftl");
+                   "form");
 
         TaskFormsEditorServlet taskFormsEditorServlet = new TaskFormsEditorServlet();
         taskFormsEditorServlet.setProfile(profile);
@@ -184,10 +360,10 @@ public class TaskFormsEditorServletTest extends RepositoryBaseTest {
                                       response);
 
         Collection<Asset> forms = repository.listAssets("/defaultPackage",
-                                                        new FilterByExtension("ftl"));
+                                                        new FilterByExtension("form"));
         assertNotNull(forms);
         // ftl forms are retired. Should not get generated
-        assertEquals(0,
+        assertEquals(1,
                      forms.size());
     }
 
@@ -265,6 +441,118 @@ public class TaskFormsEditorServletTest extends RepositoryBaseTest {
 
         Collection<Asset> frmForms = repository.listAssets("/defaultPackage",
                                                            new FilterByExtension("frm"));
+        assertNotNull(frmForms);
+        assertEquals(1,
+                     frmForms.size());
+    }
+
+    @Test
+    public void testSaveExistingTaskForm() throws Exception {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository) repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        AssetBuilder processBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        processBuilder.content("bpmn2 content")
+                .type("bpmn2")
+                .name("testprocess")
+                .location("/defaultPackage");
+        String processUniqueId = repository.createAsset(processBuilder.getAsset());
+
+        AssetBuilder formBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+        formBuilder.content("form content".getBytes())
+                .type("form")
+                .name("mytask-taskform")
+                .location("/defaultPackage");
+        repository.createAsset(formBuilder.getAsset());
+
+        AssetBuilder frmBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+        frmBuilder.content("form content".getBytes())
+                .type("frm")
+                .name("mytask-taskform")
+                .location("/defaultPackage");
+        repository.createAsset(frmBuilder.getAsset());
+
+        Collection<Asset> ftlForms = repository.listAssets("/defaultPackage",
+                                                           new FilterByExtension("ftl"));
+        assertNotNull(ftlForms);
+        // ftl forms are retired. Should not get generated
+        assertEquals(0,
+                     ftlForms.size());
+
+        Collection<Asset> formForms = repository.listAssets("/defaultPackage",
+                                                            new FilterByExtension("form"));
+        assertNotNull(formForms);
+        assertEquals(1,
+                     formForms.size());
+
+        Collection<Asset> frmForms = repository.listAssets("/defaultPackage",
+                                                           new FilterByExtension("frm"));
+        assertNotNull(frmForms);
+        assertEquals(1,
+                     frmForms.size());
+
+        // setup parameters
+        String taskName = "mytask";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("uuid",
+                   processUniqueId);
+        params.put("action",
+                   "save");
+        params.put("profile",
+                   "jbpm");
+        params.put("taskname",
+                   Base64.encodeBase64String(UriUtils.encode(taskName).getBytes()));
+        params.put("tfvalue",
+                   "this is simple task content");
+        params.put("formtype",
+                   "form");
+        params.put("json",
+                   "{\"resourceId\":\"Definition\",\"properties\":{\"namespaces\":\"\",\"name\":\"\",\"expressionlanguage\":\"http://www.mvel.org/2.0\",\"executable\":\"true\",\"package\":\"\",\"vardefs\":\"\",\"customdescription\":\"\",\"customcaseidprefix\":\"\",\"customcaseroles\":\"\",\"adhocprocess\":\"false\",\"imports\":\"\",\"globals\":\"\",\"id\":\"evaluation.abc\",\"version\":\"1.0\",\"timeunit\":\"min\",\"currency\":\"\",\"targetnamespace\":\"http://www.omg.org/bpmn20\",\"typelanguage\":\"http://www.java.com/javaTypes\",\"processn\":\"abc\",\"documentation\":\"\"},\"stencil\":{\"id\":\"BPMNDiagram\"},\"childShapes\":[{\"resourceId\":\"_17704A2A-ABF7-4F52-A5C5-0A6C638B73B3\",\"properties\":{\"name\":\"myTask\",\"documentation\":\"\",\"isselectable\":\"true\",\"invisid\":\"\",\"isforcompensation\":\"\",\"assignments\":\"\",\"assignmentsview\":\"0 data inputs, 0 data outputs\",\"tasktype\":\"User\",\"messageref\":\"\",\"script\":\"\",\"script_language\":\"java\",\"bgcolor\":\"#fafad2\",\"bordercolor\":\"#000000\",\"fontcolor\":\"#000000\",\"fontsize\":\"\",\"datainputset\":\"\",\"dataoutputset\":\"\",\"origbgcolor\":\"#fafad2\",\"nomorph\":\"true\",\"origbordercolor\":\"#000000\",\"ruleflowgroup\":\"\",\"rulelanguage\":\"DRL\",\"onentryactions\":\"\",\"onexitactions\":\"\",\"isasync\":\"false\",\"customautostart\":\"false\",\"taskname\":\"myTask\",\"serviceoperation\":\"\",\"serviceinterface\":\"\",\"serviceimplementation\":\"Java\",\"actors\":\"\",\"groupid\":\"\",\"subject\":\"\",\"description\":\"\",\"content\":\"\",\"reassignment\":\"\",\"notifications\":\"\",\"locale\":\"\",\"createdby\":\"\",\"skippable\":\"true\",\"priority\":\"\",\"multipleinstance\":\"false\",\"multipleinstancecollectioninput\":\"\",\"multipleinstancecollectionoutput\":\"\",\"multipleinstancedatainput\":\"\",\"multipleinstancedataoutput\":\"\",\"multipleinstancecompletioncondition\":\"\",\"min\":\"5\",\"max\":\"10\",\"standarddeviation\":\"1\",\"mean\":\"0\",\"distributiontype\":\"uniform\",\"quantity\":\"1\",\"workinghours\":\"8\",\"unitcost\":\"0\"},\"stencil\":{\"id\":\"Task\"},\"childShapes\":[],\"outgoing\":[],\"bounds\":{\"lowerRight\":{\"x\":178,\"y\":210},\"upperLeft\":{\"x\":78,\"y\":130}},\"dockers\":[]}],\"bounds\":{\"lowerRight\":{\"x\":3000,\"y\":2000},\"upperLeft\":{\"x\":0,\"y\":0}},\"stencilset\":{\"url\":\"/org.kie.workbench.KIEWebapp/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json\",\"namespace\":\"http://b3mn.org/stencilset/bpmn2.0#\"},\"ssextensions\":[]}");
+        params.put("ppdata",
+                   "");
+
+        TaskFormsEditorServlet taskFormsEditorServlet = new TaskFormsEditorServlet();
+        taskFormsEditorServlet.setProfile(profile);
+
+        taskFormsEditorServlet.init(new TestServletConfig(new TestServletContext(repository)));
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        taskFormsEditorServlet.doPost(new TestHttpServletRequest(params),
+                                      response);
+
+        ftlForms = repository.listAssets("/defaultPackage",
+                                         new FilterByExtension("ftl"));
+        assertNotNull(ftlForms);
+        // ftl forms are retired. Should not get generated
+        assertEquals(0,
+                     ftlForms.size());
+
+        formForms = repository.listAssets("/defaultPackage",
+                                          new FilterByExtension("form"));
+        assertNotNull(formForms);
+        assertEquals(1,
+                     formForms.size());
+
+        params.remove("formtype");
+        params.put("formtype",
+                   "frm");
+
+        taskFormsEditorServlet = new TaskFormsEditorServlet();
+        taskFormsEditorServlet.setProfile(profile);
+
+        taskFormsEditorServlet.init(new TestServletConfig(new TestServletContext(repository)));
+        response = new TestHttpServletResponse();
+        taskFormsEditorServlet.doPost(new TestHttpServletRequest(params),
+                                      response);
+
+        ftlForms = repository.listAssets("/defaultPackage",
+                                         new FilterByExtension("ftl"));
+        assertNotNull(ftlForms);
+        // ftl forms are retired. Should not get generated
+        assertEquals(0,
+                     ftlForms.size());
+
+        frmForms = repository.listAssets("/defaultPackage",
+                                         new FilterByExtension("frm"));
         assertNotNull(frmForms);
         assertEquals(1,
                      frmForms.size());

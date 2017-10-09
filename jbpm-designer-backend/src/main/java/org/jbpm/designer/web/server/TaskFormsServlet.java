@@ -93,6 +93,7 @@ public class TaskFormsServlet extends HttpServlet {
         String preprocessingData = req.getParameter("ppdata");
         String taskId = req.getParameter("taskid");
         String formType = req.getParameter("formtype");
+        String sessionId = req.getParameter("sessionid");
 
         if (profile == null) {
             profile = _profileService.findProfile(req,
@@ -129,7 +130,8 @@ public class TaskFormsServlet extends HttpServlet {
             resp.setContentType("application/json");
             resp.getWriter().write(storeInRepository(templateManager,
                                                      processAsset.getAssetLocation(),
-                                                     repository).toString());
+                                                     repository,
+                                                     sessionId).toString());
         } catch (Exception e) {
             _logger.error(e.getMessage());
             //displayErrorResponse(resp, e.getMessage());
@@ -140,13 +142,15 @@ public class TaskFormsServlet extends HttpServlet {
 
     public JSONArray storeInRepository(TaskFormTemplateManager templateManager,
                                        String location,
-                                       Repository repository) throws Exception {
+                                       Repository repository,
+                                       String sessionId) throws Exception {
         JSONArray retArray = new JSONArray();
         List<TaskFormInfo> taskForms = templateManager.getTaskFormInformationList();
         for (TaskFormInfo taskForm : taskForms) {
             retArray.put(storeTaskForm(taskForm,
                                        location,
-                                       repository));
+                                       repository,
+                                       sessionId));
         }
 
         return retArray;
@@ -154,7 +158,8 @@ public class TaskFormsServlet extends HttpServlet {
 
     public JSONObject storeTaskForm(TaskFormInfo taskForm,
                                     String location,
-                                    Repository repository) throws Exception {
+                                    Repository repository,
+                                    String sessionId) throws Exception {
         try {
             JSONObject retObj = new JSONObject();
 
@@ -165,17 +170,32 @@ public class TaskFormsServlet extends HttpServlet {
                 public void accept(String extension,
                                    String content) {
                     try {
-                        repository.deleteAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId() + "." + extension);
-                        AssetBuilder modelerBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
-                        modelerBuilder.name(taskForm.getId())
-                                .location(location)
-                                .type(extension)
-                                .content(content.getBytes("UTF-8"));
+                        // update existing or create new
+                        if (repository.assetExists(location.replaceAll("\\s", "%20") + "/" + taskForm.getId() + "." + extension)) {
+                            Asset currentAsset = repository.loadAssetFromPath(location.replaceAll("\\s", "%20") + "/" + taskForm.getId() + "." + extension);
+                            AssetBuilder formBuilder = AssetBuilderFactory.getAssetBuilder(currentAsset);
+                            formBuilder.content(content);
+                            String updatedFormId = repository.updateAsset(formBuilder.getAsset(),
+                                                                          "",
+                                                                          sessionId);
 
-                        repository.createAsset(modelerBuilder.getAsset());
+                            if (updatedFormId == null) {
+                                _logger.error("Unable to update form: " + taskForm.getPkgName() + "/" + taskForm.getId() + "." + extension);
+                            }
+                        } else {
+                            AssetBuilder modelerBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+                            modelerBuilder.name(taskForm.getId())
+                                    .location(location.replaceAll("\\s", "%20"))
+                                    .type(extension)
+                                    .content(content.getBytes("UTF-8"));
+
+                            String createdFormId = repository.createAsset(modelerBuilder.getAsset());
+                            if (createdFormId == null) {
+                                _logger.error("Unable to create form: " + taskForm.getPkgName() + "/" + taskForm.getId() + "." + extension);
+                            }
+                        }
 
                         Asset newModelerFormAsset = repository.loadAssetFromPath(taskForm.getPkgName() + "/" + taskForm.getId() + "." + extension);
-
                         String modelerUniqueId = newModelerFormAsset.getUniqueId();
                         if (Base64.isBase64(modelerUniqueId)) {
                             byte[] decoded = Base64.decodeBase64(modelerUniqueId);
