@@ -5289,8 +5289,17 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField, {
                             clicksToEdit: 1
                         });
 
+                        var gridPanel = new Ext.Panel({
+                            layout: 'fit',
+                            viewConfig : {
+                                forceFit:true
+                            },
+                            border: false,
+                            items: [grid]
+                        });
+
                         var dialog = new Ext.Window({
-                            layout: 'anchor',
+                            layout: 'fit',
                             autoCreate: true,
                             title: this.windowTitle,
                             height: dialogSize.height,
@@ -5308,7 +5317,7 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField, {
                                     dialog.hide()
                                 }.bind(this)
                             }],
-                            items: [grid],
+                            items: [gridPanel],
                             listeners: {
                                 hide: function () {
                                     this.fireEvent('dialogClosed', this.value);
@@ -6457,7 +6466,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField, {
                         var ruleFlowGroupsPanel = new Ext.Panel({
                             id: 'ruleFlowGroupsPanel',
                             title: '<center><p style="font-size:11px"><i>Select RuleFlow Group Name and click on Save</i></p></center>',
-                            layout: 'column',
+                            layout: 'fit',
                             items: [
                                 grid
                             ],
@@ -6470,7 +6479,7 @@ Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField, {
                         });
 
                         var dialog = new Ext.Window({
-                            layout: 'anchor',
+                            layout: 'fit',
                             autoCreate: true,
                             title: 'Editor for RuleFlow Groups',
                             height: dialogSize.height,
