@@ -79,7 +79,6 @@ import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
-import org.jbpm.migration.JbpmMigration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,7 +95,6 @@ public class TransformerServlet extends HttpServlet {
     private static final String TO_PDF = "pdf";
     private static final String TO_PNG = "png";
     private static final String TO_SVG = "svg";
-    private static final String JPDL_TO_BPMN2 = "jpdl2bpmn2";
     private static final String BPMN2_TO_JSON = "bpmn2json";
     private static final String JSON_TO_BPMN2 = "json2bpmn2";
     private static final String HTML_TO_PDF = "html2pdf";
@@ -281,37 +279,8 @@ public class TransformerServlet extends HttpServlet {
             }
         } else if (transformto != null && transformto.equals(TO_SVG)) {
             storeInRepository(uuid, formattedSvg, transformto, processid, repository);
-        } else if (transformto != null && transformto.equals(JPDL_TO_BPMN2)) {
-            try {
-                String bpmn2 = JbpmMigration.transform(jpdl);
-                Definitions def = ((JbpmProfileImpl) profile).getDefinitions(bpmn2);
-                // add bpmndi info to Definitions with help of gpd
-                addBpmnDiInfo(def, gpd);
-                // hack for now
-                revisitSequenceFlows(def, bpmn2);
-                // another hack if id == name
-                revisitNodeNames(def);
 
-                // get the xml from Definitions
-                ResourceSet rSet = new ResourceSetImpl();
-                rSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("bpmn2", new JBPMBpmn2ResourceFactoryImpl());
-                JBPMBpmn2ResourceImpl bpmn2resource = (JBPMBpmn2ResourceImpl) rSet.createResource(URI.createURI("virtual.bpmn2"));
-                rSet.getResources().add(bpmn2resource);
-                bpmn2resource.getContents().add(def);
-                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                bpmn2resource.save(outputStream, new HashMap<Object, Object>());
-                String fullXmlModel =  outputStream.toString();
-                // convert to json and write response
-                String json = profile.createUnmarshaller().parseModel(fullXmlModel, profile, pp);
-                resp.setCharacterEncoding("UTF-8");
-                resp.setContentType("application/json");
-                resp.getWriter().print(json);
-            } catch(Exception e) {
-                _logger.error(e.getMessage());
-                resp.setContentType("application/json");
-                resp.getWriter().print("{}");
-            }
-        }  else if (transformto != null && transformto.equals(BPMN2_TO_JSON)) {
+        } else if (transformto != null && transformto.equals(BPMN2_TO_JSON)) {
             try {
                 if(convertServiceTasks != null && convertServiceTasks.equals("true")) {
                     bpmn2in = bpmn2in.replaceAll("drools:taskName=\".*?\"", "drools:taskName=\"ReadOnlyService\"");
