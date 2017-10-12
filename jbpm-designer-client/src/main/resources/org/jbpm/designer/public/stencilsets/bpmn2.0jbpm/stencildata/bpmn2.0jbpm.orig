@@ -1,3 +1,4 @@
+
 {
 	"title":"Full",
 	"namespace":"http://b3mn.org/stencilset/bpmn2.0#",
@@ -759,7 +760,7 @@
 						  "description_ja":"",
 						  "readonly":false,
 						  "optional":true,
-						  "ifproptrue":"adhocprocess",
+						  "ifproptrue":"adhocprocess"
 				},
 				{
 						  "id":"customcaseroles",
@@ -770,7 +771,7 @@
 						  "description_ja":"",
 						  "readonly":false,
 						  "optional":true,
-						  "ifproptrue":"adhocprocess",
+						  "ifproptrue":"adhocprocess"
                 },
 				{
 					"id":"adhocprocess",
@@ -3853,7 +3854,6 @@
                     $else$
                         "value":"false",
                     $endif$
-					"value":"false",
 					"description":"Specifies whether node should be auto started - applies to adhoc tasks only",
 					"description_ja":"",
 					"readonly":false,
@@ -6147,7 +6147,6 @@
 				{
 					"id":"gatewaytype",
 					"type":"String",
-					"title":"Gateway type",
 					"title":"Gateway-Type",
 					"value":"XOR",
 					"description":"",
@@ -6565,8 +6564,7 @@
 					"fill":true,
 					"visible":false,
 					"stroke":false,
-					"hidden":true,
-                                        "visible":false
+					"hidden":true
 				},
 				{
 					"id":"bgcolor",
