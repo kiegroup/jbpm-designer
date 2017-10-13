@@ -18,21 +18,29 @@ package org.jbpm.designer.bpmn2.resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.eclipse.bpmn2.Bpmn2Package;
+import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.util.Bpmn2ResourceImpl;
+import org.eclipse.bpmn2.util.ImportHelper;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLLoad;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.XMLSave;
 import org.eclipse.emf.ecore.xmi.impl.XMLLoadImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JBPMBpmn2ResourceImpl extends Bpmn2ResourceImpl {
+
+    private static final Logger logger = LoggerFactory.getLogger(JBPMBpmn2ResourceImpl.class);
 
     public HashMap xmlNameToFeatureMap = new HashMap();
 
@@ -58,6 +66,41 @@ public class JBPMBpmn2ResourceImpl extends Bpmn2ResourceImpl {
                                          "UTF-8");
         this.getDefaultSaveOptions().put(XMLResource.OPTION_PROCESS_DANGLING_HREF,
                                          XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
+    }
+
+    @Override
+    protected void prepareSave() {
+        EObject cur;
+        Definitions thisDefinitions = ImportHelper.getDefinitions(this);
+        for (Iterator<EObject> iter = getAllContents(); iter.hasNext(); ) {
+            cur = iter.next();
+            this.setIdIfNotSet(cur);
+            for (EObject referenced : cur.eCrossReferences()) {
+                this.setIdIfNotSet(referenced);
+                if (thisDefinitions != null) {
+                    Resource refResource = referenced.eResource();
+                    if (refResource != null && refResource != this) {
+                        createImportIfNecessary(thisDefinitions,
+                                                refResource);
+                    }
+                }
+            }
+        }
+    }
+
+    protected static void setIdIfNotSet(EObject obj) {
+        try {
+            if (obj.eClass() != null) {
+                EStructuralFeature idAttr = obj.eClass().getEIDAttribute();
+                if (idAttr != null && !obj.eIsSet(idAttr)) {
+                    obj.eSet(idAttr,
+                             EcoreUtil.generateUUID());
+                }
+            }
+        } catch (Throwable t) {
+            logger.error("Error setting id: " + t.getMessage());
+            t.printStackTrace();
+        }
     }
 
     @Override
