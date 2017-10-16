@@ -31,48 +31,19 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
     },
 
     chooseFormEditor: function(options, action) {
-        var editorAction = action;
-
-        if(ORYX.FORMSTYPE && (ORYX.FORMSTYPE == "form" || ORYX.FORMSTYPE == "frm")) {
-            if(action == "load") {
-                this.showTaskFormEditor(ORYX.FORMSTYPE, options);
-            } else if(action == "store") {
-                this.generateTaskForm(ORYX.FORMSTYPE, options);
-            } else if(action == "storeall") {
-                this.generateAllTaskForms(ORYX.FORMSTYPE, options);
-            } else {
-                this.facade.raiseEvent({
-                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                    ntype		: 'error',
-                    msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor+'.',
-                    title       : ''
-                });
-            }
+        ORYX.FORMSTYPE = "frm";
+        if(action == "load") {
+            this.showTaskFormEditor(ORYX.FORMSTYPE, options);
+        } else if(action == "store") {
+            this.generateTaskForm(ORYX.FORMSTYPE, options);
+        } else if(action == "storeall") {
+            this.generateAllTaskForms(ORYX.FORMSTYPE, options);
         } else {
-            Ext.Msg.show({
-                title : ORYX.I18N.inlineTaskFormEditor.formEditor,
-                msg : ORYX.I18N.inlineTaskFormEditor.selectForm,
-                buttons : {yes : ORYX.I18N.inlineTaskFormEditor.graphicalModeler, no : ORYX.I18N.inlineTaskFormEditor.graphicalModelerPreview, cancel : ORYX.I18N.Dictionary.cancel},
-                icon : Ext.MessageBox.QUESTION,
-                fn : function(btn) {
-                    if(btn != 'cancel') {
-                        var formType = btn == 'yes' ? "form" : "frm";
-                        if (action == "load") {
-                            this.showTaskFormEditor(formType, options);
-                        } else if (action == "store") {
-                            this.generateTaskForm(formType, options);
-                        } else if (action == "storeall") {
-                            this.generateAllTaskForms(formType, options);
-                        } else {
-                            this.facade.raiseEvent({
-                                type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                ntype: 'error',
-                                msg: ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor + '.',
-                                title: ''
-                            });
-                        }
-                    }
-                }.bind(this)
+            this.facade.raiseEvent({
+                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                ntype		: 'error',
+                msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor+'.',
+                title       : ''
             });
         }
     },
