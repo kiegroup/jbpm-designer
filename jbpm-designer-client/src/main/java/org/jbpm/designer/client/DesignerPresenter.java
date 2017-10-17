@@ -142,14 +142,15 @@ public class DesignerPresenter
                     .addSave(versionRecordManager.newSaveMenuItem(new Command() {
                         @Override
                         public void execute() {
-                            onSave();
+                            saveAction();
                         }
                     }))
                     .addCopy(versionRecordManager.getCurrentPath(),
-                             fileNameValidator)
+                             assetUpdateValidator)
                     .addRename(versionRecordManager.getPathToLatest(),
-                               fileNameValidator)
-                    .addDelete(versionRecordManager.getPathToLatest());
+                               assetUpdateValidator)
+                    .addDelete(versionRecordManager.getPathToLatest(),
+                               assetUpdateValidator);
         }
 
         fileMenuBuilder

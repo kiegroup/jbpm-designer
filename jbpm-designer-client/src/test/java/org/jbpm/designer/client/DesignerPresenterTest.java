@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.workbench.common.widgets.client.menu.FileMenuBuilderImpl;
+import org.kie.workbench.common.widgets.metadata.client.validation.AssetUpdateValidator;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -35,7 +36,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.ext.editor.commons.client.history.VersionRecordManager;
 import org.uberfire.ext.editor.commons.client.menu.BasicFileMenuBuilder;
-import org.uberfire.ext.editor.commons.client.validation.DefaultFileNameValidator;
 import org.uberfire.workbench.model.menu.MenuItem;
 
 import static org.junit.Assert.*;
@@ -123,10 +123,11 @@ public class DesignerPresenterTest {
 
         verify(fileMenuBuilder).addSave(any(MenuItem.class));
         verify(fileMenuBuilder).addCopy(any(Path.class),
-                                        any(DefaultFileNameValidator.class));
+                                        any(AssetUpdateValidator.class));
         verify(fileMenuBuilder).addRename(any(Path.class),
-                                          any(DefaultFileNameValidator.class));
-        verify(fileMenuBuilder).addDelete(any(Path.class));
+                                          any(AssetUpdateValidator.class));
+        verify(fileMenuBuilder).addDelete(any(Path.class),
+                                          any(AssetUpdateValidator.class));
     }
 
     @Test
@@ -140,11 +141,12 @@ public class DesignerPresenterTest {
                never()).addSave(any(MenuItem.class));
         verify(fileMenuBuilder,
                never()).addCopy(any(Path.class),
-                                any(DefaultFileNameValidator.class));
+                                any(AssetUpdateValidator.class));
         verify(fileMenuBuilder,
                never()).addRename(any(Path.class),
-                                  any(DefaultFileNameValidator.class));
+                                  any(AssetUpdateValidator.class));
         verify(fileMenuBuilder,
-               never()).addDelete(any(Path.class));
+               never()).addDelete(any(Path.class),
+                                  any(AssetUpdateValidator.class));
     }
 }
