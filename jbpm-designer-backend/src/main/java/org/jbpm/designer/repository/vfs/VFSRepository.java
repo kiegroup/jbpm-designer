@@ -667,7 +667,7 @@ public class VFSRepository implements Repository {
         String resourcesDirPath = projectPath + separator + "src" + separator + "main" + separator + "resources";
         Path globalDirVFSPath = ioService.get(URI.create(globalDirPath));
 
-        ioService.startBatch(new FileSystem[]{ioService.getFileSystem(URI.create(globalDirPath))});
+        ioService.startBatch(ioService.getFileSystem(URI.create(globalDirPath)));
 
         if (!ioService.exists(globalDirVFSPath)) {
             ioService.createDirectory(globalDirVFSPath);
