@@ -58,8 +58,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private static final Logger _logger = LoggerFactory.getLogger(TaskFormsEditorServlet.class);
-    private static final String FORMMODELER_FILE_EXTENSION = "form";
-    private static final String FORMMODELER_PREVIEW_FILE_EXTENSION = "frm";
+    private static final String FORMMODELER_FILE_EXTENSION = "frm";
     private static final String TASKFORM_NAME_EXTENSION = "-taskform";
     protected static final String ACTION_LOAD = "load";
     protected static final String ACTION_SAVE = "save";
@@ -156,7 +155,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
                                                  String formValue,
                                                  Repository repository,
                                                  String sessionId) throws Exception {
-        if (formType.equals(FORMMODELER_FILE_EXTENSION) || formType.equals(FORMMODELER_PREVIEW_FILE_EXTENSION)) {
+        if (formType.equals(FORMMODELER_FILE_EXTENSION)) {
 
             if (repository.assetExists(packageName.replaceAll("\\s", "%20") + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType)) {
                 Asset currentAsset = repository.loadAssetFromPath(packageName.replaceAll("\\s", "%20") + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
@@ -208,7 +207,7 @@ public class TaskFormsEditorServlet extends HttpServlet {
                                              String taskId) {
         try {
             Asset<String> formAsset = repository.loadAssetFromPath(packageName + "/" + taskName + TASKFORM_NAME_EXTENSION + "." + formType);
-            if (formType.equals(FORMMODELER_FILE_EXTENSION) || formType.equals(FORMMODELER_PREVIEW_FILE_EXTENSION)) {
+            if (formType.equals(FORMMODELER_FILE_EXTENSION)) {
                 try {
                     return getAssetInfo(formAsset);
                 } catch (UnsupportedEncodingException e) {
@@ -217,10 +216,10 @@ public class TaskFormsEditorServlet extends HttpServlet {
             } else {
                 _logger.error("Cannot load existing form for invalid form type: " + formType);
             }
-        } catch (NoSuchFileException anfe) {
+        } catch (NoSuchFileException nsfe) {
             try {
                 String formValue = "";
-                if (formType.equals(FORMMODELER_FILE_EXTENSION) || formType.equals(FORMMODELER_PREVIEW_FILE_EXTENSION)) {
+                if (formType.equals(FORMMODELER_FILE_EXTENSION)) {
                     formBuilder = getFormBuilder(formType);
                     if (formBuilder != null) {
                         DroolsFactoryImpl.init();

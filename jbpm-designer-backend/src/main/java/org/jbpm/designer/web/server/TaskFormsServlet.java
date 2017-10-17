@@ -61,7 +61,6 @@ public class TaskFormsServlet extends HttpServlet {
             .getLogger(TaskFormsServlet.class);
     private static final String TASKFORMS_PATH = "taskforms";
     private static final String FORMMODELER_FILE_EXTENSION = "frm";
-    private static final String FORMMODELER_PREVIEW_FILE_EXTENSION = "form";
     public static final String DESIGNER_PATH = ConfigurationProvider.getInstance().getDesignerContext();
 
     private IDiagramProfile profile;
@@ -103,44 +102,51 @@ public class TaskFormsServlet extends HttpServlet {
         }
         Repository repository = profile.getRepository();
 
-        Asset<String> processAsset = null;
+        Asset<String> processAsset;
 
-        try {
-            processAsset = repository.loadAsset(uuid);
+        if(formType != null && formType.equals(FORMMODELER_FILE_EXTENSION)) {
+            try {
+                processAsset = repository.loadAsset(uuid);
 
-            DroolsFactoryImpl.init();
-            BpsimFactoryImpl.init();
+                DroolsFactoryImpl.init();
+                BpsimFactoryImpl.init();
 
-            Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
-            Definitions def = ((Definitions) unmarshaller.unmarshall(json,
-                                                                     preprocessingData).getContents().get(0));
+                Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
+                Definitions def = ((Definitions) unmarshaller.unmarshall(json,
+                                                                         preprocessingData).getContents().get(0));
 
-            Path myPath = vfsServices.get(uuid.replaceAll("\\s",
-                                                          "%20"));
+                Path myPath = vfsServices.get(uuid.replaceAll("\\s", "%20"));
 
-            TaskFormTemplateManager templateManager = new TaskFormTemplateManager(myPath,
-                                                                                  formBuilderManager,
-                                                                                  profile,
-                                                                                  processAsset,
-                                                                                  getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH),
-                                                                                  def,
-                                                                                  taskId,
-                                                                                  formType);
-            templateManager.processTemplates();
+                TaskFormTemplateManager templateManager = new TaskFormTemplateManager(myPath,
+                                                                                      formBuilderManager,
+                                                                                      profile,
+                                                                                      processAsset,
+                                                                                      getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH),
+                                                                                      def,
+                                                                                      taskId,
+                                                                                      formType);
+                templateManager.processTemplates();
 
-            //storeInRepository(templateManager, processAsset.getAssetLocation(), repository);
-            //displayResponse( templateManager, resp, profile );
-            resp.setContentType("application/json");
-            resp.getWriter().write(storeInRepository(templateManager,
-                                                     processAsset.getAssetLocation(),
-                                                     repository,
-                                                     sessionId).toString());
-        } catch (Exception e) {
-            _logger.error(e.getMessage());
-            //displayErrorResponse(resp, e.getMessage());
-            resp.setContentType("text/plain");
-            resp.getWriter().write("fail");
+                //storeInRepository(templateManager, processAsset.getAssetLocation(), repository);
+                //displayResponse( templateManager, resp, profile );
+                resp.setContentType("application/json");
+                resp.getWriter().write(storeInRepository(templateManager,
+                                                         processAsset.getAssetLocation(),
+                                                         repository,
+                                                         sessionId).toString());
+            } catch (Exception e) {
+                _logger.error(e.getMessage());
+                setFailResponse(resp);
+            }
+        } else {
+            setFailResponse(resp);
         }
+
+    }
+
+    public void setFailResponse(HttpServletResponse resp) throws IOException {
+        resp.setContentType("text/plain");
+        resp.getWriter().write("fail");
     }
 
     public JSONArray storeInRepository(TaskFormTemplateManager templateManager,
@@ -210,7 +216,7 @@ public class TaskFormsServlet extends HttpServlet {
                             }
                         }
 
-                        if (extension.equals(FORMMODELER_FILE_EXTENSION) || extension.equals(FORMMODELER_PREVIEW_FILE_EXTENSION)) {
+                        if (extension.equals(FORMMODELER_FILE_EXTENSION)) {
                             retObj.put("formuri",
                                        modelerUniqueId);
                         }
