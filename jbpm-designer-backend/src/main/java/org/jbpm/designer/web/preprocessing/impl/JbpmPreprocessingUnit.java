@@ -57,6 +57,7 @@ import org.guvnor.common.services.project.model.Project;
 import org.guvnor.common.services.project.service.POMService;
 import org.guvnor.common.services.project.service.ProjectService;
 import org.guvnor.common.services.shared.metadata.MetadataService;
+import org.guvnor.m2repo.backend.server.GuvnorM2Repository;
 import org.jbpm.designer.notification.DesignerWorkitemInstalledEvent;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
@@ -81,13 +82,18 @@ import org.jbpm.process.workitem.WorkItemRepository;
 import org.jbpm.util.WidMVELEvaluator;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.kie.workbench.common.services.backend.builder.core.Builder;
-import org.kie.workbench.common.services.backend.builder.core.LRUBuilderCache;
+import org.kie.workbench.common.services.backend.builder.af.KieAFBuilder;
+import org.kie.workbench.common.services.backend.compiler.impl.kie.KieCompilationResponse;
+import org.kie.workbench.common.services.backend.compiler.impl.share.BuilderCache;
+import org.kie.workbench.common.services.backend.compiler.impl.share.ClassLoaderCache;
+import org.kie.workbench.common.services.backend.compiler.impl.share.GitCache;
+import org.kie.workbench.common.services.backend.compiler.impl.utils.KieAFBuilderUtil;
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
+import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.io.IOService;
@@ -102,8 +108,6 @@ import org.uberfire.workbench.events.NotificationEvent;
 @Named("jbpmPreprocessingUnit")
 public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
-    private static final Logger _logger =
-            LoggerFactory.getLogger(JbpmPreprocessingUnit.class);
     public static final String STENCILSET_PATH = "stencilsets";
     public static final String WORKITEM_DEFINITION_EXT = "wid";
     public static final String THEME_NAME = "themes";
@@ -119,7 +123,14 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public static final String INCLUDE_DATA_OBJECT = "designerdataobjects";
     public static final Pattern UNICODE_WORDS_PATTERN = Pattern.compile("\\p{L}+",
                                                                         Pattern.UNICODE_CHARACTER_CLASS);
-
+    private static final Logger _logger =
+            LoggerFactory.getLogger(JbpmPreprocessingUnit.class);
+    @Inject
+    protected Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent;
+    @Inject
+    protected Event<NotificationEvent> notification;
+    @Inject
+    KieProjectService kieProjectService;
     private String designer_path;
     private String stencilPath;
     private String origStencilFilePath;
@@ -143,32 +154,124 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String globalDir;
     private VFSService vfsService;
     private boolean includeDataObjects;
-
-    @Inject
-    protected Event<DesignerWorkitemInstalledEvent> workitemInstalledEventEvent;
-
-    @Inject
-    protected Event<NotificationEvent> notification;
-
     @Inject
     private POMService pomService;
-
     @Inject
     private ProjectService<? extends Project> projectService;
-
     @Inject
     private MetadataService metadataService;
-
     @Inject
     private DefaultDesignerAssetService defaultDesignerAssetService;
+    @Inject
+    private BuilderCache builderCache;
 
     @Inject
-    KieProjectService kieProjectService;
+    private ClassLoaderCache classLoaderCache;
 
     @Inject
-    private LRUBuilderCache builderCache;
+    private GitCache gitCache;
+
+    @Inject
+    private GuvnorM2Repository guvnorM2Repository;
 
     public JbpmPreprocessingUnit() {
+    }
+
+    protected static String readFile(String pathname) throws IOException {
+        if (pathname == null) {
+            return null;
+        }
+
+        StringBuilder fileContents = new StringBuilder();
+        String lineSeparator = System.getProperty("line.separator");
+
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new File(pathname),
+                                  "UTF-8");
+            while (scanner.hasNextLine()) {
+                fileContents.append(scanner.nextLine() + lineSeparator);
+            }
+            return fileContents.toString();
+        } finally {
+            IOUtils.closeQuietly(scanner);
+        }
+    }
+
+    protected static byte[] getBytesFromFile(File file) throws IOException {
+        if (file == null || file.length() > Integer.MAX_VALUE) {
+            return null; // File is null or too large
+        }
+
+        long length = file.length();
+        byte[] bytes;
+        InputStream is = null;
+        try {
+            is = new FileInputStream(file);
+            bytes = new byte[(int) length];
+
+            int offset = 0;
+            int numRead = 0;
+            while (offset < bytes.length
+                    && (numRead = is.read(bytes,
+                                          offset,
+                                          bytes.length - offset)) >= 0) {
+                offset += numRead;
+            }
+
+            if (offset < bytes.length) {
+                throw new IOException("Could not completely read file " + file.getName());
+            }
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
+        return bytes;
+    }
+
+    public static String createAbsoluteIconPath(String assetPath,
+                                                String iconPath) {
+        if (assetPath == null || assetPath.length() < 1) {
+            return iconPath;
+        }
+        if (iconPath == null || iconPath.length() < 1) {
+            return assetPath;
+        }
+
+        // Handle cases where iconPath doesn't start with ".."
+        if (iconPath.startsWith("/")) {
+            return iconPath;
+        } else if (!iconPath.startsWith("..")) {
+            return assetPath + "/" + iconPath;
+        }
+
+        // Handle ".." once or more at start of iconPath
+        String separator = "/";
+        String[] assetFolders = assetPath.split(separator);
+        String[] iconFolders = iconPath.split(separator);
+
+        int toRemoveFromIconFolders = 0;
+        int toIncludeInAssetFolders = assetFolders.length;
+        for (int i = 0; i < iconFolders.length; i++) {
+            if ("..".equals(iconFolders[i])) {
+                toRemoveFromIconFolders++;
+                toIncludeInAssetFolders--;
+            } else {
+                break;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder(assetPath.length() + iconPath.length() + 1);
+        sb.append(separator);
+
+        for (int i = 1; i < toIncludeInAssetFolders; i++) {
+            sb.append(assetFolders[i]).append(separator);
+        }
+        for (int i = toRemoveFromIconFolders; i < iconFolders.length; i++) {
+            sb.append(iconFolders[i]).append(separator);
+        }
+        sb.setLength(sb.length() - 1);
+
+        return sb.toString();
     }
 
     public void init(ServletContext servletContext,
@@ -556,7 +659,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 String origWidName = ((String) workDefinitionMap.get("name")).replaceAll("\\s",
                                                                                          "");
                 Matcher widNameMatcher = UNICODE_WORDS_PATTERN.matcher(origWidName);
-                if(widNameMatcher.matches()) {
+                if (widNameMatcher.matches()) {
                     workDefinition.setName(widNameMatcher.group());
 
                     workDefinition.setDisplayName((String) workDefinitionMap.get("displayName"));
@@ -652,16 +755,21 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                             parameterValues.put(entry.getKey(),
                                                                 entry.getValue());
                                         } else if (paramValueObj instanceof EnumDataType) {
-                                            Builder builder = builderCache.getBuilder(kieProject);
+                                            org.uberfire.java.nio.file.Path nioPath = Paths.convert(kieProject.getRootPath());
+                                            //@TODO check if it works as expected
+                                            KieAFBuilder builder = KieAFBuilderUtil.getKieAFBuilder(kieProject.getRootPath().toURI(), nioPath, gitCache, builderCache, guvnorM2Repository, "system");
                                             EnumDataType enumdt = (EnumDataType) entry.getValue();
                                             if (enumdt != null) {
                                                 try {
-                                                    List<String> enumValuesList = Arrays.asList(enumdt.getValueNames(builder.getKieContainer().getClassLoader()));
-                                                    String enumValuesStr = enumValuesList.stream().filter(StringUtils::isNotBlank)
-                                                            .collect(Collectors.joining(","));
+                                                    KieCompilationResponse res = builder.build();
+                                                    if (res.isSuccessful() && res.getWorkingDir().isPresent()) {
+                                                        List<String> enumValuesList = Arrays.asList(enumdt.getValueNames(classLoaderCache.getTargetClassLoader(res.getWorkingDir().get()).get()));
+                                                        String enumValuesStr = enumValuesList.stream().filter(StringUtils::isNotBlank)
+                                                                .collect(Collectors.joining(","));
 
-                                                    parameterValues.put(entry.getKey(),
-                                                                        enumValuesStr);
+                                                        parameterValues.put(entry.getKey(),
+                                                                            enumValuesStr);
+                                                    }
                                                 } catch (Throwable t) {
                                                     _logger.error("Error retrieving enum: " + t.getMessage());
                                                 }
@@ -1038,27 +1146,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return repository.loadAssetFromPath(this.globalDir + "/" + PATTERNS_NAME + PATTERNS_EXT);
     }
 
-    protected static String readFile(String pathname) throws IOException {
-        if (pathname == null) {
-            return null;
-        }
-
-        StringBuilder fileContents = new StringBuilder();
-        String lineSeparator = System.getProperty("line.separator");
-
-        Scanner scanner = null;
-        try {
-            scanner = new Scanner(new File(pathname),
-                                  "UTF-8");
-            while (scanner.hasNextLine()) {
-                fileContents.append(scanner.nextLine() + lineSeparator);
-            }
-            return fileContents.toString();
-        } finally {
-            IOUtils.closeQuietly(scanner);
-        }
-    }
-
     private void deletefile(String file) {
         File f = new File(file);
         boolean success = f.delete();
@@ -1092,36 +1179,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
     }
 
-    protected static byte[] getBytesFromFile(File file) throws IOException {
-        if (file == null || file.length() > Integer.MAX_VALUE) {
-            return null; // File is null or too large
-        }
-
-        long length = file.length();
-        byte[] bytes;
-        InputStream is = null;
-        try {
-            is = new FileInputStream(file);
-            bytes = new byte[(int) length];
-
-            int offset = 0;
-            int numRead = 0;
-            while (offset < bytes.length
-                    && (numRead = is.read(bytes,
-                                          offset,
-                                          bytes.length - offset)) >= 0) {
-                offset += numRead;
-            }
-
-            if (offset < bytes.length) {
-                throw new IOException("Could not completely read file " + file.getName());
-            }
-        } finally {
-            IOUtils.closeQuietly(is);
-        }
-        return bytes;
-    }
-
     private String createAssetIfNotExisting(Repository repository,
                                             String location,
                                             String name,
@@ -1149,50 +1206,8 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         return null;
     }
 
-    public static String createAbsoluteIconPath(String assetPath,
-                                                String iconPath) {
-        if (assetPath == null || assetPath.length() < 1) {
-            return iconPath;
-        }
-        if (iconPath == null || iconPath.length() < 1) {
-            return assetPath;
-        }
-
-        // Handle cases where iconPath doesn't start with ".."
-        if (iconPath.startsWith("/")) {
-            return iconPath;
-        } else if (!iconPath.startsWith("..")) {
-            return assetPath + "/" + iconPath;
-        }
-
-        // Handle ".." once or more at start of iconPath
-        String separator = "/";
-        String[] assetFolders = assetPath.split(separator);
-        String[] iconFolders = iconPath.split(separator);
-
-        int toRemoveFromIconFolders = 0;
-        int toIncludeInAssetFolders = assetFolders.length;
-        for (int i = 0; i < iconFolders.length; i++) {
-            if ("..".equals(iconFolders[i])) {
-                toRemoveFromIconFolders++;
-                toIncludeInAssetFolders--;
-            } else {
-                break;
-            }
-        }
-
-        StringBuilder sb = new StringBuilder(assetPath.length() + iconPath.length() + 1);
-        sb.append(separator);
-
-        for (int i = 1; i < toIncludeInAssetFolders; i++) {
-            sb.append(assetFolders[i]).append(separator);
-        }
-        for (int i = toRemoveFromIconFolders; i < iconFolders.length; i++) {
-            sb.append(iconFolders[i]).append(separator);
-        }
-        sb.setLength(sb.length() - 1);
-
-        return sb.toString();
+    public void setGlobalDir(String globalDir) {
+        this.globalDir = globalDir;
     }
 
     private class ThemeInfo {
@@ -1240,6 +1255,14 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         private String name;
         private String description;
 
+        public PatternInfo(String id,
+                           String name,
+                           String description) {
+            this.id = id;
+            this.name = name;
+            this.description = description;
+        }
+
         public String getName() {
             return name;
         }
@@ -1254,14 +1277,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
         public void setId(String id) {
             this.id = id;
-        }
-
-        public PatternInfo(String id,
-                           String name,
-                           String description) {
-            this.id = id;
-            this.name = name;
-            this.description = description;
         }
 
         public String getDescription() {
@@ -1291,11 +1306,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
     }
 
-    public void setGlobalDir(String globalDir) {
-        this.globalDir = globalDir;
-    }
-
-    public void setBuilderCache(LRUBuilderCache builderCache) {
+    /*public void setBuilderCache(LRUBuilderCache builderCache) {
         this.builderCache = builderCache;
-    }
+    }*/
 }

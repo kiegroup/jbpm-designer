@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
-import org.guvnor.common.services.project.events.NewProjectEvent;
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestIDiagramProfile;
 import org.jbpm.designer.helper.TestServletContext;
@@ -45,9 +44,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kie.api.runtime.KieContainer;
-import org.kie.workbench.common.services.backend.builder.core.Builder;
-import org.kie.workbench.common.services.backend.builder.core.LRUBuilderCache;
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
@@ -59,7 +55,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -228,7 +223,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
-        preprocessingUnitVFS.setBuilderCache(getBuilderCache(mockProject));
         preprocessingUnitVFS.init(new TestServletContext(),
                                   "/",
                                   null);
@@ -350,7 +344,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
-        preprocessingUnitVFS.setBuilderCache(getBuilderCache(mockProject));
         preprocessingUnitVFS.init(new TestServletContext(),
                                   "/",
                                   null);
@@ -429,7 +422,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
-        preprocessingUnitVFS.setBuilderCache(getBuilderCache(mockProject));
         preprocessingUnitVFS.init(new TestServletContext(),
                                   "/",
                                   null);
@@ -494,7 +486,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
-        preprocessingUnitVFS.setBuilderCache(getBuilderCache(mockProject));
         preprocessingUnitVFS.init(new TestServletContext(),
                                   "/",
                                   null);
@@ -611,7 +602,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         String uniqueIconID = repository.createAsset(builder2.getAsset());
 
         JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit();
-        preprocessingUnitVFS.setBuilderCache(getBuilderCache(mockProject));
         preprocessingUnitVFS.init(new TestServletContext(),
                                   "/",
                                   null);
@@ -637,7 +627,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                               "ThisIsASampleWidName",
                               "ThisissomeothersampleName"));
 
-        for(Map.Entry<String, WorkDefinitionImpl> entry : workDefinitions.entrySet()) {
+        for (Map.Entry<String, WorkDefinitionImpl> entry : workDefinitions.entrySet()) {
             assertTrue(validWidNames.contains(entry.getKey()));
             assertTrue(validWidNames.contains(entry.getValue().getName()));
         }
@@ -659,7 +649,7 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         return UriUtils.encode(uniqueId);
     }
 
-    private LRUBuilderCache getBuilderCache(KieProject kieProject) {
+    /*private LRUBuilderCache getBuilderCache(KieProject kieProject) {
         NewProjectEvent event = mock(NewProjectEvent.class);
         when(event.getProject()).thenReturn(kieProject);
 
@@ -672,5 +662,5 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         when(builderCache.getBuilder(anyObject())).thenReturn(workbenchBuilder);
 
         return builderCache;
-    }
+    }*/
 }
