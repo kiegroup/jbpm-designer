@@ -335,8 +335,6 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
             assertEquals(wids.size(),
                          storedWids.size());
             for (String wid : wids) {
-                wid.replaceAll("\\s",
-                               "%20");
                 repository.assetExists(wid.replaceAll("\\s", "%20"));
             }
         }
@@ -347,8 +345,6 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
             assertEquals(pngs.size(),
                          storedPngs.size());
             for (String png : pngs) {
-                png.replaceAll("\\s",
-                               "%20");
                 repository.assetExists(png.replaceAll("\\s", "%20"));
             }
         }
@@ -359,8 +355,6 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
             assertEquals(gifs.size(),
                          storedGifs.size());
             for (String gif : gifs) {
-                gif.replaceAll("\\s",
-                               "%20");
                 repository.assetExists(gif.replaceAll("\\s", "%20"));
             }
         }
