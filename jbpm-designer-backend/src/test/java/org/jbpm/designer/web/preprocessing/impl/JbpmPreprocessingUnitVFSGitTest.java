@@ -154,12 +154,13 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         // validate results
         Collection<Asset> globalAssets = repository.listAssets("/global");
         assertNotNull(globalAssets);
-        assertEquals(9,
+        assertEquals(10,
                      globalAssets.size());
         repository.assetExists("/global/customeditors.json");
         repository.assetExists("/global/themes.json");
         repository.assetExists("/global/defaultemailicon.gif");
         repository.assetExists("/global/defaultmilestoneicon.png");
+        repository.assetExists("/global/defaultsubcaseicon.png");
         repository.assetExists("/global/defaultlogicon.gif");
         repository.assetExists("/global/defaultservicenodeicon.png");
         repository.assetExists("/global/defaultbusinessrulesicon.png");

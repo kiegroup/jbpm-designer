@@ -129,6 +129,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     private String origWorkitemSVGFile;
     private String defaultEmailIcon;
     private String defaultMilestoneIcon;
+    private String defaultSubCaseIcon;
     private String defaultLogIcon;
     private String defaultServiceNodeIcon;
     private String defaultBusinessRulesIcon;
@@ -191,6 +192,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         origWorkitemSVGFile = workitemSVGFilePath + "workitem.orig";
         defaultEmailIcon = servletContext.getRealPath(designer_path + "/defaults/defaultemailicon.gif");
         defaultMilestoneIcon = servletContext.getRealPath(designer_path + "/defaults/defaultmilestoneicon.png");
+        defaultSubCaseIcon = servletContext.getRealPath(designer_path + "/defaults/defaultsubcaseicon.png");
         defaultLogIcon = servletContext.getRealPath(designer_path + "/defaults/defaultlogicon.gif");
         defaultServiceNodeIcon = servletContext.getRealPath(designer_path + "/defaults/defaultservicenodeicon.png");
         defaultBusinessRulesIcon = servletContext.getRealPath(designer_path + "/defaults/defaultbusinessrulesicon.png");
@@ -896,6 +898,12 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                      "defaultmilestoneicon",
                                      "png",
                                      getBytesFromFile(new File(defaultMilestoneIcon)));
+
+            createAssetIfNotExisting(repository,
+                                     location,
+                                     "defaultsubcaseicon",
+                                     "png",
+                                     getBytesFromFile(new File(defaultSubCaseIcon)));
 
             createAssetIfNotExisting(repository,
                                      location,
