@@ -142,11 +142,12 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         // validate results
         Collection<Asset> globalAssets = repository.listAssets("/global");
         assertNotNull(globalAssets);
-        assertEquals(9,
+        assertEquals(10,
                      globalAssets.size());
         repository.assetExists("/global/customeditors.json");
         repository.assetExists("/global/themes.json");
         repository.assetExists("/global/defaultmilestoneicon.png");
+        repository.assetExists("/global/defaultsubcaseicon.png");
         repository.assetExists("/global/defaultemailicon.gif");
         repository.assetExists("/global/defaultlogicon.gif");
         repository.assetExists("/global/patterns.json");
@@ -188,6 +189,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                                             "/" + dirName + "/Rewardsystem.wid"),
                               Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
                                             "/" + dirName + "/defaultmilestoneicon.png",
+                                            "/" + dirName + "/defaultsubcaseicon.png",
                                             "/" + dirName + "/defaultbusinessrulesicon.png",
                                             "/" + dirName + "/defaultdecisionicon.png"),
                               Arrays.asList("/" + dirName + "/switchyard.gif",
@@ -216,6 +218,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         verifyWidsPngsAndGifs(Arrays.asList("/" + dirName + "/WorkDefinitions.wid"),
                               Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
                                             "/" + dirName + "/defaultmilestoneicon.png",
+                                            "/" + dirName + "/defaultsubcaseicon.png",
                                             "/" + dirName + "/defaultbusinessrulesicon.png",
                                             "/" + dirName + "/defaultdecisionicon.png"),
                               Arrays.asList("/" + dirName + "/defaultemailicon.gif",
@@ -243,6 +246,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         verifyWidsPngsAndGifs(Arrays.asList("/" + dirName + "/WorkDefinitions.wid"),
                               Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
                                             "/" + dirName + "/defaultmilestoneicon.png",
+                                            "/" + dirName + "/defaultsubcaseicon.png",
                                             "/" + dirName + "/defaultbusinessrulesicon.png",
                                             "/" + dirName + "/defaultdecisionicon.png"),
                               Arrays.asList("/" + dirName + "/defaultemailicon.gif",
@@ -272,6 +276,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         verifyWidsPngsAndGifs(Arrays.asList("/" + dirName + "/WorkDefinitions.wid"),
                               Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
                                             "/" + dirName + "/defaultmilestoneicon.png",
+                                            "/" + dirName + "/defaultsubcaseicon.png",
                                             "/" + dirName + "/defaultbusinessrulesicon.png",
                                             "/" + dirName + "/defaultdecisionicon.png"),
                               Arrays.asList("/" + dirName + "/defaultemailicon.gif",
@@ -311,6 +316,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                               Arrays.asList("/" + dirName + "/microsoftacademy.png",
                                             "/" + dirName + "/defaultservicenodeicon.png",
                                             "/" + dirName + "/defaultmilestoneicon.png",
+                                            "/" + dirName + "/defaultsubcaseicon.png",
                                             "/" + dirName + "/defaultbusinessrulesicon.png",
                                             "/" + dirName + "/defaultdecisionicon.png"),
                               Arrays.asList("/" + dirName + "/defaultemailicon.gif",
