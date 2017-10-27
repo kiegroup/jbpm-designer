@@ -19,6 +19,7 @@ package org.jbpm.designer.editorhandler;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +34,6 @@ import org.jbpm.designer.server.EditorHandler;
 import org.jbpm.designer.web.preprocessing.IDiagramPreprocessingService;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,10 +49,13 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EditorHandlerBaseTest extends RepositoryBaseTest {

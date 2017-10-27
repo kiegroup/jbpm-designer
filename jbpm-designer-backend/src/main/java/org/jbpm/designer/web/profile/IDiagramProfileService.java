@@ -16,6 +16,7 @@
 package org.jbpm.designer.web.profile;
 
 import java.util.Collection;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 

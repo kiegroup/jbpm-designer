@@ -16,6 +16,7 @@
 package org.jbpm.designer.filter;
 
 import java.io.InputStream;
+
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

@@ -3,7 +3,7 @@ package org.jbpm.designer.repository;
 import org.jbpm.designer.util.ConfigurationProvider;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class ConfigurationProviderTest {
 
