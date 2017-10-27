@@ -16,6 +16,7 @@
 package org.jbpm.designer.client;
 
 import java.util.Map;
+
 import javax.inject.Inject;
 
 import com.google.gwt.user.client.ui.RequiresResize;

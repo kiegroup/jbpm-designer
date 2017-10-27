@@ -25,7 +25,7 @@ import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.client.mvp.UpdatedLockStatusEvent;
 import org.uberfire.ext.editor.commons.client.history.VersionRecordManager;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class ViewLockTest {
 

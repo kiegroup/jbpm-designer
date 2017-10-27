@@ -22,7 +22,8 @@ import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.uberfire.io.IOService;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TestBPMN2FileIndexer extends BPMN2FileIndexer implements TestIndexer<Bpmn2TypeDefinition> {
 
