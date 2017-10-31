@@ -303,7 +303,7 @@
                     "name":"Version","value":processVersion,"count":"6"
                 },
                 {
-                    "name":"Docmentation","value":processDocumentation,"count":"6"
+                    "name":"Documentation","value":processDocumentation,"count":"6"
                 }
             ]
         };
