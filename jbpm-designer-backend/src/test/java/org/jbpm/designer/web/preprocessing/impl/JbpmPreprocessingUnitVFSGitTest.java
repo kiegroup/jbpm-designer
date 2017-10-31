@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2017 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -133,20 +133,20 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("import org.drools.core.process.core.datatype.impl.type.StringDataType;\n" +
-                "\n" +
-                "[\n" +
-                "\n" +
-                "  [\n" +
-                "    \"name\" : \"Rewardsystem\",\n" +
-                "    \"description\" : \"Notifies the Reward System\",\n" +
-                "    \"displayName\" : \"Rewardsystem\",\n" +
-                "    \"defaultHandler\": \"mvel: com.rewardsystem.MyRewardsHandler()\",\n" +
-                "    \"category\" : \"Rewards\",\n" +
-                "    \"customEditor\" : \"\",\n" +
-                "    \"icon\" : \"widicon.png\",\n" +
-                "  ]\n" +
-                "\n" +
-                "]")
+                                "\n" +
+                                "[\n" +
+                                "\n" +
+                                "  [\n" +
+                                "    \"name\" : \"Rewardsystem\",\n" +
+                                "    \"description\" : \"Notifies the Reward System\",\n" +
+                                "    \"displayName\" : \"Rewardsystem\",\n" +
+                                "    \"defaultHandler\": \"mvel: com.rewardsystem.MyRewardsHandler()\",\n" +
+                                "    \"category\" : \"Rewards\",\n" +
+                                "    \"customEditor\" : \"\",\n" +
+                                "    \"icon\" : \"widicon.png\",\n" +
+                                "  ]\n" +
+                                "\n" +
+                                "]")
                 .type("wid")
                 .name("processwid")
                 .location("/myprocesses");
@@ -183,6 +183,58 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         workItemTemplate2.add("workitemDefs", workDefinitions);
         assertTrue(workItemTemplate2.render().contains("CEdefined"));
         assertFalse(workItemTemplate2.render().contains("CEnotdefined"));
+
+    }
+
+    @Test
+    public void testEmptyIcon() throws Exception {
+        Repository repository = createRepository();
+        //prepare folders that will be used
+        repository.createDirectory("/myprocesses");
+        repository.createDirectory("/global");
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("import org.drools.core.process.core.datatype.impl.type.StringDataType;\n" +
+                                "\n" +
+                                "[\n" +
+                                "\n" +
+                                "  [\n" +
+                                "    \"name\" : \"Rewardsystem\",\n" +
+                                "    \"description\" : \"Notifies the Reward System\",\n" +
+                                "    \"displayName\" : \"Rewardsystem\",\n" +
+                                "    \"defaultHandler\": \"mvel: com.rewardsystem.MyRewardsHandler()\",\n" +
+                                "    \"category\" : \"Rewards\",\n" +
+                                "    \"customEditor\" : \"true\",\n" +
+                                "    \"icon\" : \"\",\n" +
+                                "  ]\n" +
+                                "\n" +
+                                "]")
+                .type("wid")
+                .name("processwid")
+                .location("/myprocesses");
+        String uniqueWidID = repository.createAsset(builder.getAsset());
+
+        AssetBuilder builder2 = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
+        builder2.content("".getBytes())
+                .type("png")
+                .name("defaultservicenodeicon")
+                .location("/global");
+        String uniqueIconID = repository.createAsset(builder2.getAsset());
+
+        JbpmPreprocessingUnit preprocessingUnitVFS = new JbpmPreprocessingUnit(new TestServletContext(), "/", null, null, null, null, null, null);
+        Asset<String> widAsset = repository.loadAsset(uniqueWidID);
+
+        preprocessingUnitVFS.setGlobalDir( new TestIDiagramProfile(repository).getRepositoryGlobalDir() );
+
+        Map<String, WorkDefinitionImpl> workDefinitions = new HashMap<String, WorkDefinitionImpl>();
+        preprocessingUnitVFS.evaluateWorkDefinitions(workDefinitions, widAsset, widAsset.getAssetLocation(), repository, profile);
+
+        assertNotNull(workDefinitions);
+        assertEquals(1, workDefinitions.size());
+        assertTrue(workDefinitions.containsKey("Rewardsystem"));
+        assertNotNull(workDefinitions.get("Rewardsystem").getIcon());
+        assertEquals("/global/defaultservicenodeicon.png", workDefinitions.get("Rewardsystem").getIcon());
+
 
     }
 }
