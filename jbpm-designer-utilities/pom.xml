@@ -27,6 +27,7 @@
   <name>jBPM Designer - Utilities</name>
   <description>jBPM Designer - Utilities - svginline</description>
   <properties>
+    <java.module.name>org.jbpm.designer.util</java.module.name>
     <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
   </properties>
   <build>

@@ -15,6 +15,10 @@
 
   <name>jBPM Designer - Client</name>
 
+  <properties>
+    <java.module.name>org.jbpm.designer.client</java.module.name>
+  </properties>
+
   <!--<properties>-->
     <!--<checkstyle.skip>true</checkstyle.skip>-->
   <!--</properties>-->

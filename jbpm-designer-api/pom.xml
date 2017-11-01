@@ -15,6 +15,10 @@
 
   <name>jBPM Designer - API</name>
 
+  <properties>
+    <java.module.name>org.jbpm.designer.api</java.module.name>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.uberfire</groupId>
