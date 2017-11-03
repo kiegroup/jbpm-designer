@@ -1,0 +1,105 @@
+{
+  "resourceId":"_Gqep0cTAEee2ocoCmQoSQA",
+  "properties":{
+    "namespaces":"",
+    "expressionlanguage":"http://www.mvel.org/2.0",
+    "name":"",
+    "executable":"true",
+    "package":"com.myteam.abc",
+    "vardefs":"aaa,bbb,ccc",
+    "customdescription":"",
+    "customcaseidprefix":"",
+    "customcaseroles":"",
+    "adhocprocess":"false",
+    "imports":"",
+    "globals":"",
+    "id":"abc.abc",
+    "version":"1.0",
+    "timeunit":"min",
+    "currency":"",
+    "targetnamespace":"http://www.omg.org/bpmn20",
+    "typelanguage":"http://www.java.com/javaTypes",
+    "processn":"abc",
+    "documentation":""
+  },
+  "stencil":{
+    "id":"BPMNDiagram"
+  },
+  "childShapes":[
+    {
+      "resourceId":"_EB520361-DC81-4B28-91A3-1D440DC37202",
+      "properties":{
+        "name":"abc",
+        "documentation":"",
+        "isselectable":"true",
+        "invisid":"",
+        "isforcompensation":"",
+        "assignments":"[din]aaa->first in,[dout]first out->aaa",
+        "assignmentsview":"1 data input, 1 data output",
+        "bgcolor":"#fafad2",
+        "bordercolor":"#000000",
+        "fontcolor":"#000000",
+        "fontsize":"",
+        "activitytype":"Sub-Process",
+        "datainputset":"first in:String",
+        "dataoutputset":"first out:String",
+        "origbgcolor":"#fafad2",
+        "origbordercolor":"#000000",
+        "calledelement":"",
+        "onentryactions":"",
+        "onexitactions":"",
+        "isasync":"false",
+        "isabortparent":"true",
+        "customautostart":"false",
+        "independent":"true",
+        "waitforcompletion":"true",
+        "script_language":"java",
+        "unitcost":"0",
+        "distributiontype":"uniform",
+        "min":"5",
+        "max":"10",
+        "mean":"0",
+        "standarddeviation":"1"
+      },
+      "stencil":{
+        "id":"ReusableSubprocess"
+      },
+      "childShapes":[
+
+      ],
+      "outgoing":[
+
+      ],
+      "bounds":{
+        "lowerRight":{
+          "x":310,
+          "y":170
+        },
+        "upperLeft":{
+          "x":210,
+          "y":90
+        }
+      },
+      "dockers":[
+
+      ]
+    }
+  ],
+  "bounds":{
+    "lowerRight":{
+      "x":3000,
+      "y":2000
+    },
+    "upperLeft":{
+      "x":0,
+      "y":0
+    }
+  },
+  "stencilset":{
+    "url":"/org.kie.workbench.KIEWebapp/stencilsets/bpmn2.0jbpm/bpmn2.0jbpm.json",
+    "namespace":"http://b3mn.org/stencilset/bpmn2.0#"
+  },
+  "ssextensions":[
+
+  ]
+}

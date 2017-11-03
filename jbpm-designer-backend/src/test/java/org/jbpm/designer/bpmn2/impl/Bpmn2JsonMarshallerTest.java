@@ -831,4 +831,64 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("[din]lastName->lastNameIn,[din]firstName->firstNameIn,[dout]lastNameOut->lastName,[dout]firstNameOut->firstName",
                      workItemPropertiesProperties.getString("assignments"));
     }
+
+    @Test
+    public void testBusinessRuleTaskInputOutputSetWithSpaces() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("businessRuleTaskWithDataInputsOutputsWithSpaces.bpmn2");
+        JSONObject businessRuleTask = getChildByName(process,
+                                                     "mytask");
+        JSONObject businessRuleTaskProperties = businessRuleTask.getJSONObject("properties");
+        assertEquals("[din]aaa->first in,[din]bbb->second in,[din]third in=123,[dout]first out->ccc,[dout]second out->bbb",
+                     businessRuleTaskProperties.getString("assignments"));
+
+        assertEquals("first in:String,second in:Object,third in:Integer",
+                     businessRuleTaskProperties.getString("datainputset"));
+
+        assertEquals("first out:String,second out:Integer",
+                     businessRuleTaskProperties.getString("dataoutputset"));
+    }
+
+    @Test
+    public void testStartEventOutputSetWithSpaces() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("startEventWithDataInputWithSpaces.bpmn2");
+        JSONObject startEvent = getChildByName(process,
+                                               "abc");
+        JSONObject startEventProperties = startEvent.getJSONObject("properties");
+
+        assertEquals("first out:String",
+                     startEventProperties.getString("dataoutput"));
+
+        assertEquals("[dout]first out->aaa",
+                     startEventProperties.getString("dataoutputassociations"));
+    }
+
+    @Test
+    public void testEndEventOutputSetWithSpaces() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("endEventWithDataInputWithSpaces.bpmn2");
+        JSONObject endEvent = getChildByName(process,
+                                             "abc");
+        JSONObject endEventProperties = endEvent.getJSONObject("properties");
+
+        assertEquals("first in:String",
+                     endEventProperties.getString("datainput"));
+
+        assertEquals("[din]aaa->first in",
+                     endEventProperties.getString("datainputassociations"));
+    }
+
+    @Test
+    public void testCallActivityInputsOutputSetWithSpaces() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("callActivityWithDataInputOutputWithSpaces.bpmn2");
+        JSONObject callActivity = getChildByName(process,
+                                                 "abc");
+        JSONObject callActivityProperties = callActivity.getJSONObject("properties");
+        assertEquals("[din]aaa->first in,[dout]first out->aaa",
+                     callActivityProperties.getString("assignments"));
+
+        assertEquals("first in:String",
+                     callActivityProperties.getString("datainputset"));
+
+        assertEquals("first out:String",
+                     callActivityProperties.getString("dataoutputset"));
+    }
 }

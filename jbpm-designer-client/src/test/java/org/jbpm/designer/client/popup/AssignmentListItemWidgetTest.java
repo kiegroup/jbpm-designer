@@ -166,7 +166,7 @@ public class AssignmentListItemWidgetTest {
                                    anyString(),
                                    anyString());
         RegExp regExp = RegExp.compile(regExpCaptor.getValue());
-        assertEquals(false,
+        assertEquals(true,
                      regExp.test("a 1"));
         assertEquals(false,
                      regExp.test("a@1"));
