@@ -114,11 +114,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-/**
- * @author Antoine Toulme
- *         <p>
- *         A series of tests to check the unmarshalling of json to bpmn2.
- */
 public class Bpmn2UnmarshallingTest {
 
     private Bpmn2Loader loader = new Bpmn2Loader(Bpmn2UnmarshallingTest.class);
@@ -1821,6 +1816,77 @@ public class Bpmn2UnmarshallingTest {
                      inputSet.getDataInputRefs().size());
         assertEquals(0,
                      outputSet.getDataOutputRefs().size());
+    }
+
+    @Test
+    public void testBusinessRuleTaskInputOutputSetWithSpaces() throws Exception {
+        Process process = getRootProcess(loader.loadProcessFromJson("businessRuleTaskWithDataInputsOutputsWithSpaces.json"));
+        assertTrue(process.getFlowElements().get(1) instanceof BusinessRuleTask);
+        BusinessRuleTask businessRuleTask = (BusinessRuleTask) process.getFlowElements().get(1);
+        assertNotNull(businessRuleTask.getIoSpecification());
+        InputOutputSpecification ioSpec = businessRuleTask.getIoSpecification();
+        assertNotNull(ioSpec.getDataInputs());
+        assertNotNull(ioSpec.getOutputSets());
+
+        List<DataInput> dataInputs = ioSpec.getDataInputs();
+        assertEquals(3, dataInputs.size());
+        assertEquals("first in", dataInputs.get(0).getName());
+        assertEquals("second in", dataInputs.get(1).getName());
+        assertEquals("third in", dataInputs.get(2).getName());
+
+        List<DataOutput> dataOutputs = ioSpec.getDataOutputs();
+        assertEquals(2, dataOutputs.size());
+        assertEquals("first out", dataOutputs.get(0).getName());
+        assertEquals("second out", dataOutputs.get(1).getName());
+
+    }
+
+    @Test
+    public void testStartEventOutputSetWithSpaces() throws Exception {
+        Process process = getRootProcess(loader.loadProcessFromJson("startEventWithDataInputWithSpaces.json"));
+        assertTrue(process.getFlowElements().get(0) instanceof StartEvent);
+        StartEvent startEvent = (StartEvent) process.getFlowElements().get(0);
+        assertNotNull(startEvent.getDataOutputAssociation());
+        assertNotNull(startEvent.getDataOutputs());
+
+        DataOutput dataOut = startEvent.getDataOutputs().get(0);
+        DataOutputAssociation dataOutAssociation = startEvent.getDataOutputAssociation().get(0);
+
+        assertEquals("first in", dataOut.getName());
+        assertEquals("first in", ((DataOutput) dataOutAssociation.getSourceRef().get(0)).getName());
+
+    }
+
+    @Test
+    public void testEndEventOutputSetWithSpaces() throws Exception {
+        Process process = getRootProcess(loader.loadProcessFromJson("endEventWithDataInputWithSpaces.json"));
+        assertTrue(process.getFlowElements().get(0) instanceof EndEvent);
+        EndEvent endEvent = (EndEvent) process.getFlowElements().get(0);
+        assertNotNull(endEvent.getDataInputAssociation());
+        assertNotNull(endEvent.getDataInputs());
+
+        DataInput dataIn = endEvent.getDataInputs().get(0);
+        DataInputAssociation dataInputAssociation = endEvent.getDataInputAssociation().get(0);
+
+        assertEquals("first in", dataIn.getName());
+        assertEquals("first in", ((DataInput) dataInputAssociation.getTargetRef()).getName());
+
+    }
+
+    @Test
+    public void testCallActivityInputsOutputSetWithSpaces() throws Exception {
+        Process process = getRootProcess(loader.loadProcessFromJson("callActivityWithDataInputOutputWithSpaces.json"));
+        assertTrue(process.getFlowElements().get(0) instanceof CallActivity);
+        CallActivity callActivity = (CallActivity) process.getFlowElements().get(0);
+        assertNotNull(callActivity.getDataInputAssociations());
+        assertNotNull(callActivity.getDataOutputAssociations());
+
+        DataInput dataIn = (DataInput) callActivity.getDataInputAssociations().get(0).getTargetRef();
+        assertEquals("first in", dataIn.getName());
+
+        DataOutput dataOut = (DataOutput) callActivity.getDataOutputAssociations().get(0).getSourceRef().get(0);
+        assertEquals("first out", dataOut.getName());
+
     }
 
     private FlowElement getFlowElement(List<FlowElement> elements,
