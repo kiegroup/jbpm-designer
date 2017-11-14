@@ -37,8 +37,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import bpsim.impl.BpsimFactoryImpl;
+import com.fasterxml.jackson.core.JsonParseException;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.codehaus.jackson.JsonParseException;
 import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.DocumentRoot;
