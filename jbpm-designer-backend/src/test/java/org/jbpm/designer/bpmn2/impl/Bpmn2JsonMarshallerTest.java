@@ -30,6 +30,7 @@ import org.junit.Test;
 
 import static org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge.createEdge;
 import static org.jbpm.designer.bpmn2.utils.Bpmn2Loader.getChildByName;
+import static org.jbpm.designer.bpmn2.utils.Bpmn2Loader.getChildByTypeName;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -890,5 +891,25 @@ public class Bpmn2JsonMarshallerTest {
 
         assertEquals("first out:String",
                      callActivityProperties.getString("dataoutputset"));
+    }
+
+    @Test
+    public void testProcessAndUserTaskWithXMLEscapeChars() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("usertaskWithXMLEscapeChars.bpmn2");
+        JSONObject processProperties = process.getJSONObject("properties");
+
+        String processName = processProperties.getString("processn");
+        assertEquals("\"'<>&Process", processName);
+
+        List<JSONObject> userTasks = getChildByTypeName(process, "Task");
+        assertNotNull(userTasks);
+        assertEquals(1, userTasks.size());
+        JSONObject userTask = userTasks.get(0);
+        assertNotNull(userTask);
+
+        JSONObject userTaskProperties = userTask.getJSONObject("properties");
+        String userTaskName = userTaskProperties.getString("name");
+        assertEquals("\"'<>&Task", userTaskName);
+
     }
 }

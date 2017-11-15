@@ -38,7 +38,6 @@ import javax.xml.stream.XMLStreamReader;
 
 import bpsim.impl.BpsimFactoryImpl;
 import com.fasterxml.jackson.core.JsonParseException;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.DocumentRoot;
@@ -68,6 +67,8 @@ import org.slf4j.LoggerFactory;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.workbench.events.NotificationEvent;
+
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4;
 
 /**
  * The implementation of the jBPM profile for Process Designer.
@@ -285,7 +286,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 res.save(outputStream,
                          new HashMap<Object, Object>());
-                return StringEscapeUtils.unescapeHtml4(outputStream.toString("UTF-8"));
+                return unescapeHtml4(outputStream.toString("UTF-8"));
             }
 
             public Definitions getDefinitions(String jsonModel,

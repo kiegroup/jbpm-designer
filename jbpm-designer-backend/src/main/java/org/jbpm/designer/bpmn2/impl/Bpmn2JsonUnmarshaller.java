@@ -174,6 +174,8 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.apache.commons.lang3.StringEscapeUtils.escapeXml;
+
 // transform JSON into BPMN2
 public class Bpmn2JsonUnmarshaller {
 
@@ -236,47 +238,6 @@ public class Bpmn2JsonUnmarshaller {
 
             }
         }
-    }
-
-    private static String escapeXmlString(String string) {
-        StringBuffer sb = new StringBuffer(string.length());
-        // true if last char was blank
-        boolean lastWasBlankChar = false;
-        int len = string.length();
-        char c;
-
-        for (int i = 0; i < len; i++) {
-            c = string.charAt(i);
-            if (c == ' ') {
-                sb.append(' ');
-            } else {
-                lastWasBlankChar = false;
-                //
-                // HTML Special Chars
-                if (c == '"') {
-                    sb.append("&quot;");
-                } else if (c == '&') {
-                    sb.append("&amp;");
-                } else if (c == '<') {
-                    sb.append("&lt;");
-                } else if (c == '>') {
-                    sb.append("&gt;");
-                } else {
-                    int ci = 0xffff & c;
-                    if (ci < 160)
-                    // nothing special only 7 Bit
-                    {
-                        sb.append(c);
-                    } else {
-                        // Not 7 Bit use the unicode system
-                        sb.append("&#");
-                        sb.append(Integer.toString(ci));
-                        sb.append(';');
-                    }
-                }
-            }
-        }
-        return sb.toString();
     }
 
     public Bpmn2Resource unmarshall(String json,
@@ -3869,8 +3830,8 @@ public class Bpmn2JsonUnmarshaller {
     protected void applySubProcessProperties(SubProcess sp,
                                              Map<String, String> properties) {
         if (properties.get("name") != null) {
-            sp.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                          " "));
+            sp.setName(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                    " "));
             // add unescaped and untouched name value as extension element as well
             Utils.setMetaDataExtensionValue(sp,
                                             "elementname",
@@ -4498,8 +4459,8 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyMessageProperties(Message msg,
                                           Map<String, String> properties) {
         if (properties.get("name") != null && properties.get("name").length() > 0) {
-            msg.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                           " "));
+            msg.setName(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                     " "));
             msg.setId(properties.get("name") + "Message");
 
             // add unescaped and untouched name value as extension element as well
@@ -4516,8 +4477,8 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyDataStoreProperties(DataStore da,
                                             Map<String, String> properties) {
         if (properties.get("name") != null) {
-            da.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                          " "));
+            da.setName(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                    " "));
 
             // add unescaped and untouched name value as extension element as well
             Utils.setMetaDataExtensionValue(da,
@@ -4532,8 +4493,8 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyDataObjectProperties(DataObject da,
                                              Map<String, String> properties) {
         if (properties.get("name") != null && properties.get("name").length() > 0) {
-            da.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                          " "));
+            da.setName(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                    " "));
 
             // add unescaped and untouched name value as extension element as well
             Utils.setMetaDataExtensionValue(da,
@@ -4576,8 +4537,8 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyTextAnnotationProperties(TextAnnotation ta,
                                                  Map<String, String> properties) {
         if (properties.get("name") != null) {
-            ta.setText(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                          " "));
+            ta.setText(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                    " "));
 
             // add unescaped and untouched name value as extension element as well
             Utils.setMetaDataExtensionValue(ta,
@@ -4643,8 +4604,8 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyEventProperties(Event event,
                                         Map<String, String> properties) {
         if (properties.get("name") != null) {
-            event.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                             " "));
+            event.setName(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                       " "));
 
             // add unescaped and untouched name value as extension element as well
             Utils.setMetaDataExtensionValue(event,
@@ -5203,8 +5164,8 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyGlobalTaskProperties(GlobalTask globalTask,
                                              Map<String, String> properties) {
         if (properties.get("name") != null) {
-            globalTask.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                                  " "));
+            globalTask.setName(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                            " "));
         } else {
             globalTask.setName("");
         }
@@ -5309,7 +5270,7 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyProcessProperties(Process process,
                                           Map<String, String> properties) {
         if (properties.get("processn") != null) {
-            process.setName(escapeXmlString(properties.get("processn")));
+            process.setName(escapeXml(properties.get("processn")));
         } else {
             process.setName("");
         }
@@ -5564,8 +5525,8 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyLaneProperties(Lane lane,
                                        Map<String, String> properties) {
         if (properties.get("name") != null) {
-            lane.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                            " "));
+            lane.setName(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                      " "));
 
             // add unescaped and untouched name value as extension element as well
             Utils.setMetaDataExtensionValue(lane,
@@ -5580,8 +5541,8 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyCallActivityProperties(CallActivity callActivity,
                                                Map<String, String> properties) {
         if (properties.get("name") != null) {
-            callActivity.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                                    " "));
+            callActivity.setName(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                              " "));
 
             // add unescaped and untouched name value as extension element as well
             Utils.setMetaDataExtensionValue(callActivity,
@@ -5879,8 +5840,8 @@ public class Bpmn2JsonUnmarshaller {
                                        Map<String, String> properties,
                                        String preProcessingData) {
         if (properties.get("name") != null) {
-            task.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                            " "));
+            task.setName(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                      " "));
         } else {
             task.setName("");
         }
@@ -7148,8 +7109,8 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyGatewayProperties(Gateway gateway,
                                           Map<String, String> properties) {
         if (properties.get("name") != null && properties.get("name").length() > 0) {
-            gateway.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                               " "));
+            gateway.setName(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                         " "));
 
             // add unescaped and untouched name value as extension element as well
             Utils.setMetaDataExtensionValue(gateway,
@@ -7177,8 +7138,8 @@ public class Bpmn2JsonUnmarshaller {
                                                Map<String, String> properties) {
         // sequence flow name is options
         if (properties.get("name") != null && !"".equals(properties.get("name"))) {
-            sequenceFlow.setName(escapeXmlString(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
-                                                                                    " "));
+            sequenceFlow.setName(escapeXml(properties.get("name")).replaceAll("\\r\\n|\\r|\\n",
+                                                                              " "));
 
             // add unescaped and untouched name value as extension eleent as well
             Utils.setMetaDataExtensionValue(sequenceFlow,

@@ -157,6 +157,8 @@ import org.jbpm.workflow.core.node.RuleSetNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeXml;
+
 // transform BPMN2 into JSON
 public class Bpmn2JsonMarshaller {
 
@@ -314,7 +316,7 @@ public class Bpmn2JsonMarshaller {
             props.put("typelanguage",
                       def.getTypeLanguage());
             props.put("name",
-                      unescapeXML(def.getName()));
+                      unescapeXml(def.getName()));
             props.put("id",
                       def.getId());
             props.put("expressionlanguage",
@@ -339,7 +341,7 @@ public class Bpmn2JsonMarshaller {
                     Process pr = (Process) rootElement;
                     if (pr.getName() != null && pr.getName().length() > 0) {
                         props.put("processn",
-                                  unescapeXML(((Process) rootElement).getName()));
+                                  unescapeXml(((Process) rootElement).getName()));
                     }
 
                     List<Property> processProperties = ((Process) rootElement).getProperties();
@@ -896,7 +898,7 @@ public class Bpmn2JsonMarshaller {
             Map<String, Object> laneProperties = new LinkedHashMap<String, Object>();
             if (lane.getName() != null) {
                 laneProperties.put("name",
-                                   unescapeXML(lane.getName()));
+                                   unescapeXml(lane.getName()));
             } else {
                 laneProperties.put("name",
                                    "");
@@ -2648,7 +2650,7 @@ public class Bpmn2JsonMarshaller {
         }
         if (node.getName() != null) {
             properties.put("name",
-                           unescapeXML(node.getName()));
+                           unescapeXml(node.getName()));
         } else {
             if (node instanceof TextAnnotation) {
                 if (((TextAnnotation) node).getText() != null) {
@@ -2829,7 +2831,7 @@ public class Bpmn2JsonMarshaller {
         }
         if (dataObject.getName() != null && dataObject.getName().length() > 0) {
             properties.put("name",
-                           unescapeXML(dataObject.getName()));
+                           unescapeXml(dataObject.getName()));
         } else {
             // we need a name, use id instead
             properties.put("name",
@@ -2931,7 +2933,7 @@ public class Bpmn2JsonMarshaller {
         Map<String, Object> properties = new LinkedHashMap<String, Object>(flowElementProperties);
         if (subProcess.getName() != null) {
             properties.put("name",
-                           unescapeXML(subProcess.getName()));
+                           unescapeXml(subProcess.getName()));
         } else {
             properties.put("name",
                            "");
@@ -3322,7 +3324,7 @@ public class Bpmn2JsonMarshaller {
         // check null for sequence flow name
         if (sequenceFlow.getName() != null && !"".equals(sequenceFlow.getName())) {
             properties.put("name",
-                           unescapeXML(sequenceFlow.getName()));
+                           unescapeXml(sequenceFlow.getName()));
         } else {
             properties.put("name",
                            "");
@@ -3745,7 +3747,7 @@ public class Bpmn2JsonMarshaller {
         Map<String, Object> properties = new LinkedHashMap<>();
         if (group.getCategoryValueRef() != null && group.getCategoryValueRef().getValue() != null) {
             properties.put("name",
-                           unescapeXML(group.getCategoryValueRef().getValue()));
+                           unescapeXml(group.getCategoryValueRef().getValue()));
         }
         Documentation doc = getDocumentation(group);
         if (doc != null) {
@@ -3862,53 +3864,6 @@ public class Bpmn2JsonMarshaller {
             }
         }
         return false;
-    }
-
-    private static String unescapeXML(String str) {
-        if (str == null || str.length() == 0) {
-            return "";
-        }
-
-        StringBuffer buf = new StringBuffer();
-        int len = str.length();
-        for (int i = 0; i < len; ++i) {
-            char c = str.charAt(i);
-            if (c == '&') {
-                int pos = str.indexOf(";",
-                                      i);
-                if (pos == -1) { // Really evil
-                    buf.append('&');
-                } else if (str.charAt(i + 1) == '#') {
-                    int val = Integer.parseInt(str.substring(i + 2,
-                                                             pos),
-                                               16);
-                    buf.append((char) val);
-                    i = pos;
-                } else {
-                    String substr = str.substring(i,
-                                                  pos + 1);
-                    if (substr.equals("&amp;")) {
-                        buf.append('&');
-                    } else if (substr.equals("&lt;")) {
-                        buf.append('<');
-                    } else if (substr.equals("&gt;")) {
-                        buf.append('>');
-                    } else if (substr.equals("&quot;")) {
-                        buf.append('"');
-                    } else if (substr.equals("&apos;")) {
-                        buf.append('\'');
-                    } else
-                    // ????
-                    {
-                        buf.append(substr);
-                    }
-                    i = pos;
-                }
-            } else {
-                buf.append(c);
-            }
-        }
-        return buf.toString();
     }
 
     private String updateReassignmentAndNotificationInput(String inputStr,
@@ -4084,6 +4039,7 @@ public class Bpmn2JsonMarshaller {
     }
 
     private String updateDataInputOutputUnderscores(String dataInputOutput) {
-        return dataInputOutput.replaceAll("_", " ");
+        return dataInputOutput.replaceAll("_",
+                                          " ");
     }
 }
