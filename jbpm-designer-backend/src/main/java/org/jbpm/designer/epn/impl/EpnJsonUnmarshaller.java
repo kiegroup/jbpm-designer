@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonParseException;
+import com.fasterxml.jackson.core.JsonParseException;
 import org.jbpm.designer.epn.EpnMarshallerHelper;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;

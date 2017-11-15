@@ -21,8 +21,8 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 import org.eclipse.dd.di.DiagramElement;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 
