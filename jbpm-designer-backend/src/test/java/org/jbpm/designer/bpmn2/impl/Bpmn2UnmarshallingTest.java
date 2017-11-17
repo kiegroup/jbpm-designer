@@ -2421,6 +2421,19 @@ public class Bpmn2UnmarshallingTest {
     }
 
     @Test
+    public void testProcessAndUserTaskWithXMLEscapeChars() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("usertaskWithXMLEscapeChars.json");
+        Process process = getRootProcess(definitions);
+        assertNotNull(process);
+        assertEquals("&quot;&apos;&lt;&gt;&amp;Process", process.getName());
+
+        UserTask task = (UserTask) process.getFlowElements().get(1);
+        assertNotNull(task);
+        assertEquals("&quot;&apos;&lt;&gt;&amp;Task", task.getName());
+
+    }
+
+    @Test
     public void testBpsimDisplayEnabledByDefault() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("userTask.json");
         assertEquals(1,

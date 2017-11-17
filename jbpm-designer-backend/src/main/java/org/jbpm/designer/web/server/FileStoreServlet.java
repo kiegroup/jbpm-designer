@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
@@ -39,6 +38,8 @@ import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static org.apache.commons.lang3.StringEscapeUtils.ESCAPE_XML11;
 
 @WebServlet(displayName = "FileStore", name = "FileStoreServlet",
         urlPatterns = "/filestore")
@@ -83,7 +84,7 @@ public class FileStoreServlet extends HttpServlet {
         if (dataEncoded != null && dataEncoded.length() > 0) {
             retData = new String(Base64.decodeBase64(dataEncoded));
         } else {
-            retData = StringEscapeUtils.ESCAPE_XML11.translate(data);
+            retData = ESCAPE_XML11.translate(data);
         }
 
         if (fext != null && (fext.equals("bpmn2") || fext.equals("svg"))) {
