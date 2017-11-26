@@ -28,7 +28,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -46,7 +46,7 @@ public class ProcessDiffServiceServletTest extends RepositoryBaseTest {
 
     @Spy
     @InjectMocks
-    private ProcessDiffServiceServlet servlet = new ProcessDiffServiceServlet();
+    private ProcessDiffServiceServlet servlet;
 
     @Before
     public void setup() {

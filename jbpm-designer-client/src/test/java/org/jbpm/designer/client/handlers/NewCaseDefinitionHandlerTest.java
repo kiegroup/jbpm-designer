@@ -32,12 +32,14 @@ import org.uberfire.mocks.CallerMock;
 import org.uberfire.mocks.EventSourceMock;
 import org.uberfire.workbench.type.ResourceTypeDefinition;
 
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(GwtMockitoTestRunner.class)
 public class NewCaseDefinitionHandlerTest {
@@ -80,9 +82,9 @@ public class NewCaseDefinitionHandlerTest {
     public void createTest() {
         final NewResourcePresenter presenter = mock(NewResourcePresenter.class);
         final Path path = mock(Path.class);
-        doReturn(path).when(designerAssetService).createCaseDefinition(any(Path.class),
-                                                                       anyString(),
-                                                                       anyString());
+        doReturn(path).when(designerAssetService).createCaseDefinition(nullable(Path.class),
+                                                                       nullable(String.class),
+                                                                       nullable(String.class));
 
         newCaseDefinitionHandler.create(mock(Package.class),
                                         "",

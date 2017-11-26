@@ -47,7 +47,7 @@ import org.kie.workbench.common.services.backend.project.ProjectClassLoaderHelpe
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.base.options.CommentedOption;
@@ -105,15 +105,11 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
     @Before
     public void initTest() throws Exception {
         when(projectService.resolveProject(any())).thenReturn(project);
-        when(project.getRootPath()).thenReturn(formPath);
 
         when(projectClassLoaderHelper.getProjectClassLoader(any())).thenReturn(getClass().getClassLoader());
 
         when(formPath.toURI()).thenReturn("file://fakepath.frm");
         when(ioService.exists(any())).thenReturn(false);
-
-        when(commentedOptionFactory.makeCommentedOption(anyString())).then(invocationOnMock -> new CommentedOption("1",
-                                                                                                                   invocationOnMock.getArguments()[0].toString()));
 
         definitions = loader.loadProcessFromJson("userTask.json");
 

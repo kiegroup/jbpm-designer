@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.base.options.CommentedOption;
@@ -35,6 +35,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -93,7 +94,7 @@ public class BusinessProcessCopyHelperTest {
         verify(ioService,
                times(1)).write(any(org.uberfire.java.nio.file.Path.class),
                                bpmn2ArgumentCaptor.capture(),
-                               any(CommentedOption.class));
+                               nullable(CommentedOption.class));
 
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 
@@ -128,7 +129,7 @@ public class BusinessProcessCopyHelperTest {
         verify(ioService,
                times(1)).write(any(org.uberfire.java.nio.file.Path.class),
                                bpmn2ArgumentCaptor.capture(),
-                               any(CommentedOption.class));
+                               nullable(CommentedOption.class));
 
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 
@@ -163,7 +164,7 @@ public class BusinessProcessCopyHelperTest {
         verify(ioService,
                times(1)).write(any(org.uberfire.java.nio.file.Path.class),
                                bpmn2ArgumentCaptor.capture(),
-                               any(CommentedOption.class));
+                               nullable(CommentedOption.class));
 
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 

@@ -42,12 +42,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.uberfire.mocks.EventSourceMock;
 import org.uberfire.workbench.events.NotificationEvent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyBoolean;
 import static org.mockito.Mockito.anySet;
@@ -130,7 +131,7 @@ public class AssignmentListItemWidgetViewImplTest {
         doCallRealMethod().when(view).setCustomDataType(anyString());
         doCallRealMethod().when(view).getModel();
         doCallRealMethod().when(view).setModel(any(AssignmentRow.class));
-        doCallRealMethod().when(view).getModelValue(any(ValueListBox.class));
+        doCallRealMethod().when(view).getModelValue(nullable(ValueListBox.class));
         doCallRealMethod().when(view).setTextBoxModelValue(any(TextBox.class),
                                                            anyString());
         doCallRealMethod().when(view).setListBoxModelValue(any(ValueListBox.class),
@@ -142,13 +143,11 @@ public class AssignmentListItemWidgetViewImplTest {
         doCallRealMethod().when(view).getVariableType();
         doCallRealMethod().when(view).setAllowDuplicateNames(anyBoolean(),
                                                              anyString());
-        doCallRealMethod().when(view).setParentWidget(any(ActivityDataIOEditorWidget.class));
+        doCallRealMethod().when(view).setParentWidget(nullable(ActivityDataIOEditorWidget.class));
         doCallRealMethod().when(view).isDuplicateName(anyString());
         doCallRealMethod().when(view).setShowConstants(anyBoolean());
         doCallRealMethod().when(view).setDisallowedNames(anySet(),
                                                          anyString());
-        doCallRealMethod().when(view).handleDeleteButton(any(ClickEvent.class));
-
         AssignmentRow row = new AssignmentRow();
         doReturn(row).when(assignment).getModel();
     }
@@ -343,6 +342,7 @@ public class AssignmentListItemWidgetViewImplTest {
         ActivityDataIOEditorWidget widget = mock(ActivityDataIOEditorWidget.class);
         AssignmentRow model = mock(AssignmentRow.class);
         when(view.getModel()).thenReturn(model);
+        doCallRealMethod().when(view).handleDeleteButton(any());
         view.setParentWidget(widget);
         view.handleDeleteButton(null);
         verify(widget).removeAssignment(model);

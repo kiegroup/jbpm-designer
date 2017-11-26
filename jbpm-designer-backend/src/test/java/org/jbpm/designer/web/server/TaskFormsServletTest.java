@@ -45,7 +45,7 @@ import org.kie.workbench.common.forms.bpmn.BPMNFormBuilderService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
@@ -87,7 +87,6 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
             }
         });
 
-        when(builderManager.getFormBuilders()).thenReturn(Arrays.asList(formBuilderService));
         when(builderManager.getBuilderByFormType(anyString())).thenReturn(formBuilderService);
     }
 
@@ -98,11 +97,6 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
 
     @Test
     public void testTaskFormServletForFormType() throws Exception {
-        when(formBuilderService.getFormExtension()).thenReturn("form");
-        when(formBuilderService.buildFormContent(any(),
-                                                  any(),
-                                                 any())).thenReturn("dummyform");
-
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
@@ -184,11 +178,6 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
 
     @Test
     public void testTaskFormServletWithUserTaskForFormType() throws Exception {
-        when(formBuilderService.buildFormContent(any(),
-                                                 any(),
-                                                 any())).thenReturn("dummyform");
-
-        when(formBuilderService.getFormExtension()).thenReturn("form");
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
