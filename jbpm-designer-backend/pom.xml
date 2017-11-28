@@ -289,6 +289,10 @@
           <groupId>rhino</groupId>
           <artifactId>js</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>org.python</groupId>
+          <artifactId>jython</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
