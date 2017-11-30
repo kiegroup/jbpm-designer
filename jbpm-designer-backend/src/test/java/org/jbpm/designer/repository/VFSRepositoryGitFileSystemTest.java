@@ -38,8 +38,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import javax.servlet.ServletContext;
 
 public class VFSRepositoryGitFileSystemTest {
 
@@ -784,9 +786,13 @@ public class VFSRepositoryGitFileSystemTest {
     }
 
     @Test
-    public void testCreateGlobalDirOnNewProject() throws FileAlreadyExistsException {
+    public void testCreateGlobalDirOnNewProject() throws Exception {
+        ServletContext servletContext = mock(ServletContext.class);
+        when (servletContext.getRealPath(anyString())).thenReturn(getClass().getResource("default.json").getFile());
+
         VFSRepository repository = new VFSRepository(producer.getIoService());
         repository.setDescriptor(descriptor);
+        repository.setServletContext(servletContext);
 
         Directory testProjectDir = repository.createDirectory("/mytestproject");
 
