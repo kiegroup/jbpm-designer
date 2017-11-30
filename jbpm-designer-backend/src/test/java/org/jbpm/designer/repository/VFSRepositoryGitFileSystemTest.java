@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+
 import org.apache.commons.codec.binary.Base64;
 import org.guvnor.common.services.project.events.NewProjectEvent;
 import org.jbpm.designer.repository.filters.FilterByExtension;
@@ -40,15 +42,16 @@ import org.kie.workbench.common.services.shared.project.KieProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
-import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.java.nio.file.NoSuchFileException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 
 public class VFSRepositoryGitFileSystemTest {
 
@@ -965,9 +968,13 @@ public class VFSRepositoryGitFileSystemTest {
     }
 
     @Test
-    public void testCreateGlobalDirOnNewProject() throws FileAlreadyExistsException {
+    public void testCreateGlobalDirOnNewProject() throws Exception {
+        ServletContext servletContext = mock(ServletContext.class);
+        when (servletContext.getRealPath(anyString())).thenReturn(getClass().getResource("default.json").getFile());
+
         VFSRepository repository = new VFSRepository(producer.getIoService());
         repository.setDescriptor(descriptor);
+        repository.setServletContext(servletContext);
 
         Directory testProjectDir = repository.createDirectory("/mytestproject");
 
