@@ -87,6 +87,7 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
 
     protected String dirName = "myprocesses";
     protected String processFileName = "process";
+    protected String numberStartFileName = "1process";
 
     @Before
     public void setup() {
@@ -324,6 +325,21 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
 
         Mockito.verify(workitemInstalledEvent,
                        Mockito.times(2)).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
+    }
+
+    @Test
+    public void testProcessIdGeneration() {
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("bpmn2 content")
+                .type("bpmn2")
+                .name(numberStartFileName)
+                .location("Evaluation");
+
+        String processId = preprocessingUnitVFS.getProcessIdFromAsset(builder.getAsset());
+
+        assertNotNull(processId);
+        assertEquals("Evaluation.1process", processId);
+
     }
 
     private void verifyWidsPngsAndGifs(List<String> wids,

@@ -412,42 +412,15 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                                      false);
             }
 
-            String processPackage = asset.getAssetLocation();
-            if (processPackage.startsWith("/")) {
-                processPackage = processPackage.substring(1,
-                                                          processPackage.length());
-            }
-            processPackage = processPackage.replaceAll("/",
-                                                       ".");
-            // final check in odd cases
-            if (processPackage.startsWith(".")) {
-                processPackage = processPackage.substring(1,
-                                                          processPackage.length());
-            }
-
             // set package to org.jbpm
             workItemTemplate.add("packageName",
                                  "org.jbpm");
 
-            String processName = asset.getName();
             workItemTemplate.add("processn",
-                                 processName);
-
-            String packageNameStr = (processPackage.length() > 0) ? processPackage + "." : "";
-            if (packageNameStr.length() > 0) {
-                String[] packageNameParts = packageNameStr.split("\\.");
-                packageNameStr = packageNameParts[0] + ".";
-            }
-
-            // default the process id to packagename.processName
-            String processIdString = packageNameStr + processName;
-            if (processIdString.startsWith(".")) {
-                processIdString = processIdString.substring(1,
-                                                            processIdString.length());
-            }
+                                 asset.getName());
 
             workItemTemplate.add("processid",
-                                 processIdString);
+                                 getProcessIdFromAsset(asset));
 
             // default version to 1.0
             workItemTemplate.add("pversion",
@@ -458,9 +431,11 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
             // delete stencil data json if exists
             deletefile(stencilFilePath);
+
             // copy our results as the stencil json data
             createAndWriteToFile(stencilFilePath,
                                  workItemTemplate.render());
+
             // create and parse the view svg to include config data
             createAndParseViewSVG(workDefinitionsTree,
                                   repository);
@@ -477,6 +452,37 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 _logger.debug("Error ending batch: " + ee.getMessage());
             }
         }
+    }
+
+    protected String getProcessIdFromAsset(Asset<String> asset) {
+        String processPackage = asset.getAssetLocation();
+        if (processPackage.startsWith("/")) {
+            processPackage = processPackage.substring(1,
+                                                      processPackage.length());
+        }
+        processPackage = processPackage.replaceAll("/",
+                                                   ".");
+        // final check in odd cases
+        if (processPackage.startsWith(".")) {
+            processPackage = processPackage.substring(1,
+                                                      processPackage.length());
+        }
+
+        String packageNameStr = (processPackage.length() > 0) ? processPackage + "." : "";
+        if (packageNameStr.length() > 0) {
+            String[] packageNameParts = packageNameStr.split("\\.");
+            packageNameStr = packageNameParts[0] + ".";
+        }
+
+        // default the process id to packagename.processName
+        String processIdString = packageNameStr + asset.getName();
+        if (processIdString.startsWith(".")) {
+            processIdString = processIdString.substring(1,
+                                                        processIdString.length());
+        }
+
+        return processIdString;
+
     }
 
     @SuppressWarnings("unchecked")
