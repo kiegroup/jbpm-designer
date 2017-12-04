@@ -6605,6 +6605,10 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField, {
             sorters: [{
                 property: 'name',
                 direction: 'ASC'
+            },
+            {
+                property: 'pkgname',
+                direction: 'ASC'
             }]
         });
         calldefs.load();
@@ -6651,12 +6655,14 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField, {
                                 header: ORYX.I18N.PropertyWindow.processId,
                                 width: colWidth,
                                 dataIndex: 'name',
+                                sortable: true,
                                 editor: new Ext.form.TextField({allowBlank: true, disabled: true})
                             }, {
                                 id: 'pkgn',
                                 header: ORYX.I18N.PropertyWindow.packageName,
                                 width: colWidth,
                                 dataIndex: 'pkgname',
+                                sortable: true,
                                 editor: new Ext.form.TextField({allowBlank: true, disabled: true})
                             }, {
                                 id: 'pim',
