@@ -6167,7 +6167,12 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
             sorters: [{
                 property: 'name',
                 direction:'ASC'
-            }]
+            },
+			{
+				property: 'pkgname',
+				direction:'ASC'
+			}
+			]
         });
     	calldefs.load();
         
@@ -6213,18 +6218,21 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField,  {
     		                    header: ORYX.I18N.PropertyWindow.processId,
     		                    width: colWidth,
     		                    dataIndex: 'name',
+                                sortable: true,
     		                    editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
     		                }, {
     		                	id: 'pkgn',
     		                    header: ORYX.I18N.PropertyWindow.packageName,
     		                    width: colWidth,
     		                    dataIndex: 'pkgname',
+                                sortable: true,
     		                    editor: new Ext.form.TextField({ allowBlank: true, disabled: true })
     		                },{
     		                	id: 'pim',
     		                    header: ORYX.I18N.LocalHistory.headertxt.ProcessImage,
     		                    width: colWidth,
     		                    dataIndex: 'imgsrc',
+                                sortable: true,
     		                    renderer: function(val) {
     		                    	if(val && val.length > 0) {
     		                    		return '<center><img src="'+ORYX.PATH+'images/page_white_picture.png" onclick="new ImageViewer({title: \'Process Image\', width: \'650\', height: \'450\', autoScroll: true, fixedcenter: true, src: \''+val+'\',hideAction: \'close\'}).show();" alt="Click to view Process Image"/></center>';
