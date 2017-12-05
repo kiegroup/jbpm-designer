@@ -6671,7 +6671,7 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField, {
                                 dataIndex: 'imgsrc',
                                 renderer: function (val) {
                                     if (val && val.length > 0) {
-                                        return '<center><img src="' + ORYX.PATH + 'images/page_white_picture.png" onclick="new ImageViewer({title: \'Process Image\', width: \'650\', height: \'450\', autoScroll: true, fixedcenter: true, src: \'' + val + '\',hideAction: \'close\'}).show();" alt="Click to view Process Image"/></center>';
+                                        return '<center><img src="' + ORYX.BASE_FILE_PATH + 'images/page_white_picture.png" onclick="new ImageViewer({title: \'Process Image\', width: \'650\', height: \'450\', autoScroll: true, fixedcenter: true, src: \'' + val + '\',hideAction: \'close\'}).show();" alt="Click to view Process Image"/></center>';
                                     } else {
                                         return ORYX.I18N.LocalHistory.headertxt.ProcessImage.NoAvailable;
                                     }
