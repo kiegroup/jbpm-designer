@@ -13,7 +13,7 @@ ImageViewer = Ext.extend(Ext.Window, {
             collapsible: false,
             resizeable: true,
             shadow: true,
-            html: '<iframe id="imageViewFrame" name="imageViewFrame" frameborder="0" scrolling="auto" width="100%" height="400" src="' + ORYX.PATH + 'imageview/imageview.html?'+uid+'"></iframe>',
+            html: '<iframe id="imageViewFrame" name="imageViewFrame" frameborder="0" scrolling="auto" width="100%" height="400" src="' + ORYX.BASE_FILE_PATH + 'imageview/imageview.html?'+uid+'"></iframe>',
             width: 400,
             height: 400,
             autoScroll: true,
