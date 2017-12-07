@@ -85,14 +85,15 @@ public class Utils {
                 }
             }
         }
-        return sb.toString();
+        // return and strip leading digits
+        return sb.toString().replaceFirst("^\\d*", "");
     }
 
     /*
      * Tests whether a character is a valid start character in xsd:NCName
      */
     protected static boolean isNCNameStart(char c) {
-        return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_');
+        return ( Character.isDigit(c) || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_');
     }
 
     /*
