@@ -210,7 +210,7 @@ public class AssignmentListItemWidgetViewImpl extends Composite implements Assig
                                 AssignmentListItemWidgetView.CONSTANT_PROMPT,
                                 AssignmentListItemWidgetView.ENTER_CONSTANT_PROMPT);
 
-        name.setRegExp("^[a-zA-Z0-9\\s\\-\\.\\_]*$",
+        name.setRegExp("^[a-zA-Z0-9\\s\\.\\_]*$",
                        DesignerEditorConstants.INSTANCE.Removed_invalid_characters_from_name(),
                        DesignerEditorConstants.INSTANCE.Invalid_character_in_name());
 

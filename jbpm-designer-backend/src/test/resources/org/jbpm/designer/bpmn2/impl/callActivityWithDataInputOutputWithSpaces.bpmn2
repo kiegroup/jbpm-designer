@@ -3,8 +3,8 @@
   <bpmn2:itemDefinition id="_aaaItem"/>
   <bpmn2:itemDefinition id="_bbbItem"/>
   <bpmn2:itemDefinition id="_cccItem"/>
-  <bpmn2:itemDefinition id="__EB520361-DC81-4B28-91A3-1D440DC37202_first_inInputXItem" structureRef="String"/>
-  <bpmn2:itemDefinition id="__EB520361-DC81-4B28-91A3-1D440DC37202_first_outOutputXItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="__EB520361-DC81-4B28-91A3-1D440DC37202__first-inInputXItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="__EB520361-DC81-4B28-91A3-1D440DC37202__first-outOutputXItem" structureRef="String"/>
   <bpmn2:process id="abc.abc" drools:packageName="com.myteam.abc" drools:version="1.0" name="abc" isExecutable="true">
     <bpmn2:property id="aaa" itemSubjectRef="_aaaItem"/>
     <bpmn2:property id="bbb" itemSubjectRef="_bbbItem"/>
@@ -16,21 +16,21 @@
         </drools:metaData>
       </bpmn2:extensionElements>
       <bpmn2:ioSpecification id="_oDA50cTWEee2ocoCmQoSQA">
-        <bpmn2:dataInput id="_EB520361-DC81-4B28-91A3-1D440DC37202_first_inInputX" drools:dtype="String" itemSubjectRef="__EB520361-DC81-4B28-91A3-1D440DC37202_first_inInputXItem" name="first in"/>
-        <bpmn2:dataOutput id="_EB520361-DC81-4B28-91A3-1D440DC37202_first_outOutputX" drools:dtype="String" itemSubjectRef="__EB520361-DC81-4B28-91A3-1D440DC37202_first_outOutputXItem" name="first out"/>
+        <bpmn2:dataInput id="_EB520361-DC81-4B28-91A3-1D440DC37202__first-inInputX" drools:dtype="String" itemSubjectRef="__EB520361-DC81-4B28-91A3-1D440DC37202__first-inInputXItem" name="_first in"/>
+        <bpmn2:dataOutput id="_EB520361-DC81-4B28-91A3-1D440DC37202__first-outOutputX" drools:dtype="String" itemSubjectRef="__EB520361-DC81-4B28-91A3-1D440DC37202__first-outOutputXItem" name="_first out"/>
         <bpmn2:inputSet id="_oDA50sTWEee2ocoCmQoSQA">
-          <bpmn2:dataInputRefs>_EB520361-DC81-4B28-91A3-1D440DC37202_first_inInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_EB520361-DC81-4B28-91A3-1D440DC37202__first-inInputX</bpmn2:dataInputRefs>
         </bpmn2:inputSet>
         <bpmn2:outputSet id="_oDA508TWEee2ocoCmQoSQA">
-          <bpmn2:dataOutputRefs>_EB520361-DC81-4B28-91A3-1D440DC37202_first_outOutputX</bpmn2:dataOutputRefs>
+          <bpmn2:dataOutputRefs>_EB520361-DC81-4B28-91A3-1D440DC37202__first-outOutputX</bpmn2:dataOutputRefs>
         </bpmn2:outputSet>
       </bpmn2:ioSpecification>
       <bpmn2:dataInputAssociation id="_oDA51MTWEee2ocoCmQoSQA">
         <bpmn2:sourceRef>aaa</bpmn2:sourceRef>
-        <bpmn2:targetRef>_EB520361-DC81-4B28-91A3-1D440DC37202_first_inInputX</bpmn2:targetRef>
+        <bpmn2:targetRef>_EB520361-DC81-4B28-91A3-1D440DC37202__first-inInputX</bpmn2:targetRef>
       </bpmn2:dataInputAssociation>
       <bpmn2:dataOutputAssociation id="_oDA51cTWEee2ocoCmQoSQA">
-        <bpmn2:sourceRef>_EB520361-DC81-4B28-91A3-1D440DC37202_first_outOutputX</bpmn2:sourceRef>
+        <bpmn2:sourceRef>_EB520361-DC81-4B28-91A3-1D440DC37202__first-outOutputX</bpmn2:sourceRef>
         <bpmn2:targetRef>aaa</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
     </bpmn2:callActivity>

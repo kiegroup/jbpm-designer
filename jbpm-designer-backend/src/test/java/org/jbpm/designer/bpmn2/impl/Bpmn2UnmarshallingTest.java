@@ -1819,7 +1819,7 @@ public class Bpmn2UnmarshallingTest {
     }
 
     @Test
-    public void testBusinessRuleTaskInputOutputSetWithSpaces() throws Exception {
+    public void testBusinessRuleTaskInputOutputSetWithSpacesAndUnderscores() throws Exception {
         Process process = getRootProcess(loader.loadProcessFromJson("businessRuleTaskWithDataInputsOutputsWithSpaces.json"));
         assertTrue(process.getFlowElements().get(1) instanceof BusinessRuleTask);
         BusinessRuleTask businessRuleTask = (BusinessRuleTask) process.getFlowElements().get(1);
@@ -1830,19 +1830,19 @@ public class Bpmn2UnmarshallingTest {
 
         List<DataInput> dataInputs = ioSpec.getDataInputs();
         assertEquals(3, dataInputs.size());
-        assertEquals("first in", dataInputs.get(0).getName());
-        assertEquals("second in", dataInputs.get(1).getName());
-        assertEquals("third in", dataInputs.get(2).getName());
+        assertEquals("_first in", dataInputs.get(0).getName());
+        assertEquals("_second in", dataInputs.get(1).getName());
+        assertEquals("_third in", dataInputs.get(2).getName());
 
         List<DataOutput> dataOutputs = ioSpec.getDataOutputs();
         assertEquals(2, dataOutputs.size());
-        assertEquals("first out", dataOutputs.get(0).getName());
-        assertEquals("second out", dataOutputs.get(1).getName());
+        assertEquals("_first out", dataOutputs.get(0).getName());
+        assertEquals("_second out", dataOutputs.get(1).getName());
 
     }
 
     @Test
-    public void testStartEventOutputSetWithSpaces() throws Exception {
+    public void testStartEventOutputSetWithSpacesAndUnderscores() throws Exception {
         Process process = getRootProcess(loader.loadProcessFromJson("startEventWithDataInputWithSpaces.json"));
         assertTrue(process.getFlowElements().get(0) instanceof StartEvent);
         StartEvent startEvent = (StartEvent) process.getFlowElements().get(0);
@@ -1852,8 +1852,8 @@ public class Bpmn2UnmarshallingTest {
         DataOutput dataOut = startEvent.getDataOutputs().get(0);
         DataOutputAssociation dataOutAssociation = startEvent.getDataOutputAssociation().get(0);
 
-        assertEquals("first in", dataOut.getName());
-        assertEquals("first in", ((DataOutput) dataOutAssociation.getSourceRef().get(0)).getName());
+        assertEquals("_first in", dataOut.getName());
+        assertEquals("_first in", ((DataOutput) dataOutAssociation.getSourceRef().get(0)).getName());
 
     }
 
@@ -1868,8 +1868,8 @@ public class Bpmn2UnmarshallingTest {
         DataInput dataIn = endEvent.getDataInputs().get(0);
         DataInputAssociation dataInputAssociation = endEvent.getDataInputAssociation().get(0);
 
-        assertEquals("first in", dataIn.getName());
-        assertEquals("first in", ((DataInput) dataInputAssociation.getTargetRef()).getName());
+        assertEquals("_first in", dataIn.getName());
+        assertEquals("_first in", ((DataInput) dataInputAssociation.getTargetRef()).getName());
 
     }
 
@@ -1882,10 +1882,26 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(callActivity.getDataOutputAssociations());
 
         DataInput dataIn = (DataInput) callActivity.getDataInputAssociations().get(0).getTargetRef();
-        assertEquals("first in", dataIn.getName());
+        assertEquals("_first in", dataIn.getName());
 
         DataOutput dataOut = (DataOutput) callActivity.getDataOutputAssociations().get(0).getSourceRef().get(0);
-        assertEquals("first out", dataOut.getName());
+        assertEquals("_first out", dataOut.getName());
+
+    }
+
+    @Test
+    public void testUserTaskInputsOutputSetWithSpaces() throws Exception {
+        Process process = getRootProcess(loader.loadProcessFromJson("userTaskWithDataInputOutputWithSpaces.json"));
+        assertTrue(process.getFlowElements().get(0) instanceof UserTask);
+        UserTask userTask = (UserTask) process.getFlowElements().get(0);
+        assertNotNull(userTask.getDataInputAssociations());
+        assertNotNull(userTask.getDataOutputAssociations());
+
+        DataInput dataIn = (DataInput) userTask.getDataInputAssociations().get(0).getTargetRef();
+        assertEquals("_first in", dataIn.getName());
+
+        DataOutput dataOut = (DataOutput) userTask.getDataOutputAssociations().get(0).getSourceRef().get(0);
+        assertEquals("_first out", dataOut.getName());
 
     }
 
