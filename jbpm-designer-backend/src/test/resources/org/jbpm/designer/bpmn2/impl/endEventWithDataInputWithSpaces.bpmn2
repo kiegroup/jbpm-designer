@@ -13,13 +13,13 @@
           <drools:metaValue><![CDATA[abc]]></drools:metaValue>
         </drools:metaData>
       </bpmn2:extensionElements>
-      <bpmn2:dataInput id="_A4E656CC-59E6-46EA-BD15-76B097C7BBF5_first_inInputX" drools:dtype="String" name="first in"/>
+      <bpmn2:dataInput id="_A4E656CC-59E6-46EA-BD15-76B097C7BBF5__first-inInputX" drools:dtype="String" name="_first in"/>
       <bpmn2:dataInputAssociation id="_T0qfQsTYEee2ocoCmQoSQA">
         <bpmn2:sourceRef>aaa</bpmn2:sourceRef>
-        <bpmn2:targetRef>_A4E656CC-59E6-46EA-BD15-76B097C7BBF5_first_inInputX</bpmn2:targetRef>
+        <bpmn2:targetRef>_A4E656CC-59E6-46EA-BD15-76B097C7BBF5__first-inInputX</bpmn2:targetRef>
       </bpmn2:dataInputAssociation>
       <bpmn2:inputSet id="_T0qfQcTYEee2ocoCmQoSQA">
-        <bpmn2:dataInputRefs>_A4E656CC-59E6-46EA-BD15-76B097C7BBF5_first_inInputX</bpmn2:dataInputRefs>
+        <bpmn2:dataInputRefs>_A4E656CC-59E6-46EA-BD15-76B097C7BBF5__first-inInputX</bpmn2:dataInputRefs>
       </bpmn2:inputSet>
     </bpmn2:endEvent>
   </bpmn2:process>
