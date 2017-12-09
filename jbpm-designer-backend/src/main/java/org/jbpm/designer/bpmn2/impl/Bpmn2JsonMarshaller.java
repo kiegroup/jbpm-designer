@@ -2384,35 +2384,39 @@ public class Bpmn2JsonMarshaller {
                              true);
 
                 for (OnEntryScriptType onEntryScript : onEntryExtensions) {
-                    onEntryStr += onEntryScript.getScript().replace("\\",
-                                                                    "\\\\").replace("\n",
-                                                                                    "\\n");
-                    if (!onEntryStr.endsWith("\\n")) {
-                        onEntryStr += "\n";
-                    }
+                    if(onEntryScript.getScript() != null) {
+                        onEntryStr += onEntryScript.getScript().replace("\\",
+                                                                        "\\\\").replace("\n",
+                                                                                        "\\n");
+                        if (!onEntryStr.endsWith("\\n")) {
+                            onEntryStr += "\n";
+                        }
 
-                    if (onEntryScript.getScriptFormat() != null) {
-                        String format = onEntryScript.getScriptFormat();
-                        String formatToWrite = getScriptLanguageFormat(format);
-                        properties.put("script_language",
-                                       formatToWrite);
+                        if (onEntryScript.getScriptFormat() != null) {
+                            String format = onEntryScript.getScriptFormat();
+                            String formatToWrite = getScriptLanguageFormat(format);
+                            properties.put("script_language",
+                                           formatToWrite);
+                        }
                     }
                 }
 
                 for (OnExitScriptType onExitScript : onExitExtensions) {
-                    onExitStr += onExitScript.getScript().replace("\\",
-                                                                  "\\\\").replace("\n",
-                                                                                  "\\n");
-                    if (!onExitStr.endsWith("\\n")) {
-                        onExitStr += "\n";
-                    }
+                    if (onExitScript.getScript() != null) {
+                        onExitStr += onExitScript.getScript().replace("\\",
+                                                                      "\\\\").replace("\n",
+                                                                                      "\\n");
+                        if (!onExitStr.endsWith("\\n")) {
+                            onExitStr += "\n";
+                        }
 
-                    if (onExitScript.getScriptFormat() != null) {
-                        String format = onExitScript.getScriptFormat();
-                        String formatToWrite = getScriptLanguageFormat(format);
-                        if (properties.get("script_language") == null) {
-                            properties.put("script_language",
-                                           formatToWrite);
+                        if (onExitScript.getScriptFormat() != null) {
+                            String format = onExitScript.getScriptFormat();
+                            String formatToWrite = getScriptLanguageFormat(format);
+                            if (properties.get("script_language") == null) {
+                                properties.put("script_language",
+                                               formatToWrite);
+                            }
                         }
                     }
                 }
