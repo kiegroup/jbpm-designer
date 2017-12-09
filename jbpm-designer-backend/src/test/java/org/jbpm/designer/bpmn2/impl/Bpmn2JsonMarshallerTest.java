@@ -531,4 +531,23 @@ public class Bpmn2JsonMarshallerTest {
 
     }
 
+    @Test
+    public void testProcessWithEmptyOnEntryOnExitNode() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("usertaskWithEmptyOnEntryOnExistActions.bpmn2");
+        JSONObject processProperties = process.getJSONObject("properties");
+
+        String processName = processProperties.getString("processn");
+        assertEquals("MyProcess", processName);
+
+        List<JSONObject> userTasks = loader.getChildByTypeName(process, "Task");
+        assertNotNull(userTasks);
+        assertEquals(1, userTasks.size());
+        JSONObject userTask = userTasks.get(0);
+        assertNotNull(userTask);
+
+        JSONObject userTaskProperties = userTask.getJSONObject("properties");
+        String userTaskName = userTaskProperties.getString("name");
+        assertEquals("MyTask", userTaskName);
+    }
+
 }
