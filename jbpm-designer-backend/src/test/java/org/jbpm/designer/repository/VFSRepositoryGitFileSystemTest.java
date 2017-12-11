@@ -27,7 +27,6 @@ import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.*;
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.uberfire.backend.server.util.Paths;
-import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.java.nio.file.NoSuchFileException;
 
 import java.io.File;
@@ -42,6 +41,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 public class VFSRepositoryGitFileSystemTest {
 
@@ -790,9 +790,12 @@ public class VFSRepositoryGitFileSystemTest {
         ServletContext servletContext = mock(ServletContext.class);
         when (servletContext.getRealPath(anyString())).thenReturn(getClass().getResource("default.json").getFile());
 
+        HttpServletRequest servletRequest = mock(HttpServletRequest.class);
+        when (servletRequest.getServletContext()).thenReturn(servletContext);
+
         VFSRepository repository = new VFSRepository(producer.getIoService());
         repository.setDescriptor(descriptor);
-        repository.setServletContext(servletContext);
+        repository.setServletRequest(servletRequest);
 
         Directory testProjectDir = repository.createDirectory("/mytestproject");
 
