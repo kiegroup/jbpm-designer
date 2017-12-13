@@ -19,6 +19,7 @@ package org.jbpm.designer.web.server;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -44,6 +45,8 @@ import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
@@ -51,13 +54,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(Parameterized.class)
 public class TransformerServletTest extends RepositoryBaseTest {
 
     private static final String BP_CONTENT = "test process";
     private static final String BPMN2_FILE_TYPE = "bpmn2";
     private static final String BP_NAME = "bp1";
     private static final String JBPM_PROFILE_NAME = "jbpm";
-    private static final String LOCATION = "/global";
     private static final String SVG_WIDTH = "197.28";
     private static final String SVG_HEIGHT = "235.92";
 
@@ -65,6 +68,8 @@ public class TransformerServletTest extends RepositoryBaseTest {
     private static final String TEST_HTML = "<html><head></head><body><div id=\"pagecontainercore\"><p>Test String</p></div></body>";
     private static String FORMATTED_SVG_ENCODED;
     private static String TEST_HTML_ENCODED;
+
+    private String location;
 
     {
         try {
@@ -84,11 +89,20 @@ public class TransformerServletTest extends RepositoryBaseTest {
         super.teardown();
     }
 
+    @Parameterized.Parameters
+    public static Collection<String[]> assetLocations() {
+        return Arrays.asList(new String[][]{{"/global"}, {"/g l o b a l"}});
+    }
+
+    public TransformerServletTest(String location) {
+        this.location = location;
+    }
+
     @Test
     public void testTransformToPng() throws Exception {
         Repository repository = createRepository();
         String id = createAsset(repository,
-                                LOCATION,
+                                location,
                                 BP_NAME,
                                 BPMN2_FILE_TYPE,
                                 BP_CONTENT);
@@ -120,7 +134,7 @@ public class TransformerServletTest extends RepositoryBaseTest {
         String responseText = new String(response.getContent());
         assertNotNull(responseText);
 
-        Collection<Asset> assets = repository.listAssets(LOCATION,
+        Collection<Asset> assets = repository.listAssets(location,
                                                          new FilterByExtension(targetType));
         Asset<String> asset = repository.loadAsset(assets.iterator().next().getUniqueId());
         assertNotNull(asset);
@@ -131,7 +145,7 @@ public class TransformerServletTest extends RepositoryBaseTest {
     public void testTransformToPdf() throws Exception {
         Repository repository = createRepository();
         String id = createAsset(repository,
-                                LOCATION,
+                                location,
                                 BP_NAME,
                                 BPMN2_FILE_TYPE,
                                 BP_CONTENT);
@@ -163,7 +177,7 @@ public class TransformerServletTest extends RepositoryBaseTest {
         String responseText = new String(response.getContent());
         assertNotNull(responseText);
 
-        Collection<Asset> assets = repository.listAssets(LOCATION,
+        Collection<Asset> assets = repository.listAssets(location,
                                                          new FilterByExtension(targetType));
         Asset<String> asset = repository.loadAsset(assets.iterator().next().getUniqueId());
         assertNotNull(asset);
@@ -174,7 +188,7 @@ public class TransformerServletTest extends RepositoryBaseTest {
     public void testTransformHtmlToPdf() throws Exception {
         Repository repository = createRepository();
         String id = createAsset(repository,
-                                LOCATION,
+                                location,
                                 BP_NAME,
                                 BPMN2_FILE_TYPE,
                                 BP_CONTENT);
@@ -213,7 +227,7 @@ public class TransformerServletTest extends RepositoryBaseTest {
     public void testSharePng() throws Exception {
         Repository repository = createRepository();
         String id = createAsset(repository,
-                                LOCATION,
+                                location,
                                 BP_NAME,
                                 BPMN2_FILE_TYPE,
                                 BP_CONTENT);
@@ -257,7 +271,7 @@ public class TransformerServletTest extends RepositoryBaseTest {
     public void testSharePdf() throws Exception {
         Repository repository = createRepository();
         String id = createAsset(repository,
-                                LOCATION,
+                                location,
                                 BP_NAME,
                                 BPMN2_FILE_TYPE,
                                 BP_CONTENT);
@@ -310,7 +324,7 @@ public class TransformerServletTest extends RepositoryBaseTest {
 
         String bpName = "mytestbp1";
         String id = createAsset(repository,
-                                LOCATION,
+                                location,
                                 bpName,
                                 BPMN2_FILE_TYPE,
                                 BP_CONTENT);
@@ -325,7 +339,7 @@ public class TransformerServletTest extends RepositoryBaseTest {
                                              bpName,
                                              repository);
 
-        Collection<Asset> assets = repository.listAssets(LOCATION,
+        Collection<Asset> assets = repository.listAssets(location,
                                                          new FilterByExtension(targetType));
         assertEquals(1,
                      assets.size());
@@ -354,7 +368,7 @@ public class TransformerServletTest extends RepositoryBaseTest {
             }
         }
 
-        assets = repository.listAssets(LOCATION,
+        assets = repository.listAssets(location,
                                        new FilterByExtension(targetType));
         assertEquals(1,
                      assets.size());
