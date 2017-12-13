@@ -629,7 +629,7 @@ public class Bpmn2JsonMarshaller {
             for (DataOutputAssociation doa : outputAssociations) {
                 String doaName = ((DataOutput) doa.getSourceRef().get(0)).getName();
                 if (doaName != null && doaName.length() > 0) {
-                    doutassociationbuff.append("[dout]" + updateDataInputOutputUnderscores(((DataOutput) doa.getSourceRef().get(0)).getName()));
+                    doutassociationbuff.append("[dout]" + updateDataInputOutputDashes(((DataOutput) doa.getSourceRef().get(0)).getName()));
                     doutassociationbuff.append("->");
                     doutassociationbuff.append(doa.getTargetRef().getId());
                     doutassociationbuff.append(",");
@@ -2140,7 +2140,7 @@ public class Bpmn2JsonMarshaller {
                         if (isCustomElement((String) properties.get("taskname"),
                                             preProcessingData)) {
                             if (!(rhsAssociation.equals("TaskName"))) {
-                                String replacer = encodeAssociationValue(updateDataInputOutputUnderscores(associationValue));
+                                String replacer = encodeAssociationValue(updateDataInputOutputDashes(associationValue));
                                 associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
                                 associationBuff.append(",");
 
@@ -2164,7 +2164,7 @@ public class Bpmn2JsonMarshaller {
                                             rhsAssociation.equals("NotStartedNotify")
                                     )) {
                                 String replacer = encodeAssociationValue(associationValue);
-                                associationBuff.append("[din]" + updateDataInputOutputUnderscores(rhsAssociation)).append("=").append(replacer);
+                                associationBuff.append("[din]" + updateDataInputOutputDashes(rhsAssociation)).append("=").append(replacer);
                                 associationBuff.append(",");
 
                                 properties.put(rhsAssociation.toLowerCase(),
@@ -2236,7 +2236,7 @@ public class Bpmn2JsonMarshaller {
                 //            }
                 else {
                     if (lhsAssociation != null && lhsAssociation.length() > 0) {
-                        associationBuff.append("[din]" + lhsAssociation).append("->").append(updateDataInputOutputUnderscores(rhsAssociation));
+                        associationBuff.append("[din]" + lhsAssociation).append("->").append(updateDataInputOutputDashes(rhsAssociation));
                         associationBuff.append(",");
                         // Handle properties that have their independent input editors
                         if (isCustomElement((String) properties.get("taskname"),
@@ -2318,7 +2318,7 @@ public class Bpmn2JsonMarshaller {
 
                     if (!wasBiDirectional) {
                         if (lhsAssociation != null && lhsAssociation.length() > 0) {
-                            associationBuff.append("[dout]" + updateDataInputOutputUnderscores(lhsAssociation)).append("->").append(rhsAssociation);
+                            associationBuff.append("[dout]" + updateDataInputOutputDashes(lhsAssociation)).append("->").append(rhsAssociation);
                             associationBuff.append(",");
                         }
                     }
@@ -3260,7 +3260,7 @@ public class Bpmn2JsonMarshaller {
                     }
 
                     if (lhsAssociation != null && lhsAssociation.length() > 0) {
-                        associationBuff.append("[dout]" + updateDataInputOutputUnderscores(lhsAssociation)).append("->").append(rhsAssociation);
+                        associationBuff.append("[dout]" + updateDataInputOutputDashes(lhsAssociation)).append("->").append(rhsAssociation);
                         associationBuff.append(",");
                     }
                 }
@@ -3300,13 +3300,13 @@ public class Bpmn2JsonMarshaller {
                         if (associationValue == null) {
                             associationValue = "";
                         }
-                        String replacer = encodeAssociationValue(updateDataInputOutputUnderscores(associationValue));
+                        String replacer = encodeAssociationValue(updateDataInputOutputDashes(associationValue));
                         associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
                         associationBuff.append(",");
                     }
                 } else {
                     if (lhsAssociation != null && lhsAssociation.length() > 0) {
-                        associationBuff.append("[din]" + lhsAssociation).append("->").append(updateDataInputOutputUnderscores(rhsAssociation));
+                        associationBuff.append("[din]" + lhsAssociation).append("->").append(updateDataInputOutputDashes(rhsAssociation));
                         associationBuff.append(",");
                     }
                 }
@@ -4042,8 +4042,8 @@ public class Bpmn2JsonMarshaller {
         }
     }
 
-    private String updateDataInputOutputUnderscores(String dataInputOutput) {
-        return dataInputOutput.replaceAll("_",
+    private String updateDataInputOutputDashes(String dataInputOutput) {
+        return dataInputOutput.replaceAll("-",
                                           " ");
     }
 }

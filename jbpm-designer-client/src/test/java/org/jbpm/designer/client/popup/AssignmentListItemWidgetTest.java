@@ -172,6 +172,8 @@ public class AssignmentListItemWidgetTest {
                      regExp.test("a@1"));
         assertEquals(true,
                      regExp.test("a1"));
+        assertEquals(false,
+                     regExp.test("a-1"));
 
         verify(customDataType,
                times(1)).addKeyDownHandler(any(KeyDownHandler.class));
