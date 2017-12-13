@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
 import org.guvnor.common.services.project.events.NewProjectEvent;
@@ -972,9 +973,12 @@ public class VFSRepositoryGitFileSystemTest {
         ServletContext servletContext = mock(ServletContext.class);
         when (servletContext.getRealPath(anyString())).thenReturn(getClass().getResource("default.json").getFile());
 
+        HttpServletRequest servletRequest = mock(HttpServletRequest.class);
+        when (servletRequest.getServletContext()).thenReturn(servletContext);
+
         VFSRepository repository = new VFSRepository(producer.getIoService());
         repository.setDescriptor(descriptor);
-        repository.setServletContext(servletContext);
+        repository.setServletRequest(servletRequest);
 
         Directory testProjectDir = repository.createDirectory("/mytestproject");
 
