@@ -681,7 +681,7 @@ public class TransformerServlet extends HttpServlet {
                 }
                 assetFullName = processid + assetExt + assetFileExt;
 
-                repository.deleteAssetFromPath(processAsset.getAssetLocation() + File.separator + assetFullName);
+                repository.deleteAssetFromPath(processAsset.getAssetLocation().replaceAll("\\s", "%20") + File.separator + assetFullName);
 
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
@@ -732,7 +732,7 @@ public class TransformerServlet extends HttpServlet {
 
                 builder.name(processid + assetExt)
                         .type(assetFileExt.substring(1))
-                        .location(processAsset.getAssetLocation())
+                        .location(processAsset.getAssetLocation().replaceAll("\\s", "%20"))
                         .version(processAsset.getVersion())
                         .content(outputStream.toByteArray());
 
