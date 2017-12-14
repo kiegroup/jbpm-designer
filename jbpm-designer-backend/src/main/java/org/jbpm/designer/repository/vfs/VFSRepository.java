@@ -31,7 +31,7 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
@@ -81,7 +81,7 @@ public class VFSRepository implements Repository {
     User identity;
 
     @Inject
-    private ServletContext servletContext;
+    HttpServletRequest servletRequest;
 
     public VFSRepository() {
 
@@ -768,7 +768,7 @@ public class VFSRepository implements Repository {
                 ioService.write(ioService.get(URI.create(globalDirPath + separator + fileName)),
                                 "");
             } else {
-                String fileRealPath = servletContext.getRealPath(designerContext + "/defaults/" + fileName);
+                String fileRealPath = servletRequest.getServletContext().getRealPath(designerContext + "/defaults/" + fileName);
                 ioService.write(ioService.get(URI.create(globalDirPath + separator + fileName)),
                                 IOUtils.toByteArray(new FileInputStream(fileRealPath)));
             }
@@ -776,7 +776,7 @@ public class VFSRepository implements Repository {
     }
 
     // for testing
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
+    public void setServletRequest(HttpServletRequest servletRequest) {
+        this.servletRequest = servletRequest;
     }
 }
