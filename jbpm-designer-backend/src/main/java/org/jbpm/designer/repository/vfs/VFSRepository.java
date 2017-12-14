@@ -38,7 +38,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.guvnor.common.services.project.events.NewModuleEvent;
-import org.guvnor.common.services.project.events.NewProjectEvent;
 import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
@@ -669,12 +668,23 @@ public class VFSRepository implements Repository {
         }
     }
 
+    private String makeGlobalDirPath(final String projectPath,
+                                     final String separator) {
+        if (projectPath == null || projectPath.trim().isEmpty()) {
+            return "global";
+        } else {
+            return projectPath + separator + "global";
+        }
+    }
+
     public void createGlobalDirOnNewProject(@Observes final NewModuleEvent newModuleEvent) {
         // create the global dir before the asset is created (upon new project creation)
         KieModule module = (KieModule) newModuleEvent.getModule();
         String projectPath = org.uberfire.backend.server.util.Paths.convert(module.getRootPath()).toUri().toString();
         String separator = org.uberfire.backend.server.util.Paths.convert(module.getRootPath()).getFileSystem().getSeparator();
-        String globalDirPath = projectPath + separator + "global";
+
+        String globalDirPath = makeGlobalDirPath(projectPath,
+                                                 separator);
         Path globalDirVFSPath = ioService.get(URI.create(globalDirPath));
         String designerContext = ConfigurationProvider.getInstance().getDesignerContext();
 
