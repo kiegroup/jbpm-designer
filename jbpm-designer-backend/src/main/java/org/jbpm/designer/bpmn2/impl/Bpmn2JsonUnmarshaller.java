@@ -7412,6 +7412,6 @@ public class Bpmn2JsonUnmarshaller {
 
     private String updateDataInputOutputSpaces(String dataInputOutput) {
         return dataInputOutput.replaceAll(" ",
-                                          "_");
+                                          "-");
     }
 }

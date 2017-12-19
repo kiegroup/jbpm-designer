@@ -1,19 +1,19 @@
 {
-  "resourceId":"_Gqep0cTAEee2ocoCmQoSQA",
+  "resourceId":"_ARJkkNxLEeeOIpicKQc2jw",
   "properties":{
     "namespaces":"",
     "expressionlanguage":"http://www.mvel.org/2.0",
-    "name":"",
+    "name":"null",
     "executable":"true",
-    "package":"com.myteam.abc",
-    "vardefs":"aaa,bbb,ccc",
+    "package":"org.jbpm",
+    "vardefs":"aaa,bbb",
     "customdescription":"",
     "customcaseidprefix":"",
     "customcaseroles":"",
     "adhocprocess":"false",
     "imports":"",
     "globals":"",
-    "id":"abc.abc",
+    "id":"evaluation.abc",
     "version":"1.0",
     "timeunit":"min",
     "currency":"",
@@ -27,42 +27,66 @@
   },
   "childShapes":[
     {
-      "resourceId":"_EB520361-DC81-4B28-91A3-1D440DC37202",
+      "resourceId":"_E0A9FD4C-EFE9-4C07-853D-41370BB5A859",
       "properties":{
-        "name":"abc",
+        "name":"myTask",
         "documentation":"",
         "isselectable":"true",
         "invisid":"",
         "isforcompensation":"",
-        "assignments":"[din]aaa->_first in,[dout]_first out->aaa",
+        "assignments":"[din]aaa->_first in,[dout]_first out->bbb",
         "assignmentsview":"1 data input, 1 data output",
+        "tasktype":"User",
+        "messageref":"",
+        "script":"",
+        "script_language":"java",
         "bgcolor":"#fafad2",
         "bordercolor":"#000000",
         "fontcolor":"#000000",
         "fontsize":"",
-        "activitytype":"Sub-Process",
         "datainputset":"_first in:String",
         "dataoutputset":"_first out:String",
         "origbgcolor":"#fafad2",
+        "nomorph":"true",
         "origbordercolor":"#000000",
-        "calledelement":"",
+        "ruleflowgroup":"",
+        "rulelanguage":"DRL",
         "onentryactions":"",
         "onexitactions":"",
         "isasync":"false",
-        "isabortparent":"true",
         "customautostart":"false",
-        "independent":"true",
-        "waitforcompletion":"true",
-        "script_language":"java",
-        "unitcost":"0",
-        "distributiontype":"uniform",
+        "taskname":"",
+        "serviceoperation":"",
+        "serviceinterface":"",
+        "serviceimplementation":"Java",
+        "actors":"",
+        "groupid":"",
+        "subject":"",
+        "description":"",
+        "content":"",
+        "reassignment":"",
+        "notifications":"",
+        "locale":"",
+        "createdby":"",
+        "skippable":"true",
+        "priority":"",
+        "multipleinstance":"false",
+        "multipleinstancecollectioninput":"",
+        "multipleinstancecollectionoutput":"",
+        "multipleinstancedatainput":"",
+        "multipleinstancedataoutput":"",
+        "multipleinstancecompletioncondition":"",
         "min":"5",
         "max":"10",
+        "standarddeviation":"1",
         "mean":"0",
-        "standarddeviation":"1"
+        "distributiontype":"uniform",
+        "quantity":"1",
+        "workinghours":"8",
+        "unitcost":"0"
       },
       "stencil":{
-        "id":"ReusableSubprocess"
+        "id":"Task"
       },
       "childShapes":[
 
@@ -72,12 +96,12 @@
       ],
       "bounds":{
         "lowerRight":{
-          "x":310,
-          "y":170
+          "x":316,
+          "y":229
         },
         "upperLeft":{
-          "x":210,
-          "y":90
+          "x":216,
+          "y":149
         }
       },
       "dockers":[
