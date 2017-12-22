@@ -19,10 +19,12 @@ package org.jbpm.designer.client.handlers;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.project.model.Package;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jbpm.designer.client.resources.DesignerEditorResources;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
@@ -62,7 +64,7 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
 
     @Override
     public IsWidget getIcon() {
-        return resourceType.getIcon();
+        return new Image(DesignerEditorResources.INSTANCE.images().typeForm());
     }
 
     @Override
