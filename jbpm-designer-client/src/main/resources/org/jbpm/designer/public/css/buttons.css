@@ -1,0 +1,10 @@
+#ext-gen293, button.images_page_copy,
+#ext-gen301, button.images_page_paste,
+#ext-gen309, button.images_cross,
+li#ext-gen686, li#ext-gen691,
+#ext-gen867, button.images_repository_rep,
+#ext-gen901, button.images_fullscreen,
+#ext-gen952, img#ext-gen947,
+#ext-gen945, img#ext-gen946 {
+	display: none;
+}
