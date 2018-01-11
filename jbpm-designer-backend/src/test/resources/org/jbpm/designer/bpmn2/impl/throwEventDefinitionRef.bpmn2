@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/bpmn20" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:drools="http://www.jboss.org/drools" id="_8MHtEPceEee2rZH0ew5N-g" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd" exporter="jBPM Designer" exporterVersion="6.2.0" expressionLanguage="http://www.mvel.org/2.0" targetNamespace="http://www.omg.org/bpmn20" typeLanguage="http://www.java.com/javaTypes">
+  <bpmn2:signal id="_MYSIGNAL" name="mysignal"></bpmn2:signal>
+  <bpmn2:signalEventDefinition id="_MYSIGNALDEFINITION" signalRef="_MYSIGNAL">
+  </bpmn2:signalEventDefinition>
+  <bpmn2:process id="myproject.throwDefinitionRef" drools:packageName="com.myteam.myproject" drools:version="1.0" name="throwDefinitionRef" isExecutable="true">
+    <bpmn2:intermediateThrowEvent id="_033D62B7-73A8-42BE-8E84-7D14F8D181CF" drools:selectable="true" color:background-color="#8cabff" color:border-color="#008cec" color:color="#000000" name="mysignalEvent">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[mysignalEvent]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:eventDefinitionRef>_MYSIGNALDEFINITION</bpmn2:eventDefinitionRef>
+    </bpmn2:intermediateThrowEvent>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="_8MHtEvceEee2rZH0ew5N-g">
+    <bpmndi:BPMNPlane id="_8MHtE_ceEee2rZH0ew5N-g" bpmnElement="myproject.throwDefinitionRef">
+      <bpmndi:BPMNShape id="_8MHtFPceEee2rZH0ew5N-g" bpmnElement="_033D62B7-73A8-42BE-8E84-7D14F8D181CF">
+        <dc:Bounds height="30.0" width="30.0" x="269.0" y="177.0"/>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

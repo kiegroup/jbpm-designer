@@ -642,24 +642,36 @@ public class Bpmn2JsonMarshaller {
                            doutassociationbuff.toString());
         }
         // event definitions
-        List<EventDefinition> eventdefs = event.getEventDefinitions();
+        List<EventDefinition> eventdefs = getEventDefinitionsForEvent(event);
         for (EventDefinition ed : eventdefs) {
             if (ed instanceof TimerEventDefinition) {
                 TimerEventDefinition ted = (TimerEventDefinition) ed;
                 if (ted.getTimeDate() != null) {
-                    properties.put("timedate",
-                                   ((FormalExpression) ted.getTimeDate()).getBody());
+                    try {
+                        properties.put("timedate",
+                                       ((FormalExpression) ted.getTimeDate()).getBody());
+                    } catch(Exception e) {
+                        _logger.info("Could not find timedate for : " + ted);
+                    }
                 }
                 if (ted.getTimeDuration() != null) {
-                    properties.put("timeduration",
+                    try {
+                        properties.put("timeduration",
                                    ((FormalExpression) ted.getTimeDuration()).getBody());
+                    } catch(Exception e) {
+                        _logger.info("Could not find timeduration for : " + ted);
+                    }
                 }
                 if (ted.getTimeCycle() != null) {
-                    properties.put("timecycle",
-                                   ((FormalExpression) ted.getTimeCycle()).getBody());
-                    if (((FormalExpression) ted.getTimeCycle()).getLanguage() != null) {
-                        properties.put("timecyclelanguage",
-                                       ((FormalExpression) ted.getTimeCycle()).getLanguage());
+                    try {
+                        properties.put("timecycle",
+                                       ((FormalExpression) ted.getTimeCycle()).getBody());
+                        if (((FormalExpression) ted.getTimeCycle()).getLanguage() != null) {
+                            properties.put("timecyclelanguage",
+                                           ((FormalExpression) ted.getTimeCycle()).getLanguage());
+                        }
+                    } catch(Exception e) {
+                        _logger.info("Could not find timecycle for : " + ted);
                     }
                 }
             } else if (ed instanceof SignalEventDefinition) {
@@ -693,25 +705,29 @@ public class Bpmn2JsonMarshaller {
                                    "");
                 }
             } else if (ed instanceof ConditionalEventDefinition) {
-                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
-                if (conditionalExp.getBody() != null) {
-                    properties.put("conditionexpression",
-                                   conditionalExp.getBody().replaceAll("\n",
-                                                                       "\\\\n"));
-                }
-                if (conditionalExp.getLanguage() != null) {
-                    String languageVal = conditionalExp.getLanguage();
-                    if (languageVal.equals("http://www.jboss.org/drools/rule")) {
-                        properties.put("conditionlanguage",
-                                       "drools");
-                    } else if (languageVal.equals("http://www.mvel.org/2.0")) {
-                        properties.put("conditionlanguage",
-                                       "mvel");
-                    } else {
-                        // default to drools
-                        properties.put("conditionlanguage",
-                                       "drools");
+                try {
+                    FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
+                    if (conditionalExp.getBody() != null) {
+                        properties.put("conditionexpression",
+                                       conditionalExp.getBody().replaceAll("\n",
+                                                                           "\\\\n"));
                     }
+                    if (conditionalExp.getLanguage() != null) {
+                        String languageVal = conditionalExp.getLanguage();
+                        if (languageVal.equals("http://www.jboss.org/drools/rule")) {
+                            properties.put("conditionlanguage",
+                                           "drools");
+                        } else if (languageVal.equals("http://www.mvel.org/2.0")) {
+                            properties.put("conditionlanguage",
+                                           "mvel");
+                        } else {
+                            // default to drools
+                            properties.put("conditionlanguage",
+                                           "drools");
+                        }
+                    }
+                } catch(Exception e) {
+                    _logger.info("Could not find conditional expression for: " + ed);
                 }
             } else if (ed instanceof EscalationEventDefinition) {
                 if (((EscalationEventDefinition) ed).getEscalationRef() != null) {
@@ -784,24 +800,36 @@ public class Bpmn2JsonMarshaller {
         }
 
         // event definitions
-        List<EventDefinition> eventdefs = event.getEventDefinitions();
+        List<EventDefinition> eventdefs = getEventDefinitionsForEvent(event);
         for (EventDefinition ed : eventdefs) {
             if (ed instanceof TimerEventDefinition) {
                 TimerEventDefinition ted = (TimerEventDefinition) ed;
                 if (ted.getTimeDate() != null) {
-                    properties.put("timedate",
-                                   ((FormalExpression) ted.getTimeDate()).getBody());
+                    try {
+                        properties.put("timedate",
+                                       ((FormalExpression) ted.getTimeDate()).getBody());
+                    } catch (Exception e) {
+                        _logger.info("Could not find timedate for: " + ted);
+                    }
                 }
                 if (ted.getTimeDuration() != null) {
-                    properties.put("timeduration",
+                    try {
+                        properties.put("timeduration",
                                    ((FormalExpression) ted.getTimeDuration()).getBody());
+                    } catch (Exception e) {
+                        _logger.info("Could not find timeduration for: " + ted);
+                    }
                 }
                 if (ted.getTimeCycle() != null) {
-                    properties.put("timecycle",
-                                   ((FormalExpression) ted.getTimeCycle()).getBody());
-                    if (((FormalExpression) ted.getTimeCycle()).getLanguage() != null) {
-                        properties.put("timecyclelanguage",
-                                       ((FormalExpression) ted.getTimeCycle()).getLanguage());
+                    try {
+                        properties.put("timecycle",
+                                       ((FormalExpression) ted.getTimeCycle()).getBody());
+                        if (((FormalExpression) ted.getTimeCycle()).getLanguage() != null) {
+                            properties.put("timecyclelanguage",
+                                           ((FormalExpression) ted.getTimeCycle()).getLanguage());
+                        }
+                    } catch(Exception e) {
+                        _logger.info("Could not find timecycle for: " + ted);
                     }
                 }
             } else if (ed instanceof SignalEventDefinition) {
@@ -835,24 +863,28 @@ public class Bpmn2JsonMarshaller {
                                    "");
                 }
             } else if (ed instanceof ConditionalEventDefinition) {
-                FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
-                if (conditionalExp.getBody() != null) {
-                    properties.put("conditionexpression",
-                                   conditionalExp.getBody());
-                }
-                if (conditionalExp.getLanguage() != null) {
-                    String languageVal = conditionalExp.getLanguage();
-                    if (languageVal.equals("http://www.jboss.org/drools/rule")) {
-                        properties.put("conditionlanguage",
-                                       "drools");
-                    } else if (languageVal.equals("http://www.mvel.org/2.0")) {
-                        properties.put("conditionlanguage",
-                                       "mvel");
-                    } else {
-                        // default to drools
-                        properties.put("conditionlanguage",
-                                       "drools");
+                try {
+                    FormalExpression conditionalExp = (FormalExpression) ((ConditionalEventDefinition) ed).getCondition();
+                    if (conditionalExp.getBody() != null) {
+                        properties.put("conditionexpression",
+                                       conditionalExp.getBody());
                     }
+                    if (conditionalExp.getLanguage() != null) {
+                        String languageVal = conditionalExp.getLanguage();
+                        if (languageVal.equals("http://www.jboss.org/drools/rule")) {
+                            properties.put("conditionlanguage",
+                                           "drools");
+                        } else if (languageVal.equals("http://www.mvel.org/2.0")) {
+                            properties.put("conditionlanguage",
+                                           "mvel");
+                        } else {
+                            // default to drools
+                            properties.put("conditionlanguage",
+                                           "drools");
+                        }
+                    }
+                } catch(Exception e) {
+                    _logger.info("Could not find conditionexpression for: " + ed);
                 }
             } else if (ed instanceof EscalationEventDefinition) {
                 if (((EscalationEventDefinition) ed).getEscalationRef() != null) {
@@ -1300,7 +1332,7 @@ public class Bpmn2JsonMarshaller {
         setSimulationProperties(startEvent.getId(),
                                 properties);
 
-        List<EventDefinition> eventDefinitions = startEvent.getEventDefinitions();
+        List<EventDefinition> eventDefinitions = getEventDefinitionsForEvent(startEvent);
         properties.put("isinterrupting",
                        startEvent.isIsInterrupting());
         if (eventDefinitions == null || eventDefinitions.size() == 0) {
@@ -1394,7 +1426,7 @@ public class Bpmn2JsonMarshaller {
         setSimulationProperties(endEvent.getId(),
                                 properties);
 
-        List<EventDefinition> eventDefinitions = endEvent.getEventDefinitions();
+        List<EventDefinition> eventDefinitions = getEventDefinitionsForEvent(endEvent);
         if (eventDefinitions == null || eventDefinitions.size() == 0) {
             marshallNode(endEvent,
                          properties,
@@ -1475,7 +1507,7 @@ public class Bpmn2JsonMarshaller {
                                                   float xOffset,
                                                   float yOffset,
                                                   Map<String, Object> properties) throws JsonGenerationException, IOException {
-        List<EventDefinition> eventDefinitions = catchEvent.getEventDefinitions();
+        List<EventDefinition> eventDefinitions = getEventDefinitionsForEvent(catchEvent);
         // simulation properties
         setSimulationProperties(catchEvent.getId(),
                                 properties);
@@ -1551,7 +1583,7 @@ public class Bpmn2JsonMarshaller {
                                          float xOffset,
                                          float yOffset,
                                          Map<String, Object> catchEventProperties) throws JsonGenerationException, IOException {
-        List<EventDefinition> eventDefinitions = boundaryEvent.getEventDefinitions();
+        List<EventDefinition> eventDefinitions = getEventDefinitionsForEvent(boundaryEvent);
         if (boundaryEvent.isCancelActivity()) {
             catchEventProperties.put("boundarycancelactivity",
                                      "true");
@@ -1635,7 +1667,7 @@ public class Bpmn2JsonMarshaller {
                                                   float xOffset,
                                                   float yOffset,
                                                   Map<String, Object> properties) throws JsonGenerationException, IOException {
-        List<EventDefinition> eventDefinitions = throwEvent.getEventDefinitions();
+        List<EventDefinition> eventDefinitions = getEventDefinitionsForEvent(throwEvent);
 
         // simulation properties
         setSimulationProperties(throwEvent.getId(),
@@ -1993,9 +2025,13 @@ public class Bpmn2JsonMarshaller {
             }
 
             if (taskmi.getCompletionCondition() != null) {
-                if (taskmi.getCompletionCondition() instanceof FormalExpression) {
-                    properties.put("multipleinstancecompletioncondition",
-                                   ((FormalExpression) taskmi.getCompletionCondition()).getBody());
+                try {
+                    if (taskmi.getCompletionCondition() instanceof FormalExpression) {
+                        properties.put("multipleinstancecompletioncondition",
+                                       ((FormalExpression) taskmi.getCompletionCondition()).getBody());
+                    }
+                } catch(Exception e) {
+                    _logger.info("Could not find multipleinstancecompletioncondition for: " + taskmi);
                 }
             }
         } else {
@@ -2965,16 +3001,20 @@ public class Bpmn2JsonMarshaller {
                                "Parallel");
             }
             if (ahsp.getCompletionCondition() != null) {
-                FormalExpression completionExpression = (FormalExpression) ahsp.getCompletionCondition();
-                if (completionExpression != null) {
-                    properties.put("adhoccompletioncondition",
-                                   completionExpression.getBody().replaceAll("\n",
-                                                                             "\\\\n"));
-                    if (completionExpression.getLanguage() != null) {
-                        String completionLanguage = getScriptLanguageFormat(completionExpression.getLanguage());
-                        properties.put("script_language",
-                                       completionLanguage);
+                try {
+                    FormalExpression completionExpression = (FormalExpression) ahsp.getCompletionCondition();
+                    if (completionExpression != null) {
+                        properties.put("adhoccompletioncondition",
+                                       completionExpression.getBody().replaceAll("\n",
+                                                                                 "\\\\n"));
+                        if (completionExpression.getLanguage() != null) {
+                            String completionLanguage = getScriptLanguageFormat(completionExpression.getLanguage());
+                            properties.put("script_language",
+                                           completionLanguage);
+                        }
                     }
+                } catch(Exception e) {
+                    _logger.info("Could not find adhoccompletioncondition for: " + ahsp);
                 }
             }
         }
@@ -3083,9 +3123,13 @@ public class Bpmn2JsonMarshaller {
             }
 
             if (taskmi.getCompletionCondition() != null) {
-                if (taskmi.getCompletionCondition() instanceof FormalExpression) {
-                    properties.put("multipleinstancecompletioncondition",
-                                   ((FormalExpression) taskmi.getCompletionCondition()).getBody());
+                try {
+                    if (taskmi.getCompletionCondition() instanceof FormalExpression) {
+                        properties.put("multipleinstancecompletioncondition",
+                                       ((FormalExpression) taskmi.getCompletionCondition()).getBody());
+                    }
+                } catch(Exception e) {
+                    _logger.info("Could not find multipleinstancecompletioncondition for : " + taskmi);
                 }
             }
         }
@@ -3355,30 +3399,34 @@ public class Bpmn2JsonMarshaller {
         }
 
         Expression conditionExpression = sequenceFlow.getConditionExpression();
-        if (conditionExpression instanceof FormalExpression) {
-            if (((FormalExpression) conditionExpression).getBody() != null) {
-                properties.put("conditionexpression",
-                               ((FormalExpression) conditionExpression).getBody().replaceAll("\n",
-                                                                                             "\\\\n"));
-            }
-            if (((FormalExpression) conditionExpression).getLanguage() != null) {
-                String cd = ((FormalExpression) conditionExpression).getLanguage();
-                String cdStr = "";
-                if (cd.equalsIgnoreCase("http://www.java.com/java")) {
-                    cdStr = "java";
-                } else if (cd.equalsIgnoreCase("http://www.jboss.org/drools/rule")) {
-                    cdStr = "drools";
-                } else if (cd.equalsIgnoreCase("http://www.mvel.org/2.0")) {
-                    cdStr = "mvel";
-                } else if (cd.equalsIgnoreCase("http://www.javascript.com/javascript")) {
-                    cdStr = "javascript";
-                } else {
-                    // default to mvel
-                    cdStr = "mvel";
+        try {
+            if (conditionExpression instanceof FormalExpression) {
+                if (((FormalExpression) conditionExpression).getBody() != null) {
+                    properties.put("conditionexpression",
+                                   ((FormalExpression) conditionExpression).getBody().replaceAll("\n",
+                                                                                                 "\\\\n"));
                 }
-                properties.put("conditionexpressionlanguage",
-                               cdStr);
+                if (((FormalExpression) conditionExpression).getLanguage() != null) {
+                    String cd = ((FormalExpression) conditionExpression).getLanguage();
+                    String cdStr = "";
+                    if (cd.equalsIgnoreCase("http://www.java.com/java")) {
+                        cdStr = "java";
+                    } else if (cd.equalsIgnoreCase("http://www.jboss.org/drools/rule")) {
+                        cdStr = "drools";
+                    } else if (cd.equalsIgnoreCase("http://www.mvel.org/2.0")) {
+                        cdStr = "mvel";
+                    } else if (cd.equalsIgnoreCase("http://www.javascript.com/javascript")) {
+                        cdStr = "javascript";
+                    } else {
+                        // default to mvel
+                        cdStr = "mvel";
+                    }
+                    properties.put("conditionexpressionlanguage",
+                                   cdStr);
+                }
             }
+        } catch(Exception e) {
+            _logger.info("Could not find conditionexpression for : " + conditionExpression);
         }
 
         boolean foundBgColor = false;
@@ -4046,4 +4094,23 @@ public class Bpmn2JsonMarshaller {
         return dataInputOutput.replaceAll("-",
                                           " ");
     }
+
+    private List<EventDefinition> getEventDefinitionsForEvent(Event event) {
+        List<EventDefinition> eventDefinitions = new ArrayList<>();
+
+        if(event != null && event instanceof CatchEvent) {
+            CatchEvent catchEvent = (CatchEvent) event;
+            eventDefinitions.addAll(catchEvent.getEventDefinitions());
+            eventDefinitions.addAll(catchEvent.getEventDefinitionRefs());
+        } else if(event != null && event instanceof ThrowEvent) {
+            ThrowEvent throwEvent = (ThrowEvent) event;
+            eventDefinitions.addAll(throwEvent.getEventDefinitions());
+            eventDefinitions.addAll(throwEvent.getEventDefinitionRefs());
+        } else {
+            _logger.warn("Unable to get event definitions for event: " + event);
+        }
+
+        return eventDefinitions;
+    }
+
 }
