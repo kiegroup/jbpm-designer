@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/bpmn20" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:drools="http://www.jboss.org/drools" id="_-r4pMPcgEee2rZH0ew5N-g" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd" exporter="jBPM Designer" exporterVersion="6.2.0" expressionLanguage="http://www.mvel.org/2.0" targetNamespace="http://www.omg.org/bpmn20" typeLanguage="http://www.java.com/javaTypes">
+  <bpmn2:timerEventDefinition id="_MYTIMERDEFINITION">
+    <bpmn2:timeDate />
+  </bpmn2:timerEventDefinition>
+  <bpmn2:process id="myproject.boundaryDefinitionRef" drools:packageName="com.myteam.myproject" drools:version="1.0" name="boundaryDefinitionRef" isExecutable="true">
+    <bpmn2:userTask id="_CD3493CE-C580-4337-B71C-5412C9232959" drools:selectable="true" drools:scriptFormat="http://www.java.com/java" color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" name="myUserTask">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[myUserTask]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:ioSpecification id="_-r4pMfcgEee2rZH0ew5N-g">
+        <bpmn2:dataInput id="_CD3493CE-C580-4337-B71C-5412C9232959_SkippableInputX" name="Skippable"/>
+        <bpmn2:inputSet id="_-r4pMvcgEee2rZH0ew5N-g">
+          <bpmn2:dataInputRefs>_CD3493CE-C580-4337-B71C-5412C9232959_SkippableInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet id="_-r4pM_cgEee2rZH0ew5N-g"/>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation id="_-r4pNPcgEee2rZH0ew5N-g">
+        <bpmn2:targetRef>_CD3493CE-C580-4337-B71C-5412C9232959_SkippableInputX</bpmn2:targetRef>
+        <bpmn2:assignment id="_-r4pNfcgEee2rZH0ew5N-g">
+          <bpmn2:from xsi:type="bpmn2:tFormalExpression" id="_-r4pNvcgEee2rZH0ew5N-g">true</bpmn2:from>
+          <bpmn2:to xsi:type="bpmn2:tFormalExpression" id="_-r4pN_cgEee2rZH0ew5N-g">_CD3493CE-C580-4337-B71C-5412C9232959_SkippableInputX</bpmn2:to>
+        </bpmn2:assignment>
+      </bpmn2:dataInputAssociation>
+    </bpmn2:userTask>
+    <bpmn2:boundaryEvent id="_5CC0167E-0CF9-407C-B1C9-7F12B2BE48C9" drools:selectable="true" drools:boundaryca="true" drools:dockerinfo="52.0^73.0|" color:background-color="#f5deb3" color:border-color="#a0522d" color:color="#000000" name="myboundarytimer" attachedToRef="_CD3493CE-C580-4337-B71C-5412C9232959">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[myboundarytimer]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:eventDefinitionRef>_MYTIMERDEFINITION</bpmn2:eventDefinitionRef>
+    </bpmn2:boundaryEvent>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="_-r4pOfcgEee2rZH0ew5N-g">
+    <bpmndi:BPMNPlane id="_-r4pOvcgEee2rZH0ew5N-g" bpmnElement="myproject.boundaryDefinitionRef">
+      <bpmndi:BPMNShape id="_-r4pO_cgEee2rZH0ew5N-g" bpmnElement="_CD3493CE-C580-4337-B71C-5412C9232959">
+        <dc:Bounds height="80.0" width="100.0" x="254.0" y="117.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_-r4pPPcgEee2rZH0ew5N-g" bpmnElement="_5CC0167E-0CF9-407C-B1C9-7F12B2BE48C9">
+        <dc:Bounds height="30.0" width="30.0" x="291.0" y="182.0"/>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

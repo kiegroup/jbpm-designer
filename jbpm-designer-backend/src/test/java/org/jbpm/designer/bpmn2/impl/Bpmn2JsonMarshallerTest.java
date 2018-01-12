@@ -947,4 +947,65 @@ public class Bpmn2JsonMarshallerTest {
         String userTaskName = userTaskProperties.getString("name");
         assertEquals("MyTask", userTaskName);
     }
+
+    @Test
+    public void testCatchEventDefinitionRef() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("catchEventDefinitionRef.bpmn2");
+        JSONObject processProperties = process.getJSONObject("properties");
+
+        String processName = processProperties.getString("processn");
+        assertEquals("catchDefinitionRef", processName);
+
+        JSONObject catchEvent = getChildByName(process, "mytimer");
+        assertNotNull(catchEvent);
+    }
+
+    @Test
+    public void testThrowEventDefinitionRef() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("throwEventDefinitionRef.bpmn2");
+        JSONObject processProperties = process.getJSONObject("properties");
+
+        String processName = processProperties.getString("processn");
+        assertEquals("throwDefinitionRef", processName);
+
+        JSONObject catchEvent = getChildByName(process, "mysignalEvent");
+        assertNotNull(catchEvent);
+    }
+
+    @Test
+    public void testStartEventDefinitionRef() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("startEventDefinitionRef.bpmn2");
+        JSONObject processProperties = process.getJSONObject("properties");
+
+        String processName = processProperties.getString("processn");
+        assertEquals("startDefinitionRef", processName);
+
+        JSONObject startEvent = getChildByName(process, "mytimerstart");
+        assertNotNull(startEvent);
+    }
+
+    @Test
+    public void testEndEventDefinitionRef() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("endEventDefinitionRef.bpmn2");
+        JSONObject processProperties = process.getJSONObject("properties");
+
+        String processName = processProperties.getString("processn");
+        assertEquals("endEventDefinitionRef", processName);
+
+        JSONObject endEvent = getChildByName(process, "mysignalendEvent");
+        assertNotNull(endEvent);
+    }
+
+    @Test
+    public void testBoundaryEventDefinitionRef() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("boundaryEventDefinitionRef.bpmn2");
+        JSONObject processProperties = process.getJSONObject("properties");
+
+        String processName = processProperties.getString("processn");
+        assertEquals("boundaryDefinitionRef", processName);
+
+        JSONObject endEvent = getChildByName(process, "myboundarytimer");
+        assertNotNull(endEvent);
+    }
+
 }
