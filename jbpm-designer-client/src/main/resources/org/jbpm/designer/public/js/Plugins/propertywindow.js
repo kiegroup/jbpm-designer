@@ -5729,6 +5729,68 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField, {
                 });
             }
 
+            // check for parent node vars
+            var myselection = ORYX.EDITOR._pluginFacade.getSelection();
+            if (myselection) {
+                var myselected = myselection.first();
+                if (myselected && myselected.parent) {
+
+                    var myselectedParent = myselected.parent;
+
+                    // if selected is sequence flow we have
+                    // to get parent of the incoming node
+                    if(myselected._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#SequenceFlow") {
+                        if(myselected.incoming && myselected.incoming.length > 0) {
+                            myselectedParent = myselected.incoming[0].parent;
+                        }
+                    }
+
+                    if (myselectedParent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#MultipleInstanceSubprocess"
+                            || myselectedParent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#Subprocess"
+                            || myselectedParent._stencil._jsonStencil.id == "http://b3mn.org/stencilset/bpmn2.0#AdHocSubprocess") {
+
+                        var vardefsprop = myselectedParent.properties["oryx-vardefs"];
+                        if (vardefsprop && vardefsprop.length > 0) {
+                            var vardefspropParts = vardefsprop.split(",");
+                            for (var k = 0; k < vardefspropParts.length; k++) {
+                                var nextPart = vardefspropParts[k];
+                                if (nextPart.indexOf(":") > 0) {
+                                    var innerParts = nextPart.split(":");
+                                    var varName = innerParts[0].trim();
+                                    var varType = innerParts[1].trim();
+                                    switch (varType) {
+                                        case "String":
+                                        case "java.lang.String":
+                                            processVars.push([varName, varType, sActionStore]);
+                                            break;
+                                        case "Integer":
+                                        case "java.lang.Integer":
+                                        case "java.math.BigInteger":
+                                        case "java.lang.Short":
+                                        case "java.lang.Long":
+                                            processVars.push([varName, varType, iActionStore]);
+                                            break;
+                                        case "Float":
+                                        case "java.math.BigDecimal":
+                                        case "java.lang.Float":
+                                        case "java.lang.Double":
+                                            processVars.push([varName, varType, fActionStore]);
+                                            break;
+                                        case "Boolean":
+                                        case "java.lang.Boolean":
+                                            processVars.push([varName, varType, bActionStore]);
+                                            break;
+                                        default:
+                                            processVars.push([varName, varType, oActionStore]);
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             var varsStore = new Ext.data.SimpleStore({
                 fields: [{name: 'value'}, {name: 'type'}, {name: 'store'}],
                 data: processVars
