@@ -48,7 +48,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
@@ -162,17 +162,14 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         String pomuuid = rootPath.toURI() + "/pom.xml";
 
         KieProject project = Mockito.mock(KieProject.class);
-        when(project.getRootPath()).thenReturn(rootPath);
         final org.uberfire.backend.vfs.Path pomXmlPath = mock(org.uberfire.backend.vfs.Path.class);
 
         when(project.getPomXMLPath()).thenReturn(pomXmlPath);
-        when(pomXmlPath.toURI()).thenReturn(pomuuid);
         when(project.getPomXMLPath()).thenReturn(pomXmlPath);
 
         projectPOM = new POM();
         when(pomService.load(pomXmlPath)).thenReturn(projectPOM);
 
-        when(ioService.exists(any(org.uberfire.java.nio.file.Path.class))).thenReturn(true);
         when(projectService.resolveProject(any(Path.class))).thenReturn(project);
     }
 

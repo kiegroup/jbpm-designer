@@ -32,6 +32,7 @@ import org.uberfire.mocks.CallerMock;
 import org.uberfire.mocks.EventSourceMock;
 import org.uberfire.workbench.type.ResourceTypeDefinition;
 
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doReturn;
@@ -80,8 +81,8 @@ public class NewProcessHandlerTest {
     public void createTest() {
         final NewResourcePresenter presenter = mock(NewResourcePresenter.class);
         final Path path = mock(Path.class);
-        doReturn(path).when(designerAssetService).createProcess(any(Path.class),
-                                                                anyString());
+        doReturn(path).when(designerAssetService).createProcess(nullable(Path.class),
+                                                                nullable(String.class));
 
         newProcessHandler.create(mock(Package.class),
                                  "",

@@ -51,7 +51,7 @@ import org.kie.workbench.common.services.backend.builder.core.LRUBuilderCache;
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.stringtemplate.v4.ST;
 import org.uberfire.backend.server.util.Paths;
 
@@ -188,7 +188,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
-        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("[\n" +
@@ -321,7 +320,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
-        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("\n" +
@@ -400,7 +398,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
-        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("\n" +
@@ -465,7 +462,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
-        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("\n" +
@@ -528,7 +524,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
         repository.createDirectory("/global");
 
         KieProject mockProject = mock(KieProject.class);
-        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("\n" +
@@ -662,7 +657,6 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
 
     private LRUBuilderCache getBuilderCache(KieProject kieProject) {
         NewProjectEvent event = mock(NewProjectEvent.class);
-        when(event.getProject()).thenReturn(kieProject);
 
         LRUBuilderCache builderCache = mock(LRUBuilderCache.class);
         KieContainer kieContainer = mock(KieContainer.class);

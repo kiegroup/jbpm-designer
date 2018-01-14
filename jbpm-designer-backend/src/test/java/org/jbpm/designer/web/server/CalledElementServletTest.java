@@ -36,7 +36,7 @@ import org.kie.soup.project.datamodel.oracle.PackageDataModelOracle;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -56,7 +56,7 @@ public class CalledElementServletTest extends RepositoryBaseTest {
 
     @Spy
     @InjectMocks
-    private CalledElementServlet servlet = new CalledElementServlet();
+    private CalledElementServlet servlet;
 
     @Before
     public void setup() {

@@ -33,10 +33,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -51,7 +52,6 @@ public class AbstractConnectorServletTest extends RepositoryBaseTest {
     @Mock
     IDiagramProfileService profileService;
 
-    @Spy
     @InjectMocks
     private AbstractConnectorServlet servlet = new AbstractConnectorServlet() {
         @Override
@@ -68,8 +68,8 @@ public class AbstractConnectorServletTest extends RepositoryBaseTest {
     @Before
     public void setup() {
         super.setup();
-        when(profileService.findProfile(any(HttpServletRequest.class),
-                                        anyString())).thenReturn(profile);
+        when(profileService.findProfile(nullable(HttpServletRequest.class),
+                                        nullable(String.class))).thenReturn(profile);
     }
 
     @After
@@ -92,7 +92,6 @@ public class AbstractConnectorServletTest extends RepositoryBaseTest {
 
     @Test
     public void testDoPostFindProfile() throws Exception {
-
         HttpServletRequest request = mock(HttpServletRequest.class);
         try {
             servlet.doPost(request,

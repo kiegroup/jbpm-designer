@@ -19,6 +19,7 @@ package org.jbpm.designer.client;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.runner.Version;
 import org.guvnor.common.services.project.client.security.ProjectController;
 import org.guvnor.common.services.project.context.ProjectContext;
 import org.guvnor.common.services.project.model.Project;
@@ -32,10 +33,12 @@ import org.kie.workbench.common.widgets.metadata.client.validation.AssetUpdateVa
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.ext.editor.commons.client.history.VersionRecordManager;
 import org.uberfire.ext.editor.commons.client.menu.BasicFileMenuBuilder;
+import org.uberfire.mvp.Command;
 import org.uberfire.workbench.model.menu.MenuItem;
 
 import static org.junit.Assert.assertEquals;
@@ -47,6 +50,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DesignerPresenterTest {
@@ -83,6 +87,9 @@ public class DesignerPresenterTest {
 
     @Before
     public void setup() {
+        when(versionRecordManager.newSaveMenuItem(any(Command.class))).thenReturn(mock(MenuItem.class));
+        when(versionRecordManager.getCurrentPath()).thenReturn(mock(ObservablePath.class));
+        when(versionRecordManager.getPathToLatest()).thenReturn(mock(ObservablePath.class));
         presenter = spy(new DesignerPresenter(view) {
 
             {
@@ -91,11 +98,13 @@ public class DesignerPresenterTest {
                 this.workbenchContext = DesignerPresenterTest.this.workbenchContext;
                 this.versionRecordManager = DesignerPresenterTest.this.versionRecordManager;
                 this.designerEditorParametersPublisher = DesignerPresenterTest.this.designerEditorParametersPublisher;
+                this.assetUpdateValidator = mock(AssetUpdateValidator.class);
             }
 
             @Override
             protected void resetEditorPages(final Overview overview) {
             }
+
         });
     }
 

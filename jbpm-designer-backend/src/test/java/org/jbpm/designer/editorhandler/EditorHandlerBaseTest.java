@@ -43,7 +43,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -73,7 +73,7 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
 
     @Spy
     @InjectMocks
-    private EditorHandler editorHandler = new EditorHandler();
+    private EditorHandler editorHandler;
 
     @Captor
     private ArgumentCaptor<String> stringCaptor;
@@ -254,8 +254,6 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
 
     @Test
     public void testStoreSVGOnSave() throws Exception {
-        when(editorHandler.getProfile()).thenReturn(mockProfile);
-
         // default the profile svg on save to true
         when(mockProfile.getStoreSVGonSaveOption()).thenReturn("true");
 
@@ -300,8 +298,6 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
         assertEquals("true",
                      editorHandler.getEditorTemplate().getAttribute("storesvgonsave"));
 
-        when(editorHandler.getProfile()).thenReturn(profile);
-
         //overwrite with incorrect system prop  -- should be false (default to the profile value)
         when(mockProfile.getStoreSVGonSaveOption()).thenReturn("false");
         System.setProperty(EditorHandler.STORE_SVG_ON_SAVE,
@@ -311,9 +307,6 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
                             response);
         assertEquals("false",
                      editorHandler.getEditorTemplate().getAttribute("storesvgonsave"));
-
-        when(editorHandler.getProfile()).thenReturn(profile);
-
     }
 
     private void verifyServiceRepoAndTasks(ServletConfig config,
