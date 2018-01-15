@@ -1037,6 +1037,75 @@ public class VFSRepositoryGitFileSystemTest {
                      foundWidAssetsAfterSecondCall.size());
     }
 
+    @Test
+    public void testCreateGlobalDirOnNewProjectWithSpaces() throws Exception {
+        ServletContext servletContext = mock(ServletContext.class);
+        when (servletContext.getRealPath(anyString())).thenReturn(getClass().getResource("default.json").getFile());
+
+        HttpServletRequest servletRequest = mock(HttpServletRequest.class);
+        when (servletRequest.getServletContext()).thenReturn(servletContext);
+
+        VFSRepository repository = new VFSRepository(producer.getIoService());
+        repository.setDescriptor(descriptor);
+        repository.setServletRequest(servletRequest);
+
+        Directory testProjectDir = repository.createDirectory("/my test project");
+
+        final KieProject mockProject = mock(KieProject.class);
+        when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
+
+        NewProjectEvent event = mock(NewProjectEvent.class);
+        when(event.getProject()).thenReturn(mockProject);
+
+        repository.createGlobalDirOnNewProject(event);
+
+        boolean globalDirectoryExists = repository.directoryExists("/my test project/global");
+        assertTrue(globalDirectoryExists);
+
+        Collection<Asset> foundFormTemplates = repository.listAssets("/my test project/global",
+                                                                     new FilterByExtension("fw"));
+        assertNotNull(foundFormTemplates);
+        assertEquals(0,
+                     foundFormTemplates.size());
+
+        Collection<Asset> foundJSONAssets = repository.listAssets("/my test project/global",
+                                                                  new FilterByExtension("json"));
+        assertNotNull(foundJSONAssets);
+        assertEquals(3,
+                     foundJSONAssets.size());
+
+        Collection<Asset> foundWidAssets = repository.listAssets("/my test project",
+                                                                 new FilterByExtension("wid"));
+        assertNotNull(foundWidAssets);
+        assertEquals(0,
+                     foundWidAssets.size());
+
+        // call again to try to trigger FileAlreadyExistsException
+        repository.createGlobalDirOnNewProject(event);
+
+        boolean globalDirectoryStillExists = repository.directoryExists("/my test project/global");
+        assertTrue(globalDirectoryStillExists);
+
+        // no new files or copies were added
+        Collection<Asset> foundFormTemplatesAfterSecondCall = repository.listAssets("/my test project/global",
+                                                                                    new FilterByExtension("fw"));
+        assertNotNull(foundFormTemplatesAfterSecondCall);
+        assertEquals(0,
+                     foundFormTemplatesAfterSecondCall.size());
+
+        Collection<Asset> foundJSONAssetsAfterSecondCall = repository.listAssets("/my test project/global",
+                                                                                 new FilterByExtension("json"));
+        assertNotNull(foundJSONAssetsAfterSecondCall);
+        assertEquals(3,
+                     foundJSONAssetsAfterSecondCall.size());
+
+        Collection<Asset> foundWidAssetsAfterSecondCall = repository.listAssets("/my test project",
+                                                                                new FilterByExtension("wid"));
+        assertNotNull(foundWidAssetsAfterSecondCall);
+        assertEquals(0,
+                     foundWidAssetsAfterSecondCall.size());
+    }
+
     private String decodeUniqueId(String uniqueId) {
         if (Base64.isBase64(uniqueId)) {
             byte[] decoded = Base64.decodeBase64(uniqueId);
