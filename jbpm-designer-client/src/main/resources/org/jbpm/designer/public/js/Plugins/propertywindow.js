@@ -6652,6 +6652,8 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField, {
             name: 'pkgname'
         }, {
             name: 'imgsrc'
+        },{
+            name: 'assetname'
         }]);
 
         var calldefsProxy = new Ext.data.MemoryProxy({
@@ -6664,14 +6666,24 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField, {
                 root: "root"
             }, CallElementDef),
             proxy: calldefsProxy,
-            sorters: [{
-                property: 'name',
-                direction: 'ASC'
-            },
-            {
-                property: 'pkgname',
-                direction: 'ASC'
-            }]
+            sorters: [
+                {
+                    property: 'name',
+                    direction: 'ASC'
+                },
+                {
+                    property: 'pkgname',
+                    direction: 'ASC'
+                },
+                {
+                    property: 'imgsrc',
+                    direction: 'ASC'
+                },
+                {
+                    property: 'assetname',
+                    direction: 'ASC'
+                },
+            ]
         });
         calldefs.load();
 
@@ -6698,13 +6710,14 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField, {
                             calldefs.add(new CallElementDef({
                                 name: keyParts[0],
                                 pkgname: keyParts[1],
+                                assetname : keyParts[2],
                                 imgsrc: responseJson[key]
                             }));
                         }
                         calldefs.commitChanges();
 
                         var dialogSize = ORYX.Utils.getDialogSize(350, 690);
-                        var colWidth = (dialogSize.width - 30) / 3;
+                        var colWidth = (dialogSize.width - 30) / 4;
                         var gridId = Ext.id();
                         var grid = new Ext.grid.EditorGridPanel({
                             autoScroll: true,
@@ -6712,7 +6725,16 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField, {
                             store: calldefs,
                             id: gridId,
                             stripeRows: true,
-                            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(), {
+                            cm: new Ext.grid.ColumnModel([new Ext.grid.RowNumberer(),
+                            {
+                                id: 'passet',
+                                header: ORYX.I18N.PropertyWindow.processAsset,
+                                width: colWidth,
+                                dataIndex: 'assetname',
+                                sortable: true,
+                                editor: new Ext.form.TextField({allowBlank: true, disabled: true})
+                            },
+                            {
                                 id: 'pid',
                                 header: ORYX.I18N.PropertyWindow.processId,
                                 width: colWidth,
