@@ -210,6 +210,23 @@ ORYX.Plugins.PropertyWindow = {
         // Sort as Default the first column
         //this.dataSource.sort('name');
 
+        // set sorting to case insensitive
+        Ext.data.Store.prototype.sortData = function(f, direction){
+            direction = direction || 'ASC';
+            var st = this.fields.get(f).sortType;
+            var fn = function(r1, r2) {
+                var v1 = st(r1.data[f]), v2 = st(r2.data[f]);
+                if (v1.toLowerCase) {
+                    v1 = v1.toLowerCase();
+                    v2 = v2.toLowerCase();
+                }
+                return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
+            };
+            this.data.sort(direction, fn);
+            if (this.snapshot && this.snapshot != this.data) {
+                this.snapshot.sort(direction, fn);
+            }
+        }
     },
 
     // Select the Canvas when the editor is ready
