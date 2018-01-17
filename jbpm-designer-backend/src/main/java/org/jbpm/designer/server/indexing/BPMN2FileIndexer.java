@@ -28,8 +28,8 @@ import org.drools.compiler.builder.impl.KnowledgeBuilderConfigurationImpl;
 import org.drools.core.io.impl.ByteArrayResource;
 import org.drools.core.io.impl.ReaderResource;
 import org.drools.core.xml.SemanticModules;
+import org.guvnor.common.services.project.model.Module;
 import org.guvnor.common.services.project.model.Package;
-import org.guvnor.common.services.project.model.Project;
 import org.jbpm.bpmn2.xml.BPMNDISemanticModule;
 import org.jbpm.bpmn2.xml.BPMNExtensionsSemanticModule;
 import org.jbpm.bpmn2.xml.BPMNSemanticModule;
@@ -45,10 +45,10 @@ import org.kie.api.io.ResourceType;
 import org.kie.internal.builder.KnowledgeBuilder;
 import org.kie.internal.builder.KnowledgeBuilderError;
 import org.kie.internal.builder.KnowledgeBuilderFactory;
-import org.kie.workbench.common.services.backend.project.ProjectClassLoaderHelper;
+import org.kie.workbench.common.services.backend.project.ModuleClassLoaderHelper;
 import org.kie.workbench.common.services.refactoring.backend.server.indexing.AbstractFileIndexer;
 import org.kie.workbench.common.services.refactoring.backend.server.indexing.DefaultIndexBuilder;
-import org.kie.workbench.common.services.shared.project.KieProject;
+import org.kie.workbench.common.services.shared.project.KieModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
@@ -71,7 +71,7 @@ public class BPMN2FileIndexer extends AbstractFileIndexer {
     protected Bpmn2TypeDefinition bpmn2TypeDefinition;
 
     @Inject
-    protected ProjectClassLoaderHelper classLoaderHelper;
+    protected ModuleClassLoaderHelper classLoaderHelper;
 
     @Override
     public boolean supportsPath(Path path) {
@@ -83,17 +83,17 @@ public class BPMN2FileIndexer extends AbstractFileIndexer {
      */
     @Override
     protected DefaultIndexBuilder fillIndexBuilder(Path path) throws Exception {
-        final KieProject project = projectService.resolveProject(Paths.convert(path));
-        if (project == null) {
-            logger.error("Unable to index " + path.toUri().toString() + ": project could not be resolved.");
+        final KieModule module = moduleService.resolveModule(Paths.convert(path));
+        if (module == null) {
+            logger.error("Unable to index " + path.toUri().toString() + ": module could not be resolved.");
             return null;
         }
 
         // responsible for basic index info: project name, branch, etc
         final DefaultIndexBuilder builder = getIndexBuilder(path,
-                                                            project);
+                                                            module);
         String bpmnStr = ioService.readAllString(path);
-        ClassLoader projectClassLoader = getProjectClassLoader(project);
+        ClassLoader projectClassLoader = getProjectClassLoader(module);
 
         try {
             List<DesignerProcessDataEventListener> procesDataList = buildProcessDefinition(bpmnStr,
@@ -172,8 +172,8 @@ public class BPMN2FileIndexer extends AbstractFileIndexer {
     }
 
     // Protected method for testing
-    protected ClassLoader getProjectClassLoader(final KieProject project) {
-        return classLoaderHelper.getProjectClassLoader(project);
+    protected ClassLoader getProjectClassLoader(final KieModule module) {
+        return classLoaderHelper.getModuleClassLoader(module);
     }
 
     private List<DesignerProcessDataEventListener> buildProcessDefinition(String bpmn2Content,
@@ -220,8 +220,8 @@ public class BPMN2FileIndexer extends AbstractFileIndexer {
     }
 
     protected DefaultIndexBuilder getIndexBuilder(Path path,
-                                                  Project project) {
-        final Package pkg = projectService.resolvePackage(Paths.convert(path));
+                                                  Module module) {
+        final Package pkg = moduleService.resolvePackage(Paths.convert(path));
         if (pkg == null) {
             logger.error("Unable to index " + path.toUri().toString() + ": package could not be resolved.");
             return null;
@@ -229,7 +229,7 @@ public class BPMN2FileIndexer extends AbstractFileIndexer {
 
         // responsible for basic index info: project name, branch, etc
         return new DefaultIndexBuilder(Paths.convert(path).getFileName(),
-                                       project,
+                                       module,
                                        pkg);
     }
 }

@@ -16,9 +16,9 @@
 package org.jbpm.designer.server.indexing;
 
 import org.jbpm.designer.type.Bpmn2TypeDefinition;
-import org.kie.workbench.common.services.backend.project.ProjectClassLoaderHelper;
+import org.kie.workbench.common.services.backend.project.ModuleClassLoaderHelper;
 import org.kie.workbench.common.services.refactoring.backend.server.TestIndexer;
-import org.kie.workbench.common.services.shared.project.KieProjectService;
+import org.kie.workbench.common.services.shared.project.KieModuleService;
 import org.uberfire.io.IOService;
 
 import static org.mockito.Matchers.any;
@@ -28,8 +28,8 @@ import static org.mockito.Mockito.when;
 public class TestBPMN2FileIndexer extends BPMN2FileIndexer implements TestIndexer<Bpmn2TypeDefinition> {
 
     public TestBPMN2FileIndexer() {
-        this.classLoaderHelper = mock(ProjectClassLoaderHelper.class);
-        when(this.classLoaderHelper.getProjectClassLoader(any())).thenReturn(this.getClass().getClassLoader());
+        this.classLoaderHelper = mock(ModuleClassLoaderHelper.class);
+        when(this.classLoaderHelper.getModuleClassLoader(any())).thenReturn(this.getClass().getClassLoader());
     }
 
     @Override
@@ -38,8 +38,8 @@ public class TestBPMN2FileIndexer extends BPMN2FileIndexer implements TestIndexe
     }
 
     @Override
-    public void setProjectService(KieProjectService projectService) {
-        this.projectService = projectService;
+    public void setModuleService(KieModuleService moduleService) {
+        this.moduleService = moduleService;
     }
 
     @Override

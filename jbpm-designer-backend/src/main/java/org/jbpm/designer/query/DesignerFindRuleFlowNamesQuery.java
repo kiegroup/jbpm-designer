@@ -34,7 +34,7 @@ import org.kie.workbench.common.services.refactoring.backend.server.query.standa
 import org.kie.workbench.common.services.refactoring.model.index.terms.SharedPartIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueBranchNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueProjectNameIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueModuleNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueSharedPartIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringStringPageRow;
@@ -51,15 +51,14 @@ import org.uberfire.paging.PageResponse;
 @ApplicationScoped
 public class DesignerFindRuleFlowNamesQuery extends AbstractFindQuery implements NamedQuery {
 
+    public static final String NAME = DesignerFindRuleFlowNamesQuery.class.getSimpleName();
     private static final Logger logger = LoggerFactory.getLogger(DesignerFindRuleFlowNamesQuery.class);
-
+    private static final ValueSharedPartIndexTerm ruleFlowTerm = new ValueSharedPartIndexTerm("not-used",
+                                                                                              PartType.RULEFLOW_GROUP);
     @Inject
     @Named("ioStrategy")
     private IOService ioService;
-
     private RuleFlowNamesResponseBuilder responseBuilder = new RuleFlowNamesResponseBuilder();
-
-    public static final String NAME = DesignerFindRuleFlowNamesQuery.class.getSimpleName();
 
     @Override
     public String getName() {
@@ -80,9 +79,6 @@ public class DesignerFindRuleFlowNamesQuery extends AbstractFindQuery implements
         return buildFromSingleTerm(terms);
     }
 
-    private static final ValueSharedPartIndexTerm ruleFlowTerm = new ValueSharedPartIndexTerm("not-used",
-                                                                                              PartType.RULEFLOW_GROUP);
-
     /* (non-Javadoc)
      * @see org.kie.workbench.common.services.refactoring.backend.server.query.NamedQuery#validateTerms(java.util.Set)
      */
@@ -96,7 +92,7 @@ public class DesignerFindRuleFlowNamesQuery extends AbstractFindQuery implements
                                              null, null,  // not required
                                              ruleFlowTerm.getTerm()
                                      },
-                                     (t) -> (t instanceof ValueProjectNameIndexTerm),
+                                     (t) -> (t instanceof ValueModuleNameIndexTerm),
                                      (t) -> (t instanceof ValueBranchNameIndexTerm),
                                      (t) -> (t.getTerm().equals(ruleFlowTerm.getTerm())));
     }

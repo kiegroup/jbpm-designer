@@ -41,8 +41,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.kie.workbench.common.services.shared.project.KieProject;
-import org.kie.workbench.common.services.shared.project.KieProjectService;
+import org.kie.workbench.common.services.shared.project.KieModule;
+import org.kie.workbench.common.services.shared.project.KieModuleService;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
@@ -72,31 +72,22 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
+    protected final List<Object> receivedWidInstallEvents = new ArrayList<Object>();
     @Mock
     protected VFSService vfsServices;
-
     @Mock
     protected IOService ioService;
-
     @Mock
-    protected KieProjectService projectService;
-
+    protected KieModuleService moduleService;
     @Mock
     protected POMService pomService;
-
     @Mock
     protected MetadataService metadataService;
-
     @Captor
     protected ArgumentCaptor<NotificationEvent> notificationCaptor;
-
     @Captor
     protected ArgumentCaptor<DesignerWorkitemInstalledEvent> widinstallCaptor;
-
     protected Event<NotificationEvent> notification = mock(EventSourceMock.class);
-
-    protected final List<Object> receivedWidInstallEvents = new ArrayList<Object>();
-
     protected Event<DesignerWorkitemInstalledEvent> widinstall = new EventSourceMock<DesignerWorkitemInstalledEvent>() {
 
         @Override
@@ -161,19 +152,19 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         uuid = rootPath.toURI() + dirName + "/" + processFileName + ".bpmn2";
         String pomuuid = rootPath.toURI() + "/pom.xml";
 
-        KieProject project = Mockito.mock(KieProject.class);
-        when(project.getRootPath()).thenReturn(rootPath);
+        KieModule module = Mockito.mock(KieModule.class);
+        when(module.getRootPath()).thenReturn(rootPath);
         final org.uberfire.backend.vfs.Path pomXmlPath = mock(org.uberfire.backend.vfs.Path.class);
 
-        when(project.getPomXMLPath()).thenReturn(pomXmlPath);
+        when(module.getPomXMLPath()).thenReturn(pomXmlPath);
         when(pomXmlPath.toURI()).thenReturn(pomuuid);
-        when(project.getPomXMLPath()).thenReturn(pomXmlPath);
+        when(module.getPomXMLPath()).thenReturn(pomXmlPath);
 
         projectPOM = new POM();
         when(pomService.load(pomXmlPath)).thenReturn(projectPOM);
 
         when(ioService.exists(any(org.uberfire.java.nio.file.Path.class))).thenReturn(true);
-        when(projectService.resolveProject(any(Path.class))).thenReturn(project);
+        when(moduleService.resolveModule(any(Path.class))).thenReturn(module);
     }
 
     @After
@@ -201,7 +192,7 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
                                          widinstall,
                                          notification,
                                          pomService,
-                                         projectService,
+                                         moduleService,
                                          metadataService);
 
         Collection<Asset> foundWids = repository.listAssetsRecursively("/",
@@ -290,7 +281,7 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
                                          widinstall,
                                          notification,
                                          pomService,
-                                         projectService,
+                                         moduleService,
                                          metadataService);
 
         ServiceRepoUtils.installWorkItem(workitemsFromRepo,
@@ -301,7 +292,7 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
                                          widinstall,
                                          notification,
                                          pomService,
-                                         projectService,
+                                         moduleService,
                                          metadataService);
 
         assertEquals(2,
@@ -358,7 +349,7 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
                                          widinstall,
                                          notification,
                                          pomService,
-                                         projectService,
+                                         moduleService,
                                          metadataService);
 
         assertEquals(0,

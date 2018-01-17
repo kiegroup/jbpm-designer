@@ -26,6 +26,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.guvnor.structure.repositories.Branch;
 import org.guvnor.structure.repositories.Repository;
 import org.guvnor.structure.repositories.RepositoryService;
 import org.uberfire.io.IOService;
@@ -50,9 +51,9 @@ public class RepositoryDescriptorProvider {
         Collection<Repository> active = repositoryService.getRepositories();
         if (active != null) {
             for (org.guvnor.structure.repositories.Repository repo : active) {
-                for (String branchName : repo.getBranches()) {
+                for (final Branch branch : repo.getBranches()) {
                     buildAndRegister(repo,
-                                     branchName);
+                                     branch.getName());
                 }
             }
         }
@@ -81,8 +82,13 @@ public class RepositoryDescriptorProvider {
 
     private RepositoryDescriptor buildAndRegister(Repository repository,
                                                   String branchName) {
-        String repoUri = repository.getRoot().toURI().replaceFirst("://.*?@",
-                                                                   "://" + branchName + "@");
+
+        if (!repository.getDefaultBranch().isPresent()) {
+            throw new IllegalStateException("Repository should have at least one branch.");
+        }
+
+        String repoUri = repository.getDefaultBranch().get().getPath().toURI().replaceFirst("://.*?@",
+                                                                                            "://" + branchName + "@");
         URI root = URI.create(repoUri);
 
         FileSystem fs = ioService.getFileSystem(root);
