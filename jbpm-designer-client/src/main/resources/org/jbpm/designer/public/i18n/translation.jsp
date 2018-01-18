@@ -517,6 +517,7 @@ ORYX.I18N.PropertyWindow.editorForGlobals='<i18n:message key="ORYX.I18N.Property
 ORYX.I18N.PropertyWindow.addGlobal='<i18n:message key="ORYX.I18N.PropertyWindow.addGlobal">Add Global</i18n:message>';
 ORYX.I18N.PropertyWindow.expressionEditor='<i18n:message key="ORYX.I18N.PropertyWindow.expressionEditor">Expression Editor</i18n:message>';
 ORYX.I18N.PropertyWindow.loadingProcessInf='<i18n:message key="ORYX.I18N.PropertyWindow.loadingProcessInf">Loading Process Information.</i18n:message>';
+ORYX.I18N.PropertyWindow.processAsset='<i18n:message key="ORYX.I18N.PropertyWindow.processAsset">Asset Name</i18n:message>';
 ORYX.I18N.PropertyWindow.processId='<i18n:message key="ORYX.I18N.PropertyWindow.processId">Process Id</i18n:message>';
 ORYX.I18N.PropertyWindow.packageName='<i18n:message key="ORYX.I18N.PropertyWindow.packageName">Package Name</i18n:message>';
 ORYX.I18N.PropertyWindow.selectProcessId='<i18n:message key="ORYX.I18N.PropertyWindow.selectProcessId">Select Process Id and click \"Save\" to select</i18n:message>';

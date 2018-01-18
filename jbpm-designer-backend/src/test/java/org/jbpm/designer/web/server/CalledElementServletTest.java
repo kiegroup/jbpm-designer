@@ -17,22 +17,35 @@
 package org.jbpm.designer.web.server;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jbpm.designer.helper.TestHttpServletRequest;
+import org.jbpm.designer.helper.TestHttpServletResponse;
+import org.jbpm.designer.helper.TestServletConfig;
+import org.jbpm.designer.helper.TestServletContext;
+import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.AssetBuilderFactory;
+import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
+import org.jbpm.designer.repository.impl.AssetBuilder;
+import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.kie.soup.project.datamodel.oracle.DataType;
 import org.kie.soup.project.datamodel.oracle.FieldAccessorsAndMutators;
 import org.kie.soup.project.datamodel.oracle.ModelField;
 import org.kie.soup.project.datamodel.oracle.PackageDataModelOracle;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -40,6 +53,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -145,5 +160,44 @@ public class CalledElementServletTest extends RepositoryBaseTest {
                      javatypeNameList.size());
         assertEquals("org.Address",
                      javatypeNameList.get(0));
+    }
+
+    @Test
+    public void testGetProcessInfo() throws Exception {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository) repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        AssetBuilder builder;
+
+        builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("<bpmn2:process id=\"com.sample.testprocess1\" drools:packageName=\"com.myteam.myproject\" drools:version=\"1.0\" name=\"Test Process 1\" isExecutable=\"true\"></bpmn2:process>")
+                .type("bpmn2")
+                .name("testprocess1")
+                .location("/defaultPackage");
+        repository.createAsset(builder.getAsset());
+
+        builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("<bpmn2:process id=\"com.sample.testprocess2\" drools:packageName=\"com.myteam.myproject\" drools:version=\"1.0\" name=\"Test Process 2\" isExecutable=\"true\"></bpmn2:process>")
+                .type("bpmn2")
+                .name("testprocess2")
+                .location("/defaultPackage");
+        repository.createAsset(builder.getAsset());
+
+        CalledElementServlet servlet = new CalledElementServlet();
+        servlet.profile = profile;
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("action",
+                   "showProcessesInPackage");
+
+        servlet.init(new TestServletConfig(new TestServletContext(repository)));
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        servlet.doPost(new TestHttpServletRequest(params),
+                       response);
+
+        String returnData = new String(response.getContent());
+        assertNotNull(returnData);
+        assertTrue(returnData.contains("com.sample.testprocess1|/defaultPackage|testprocess1.bpmn2"));
+        assertTrue(returnData.contains("com.sample.testprocess2|/defaultPackage|testprocess2.bpmn2"));
     }
 }
