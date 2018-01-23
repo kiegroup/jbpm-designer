@@ -1047,11 +1047,11 @@ public class VFSRepositoryGitFileSystemTest {
 
         Directory testProjectDir = repository.createDirectory("/my test project");
 
-        final KieProject mockProject = mock(KieProject.class);
+        final KieModule mockProject = mock(KieModule.class);
         when(mockProject.getRootPath()).thenReturn(Paths.convert(producer.getIoService().get(URI.create(decodeUniqueId(testProjectDir.getUniqueId())))));
 
-        NewProjectEvent event = mock(NewProjectEvent.class);
-        when(event.getProject()).thenReturn(mockProject);
+        NewModuleEvent event = mock(NewModuleEvent.class);
+        when(event.getModule()).thenReturn(mockProject);
 
         repository.createGlobalDirOnNewProject(event);
 
