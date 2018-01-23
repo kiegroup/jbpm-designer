@@ -673,7 +673,7 @@ public class VFSRepository implements Repository {
     public void createGlobalDirOnNewProject(@Observes NewProjectEvent newProjectEvent) {
         // create the global dir before the asset is created (upon new project creation)
         KieProject project = (KieProject) newProjectEvent.getProject();
-        String projectPath = org.uberfire.backend.server.util.Paths.convert(project.getRootPath()).toUri().toString();
+        String projectPath = org.uberfire.backend.server.util.Paths.convert(project.getRootPath()).toUri().toString().replaceAll("\\s", "%20");
         String separator = org.uberfire.backend.server.util.Paths.convert(project.getRootPath()).getFileSystem().getSeparator();
         String globalDirPath = projectPath + separator + "global";
         Path globalDirVFSPath = ioService.get(URI.create(globalDirPath));
