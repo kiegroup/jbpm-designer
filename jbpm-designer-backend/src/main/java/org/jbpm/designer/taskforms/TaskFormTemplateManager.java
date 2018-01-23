@@ -471,7 +471,7 @@ public class TaskFormTemplateManager {
         tfi.setMetaOutput(processFormTemplate.render());
     }
 
-    protected void generatePlatformForms(TaskFormInfo tfi) {
+    protected void generatePlatformForms(TaskFormInfo tfi) throws UnsupportedOperationException {
 
         BPMNFormBuilderService<Definitions> formBuilder = formBuilderManager.getBuilderByFormType(formType);
         if (formBuilder != null && formBuilder.getFormExtension() != null) {
@@ -491,8 +491,7 @@ public class TaskFormTemplateManager {
                                                                          def,
                                                                          tfi.getTaskId()));
             } catch (Exception e) {
-                _logger.error(e.getMessage());
-                e.printStackTrace();
+                throw new UnsupportedOperationException(e);
             }
         } else {
             _logger.error("Unable to find form builder service for type: " + formType);

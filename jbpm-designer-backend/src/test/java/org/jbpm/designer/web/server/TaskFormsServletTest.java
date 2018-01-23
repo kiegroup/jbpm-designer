@@ -17,14 +17,17 @@
 package org.jbpm.designer.web.server;
 
 import java.net.URL;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.bpmn2.Definitions;
+
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
 import org.jbpm.designer.helper.TestServletConfig;
@@ -37,23 +40,30 @@ import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.taskforms.BPMNFormBuilderManager;
+import org.jbpm.designer.taskforms.TaskFormTemplateManager;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.kie.workbench.common.forms.bpmn.BPMNFormBuilderService;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
+
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.backend.vfs.VFSService;
 
 import static org.junit.Assert.assertEquals;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -67,6 +77,9 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
 
     @Mock
     protected BPMNFormBuilderManager builderManager;
+
+    @Mock
+    protected TaskFormTemplateManager templateManager;
 
     @InjectMocks
     TaskFormsServlet taskFormsServlet;
@@ -100,7 +113,7 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
     public void testTaskFormServletForFormType() throws Exception {
         when(formBuilderService.getFormExtension()).thenReturn("form");
         when(formBuilderService.buildFormContent(any(),
-                                                  any(),
+                                                 any(),
                                                  any())).thenReturn("dummyform");
 
         Repository repository = new VFSRepository(producer.getIoService());
@@ -326,6 +339,92 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
         // process form and task form
         assertEquals(2,
                      frmForms.size());
+    }
+
+    @Test
+    public void testInvalidFormType() throws Exception {
+        when(formBuilderService.getFormExtension()).thenReturn("form");
+        when(formBuilderService.buildFormContent(any(),
+                                                 any(),
+                                                 any())).thenReturn("dummyform");
+
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository) repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("bpmn2 content")
+                .type("bpmn2")
+                .name(processFileName)
+                .location("/" + dirName);
+        String uniqueId = repository.createAsset(builder.getAsset());
+        // setup parameters
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("uuid",
+                   uniqueId);
+        params.put("json",
+                   readFile("BPMN2-DefaultProcess.json"));
+        params.put("profile",
+                   "jbpm");
+        params.put("ppdata",
+                   null);
+        params.put("formtype",
+                   "invalidFormType");
+        taskFormsServlet.setProfile(profile);
+
+        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository,
+                                                                           "org/jbpm/designer/public")));
+
+        TestHttpServletResponse testResponse = new TestHttpServletResponse();
+        taskFormsServlet.doPost(new TestHttpServletRequest(params),
+                                testResponse);
+
+        assertEquals("fail",
+                     new String(testResponse.getContent(),
+                                "UTF-8"));
+    }
+
+    @Test
+    public void testFailResponseOnException() throws Exception {
+        when(formBuilderService.getFormExtension()).thenReturn("form");
+        when(formBuilderService.buildFormContent(any(),
+                                                 any(),
+                                                 any())).thenReturn("dummyform");
+
+        doThrow(new NullPointerException()).when(templateManager).processTemplates();
+
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository) repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("bpmn2 content")
+                .type("bpmn2")
+                .name(processFileName)
+                .location("/" + dirName);
+        String uniqueId = repository.createAsset(builder.getAsset());
+        // setup parameters
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("uuid",
+                   uniqueId);
+        params.put("json",
+                   readFile("BPMN2-InvalidDefaultProcess.json"));
+        params.put("profile",
+                   "jbpm");
+        params.put("ppdata",
+                   null);
+        params.put("formtype",
+                   "frm");
+        taskFormsServlet.setProfile(profile);
+
+        taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository,
+                                                                           "org/jbpm/designer/public")));
+
+        TestHttpServletResponse testResponse = new TestHttpServletResponse();
+        taskFormsServlet.doPost(new TestHttpServletRequest(params),
+                                testResponse);
+
+        assertEquals("fail",
+                     new String(testResponse.getContent(),
+                                "UTF-8"));
     }
 
     private String readFile(String fileName) throws Exception {

@@ -104,7 +104,7 @@ public class TaskFormsServlet extends HttpServlet {
 
         Asset<String> processAsset;
 
-        if(formType != null && formType.equals(FORMMODELER_FILE_EXTENSION)) {
+        if (formType != null && formType.equals(FORMMODELER_FILE_EXTENSION)) {
             try {
                 processAsset = repository.loadAsset(uuid);
 
@@ -115,7 +115,8 @@ public class TaskFormsServlet extends HttpServlet {
                 Definitions def = ((Definitions) unmarshaller.unmarshall(json,
                                                                          preprocessingData).getContents().get(0));
 
-                Path myPath = vfsServices.get(uuid.replaceAll("\\s", "%20"));
+                Path myPath = vfsServices.get(uuid.replaceAll("\\s",
+                                                              "%20"));
 
                 TaskFormTemplateManager templateManager = new TaskFormTemplateManager(myPath,
                                                                                       formBuilderManager,
@@ -125,6 +126,7 @@ public class TaskFormsServlet extends HttpServlet {
                                                                                       def,
                                                                                       taskId,
                                                                                       formType);
+
                 templateManager.processTemplates();
 
                 //storeInRepository(templateManager, processAsset.getAssetLocation(), repository);
@@ -134,14 +136,13 @@ public class TaskFormsServlet extends HttpServlet {
                                                          processAsset.getAssetLocation(),
                                                          repository,
                                                          sessionId).toString());
-            } catch (Exception e) {
-                _logger.error(e.getMessage());
+            } catch (Throwable t) {
+                _logger.error(t.getMessage());
                 setFailResponse(resp);
             }
         } else {
             setFailResponse(resp);
         }
-
     }
 
     public void setFailResponse(HttpServletResponse resp) throws IOException {
@@ -180,8 +181,10 @@ public class TaskFormsServlet extends HttpServlet {
                                    String content) {
                     try {
                         // update existing or create new
-                        if (repository.assetExists(location.replaceAll("\\s", "%20") + "/" + taskForm.getId() + "." + extension)) {
-                            Asset currentAsset = repository.loadAssetFromPath(location.replaceAll("\\s", "%20") + "/" + taskForm.getId() + "." + extension);
+                        if (repository.assetExists(location.replaceAll("\\s",
+                                                                       "%20") + "/" + taskForm.getId() + "." + extension)) {
+                            Asset currentAsset = repository.loadAssetFromPath(location.replaceAll("\\s",
+                                                                                                  "%20") + "/" + taskForm.getId() + "." + extension);
                             AssetBuilder formBuilder = AssetBuilderFactory.getAssetBuilder(currentAsset);
                             formBuilder.content(content);
                             String updatedFormId = repository.updateAsset(formBuilder.getAsset(),
@@ -194,7 +197,8 @@ public class TaskFormsServlet extends HttpServlet {
                         } else {
                             AssetBuilder modelerBuilder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Byte);
                             modelerBuilder.name(taskForm.getId())
-                                    .location(location.replaceAll("\\s", "%20"))
+                                    .location(location.replaceAll("\\s",
+                                                                  "%20"))
                                     .type(extension)
                                     .content(content.getBytes("UTF-8"));
 
