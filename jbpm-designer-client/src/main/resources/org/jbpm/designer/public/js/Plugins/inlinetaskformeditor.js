@@ -59,14 +59,23 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
                     Ext.Ajax.request({
                         url: ORYX.PATH + "taskforms",
                         method: 'POST',
-                        success: function (request) {
-                            this.facade.raiseEvent({
-                                type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                                ntype: 'success',
-                                msg: ORYX.I18N.forms.successGenTask,
-                                title: ''
+                        success: function (response) {
+                            if(response.responseText.length > 0 && response.responseText != "fail") {
+                                this.facade.raiseEvent({
+                                    type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                    ntype: 'success',
+                                    msg: ORYX.I18N.forms.successGenTask,
+                                    title: ''
 
-                            });
+                                });
+                            } else {
+                                this.facade.raiseEvent({
+                                    type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                    ntype: 'error',
+                                    msg: ORYX.I18N.forms.failGenTask,
+                                    title: ''
+                                });
+                            }
                         }.createDelegate(this),
                         failure: function () {
                             this.facade.raiseEvent({
@@ -120,14 +129,23 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
         Ext.Ajax.request({
             url: ORYX.PATH + "taskforms",
             method: 'POST',
-            success: function(request){
-                this.facade.raiseEvent({
-                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                    ntype		: 'success',
-                    msg         : ORYX.I18N.forms.successGenProcAndTask,
-                    title       : ''
+            success: function(response){
+                if(response.responseText.length > 0 && response.responseText != "fail") {
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'success',
+                        msg         : ORYX.I18N.forms.successGenProcAndTask,
+                        title       : ''
 
-                });
+                    });
+                } else {
+                    this.facade.raiseEvent({
+                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype		: 'error',
+                        msg         : ORYX.I18N.forms.failGenProcAndTask,
+                        title       : ''
+                    });
+                }
             }.createDelegate(this),
             failure: function(){
                 this.facade.raiseEvent({
