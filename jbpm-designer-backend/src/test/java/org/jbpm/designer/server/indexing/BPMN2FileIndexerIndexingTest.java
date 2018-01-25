@@ -26,9 +26,12 @@ import java.util.Set;
 import org.guvnor.common.services.project.model.GAV;
 import org.guvnor.common.services.project.model.POM;
 import org.guvnor.common.services.project.model.Package;
+
 import org.jbpm.designer.query.FindBpmn2ProcessIdsQuery;
 import org.jbpm.designer.type.Bpmn2TypeDefinition;
+
 import org.junit.Test;
+
 import org.kie.workbench.common.services.refactoring.backend.server.BaseIndexingTest;
 import org.kie.workbench.common.services.refactoring.backend.server.TestIndexer;
 import org.kie.workbench.common.services.refactoring.backend.server.query.NamedQuery;
@@ -45,6 +48,7 @@ import org.kie.workbench.common.services.refactoring.service.ResourceType;
 import org.kie.workbench.common.services.refactoring.service.impact.QueryOperationRequest;
 import org.kie.workbench.common.services.shared.project.KieProject;
 import org.kie.workbench.common.services.shared.project.KieProjectService;
+
 import org.uberfire.java.nio.file.Path;
 import org.uberfire.paging.PageResponse;
 
@@ -52,22 +56,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefinition> {
 
-    private final static List<String> PROCESS_IDS = Arrays.asList(new String[]{"hiring", "ParentProcess", "SubProcess", "multiple-rule-tasks", "org.jbpm.signal", "org.jbpm.broken"});
+    private final static List<String> PROCESS_IDS = Arrays.asList(new String[]{"callActivityProcess", "hiring", "multiple-rule-tasks", "org.jbpm.signal"});
 
     private final static String[] BPMN_FILES = {
+            "signal.bpmn2",
             "callActivity.bpmn2",
-            "callActivityByName.bpmn2",
-            "callActivityCalledSubProcess.bpmn2",
             "hiring.bpmn2",
             "multipleRuleTasksWithDataInput.bpmn2",
-            "signal.bpmn2",
-            "brokenSignal.bpmn2",
     };
 
     private static final String DEPLOYMENT_ID = "org.kjar:test:1.0";
@@ -130,7 +132,7 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
             }
 
             assertNotNull(response);
-            assertEquals(paths.length,
+            assertEquals(Arrays.asList(paths).size(),
                          response.getPageRowList().size());
         }
 
@@ -147,7 +149,7 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
                 assertEquals(1,
                              response.size());
                 assertResponseContains(response,
-                                       paths[4]);
+                                       paths[3]);
             } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
@@ -165,29 +167,12 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
                 assertEquals(1,
                              response.size());
                 assertResponseContains(response,
-                                       paths[5]);
+                                       paths[0]);
             } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
         }
 
-        {
-            QueryOperationRequest request = QueryOperationRequest
-                    .referencesSharedPart("BrokenSignal",
-                                          PartType.SIGNAL)
-                    .inAllProjects().onAllBranches();
-
-            try {
-                final List<RefactoringPageRow> response = service.queryToList(request);
-                assertNotNull(response);
-                assertEquals(1,
-                             response.size());
-                assertResponseContains(response,
-                                       paths[6]);
-            } catch (IllegalArgumentException e) {
-                fail("Exception thrown: " + e.getMessage());
-            }
-        }
         {
             QueryOperationRequest request = QueryOperationRequest
                     .referencesSharedPart("name",
@@ -197,12 +182,10 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
             try {
                 final List<RefactoringPageRow> response = service.queryToList(request);
                 assertNotNull(response);
-                assertEquals(2,
+                assertEquals(1,
                              response.size());
                 assertResponseContains(response,
-                                       paths[5]);
-                assertResponseContains(response,
-                                       paths[6]);
+                                       paths[0]);
             } catch (IllegalArgumentException e) {
                 fail("Exception thrown: " + e.getMessage());
             }
