@@ -18,6 +18,7 @@ package org.jbpm.designer.client;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.guvnor.common.services.project.client.context.WorkspaceProjectContext;
 import org.guvnor.common.services.project.client.security.ProjectController;
@@ -123,7 +124,7 @@ public class DesignerPresenterTest {
 
     @Test
     public void testMakeMenuBar() {
-        doReturn(mock(WorkspaceProject.class)).when(workbenchContext).getActiveWorkspaceProject();
+        doReturn(Optional.of(mock(WorkspaceProject.class))).when(workbenchContext).getActiveWorkspaceProject();
         doReturn(true).when(projectController).canUpdateProject(any());
 
         presenter.makeMenuBar();
@@ -139,7 +140,7 @@ public class DesignerPresenterTest {
 
     @Test
     public void testMakeMenuBarWithoutUpdateProjectPermission() {
-        doReturn(mock(WorkspaceProject.class)).when(workbenchContext).getActiveWorkspaceProject();
+        doReturn(Optional.of(mock(WorkspaceProject.class))).when(workbenchContext).getActiveWorkspaceProject();
         doReturn(false).when(projectController).canUpdateProject(any());
 
         presenter.makeMenuBar();
