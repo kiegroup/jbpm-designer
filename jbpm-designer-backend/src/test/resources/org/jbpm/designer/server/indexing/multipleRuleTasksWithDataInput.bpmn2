@@ -18,14 +18,9 @@
     </bpmn2:extensionElements>
         
     <bpmn2:startEvent id="_1" 
-        drools:selectable="true" 
+        drools:selectable="true"
         color:background-color="#9acd32" color:border-color="#000000" color:color="#000000" 
         name="start">
-      <bpmn2:extensionElements>
-        <drools:metaData name="elementname">
-          <drools:metaValue><![CDATA[]]></drools:metaValue>
-        </drools:metaData>
-      </bpmn2:extensionElements>
     </bpmn2:startEvent>
     
     <bpmn2:sequenceFlow id="_1-_2"
@@ -37,11 +32,6 @@
         drools:selectable="true" drools:ruleFlowGroup="person-rules" drools:scriptFormat="http://www.java.com/java" 
         color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" 
         name="First rule set">
-      <bpmn2:extensionElements>
-        <drools:metaData name="elementname">
-          <drools:metaValue><![CDATA[First rule set]]></drools:metaValue>
-        </drools:metaData>
-      </bpmn2:extensionElements>
       <bpmn2:ioSpecification id="_JFhPkOdSEeWopa6zIFRttQ">
         <bpmn2:dataInput id="_2_personInputX" drools:dtype="org.jbpm.bpmn2.objects.Person" itemSubjectRef="__2_personInputXItem" name="person"/>
         <bpmn2:dataOutput id="_2_personOutputX" drools:dtype="org.jbpm.bpmn2.objects.Person" itemSubjectRef="__2_personOutputXItem" name="person"/>
@@ -71,11 +61,6 @@
         drools:ruleFlowGroup="address-rules" drools:scriptFormat="http://www.java.com/java" 
         color:background-color="#fafad2" color:border-color="#000000" color:color="#000000" 
         name="Second rule set">
-      <bpmn2:extensionElements>
-        <drools:metaData name="elementname">
-          <drools:metaValue><![CDATA[Second rule set]]></drools:metaValue>
-        </drools:metaData>
-      </bpmn2:extensionElements>
       <bpmn2:ioSpecification id="_JFjEw-dSEeWopa6zIFRttQ">
         <bpmn2:dataInput id="_3_addressInputX" drools:dtype="org.jbpm.bpmn2.objects.Address" itemSubjectRef="__3_addressInputXItem" name="address"/>
         <bpmn2:dataOutput id="_3_addressOutputX" drools:dtype="org.jbpm.bpmn2.objects.Address" itemSubjectRef="__3_addressOutputXItem" name="address"/>
@@ -103,13 +88,13 @@
 
     <bpmn2:task id="_4" name="Task" drools:taskName="TaskWithGlobalScripts" >
       <bpmn2:extensionElements>
-        <drools:onEntry-script>
+        <drools:onEntry-script scriptFormat="http://www.java.com/java">
           <drools:script>list.add("On-entry1");</drools:script>
         </drools:onEntry-script>
         <drools:onEntry-script scriptFormat="http://www.java.com/java">
           <drools:script>list.add("On-entry2");</drools:script>
         </drools:onEntry-script>
-        <drools:onExit-script>
+        <drools:onExit-script scriptFormat="http://www.java.com/java">
           <drools:script>list.add("On-exit1");</drools:script>
         </drools:onExit-script>
         <drools:onExit-script scriptFormat="http://www.java.com/java">
@@ -125,11 +110,6 @@
 
     <bpmn2:endEvent id="_5" drools:selectable="true" 
     color:background-color="#ff6347" color:border-color="#000000" color:color="#000000" name="end">
-      <bpmn2:extensionElements>
-        <drools:metaData name="elementname">
-          <drools:metaValue><![CDATA[]]></drools:metaValue>
-        </drools:metaData>
-      </bpmn2:extensionElements>
     </bpmn2:endEvent>
     
   </bpmn2:process>

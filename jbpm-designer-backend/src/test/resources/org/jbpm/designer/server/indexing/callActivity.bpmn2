@@ -11,7 +11,7 @@
              xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
 >
 
-  <process processType="Private" isExecutable="true" id="ParentProcess" name="Parent Process" >
+  <process processType="Private" isExecutable="true" id="callActivityProcess" name="Call Activity Process" >
 
     <!-- process variables -->
     <property id="x" itemSubjectRef="_xItem"/>
