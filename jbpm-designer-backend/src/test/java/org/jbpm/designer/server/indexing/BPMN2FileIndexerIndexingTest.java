@@ -172,23 +172,6 @@ public class BPMN2FileIndexerIndexingTest extends BaseIndexingTest<Bpmn2TypeDefi
 
         {
             QueryOperationRequest request = QueryOperationRequest
-                    .referencesSharedPart("BrokenSignal",
-                                          PartType.SIGNAL)
-                    .inAllModules().onAllBranches();
-
-            try {
-                final List<RefactoringPageRow> response = service.queryToList(request);
-                assertNotNull(response);
-                assertEquals(1,
-                             response.size());
-                assertResponseContains(response,
-                                       paths[6]);
-            } catch (IllegalArgumentException e) {
-                fail("Exception thrown: " + e.getMessage());
-            }
-        }
-        {
-            QueryOperationRequest request = QueryOperationRequest
                     .referencesSharedPart("name",
                                           PartType.GLOBAL)
                     .inAllModules().onAllBranches();
