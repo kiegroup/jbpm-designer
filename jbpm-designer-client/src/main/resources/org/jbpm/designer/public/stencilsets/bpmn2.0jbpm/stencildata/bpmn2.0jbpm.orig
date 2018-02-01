@@ -23,7 +23,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"TextExpression",
+					"type":"DocsExpression",
 					"title":"Documentation",
 					"value":"",
 					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
@@ -79,7 +79,7 @@
             "properties": [
                 {
                     "id":"documentation",
-                    "type":"TextExpression",
+                    "type":"DocsExpression",
                     "title":"Documentation",
                     "value":"",
                     "description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
@@ -2359,7 +2359,7 @@
 				},
 				{
 					"id":"documentation",
-					"type":"TextExpression",
+					"type":"DocsExpression",
 					"title":"Documentation",
 					"value":"",
 					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",
@@ -3622,7 +3622,7 @@
 				$bclose$,
 				$bopen$
 					"id":"documentation",
-					"type":"TextExpression",
+					"type":"DocsExpression",
 					"title":"Documentation",
 					"value":"$workitemDefs.(k).documentation$",
 					"description":"This attribute is used to annotate the BPMN element, such as descriptions and other documentation.",

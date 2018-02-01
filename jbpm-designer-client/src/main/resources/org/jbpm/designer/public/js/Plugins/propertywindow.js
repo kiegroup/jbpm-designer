@@ -1158,6 +1158,19 @@ ORYX.Plugins.PropertyWindow = {
                                 editorGrid = new Ext.Editor(cf);
                                 break;
 
+                            case ORYX.CONFIG.TYPE_DOCS_EXPRESSION:
+                                var cf = new Ext.form.ConditionExpressionEditorDocumentationField({
+                                    allowBlank: pair.optional(),
+                                    dataSource: this.dataSource,
+                                    grid: this.grid,
+                                    row: index,
+                                    facade: this.facade
+                                });
+
+                                cf.on('dialogClosed', this.dialogClosed, {scope: this, row: index, col: 1, field: cf});
+                                editorGrid = new Ext.Editor(cf);
+                                break;
+
                             case ORYX.CONFIG.TYPE_CALLEDELEMENT:
                                 var cf = new Ext.form.ComplexCalledElementField({
                                     allowBlank: pair.optional(),
@@ -5507,6 +5520,7 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField, {
     doLineWrapping: true,
     doMatchBrackets: true,
     editorTitle: ORYX.I18N.ConditionExpressionEditorField.simpleTitle,
+    isForDocumentation: false,
 
     onTriggerClick: function () {
         if (this.disabled) {
@@ -5566,11 +5580,13 @@ Ext.form.ConditionExpressionEditorField = Ext.extend(Ext.form.TriggerField, {
 
         var isJavaCondition = false;
 
-        Ext.each(this.dataSource.data.items, function (item) {
-            if (item.data.gridProperties.propId == "oryx-conditionexpressionlanguage" && item.data['value'] == "java") {
-                isJavaCondition = true;
-            }
-        });
+        if(!this.isForDocumentation) {
+            Ext.each(this.dataSource.data.items, function (item) {
+                if (item.data.gridProperties.propId == "oryx-conditionexpressionlanguage" && item.data['value'] == "java") {
+                    isJavaCondition = true;
+                }
+            });
+        }
 
         var input = this;
         var isSimpleEditor = true;
@@ -6289,6 +6305,16 @@ Ext.form.ConditionExpressionEditorTextField = Ext.extend(Ext.form.ConditionExpre
     doLineWrapping: false,
     doMatchBrackets: false,
     editorTitle: ORYX.I18N.PropertyWindow.text,
+    isForDocumentation: false
+});
+
+Ext.form.ConditionExpressionEditorDocumentationField = Ext.extend(Ext.form.ConditionExpressionEditorField, {
+    typemode: "text",
+    showLineNumbers: false,
+    doLineWrapping: false,
+    doMatchBrackets: false,
+    editorTitle: ORYX.I18N.PropertyWindow.text,
+    isForDocumentation: true
 });
 
 Ext.form.ComplexRuleflowGroupElementField = Ext.extend(Ext.form.TriggerField, {
