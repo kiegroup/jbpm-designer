@@ -113,14 +113,14 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
         if (context == null) {
             callback.onSuccess(false);
         } else {
-            if (context.getActiveProject() != null) {
+            if (context.getActiveWorkspaceProject().isPresent()) {
                 designerAssetService.call(new RemoteCallback<Boolean>() {
                                               @Override
                                               public void callback(final Boolean isCaseProject) {
                                                   callback.onSuccess(isCaseProject);
                                               }
                                           },
-                                          new DefaultErrorCallback()).isCaseProject(context.getActiveProject().getRootPath());
+                                          new DefaultErrorCallback()).isCaseProject(context.getActiveWorkspaceProject().get().getRootPath());
             } else {
                 callback.onSuccess(false);
             }

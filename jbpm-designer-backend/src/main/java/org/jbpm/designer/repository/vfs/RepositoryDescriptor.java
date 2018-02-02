@@ -31,6 +31,7 @@ import org.jbpm.designer.server.service.PathEvent;
 import org.jbpm.designer.util.Utils;
 import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.Path;
+import org.uberfire.spaces.Space;
 
 @RequestScoped
 public class RepositoryDescriptor {
@@ -104,6 +105,7 @@ public class RepositoryDescriptor {
     }
 
     private void configure() {
+        Space space = null;
         String repositoryAlias = "";
         String branchName = "";
         if (!this.configured) {
@@ -119,23 +121,30 @@ public class RepositoryDescriptor {
 
                 if (uuid.indexOf("@") == -1) {
                     // simple fs pattern
-                    Pattern pattern = Pattern.compile(SEP + "(.*?)" + SEP);
+                    Pattern pattern = Pattern.compile(SEP + "(.*?)" + SEP + "(.*?)" + SEP);
                     Matcher matcher = pattern.matcher(uuid);
                     if (matcher.find()) {
-                        repositoryAlias = matcher.group(1);
+                        space = new Space(matcher.group(1));
+                        repositoryAlias = matcher.group(2);
                     }
                 } else {
                     // git based pattern
-                    Pattern pattern = Pattern.compile("(://)(.*?)@(.*?)/");
+                    Pattern pattern = Pattern.compile("(://)(.*?)@(.*?)/(.*?)");
                     Matcher matcher = pattern.matcher(uuid);
                     if (matcher.find()) {
                         branchName = matcher.group(2);
-                        repositoryAlias = matcher.group(3);
+                        space = new Space(matcher.group(3));
+                        repositoryAlias = matcher.group(4);
                     }
                 }
             }
 
-            RepositoryDescriptor found = provider.getRepositoryDescriptor(repositoryAlias,
+            if (space == null) {
+                throw new IllegalStateException("Cannot parse space from uuid in request: " + uuid);
+            }
+
+            RepositoryDescriptor found = provider.getRepositoryDescriptor(space,
+                                                                          repositoryAlias,
                                                                           branchName);
             this.fileSystem = found.getFileSystem();
             this.repositoryRoot = found.getRepositoryRoot();

@@ -53,13 +53,13 @@ import org.kie.workbench.common.services.datamodel.backend.server.service.DataMo
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueBranchNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm.TermSearchType;
-import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueProjectNameIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueModuleNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueSharedPartIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
 import org.kie.workbench.common.services.refactoring.service.PartType;
 import org.kie.workbench.common.services.refactoring.service.RefactoringQueryService;
-import org.kie.workbench.common.services.shared.project.KieProject;
-import org.kie.workbench.common.services.shared.project.KieProjectService;
+import org.kie.workbench.common.services.shared.project.KieModule;
+import org.kie.workbench.common.services.shared.project.KieModuleService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,18 +76,14 @@ public class CalledElementServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(CalledElementServlet.class);
 
     protected IDiagramProfile profile;
-
-    @Inject
-    private IDiagramProfileService _profileService = null;
-
     @Inject
     protected RefactoringQueryService queryService;
-
     @Inject
     protected VFSService vfsServices;
-
     @Inject
-    protected KieProjectService projectService;
+    protected KieModuleService moduleService;
+    @Inject
+    private IDiagramProfileService _profileService = null;
 
     @Inject
     private DataModelService dataModelService;
@@ -216,7 +212,7 @@ public class CalledElementServlet extends HttpServlet {
                     add(new ValueSharedPartIndexTerm("*",
                                                      PartType.RULEFLOW_GROUP,
                                                      TermSearchType.WILDCARD));
-                    add(new ValueProjectNameIndexTerm(projectAndBranch[0]));
+                    add(new ValueModuleNameIndexTerm(projectAndBranch[0]));
                     if (projectAndBranch[1] != null) {
                         add(new ValueBranchNameIndexTerm(projectAndBranch[1]));
                     }
@@ -257,12 +253,12 @@ public class CalledElementServlet extends HttpServlet {
     }
 
     private String[] getProjectAndBranchNames(HttpServletRequest req) {
-        // Get info about project and branch
+        // Get info about module and branch
         String uuid = Utils.getUUID(req);
         Path myPath = vfsServices.get(uuid.replaceAll("\\s",
                                                       "%20"));
-        KieProject project = projectService.resolveProject(myPath);
-        final String projectName = project.getProjectName();
+        KieModule module = moduleService.resolveModule(myPath);
+        final String projectName = module.getModuleName();
         String branchName = null;
         if (myPath instanceof SegmentedPath) {
             branchName = ((SegmentedPath) myPath).getSegmentId();

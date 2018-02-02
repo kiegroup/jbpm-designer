@@ -26,12 +26,14 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.guvnor.structure.repositories.Branch;
 import org.guvnor.structure.repositories.Repository;
 import org.guvnor.structure.repositories.RepositoryService;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.FileSystemNotFoundException;
 import org.uberfire.java.nio.file.Path;
+import org.uberfire.spaces.Space;
 
 @ApplicationScoped
 public class RepositoryDescriptorProvider {
@@ -42,23 +44,24 @@ public class RepositoryDescriptorProvider {
     @Inject
     private RepositoryService repositoryService;
 
-    private Map<String, RepositoryDescriptor> knownRepositories = new ConcurrentHashMap<String, RepositoryDescriptor>();
+    private Map<String, RepositoryDescriptor> knownRepositories = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init() {
 
-        Collection<Repository> active = repositoryService.getRepositories();
+        Collection<Repository> active = repositoryService.getAllRepositoriesFromAllUserSpaces();
         if (active != null) {
             for (org.guvnor.structure.repositories.Repository repo : active) {
-                for (String branchName : repo.getBranches()) {
+                for (final Branch branch : repo.getBranches()) {
                     buildAndRegister(repo,
-                                     branchName);
+                                     branch.getName());
                 }
             }
         }
     }
 
-    public RepositoryDescriptor getRepositoryDescriptor(String repositoryAlias,
+    public RepositoryDescriptor getRepositoryDescriptor(Space space,
+                                                        String repositoryAlias,
                                                         String branchName) {
         if (branchName == null) {
             branchName = "master";
@@ -69,7 +72,7 @@ public class RepositoryDescriptorProvider {
         } else if (knownRepositories.size() == 1) {
             return knownRepositories.values().iterator().next();
         } else {
-            Repository repository = repositoryService.getRepository(repositoryAlias);
+            Repository repository = repositoryService.getRepositoryFromSpace(space, repositoryAlias);
             if (repository != null) {
                 return buildAndRegister(repository,
                                         branchName);
@@ -81,8 +84,13 @@ public class RepositoryDescriptorProvider {
 
     private RepositoryDescriptor buildAndRegister(Repository repository,
                                                   String branchName) {
-        String repoUri = repository.getRoot().toURI().replaceFirst("://.*?@",
-                                                                   "://" + branchName + "@");
+
+        if (!repository.getDefaultBranch().isPresent()) {
+            throw new IllegalStateException("Repository should have at least one branch.");
+        }
+
+        String repoUri = repository.getDefaultBranch().get().getPath().toURI().replaceFirst("://.*?@",
+                                                                                            "://" + branchName + "@");
         URI root = URI.create(repoUri);
 
         FileSystem fs = ioService.getFileSystem(root);

@@ -29,7 +29,7 @@ import org.kie.workbench.common.services.refactoring.backend.server.query.respon
 import org.kie.workbench.common.services.refactoring.backend.server.query.standard.AbstractFindQuery;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueBranchNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueIndexTerm;
-import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueProjectNameIndexTerm;
+import org.kie.workbench.common.services.refactoring.model.index.terms.valueterms.ValueModuleNameIndexTerm;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringPageRow;
 import org.kie.workbench.common.services.refactoring.model.query.RefactoringStringPageRow;
 import org.kie.workbench.common.services.refactoring.service.ResourceType;
@@ -40,9 +40,8 @@ import org.uberfire.paging.PageResponse;
 @ApplicationScoped
 public class DesignerFindDataTypesQuery extends AbstractFindQuery implements NamedQuery {
 
-    private DataTypesResponseBuilder responseBuilder = new DataTypesResponseBuilder();
-
     public static final String NAME = DesignerFindDataTypesQuery.class.getSimpleName();
+    private DataTypesResponseBuilder responseBuilder = new DataTypesResponseBuilder();
 
     @Override
     public String getName() {
@@ -77,7 +76,7 @@ public class DesignerFindDataTypesQuery extends AbstractFindQuery implements Nam
                                              null, null // not required
                                      },
                                      (t) -> (t.getTerm().equals(ResourceType.JAVA.toString())),
-                                     (t) -> (t instanceof ValueProjectNameIndexTerm),
+                                     (t) -> (t instanceof ValueModuleNameIndexTerm),
                                      (t) -> (t instanceof ValueBranchNameIndexTerm)
         );
     }
