@@ -23,21 +23,30 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import bpsim.impl.BpsimFactoryImpl;
+
 import org.eclipse.bpmn2.Definitions;
 import org.eclipse.bpmn2.Process;
 import org.eclipse.bpmn2.RootElement;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.impl.EAttributeImpl;
+import org.eclipse.emf.ecore.impl.EStructuralFeatureImpl;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
+
 import org.guvnor.common.services.backend.util.CommentedOptionFactory;
+
 import org.jboss.drools.impl.DroolsFactoryImpl;
+
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceImpl;
 import org.jbpm.designer.type.Bpmn2TypeDefinition;
 import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.ext.editor.commons.backend.service.helper.CopyHelper;
@@ -84,6 +93,17 @@ public class BusinessProcessCopyHelper implements CopyHelper {
 
         try {
             Definitions def = new JbpmProfileImpl().getDefinitions(processSource);
+            def.setTargetNamespace("http://www.omg.org/bpmn20");
+            ExtendedMetaData metadata = org.eclipse.emf.ecore.util.ExtendedMetaData.INSTANCE;
+            EAttributeImpl extensionAttribute = (EAttributeImpl) metadata.demandFeature(
+                    "xsi",
+                    "schemaLocation",
+                    false,
+                    false);
+            EStructuralFeatureImpl.SimpleFeatureMapEntry extensionEntry = new EStructuralFeatureImpl.SimpleFeatureMapEntry(extensionAttribute,
+                                                                                                                           "http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd");
+            def.getAnyAttribute().add(extensionEntry);
+
             Process process = getRootProcess(def);
 
             String destinationPkg = "";

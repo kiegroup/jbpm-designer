@@ -34,6 +34,7 @@ import org.uberfire.java.nio.base.options.CommentedOption;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -98,6 +99,7 @@ public class BusinessProcessCopyHelperTest {
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 
         assertNotNull(newBPMN2);
+        assertTrue(newBPMN2.indexOf("schemaLocation") >= 0);
 
         DroolsFactoryImpl.init();
         BpsimFactoryImpl.init();
@@ -133,6 +135,7 @@ public class BusinessProcessCopyHelperTest {
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 
         assertNotNull(newBPMN2);
+        assertTrue(newBPMN2.indexOf("schemaLocation") >= 0);
 
         DroolsFactoryImpl.init();
         BpsimFactoryImpl.init();
@@ -168,6 +171,7 @@ public class BusinessProcessCopyHelperTest {
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 
         assertNotNull(newBPMN2);
+        assertTrue(newBPMN2.indexOf("schemaLocation") >= 0);
 
         DroolsFactoryImpl.init();
         BpsimFactoryImpl.init();
