@@ -51,10 +51,12 @@ import bpsim.TimeParameters;
 import bpsim.TimeUnit;
 import bpsim.UniformDistributionType;
 import bpsim.impl.BpsimPackageImpl;
+
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+
 import org.eclipse.bpmn2.Activity;
 import org.eclipse.bpmn2.AdHocOrdering;
 import org.eclipse.bpmn2.AdHocSubProcess;
@@ -143,6 +145,7 @@ import org.eclipse.bpmn2.util.Bpmn2Resource;
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.DcFactory;
 import org.eclipse.dd.dc.Point;
+import org.eclipse.dd.dc.impl.BoundsImpl;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -154,6 +157,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
+
 import org.jboss.drools.DroolsFactory;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.GlobalType;
@@ -162,15 +166,19 @@ import org.jboss.drools.MetaDataType;
 import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jboss.drools.impl.DroolsPackageImpl;
+
 import org.jbpm.designer.bpmn2.BpmnMarshallerHelper;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.util.DIZorderComparator;
 import org.jbpm.designer.util.Utils;
+
 import org.jbpm.workflow.core.node.RuleSetNode;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -3286,7 +3294,46 @@ public class Bpmn2JsonUnmarshaller {
                 Integer y1 = parser.getIntValue();
                 parser.nextToken();
                 parser.nextToken();
-                Bounds b = DcFactory.eINSTANCE.createBounds();
+
+                // by default the org.eclipse.dd.dc bounds says
+                // its features are set if they are non-zero
+                // we need to change that so that nodes placed on the canvas borders
+                // where x or y can be zero still are treated as set features
+                // otherwise they will not end up as attributes in the produced xml
+                BoundsImpl b = new BoundsImpl() {
+                    @Override
+                    public boolean eIsSet(int featureID) {
+                        switch(featureID) {
+                            case 0:
+                                if(this.height >= 0.0F) {
+                                    return true;
+                                }
+
+                                return false;
+                            case 1:
+                                if(this.width >= 0.0F) {
+                                    return true;
+                                }
+
+                                return false;
+                            case 2:
+                                if(this.x >= 0.0F) {
+                                    return true;
+                                }
+
+                                return false;
+                            case 3:
+                                if(this.y >= 0.0F) {
+                                    return true;
+                                }
+
+                                return false;
+                            default:
+                                return super.eIsSet(featureID);
+                        }
+                    }
+                };
+
                 b.setX(x1);
                 b.setY(y1);
                 b.setWidth(x2 - x1);

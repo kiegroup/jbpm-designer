@@ -83,29 +83,39 @@ import org.eclipse.bpmn2.TextAnnotation;
 import org.eclipse.bpmn2.ThrowEvent;
 import org.eclipse.bpmn2.TimerEventDefinition;
 import org.eclipse.bpmn2.UserTask;
+import org.eclipse.bpmn2.di.BPMNDiagram;
 import org.eclipse.bpmn2.di.BPMNEdge;
 import org.eclipse.bpmn2.di.BPMNPlane;
 import org.eclipse.bpmn2.di.BPMNShape;
 import org.eclipse.bpmn2.di.impl.BPMNEdgeImpl;
 import org.eclipse.bpmn2.impl.DataInputImpl;
 import org.eclipse.bpmn2.impl.DataOutputImpl;
+
+import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.Point;
+import org.eclipse.dd.dc.impl.BoundsImpl;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.dd.di.Edge;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.FeatureMap;
+
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.MetaDataType;
 import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jboss.drools.impl.MetaDataTypeImpl;
+
 import org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.jbpm.designer.server.EditorHandler;
+
 import org.jbpm.workflow.core.node.RuleSetNode;
+
 import org.junit.Test;
 
 import static org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge.createEdge;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -2528,6 +2538,42 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(workItemDataOutputAssociations);
         assertEquals(3, workItemDataInputAssociations.size());
         assertEquals(2, workItemDataOutputAssociations.size());
+    }
+
+    @Test
+    public void testZeroBounds() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("zeroxybounds.json");
+
+        List<BPMNDiagram> processDiagrams = definitions.getDiagrams();
+        assertNotNull(processDiagrams);
+        assertEquals(1, processDiagrams.size());
+
+        BPMNDiagram diagram = processDiagrams.get(0);
+        assertNotNull(diagram);
+
+        BPMNPlane plane = diagram.getPlane();
+        assertNotNull(plane);
+
+        List<DiagramElement> diagramElements = plane.getPlaneElement();
+        assertNotNull(diagramElements);
+        assertEquals(3, diagramElements.size());
+
+        for (DiagramElement dia : diagramElements) {
+            if (dia instanceof BPMNShape) {
+                BPMNShape shape = (BPMNShape) dia;
+                Bounds shapeBounds = shape.getBounds();
+                assertTrue(shapeBounds.getX() >= 0);
+                assertTrue(shapeBounds.getY() >= 0);
+
+                // now make sure the features of bound sare set on the eclipse level\
+                // this will assure x, y are present in generated bpmn2 xml
+                // this was the core of the chage for this test
+                BoundsImpl boundsImpl = (BoundsImpl) shapeBounds;
+                assertTrue(boundsImpl.eIsSet(2)); // 2 is x
+                assertTrue(boundsImpl.eIsSet(3)); // 3 is y
+            }
+        }
+
     }
 }
 
