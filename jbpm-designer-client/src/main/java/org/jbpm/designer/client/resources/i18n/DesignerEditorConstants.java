@@ -91,4 +91,8 @@ public interface DesignerEditorConstants extends
     String CaseDefinition();
 
     String CaseIdPrefix();
+
+    String Information();
+
+    String ModelEditorConfirmSaveBeforeRename();
 }

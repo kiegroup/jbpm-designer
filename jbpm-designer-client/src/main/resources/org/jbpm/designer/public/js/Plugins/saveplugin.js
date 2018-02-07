@@ -162,6 +162,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_SAVE, this.handleEventDoSave.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_UPDATE, this.handleEventDoUpdate.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_CHECKSAVE, this.handleEventDoCheckSave.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_CANCEL_SAVE, this.handleEventCancelSave.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_RELOAD, this.handleEventDoRealod.bind(this));
@@ -213,6 +214,11 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     handleEventDoSave: function() {
         this.setUnsaved();
         this.save(true);
+    },
+
+    handleEventDoUpdate: function() {
+        this.setUnsaved();
+        this.save(false);
     },
 
     handleEventDoCheckSave : function(options) {

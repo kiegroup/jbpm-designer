@@ -77,6 +77,10 @@ public class DesignerWidgetPresenter {
         view.raiseEventSave(editorID);
     }
 
+    public void raiseEventUpdate(final String editorID) {
+        view.raiseEventUpdate(editorID);
+    }
+
     public void raiseEventCheckSave(final String editorID,
                                     String pathURI) {
         view.raiseEventCheckSave(editorID,
