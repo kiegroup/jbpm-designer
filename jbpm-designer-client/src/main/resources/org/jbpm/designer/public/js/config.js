@@ -194,6 +194,7 @@ ORYX.CONFIG.TYPE_ENCODED_TEXT =         "encodedtext";
 ORYX.CONFIG.TYPE_VARDEF =               "vardef";
 ORYX.CONFIG.TYPE_EXPRESSION =           "expression";
 ORYX.CONFIG.TYPE_TEXT_EXPRESSION =      "textexpression";
+ORYX.CONFIG.TYPE_DOCS_EXPRESSION =      "docsexpression";
 ORYX.CONFIG.TYPE_ACTION =               "action";
 ORYX.CONFIG.TYPE_GLOBAL =               "global";
 ORYX.CONFIG.TYPE_IMPORT =               "import";
