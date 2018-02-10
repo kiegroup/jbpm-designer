@@ -21,6 +21,7 @@ import java.util.Map;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import org.kie.workbench.common.widgets.metadata.client.KieEditorView;
+import org.uberfire.mvp.Command;
 
 public interface DesignerView
         extends KieEditorView,
@@ -48,5 +49,14 @@ public interface DesignerView
 
     void askOpenInXMLEditor();
 
+    void raiseEventUpdate();
+
     void raiseEventUpdateLock();
+
+    boolean canSaveDesignerModel();
+
+    void showYesNoCancelPopup(String title,
+                              String message,
+                              Command yesCommand,
+                              Command noCommand);
 }

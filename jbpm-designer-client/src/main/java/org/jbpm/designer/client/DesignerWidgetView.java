@@ -199,6 +199,19 @@ public class DesignerWidgetView
         }
     }-*/;
 
+    public native void raiseEventUpdate(String editorID) /*-{
+        try {
+            if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
+                $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
+                    type: "designereventdoupdate"
+                });
+            }
+        } catch (e) {
+            var ex = @com.google.gwt.core.client.JavaScriptException::new(Ljava/lang/Object;)(e);
+            @com.google.gwt.core.client.GWT::log(Ljava/lang/String;Ljava/lang/Throwable;)("JSNI raiseEventSave error", ex);
+        }
+    }-*/;
+
     public native void raiseEventCheckSave(String editorID,
                                            String pathURI) /*-{
         try {

@@ -32,6 +32,7 @@ import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jboss.errai.security.shared.api.identity.User;
 import org.jbpm.designer.client.parameters.DesignerEditorParametersPublisher;
 import org.jbpm.designer.client.popup.ActivityDataIOEditor;
+import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.AssignmentData;
 import org.jbpm.designer.client.shared.Variable;
 import org.jbpm.designer.client.type.Bpmn2Type;
@@ -77,7 +78,10 @@ import static org.uberfire.ext.widgets.common.client.common.ConcurrentChangePopu
 @Dependent
 @WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = {Bpmn2Type.class})
 public class DesignerPresenter
-        extends KieEditor {
+        extends KieEditor<Path> {
+
+    @Inject
+    DesignerEditorParametersPublisher designerEditorParametersPublisher;
 
     @Inject
     private Caller<DesignerAssetService> assetService;
@@ -105,9 +109,6 @@ public class DesignerPresenter
 
     @Inject
     private ActivityDataIOEditor activityDataIOEditor;
-
-    @Inject
-    DesignerEditorParametersPublisher designerEditorParametersPublisher;
 
     private DesignerView view;
 
@@ -149,14 +150,44 @@ public class DesignerPresenter
                     }))
                     .addCopy(versionRecordManager.getCurrentPath(),
                              assetUpdateValidator)
-                    .addRename(versionRecordManager.getPathToLatest(),
-                               assetUpdateValidator)
+                    .addRename(getSaveAndRename())
                     .addDelete(versionRecordManager.getPathToLatest(),
                                assetUpdateValidator);
         }
 
         fileMenuBuilder
                 .addNewTopLevelMenu(versionRecordManager.buildMenu());
+    }
+
+    @Override
+    protected Command getSaveAndRename() {
+        return () -> {
+            if (isDirty()) {
+                view.showYesNoCancelPopup(getPopupTitle(), getMessage(), doSaveAndRename(), doRename());
+            } else {
+                doRename().execute();
+            }
+        };
+    }
+
+    boolean isDirty() {
+        return !view.canSaveDesignerModel();
+    }
+
+    String getMessage() {
+        return DesignerEditorConstants.INSTANCE.ModelEditorConfirmSaveBeforeRename();
+    }
+
+    String getPopupTitle() {
+        return DesignerEditorConstants.INSTANCE.Information();
+    }
+
+    Command doSaveAndRename() {
+        return () -> save(doRename());
+    }
+
+    Command doRename() {
+        return () -> openRenamePopUp(versionRecordManager.getPathToLatest());
     }
 
     @OnClose
@@ -438,23 +469,41 @@ public class DesignerPresenter
         vfsServices.call(new RemoteCallback<ObservablePath>() {
             @Override
             public void callback(final ObservablePath mypath) {
-                renamePopUpPresenter.show(mypath,
-                                          fileNameValidator,
-                                          new CommandWithFileNameAndCommitMessage() {
-                                              @Override
-                                              public void execute(final FileNameAndCommitMessage details) {
-                                                  baseView.showLoading();
-                                                  renameService.call(getRenameSuccessCallback(renamePopUpPresenter.getView()),
-                                                                     getRenameErrorCallback(renamePopUpPresenter.getView())).rename(versionRecordManager.getPathToLatest(),
-                                                                                                                                    details.getNewFileName(),
-                                                                                                                                    details.getCommitMessage());
-                                              }
-                                          });
+                openRenamePopUp(mypath);
             }
         }).get(URIUtil.encode(uri));
     }
 
-    private HasBusyIndicatorDefaultErrorCallback getRenameErrorCallback(final RenamePopUpPresenter.View renamePopupView) {
+    void openRenamePopUp(final ObservablePath observablePath) {
+
+        final CommandWithFileNameAndCommitMessage renameCommand = makeRenameCommand();
+
+        renamePopUpPresenter.show(observablePath,
+                                  fileNameValidator,
+                                  renameCommand);
+    }
+
+    CommandWithFileNameAndCommitMessage makeRenameCommand() {
+
+        return details -> {
+
+            final RenamePopUpPresenter.View view = renamePopUpPresenter.getView();
+            final ObservablePath pathToLatest = versionRecordManager.getPathToLatest();
+            final RemoteCallback<Path> onSuccess = getRenameSuccessCallback(view);
+            final HasBusyIndicatorDefaultErrorCallback onError = getRenameErrorCallback(view);
+
+            baseView.showLoading();
+            getRenameService().call(onSuccess, onError).rename(pathToLatest,
+                                                               details.getNewFileName(),
+                                                               details.getCommitMessage());
+        };
+    }
+
+    Caller<RenameService> getRenameService() {
+        return renameService;
+    }
+
+    HasBusyIndicatorDefaultErrorCallback getRenameErrorCallback(final RenamePopUpPresenter.View renamePopupView) {
         return new HasBusyIndicatorDefaultErrorCallback(baseView) {
 
             @Override
@@ -535,7 +584,7 @@ public class DesignerPresenter
         };
     }
 
-    private RemoteCallback<Path> getRenameSuccessCallback(final RenamePopUpPresenter.View renamePopupView) {
+    RemoteCallback<Path> getRenameSuccessCallback(final RenamePopUpPresenter.View renamePopupView) {
         return new RemoteCallback<Path>() {
 
             @Override
@@ -662,11 +711,17 @@ public class DesignerPresenter
     protected void save() {
         final ObservablePath latestPath = versionRecordManager.getPathToLatest();
 
-        assetService.call(new RemoteCallback<Void>() {
-            @Override
-            public void callback(final Void aVoid) {
-                view.raiseEventCheckSave(latestPath.toURI());
-            }
+        assetService.call(aVoid -> {
+            view.raiseEventCheckSave(latestPath.toURI());
+        }).updateMetadata(latestPath,
+                          overview.getMetadata());
+    }
+
+    protected void save(final Command onSuccess) {
+        final ObservablePath latestPath = versionRecordManager.getPathToLatest();
+        assetService.call(aVoid -> {
+            view.raiseEventUpdate();
+            onSuccess.execute();
         }).updateMetadata(latestPath,
                           overview.getMetadata());
     }

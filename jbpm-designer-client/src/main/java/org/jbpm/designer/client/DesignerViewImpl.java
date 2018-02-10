@@ -22,6 +22,8 @@ import javax.inject.Inject;
 
 import com.google.gwt.user.client.ui.RequiresResize;
 import org.kie.workbench.common.widgets.metadata.client.KieEditorViewImpl;
+import org.uberfire.ext.widgets.common.client.common.popups.YesNoCancelPopup;
+import org.uberfire.mvp.Command;
 
 public class DesignerViewImpl
         extends KieEditorViewImpl
@@ -57,6 +59,11 @@ public class DesignerViewImpl
     @Override
     public void raiseEventSave() {
         designerWidget.raiseEventSave(designerWidget.getEditorID());
+    }
+
+    @Override
+    public void raiseEventUpdate() {
+        designerWidget.raiseEventUpdate(designerWidget.getEditorID());
     }
 
     @Override
@@ -100,7 +107,7 @@ public class DesignerViewImpl
 
     @Override
     public boolean canClose() {
-        if (!designerWidget.canSaveDesignerModel(designerWidget.getEditorID()) ||
+        if (!canSaveDesignerModel() ||
                 designerWidget.isProcessValidating(designerWidget.getEditorID())) {
             boolean canClose = designerWidget.confirmClose();
             if (canClose) {
@@ -114,6 +121,30 @@ public class DesignerViewImpl
         } else {
             return true;
         }
+    }
+
+    @Override
+    public boolean canSaveDesignerModel() {
+        return designerWidget.canSaveDesignerModel(designerWidget.getEditorID());
+    }
+
+    @Override
+    public void showYesNoCancelPopup(final String title,
+                                     final String message,
+                                     final Command yesCommand,
+                                     final Command noCommand) {
+
+        final Command cancelCommand = () -> {
+            // Do nothing, but let the cancel button be shown.
+        };
+        final YesNoCancelPopup yesNoCancelPopup = YesNoCancelPopup.newYesNoCancelPopup(title,
+                                                                                       message,
+                                                                                       yesCommand,
+                                                                                       noCommand,
+                                                                                       cancelCommand);
+        yesNoCancelPopup.clearScrollHeight();
+        yesNoCancelPopup.setClosable(false);
+        yesNoCancelPopup.show();
     }
 
     @Override
