@@ -61,7 +61,7 @@ public class ServiceRepoUtils {
                                        ModuleService moduleService,
                                        MetadataService metadataService) throws IOException, FileAlreadyExistsException {
 
-        String workitemDefinitionURL = workitemsFromRepo.get(key).getPath() + "/" + workitemsFromRepo.get(key).getName() + ".wid";
+        String workitemDefinitionURL = workitemsFromRepo.get(key).getPath() + "/" + workitemsFromRepo.get(key).getFile();
         String iconFileURL = workitemsFromRepo.get(key).getPath() + "/" + workitemsFromRepo.get(key).getIcon();
         String workItemDefinitionContent = ConfFileUtils.URLContentsToString(new URL(workitemDefinitionURL));
         String iconName = workitemsFromRepo.get(key).getIcon();
