@@ -24,7 +24,6 @@ import com.google.gwt.core.client.Callback;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.project.model.Package;
 import org.gwtbootstrap3.client.ui.TextBox;
-import org.gwtbootstrap3.client.ui.gwt.HTMLPanel;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
@@ -79,9 +78,7 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
 
     @PostConstruct
     private void setupExtensions() {
-        extensions.add(Pair.newPair("CaseIdPrefixLabel",
-                                    new HTMLPanel(DesignerEditorConstants.INSTANCE.CaseIdPrefix())));
-        extensions.add(Pair.newPair("CaseIdPrefixTextBox",
+        extensions.add(Pair.newPair(DesignerEditorConstants.INSTANCE.CaseIdPrefix(),
                                     caseIdPrefixTextBox));
     }
 
