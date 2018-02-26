@@ -24,13 +24,16 @@ import org.jbpm.designer.bpmn2.BpmnMarshallerHelper;
 import org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxCheckerTest;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import org.junit.Test;
 
 import static org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge.createEdge;
 import static org.jbpm.designer.bpmn2.utils.Bpmn2Loader.getChildByName;
 import static org.jbpm.designer.bpmn2.utils.Bpmn2Loader.getChildByTypeName;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -915,18 +918,21 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject processProperties = process.getJSONObject("properties");
 
         String processName = processProperties.getString("processn");
-        assertEquals("\"'<>&Process", processName);
+        assertEquals("\"'<>&Process",
+                     processName);
 
-        List<JSONObject> userTasks = getChildByTypeName(process, "Task");
+        List<JSONObject> userTasks = getChildByTypeName(process,
+                                                        "Task");
         assertNotNull(userTasks);
-        assertEquals(1, userTasks.size());
+        assertEquals(1,
+                     userTasks.size());
         JSONObject userTask = userTasks.get(0);
         assertNotNull(userTask);
 
         JSONObject userTaskProperties = userTask.getJSONObject("properties");
         String userTaskName = userTaskProperties.getString("name");
-        assertEquals("\"'<>&Task", userTaskName);
-
+        assertEquals("\"'<>&Task",
+                     userTaskName);
     }
 
     @Test
@@ -935,17 +941,21 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject processProperties = process.getJSONObject("properties");
 
         String processName = processProperties.getString("processn");
-        assertEquals("MyProcess", processName);
+        assertEquals("MyProcess",
+                     processName);
 
-        List<JSONObject> userTasks = getChildByTypeName(process, "Task");
+        List<JSONObject> userTasks = getChildByTypeName(process,
+                                                        "Task");
         assertNotNull(userTasks);
-        assertEquals(1, userTasks.size());
+        assertEquals(1,
+                     userTasks.size());
         JSONObject userTask = userTasks.get(0);
         assertNotNull(userTask);
 
         JSONObject userTaskProperties = userTask.getJSONObject("properties");
         String userTaskName = userTaskProperties.getString("name");
-        assertEquals("MyTask", userTaskName);
+        assertEquals("MyTask",
+                     userTaskName);
     }
 
     @Test
@@ -954,9 +964,11 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject processProperties = process.getJSONObject("properties");
 
         String processName = processProperties.getString("processn");
-        assertEquals("catchDefinitionRef", processName);
+        assertEquals("catchDefinitionRef",
+                     processName);
 
-        JSONObject catchEvent = getChildByName(process, "mytimer");
+        JSONObject catchEvent = getChildByName(process,
+                                               "mytimer");
         assertNotNull(catchEvent);
     }
 
@@ -966,9 +978,11 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject processProperties = process.getJSONObject("properties");
 
         String processName = processProperties.getString("processn");
-        assertEquals("throwDefinitionRef", processName);
+        assertEquals("throwDefinitionRef",
+                     processName);
 
-        JSONObject catchEvent = getChildByName(process, "mysignalEvent");
+        JSONObject catchEvent = getChildByName(process,
+                                               "mysignalEvent");
         assertNotNull(catchEvent);
     }
 
@@ -978,9 +992,11 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject processProperties = process.getJSONObject("properties");
 
         String processName = processProperties.getString("processn");
-        assertEquals("startDefinitionRef", processName);
+        assertEquals("startDefinitionRef",
+                     processName);
 
-        JSONObject startEvent = getChildByName(process, "mytimerstart");
+        JSONObject startEvent = getChildByName(process,
+                                               "mytimerstart");
         assertNotNull(startEvent);
     }
 
@@ -990,9 +1006,11 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject processProperties = process.getJSONObject("properties");
 
         String processName = processProperties.getString("processn");
-        assertEquals("endEventDefinitionRef", processName);
+        assertEquals("endEventDefinitionRef",
+                     processName);
 
-        JSONObject endEvent = getChildByName(process, "mysignalendEvent");
+        JSONObject endEvent = getChildByName(process,
+                                             "mysignalendEvent");
         assertNotNull(endEvent);
     }
 
@@ -1002,10 +1020,40 @@ public class Bpmn2JsonMarshallerTest {
         JSONObject processProperties = process.getJSONObject("properties");
 
         String processName = processProperties.getString("processn");
-        assertEquals("boundaryDefinitionRef", processName);
+        assertEquals("boundaryDefinitionRef",
+                     processName);
 
-        JSONObject endEvent = getChildByName(process, "myboundarytimer");
+        JSONObject endEvent = getChildByName(process,
+                                             "myboundarytimer");
         assertNotNull(endEvent);
     }
 
+    @Test
+    public void testMessageRefNodes() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("messageRefNodes.bpmn2");
+
+        JSONObject startMessageEvent = getChildByName(process,
+                                                      "start");
+        JSONObject startMessageEventProperties = startMessageEvent.getJSONObject("properties");
+        assertEquals("messageOne",
+                     startMessageEventProperties.getString("messageref"));
+
+        JSONObject sendTask = getChildByName(process,
+                                             "send");
+        JSONObject sendTaskProperties = sendTask.getJSONObject("properties");
+        assertEquals("messagetwo",
+                     sendTaskProperties.getString("messageref"));
+
+        JSONObject receiveTask = getChildByName(process,
+                                                "receive");
+        JSONObject receiveTaskProperties = receiveTask.getJSONObject("properties");
+        assertEquals("messagethree",
+                     receiveTaskProperties.getString("messageref"));
+
+        JSONObject endMessageEvent = getChildByName(process,
+                                                    "end");
+        JSONObject endMessageEventProperties = endMessageEvent.getJSONObject("properties");
+        assertEquals("messagefour",
+                     endMessageEventProperties.getString("messageref"));
+    }
 }
