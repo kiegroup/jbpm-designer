@@ -17,13 +17,16 @@
 package org.jbpm.designer.client.type;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import org.guvnor.common.services.project.categories.Process;
 import org.jbpm.designer.client.resources.DesignerEditorResources;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.type.Bpmn2TypeDefinition;
 import org.uberfire.client.workbench.type.ClientResourceType;
+import org.uberfire.workbench.category.Category;
 
 @ApplicationScoped
 public class Bpmn2Type
@@ -31,6 +34,14 @@ public class Bpmn2Type
         implements ClientResourceType {
 
     private static final Image IMAGE = new Image(DesignerEditorResources.INSTANCE.images().typeForm());
+
+    public Bpmn2Type() {
+    }
+
+    @Inject
+    public Bpmn2Type(final Process category) {
+        super(category);
+    }
 
     @Override
     public IsWidget getIcon() {
