@@ -294,7 +294,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
     @Override
     public String getRepositoryGlobalDir(String uuid) {
         if(uuid != null) {
-            Path uuidPath = vfsServices.get(UriUtils.encode(uuid) );
+            Path uuidPath = vfsServices.get(UriUtils.encode(uuid.replaceAll("\\s", "%20")) );
             String pathURI = uuidPath.toURI();
 
             if(pathURI != "/") {

@@ -15,6 +15,14 @@
 
 package org.jbpm.designer.web.server;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Scanner;
+
 import org.jbpm.designer.helper.TestHttpServletRequest;
 import org.jbpm.designer.helper.TestHttpServletResponse;
 import org.jbpm.designer.helper.TestServletConfig;
@@ -25,27 +33,47 @@ import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
 import org.jbpm.designer.repository.filters.FilterByExtension;
 import org.jbpm.designer.repository.impl.AssetBuilder;
-import org.jbpm.designer.repository.VFSFileSystemProducer;
 import org.jbpm.designer.repository.vfs.VFSRepository;
-import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
+import org.uberfire.backend.vfs.Path;
+import org.uberfire.backend.vfs.PathFactory;
+import org.uberfire.backend.vfs.VFSService;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.is;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+@RunWith(MockitoJUnitRunner.class)
+public class TaskFormsServletTest extends RepositoryBaseTest {
 
-public class TaskFormsServletTest  extends RepositoryBaseTest {
+    @Mock
+    private VFSService vfsServices;
+
+    private Repository repository;
 
     @Before
     public void setup() {
         super.setup();
+
+        when(vfsServices.get(anyString())).thenAnswer(new Answer<Path>() {
+            @Override
+            public Path answer(InvocationOnMock invocation) throws Throwable {
+                Object[] args = invocation.getArguments();
+                return PathFactory.newPath((String) args[0], (String) args[0]);
+            }
+        });
+
+        repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository)repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
     }
 
     @After
@@ -53,7 +81,9 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         super.teardown();
     }
 
-    @Ignore
+    protected String dirName = "defaultPackage";
+    protected String processFileName = "process";
+
     @Test
     public void testTaskFormServlet() throws Exception {
 
@@ -63,8 +93,8 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
                 .type("bpmn2")
-                .name("hello")
-                .location("/defaultPackage");
+                .name(processFileName)
+                .location("/" + dirName);
         String uniqueId = repository.createAsset(builder.getAsset());
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -75,33 +105,29 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
 
         TaskFormsServlet taskFormsServlet = new TaskFormsServlet();
         taskFormsServlet.setProfile(profile);
+        taskFormsServlet.setVfsServices(vfsServices);
 
         taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository)));
 
         taskFormsServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
 
-        Collection<Asset> forms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
+        Collection<Asset> forms = repository.listAssets("/" + dirName, new FilterByExtension("ftl"));
         assertNotNull(forms);
         assertEquals(1, forms.size());
         assertEquals("hello-taskform", forms.iterator().next().getName());
-        assertEquals("/defaultPackage", forms.iterator().next().getAssetLocation());
+        assertEquals("/" + dirName, forms.iterator().next().getAssetLocation());
 
         Asset<String> form = repository.loadAsset(forms.iterator().next().getUniqueId());
         assertNotNull(form.getAssetContent());
     }
 
-    @Ignore
     @Test
     public void testTaskFormServletWithUserTask() throws Exception {
-
-        Repository repository = new VFSRepository(producer.getIoService());
-        ((VFSRepository)repository).setDescriptor(descriptor);
-        profile.setRepository(repository);
         AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         builder.content("bpmn2 content")
                 .type("bpmn2")
-                .name("userTask")
-                .location("/defaultPackage");
+                .name(processFileName)
+                .location("/" + dirName);
         String uniqueId = repository.createAsset(builder.getAsset());
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -112,22 +138,23 @@ public class TaskFormsServletTest  extends RepositoryBaseTest {
 
         TaskFormsServlet taskFormsServlet = new TaskFormsServlet();
         taskFormsServlet.setProfile(profile);
+        taskFormsServlet.setVfsServices(vfsServices);
 
         taskFormsServlet.init(new TestServletConfig(new TestServletContext(repository)));
 
         taskFormsServlet.doPost(new TestHttpServletRequest(params), new TestHttpServletResponse());
 
-        Collection<Asset> forms = repository.listAssets("/defaultPackage", new FilterByExtension("ftl"));
+        Collection<Asset> forms = repository.listAssets("/" + dirName, new FilterByExtension("ftl"));
         assertNotNull(forms);
         assertEquals(2, forms.size());
         Iterator<Asset> assets = forms.iterator();
         Asset asset1 = assets.next();
-        assertEquals("evaluate-taskform", asset1.getName());
-        assertEquals("/defaultPackage", asset1.getAssetLocation());
+        assertThat(asset1.getName(), anyOf(is("evaluate-taskform"), is("testprocess-taskform")));
+        assertEquals("/" + dirName, asset1.getAssetLocation());
 
         Asset asset2 = assets.next();
-        assertEquals("testprocess-taskform", asset2.getName());
-        assertEquals("/defaultPackage", asset2.getAssetLocation());
+        assertThat(asset2.getName(), anyOf(is("evaluate-taskform"), is("testprocess-taskform")));
+        assertEquals("/" + dirName, asset2.getAssetLocation());
 
         Asset<String> form1 = repository.loadAsset(asset1.getUniqueId());
         assertNotNull(form1.getAssetContent());

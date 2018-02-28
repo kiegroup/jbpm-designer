@@ -431,7 +431,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 boolean iconFound = false;
                 // Look for icon located relative to the asset
                 String absoluteIcon = createAbsoluteIconPath(assetLocation, icon);
-                if (repository.assetExists(absoluteIcon)) {
+                if (repository.assetExists(absoluteIcon.replaceAll("\\s", "%20"))) {
                     icon = absoluteIcon;
                     iconFound = true;
                 }
@@ -447,14 +447,14 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                 }
 
                 try {
-                    if (!repository.assetExists(icon)) {
+                    if (!repository.assetExists(icon.replaceAll("\\s", "%20"))) {
                         icon = this.globalDir + "/defaultservicenodeicon.png";
                     }
                 } catch (Exception e) {
                     _logger.error(e.getMessage());
                     icon = this.globalDir + "/defaultservicenodeicon.png";
                 }
-                iconAsset = repository.loadAssetFromPath(icon);
+                iconAsset = repository.loadAssetFromPath(icon.replaceAll("\\s", "%20"));
                 workDefinition.setIcon(icon);
 
                 String iconEncoded = "data:image/png;base64," + javax.xml.bind.DatatypeConverter.printBase64Binary(iconAsset.getAssetContent());

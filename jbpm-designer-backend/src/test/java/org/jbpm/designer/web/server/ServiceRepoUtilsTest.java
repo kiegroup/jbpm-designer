@@ -103,6 +103,8 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
     private POM projectPOM;
 
+    protected String dirName = "/src/main/resources";
+    protected String processFileName = "samplebpmn2process";
 
     @Before
     public void setup() {
@@ -125,8 +127,8 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         AssetBuilder bpmn2builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
         bpmn2builder.content("bpmn2 content")
                 .type("bpmn2")
-                .name("samplebpmn2process")
-                .location("/src/main/resources");
+                .name(processFileName)
+                .location(dirName);
         String bpmn2AssetID = repository.createAsset(bpmn2builder.getAsset());
         assertNotNull(bpmn2AssetID);
 
@@ -139,13 +141,13 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         String pomAssetID = repository.createAsset(pomBuilder.getAsset());
         assertNotNull(pomAssetID);
 
-        Collection<Asset> foundAsset = repository.listAssets("/src/main/resources", new FilterByExtension("bpmn2"));
+        Collection<Asset> foundAsset = repository.listAssets(dirName, new FilterByExtension("bpmn2"));
         assertNotNull(foundAsset);
         assertEquals(1, foundAsset.size());
 
         Path rootPath = Paths.convert(((VFSRepository) repository).getDescriptor().getRepositoryRootPath());
 
-        uuid = rootPath.toURI() + "/src/main/resources/samplebpmn2process.bpmn2";
+        uuid = rootPath.toURI() + dirName + "/" + processFileName + ".bpmn2";
         String pomuuid = rootPath.toURI() + "/pom.xml";
 
         KieProject project = Mockito.mock(KieProject.class);
