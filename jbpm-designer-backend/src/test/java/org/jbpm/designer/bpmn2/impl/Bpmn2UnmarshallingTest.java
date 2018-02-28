@@ -2575,5 +2575,41 @@ public class Bpmn2UnmarshallingTest {
         }
 
     }
+    
+    @Test
+    public void testProcessCustomSlaDueDate() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("customProperties.json");
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = getRootProcess(definitions);
+
+        List<ExtensionAttributeValue> extensionAttributeValues = process.getExtensionValues();
+        assertNotNull(extensionAttributeValues);
+        assertEquals(1,
+                     extensionAttributeValues.size());
+
+        assertEquals("<![CDATA[3m]]>",
+                     getMetaDataValue(process.getExtensionValues(),
+                                      "customSLADueDate"));        
+    }
+    
+    @Test
+    public void testTaskCustomSlaDueDate() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("customPropertiesTask.json");
+        Process process = getRootProcess(definitions);
+
+        UserTask task = (UserTask) process.getFlowElements().get(1);
+        assertNotNull(task);
+        assertEquals("Task_1",
+                     task.getName());
+
+        List<ExtensionAttributeValue> extensionAttributeValues = task.getExtensionValues();
+        assertNotNull(extensionAttributeValues);
+        assertEquals(1,
+                     extensionAttributeValues.size());
+
+        assertEquals("<![CDATA[3m]]>",
+                     getMetaDataValue(task.getExtensionValues(),
+                                      "customSLADueDate")); 
+    }
 }
 

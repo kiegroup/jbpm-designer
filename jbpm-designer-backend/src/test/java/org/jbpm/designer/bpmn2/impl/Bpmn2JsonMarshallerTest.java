@@ -1056,4 +1056,26 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("messagefour",
                      endMessageEventProperties.getString("messageref"));
     }
+    
+    @Test
+    public void testProcessCustomSlaDueDate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("customProperties.bpmn2");
+        JSONObject properties = process.getJSONObject("properties");
+        String slaDueDate = properties.getString("customsladuedate");
+
+        assertEquals("3m",
+                     slaDueDate);
+    }
+    
+    @Test
+    public void testTaskCustomSlaDueDate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("customPropertiesTask.bpmn2");
+        JSONObject task = getChildByName(process,
+                                         "Task_1");
+        JSONObject properties = task.getJSONObject("properties");
+        String slaDueDate = properties.getString("customsladuedate");
+
+        assertEquals("3m",
+                     slaDueDate);
+    }
 }

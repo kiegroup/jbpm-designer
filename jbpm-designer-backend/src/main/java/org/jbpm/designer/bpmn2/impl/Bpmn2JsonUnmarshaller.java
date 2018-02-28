@@ -3487,6 +3487,12 @@ public class Bpmn2JsonUnmarshaller {
                                                         "customCaseRoles",
                                                         wrapInCDATABlock(properties.get("customcaseroles")));
                     }
+                    // customsladuedate metadata
+                    if (properties.get("customsladuedate") != null && properties.get("customsladuedate").length() > 0) {
+                        Utils.setMetaDataExtensionValue(rootLevelProcess,
+                                                        "customSLADueDate",
+                                                        wrapInCDATABlock(properties.get("customsladuedate")));
+                    }
 
                     rootLevelProcess.setId(properties.get("id"));
                     applyProcessProperties(rootLevelProcess,
@@ -3627,6 +3633,12 @@ public class Bpmn2JsonUnmarshaller {
                                 Utils.setMetaDataExtensionValue(rootLevelProcess,
                                                                 "customCaseRoles",
                                                                 wrapInCDATABlock(properties.get("customcaseroles")));
+                            }
+                            // customsladuedate metadata
+                            if (properties.get("customsladuedate") != null && properties.get("customsladuedate").length() > 0) {
+                                Utils.setMetaDataExtensionValue(rootLevelProcess,
+                                                                "customSLADueDate",
+                                                                wrapInCDATABlock(properties.get("customsladuedate")));
                             }
                             rootLevelProcess.setId(properties.get("id"));
                             applyProcessProperties(rootLevelProcess,
@@ -3927,6 +3939,12 @@ public class Bpmn2JsonUnmarshaller {
             Utils.setMetaDataExtensionValue(sp,
                                             "customAsync",
                                             wrapInCDATABlock(properties.get("isasync")));
+        }
+        // customsladuedate metadata
+        if (properties.get("customsladuedate") != null && properties.get("customsladuedate").length() > 0) {
+            Utils.setMetaDataExtensionValue(sp,
+                                            "customSLADueDate",
+                                            wrapInCDATABlock(properties.get("customsladuedate")));
         }
 
         if (sp.getIoSpecification() == null) {
@@ -5640,6 +5658,12 @@ public class Bpmn2JsonUnmarshaller {
                                             "customAbortParent",
                                             wrapInCDATABlock(properties.get("isabortparent")));
         }
+        // customsladuedate metadata
+        if (properties.get("customsladuedate") != null && properties.get("customsladuedate").length() > 0) {
+            Utils.setMetaDataExtensionValue(callActivity,
+                                            "customSLADueDate",
+                                            wrapInCDATABlock(properties.get("customsladuedate")));
+        }
 
         //callActivity data input set
         applyDataInputProperties(callActivity,
@@ -5982,6 +6006,13 @@ public class Bpmn2JsonUnmarshaller {
             Utils.setMetaDataExtensionValue(task,
                                             "customAutoStart",
                                             wrapInCDATABlock(properties.get("customautostart")));
+        }
+        
+        // customsladuedate metadata
+        if (properties.get("customsladuedate") != null && properties.get("customsladuedate").length() > 0) {
+            Utils.setMetaDataExtensionValue(task,
+                                            "customSLADueDate",
+                                            wrapInCDATABlock(properties.get("customsladuedate")));
         }
 
         //process data input set

@@ -774,6 +774,16 @@
 						  "ifproptrue":"adhocprocess"
                 },
 				{
+                          "id":"customsladuedate",
+                          "type":"TextExpression",
+                          "title":"SLA Due Date",
+                          "value":"",
+                          "description":"SLA Due Date",
+                          "description_ja":"",
+                          "readonly":false,
+                          "optional":true
+                },                
+				{
 					"id":"adhocprocess",
 					"type":"Choice",
 					"title":"AdHoc",
@@ -2804,6 +2814,18 @@
 						}
 					]
 				},
+				{
+                          "id":"customsladuedate",
+                          "type":"TextExpression",
+                          "title":"SLA Due Date",
+                          "value":"",
+                          "description":"SLA Due Date",
+                          "description_ja":"",
+                          "readonly":false,
+                          "optional":true,
+                          "fortasktypes":"None|Send|Receive|User|Manual|Service",
+						  "extra":true,
+                },
 				{
 					"id":"taskname",
 					"type":"String",

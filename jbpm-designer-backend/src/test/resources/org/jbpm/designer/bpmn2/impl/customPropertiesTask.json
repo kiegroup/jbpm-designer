@@ -91,6 +91,7 @@
         "onexitactions": "",
         "isasync": "false",
         "customautostart": "true",
+        "customsladuedate": "3m",
         "taskname": "",
         "serviceoperation": "",
         "serviceinterface": "",

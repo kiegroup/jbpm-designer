@@ -8,6 +8,9 @@
       <drools:metaData name="customCaseRoles">
         <drools:metaValue><![CDATA[owner:1,participant:2]]></drools:metaValue>
       </drools:metaData>
+      <drools:metaData name="customSLADueDate">
+        <drools:metaValue><![CDATA[3m]]></drools:metaValue>
+      </drools:metaData>
     </bpmn2:extensionElements>
     <bpmn2:startEvent id="processStartEvent" drools:selectable="true" color:background-color="#9acd32" color:border-color="#000000" color:color="#000000" name="">
       <bpmn2:extensionElements>
