@@ -1773,13 +1773,10 @@ public class Bpmn2JsonMarshaller {
         String customAbortParent = (customAbortParentMetaData != null && customAbortParentMetaData.length() > 0) ? customAbortParentMetaData : "true";
         properties.put("isabortparent",
                        customAbortParent);
-        
+
         // custom SLA due date
-        String customSLADueDateMetaData = Utils.getMetaDataValue(callActivity.getExtensionValues(),
-                                                            "customSLADueDate");
-        if (customSLADueDateMetaData != null && customSLADueDateMetaData.length() > 0) {
-            properties.put("customsladuedate", customSLADueDateMetaData);
-        }
+        marshalCustomSLADueDateMetadata(callActivity,
+                                        properties);
 
         // data inputs
         marshallDataInputSet(callActivity,
@@ -1935,13 +1932,10 @@ public class Bpmn2JsonMarshaller {
         String customAutoStart = (customAutoStartMetaData != null && customAutoStartMetaData.length() > 0) ? customAutoStartMetaData : "false";
         properties.put("customautostart",
                        customAutoStart);
-        
+
         // custom SLA due date
-        String customSLADueDateMetaData = Utils.getMetaDataValue(task.getExtensionValues(),
-                                                            "customSLADueDate");
-        if (customSLADueDateMetaData != null && customSLADueDateMetaData.length() > 0) {
-            properties.put("customsladuedate", customSLADueDateMetaData);
-        }
+        marshalCustomSLADueDateMetadata(task,
+                                        properties);
 
         // backwards compatibility with jbds editor
         boolean foundTaskName = false;
@@ -3045,13 +3039,10 @@ public class Bpmn2JsonMarshaller {
         String customAsync = (customAsyncMetaData != null && customAsyncMetaData.length() > 0) ? customAsyncMetaData : "false";
         properties.put("isasync",
                        customAsync);
-        
-     // custom SLA due date
-        String customSLADueDateMetaData = Utils.getMetaDataValue(subProcess.getExtensionValues(),
-                                                            "customSLADueDate");
-        if (customSLADueDateMetaData != null && customSLADueDateMetaData.length() > 0) {
-            properties.put("customsladuedate", customSLADueDateMetaData);
-        }
+
+        // custom SLA due date
+        marshalCustomSLADueDateMetadata(subProcess,
+                                        properties);
 
         // data inputs
         marshallDataInputSet(subProcess,
@@ -4138,5 +4129,14 @@ public class Bpmn2JsonMarshaller {
         }
 
         return eventDefinitions;
+    }
+
+    private void marshalCustomSLADueDateMetadata(final BaseElement element,
+                                                 final Map<String, Object> properties) {
+        final String customSLADueDateMetaData = Utils.getMetaDataValue(element.getExtensionValues(),
+                                                                       "customSLADueDate");
+        if (customSLADueDateMetaData != null && customSLADueDateMetaData.length() > 0) {
+            properties.put("customsladuedate", customSLADueDateMetaData);
+        }
     }
 }
