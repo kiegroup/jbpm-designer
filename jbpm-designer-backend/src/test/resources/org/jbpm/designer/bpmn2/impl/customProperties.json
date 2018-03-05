@@ -10,6 +10,7 @@
     "customdescription": "",
     "customcaseidprefix": "HR",
     "customcaseroles": "owner:1,participant:2",
+    "customsladuedate": "3m",
     "adhocprocess": "true",
     "imports": "",
     "globals": "",

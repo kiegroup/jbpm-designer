@@ -51,12 +51,10 @@ import bpsim.TimeParameters;
 import bpsim.TimeUnit;
 import bpsim.UniformDistributionType;
 import bpsim.impl.BpsimPackageImpl;
-
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-
 import org.eclipse.bpmn2.Activity;
 import org.eclipse.bpmn2.AdHocOrdering;
 import org.eclipse.bpmn2.AdHocSubProcess;
@@ -157,7 +155,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
-
 import org.jboss.drools.DroolsFactory;
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.GlobalType;
@@ -166,19 +163,15 @@ import org.jboss.drools.MetaDataType;
 import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jboss.drools.impl.DroolsPackageImpl;
-
 import org.jbpm.designer.bpmn2.BpmnMarshallerHelper;
 import org.jbpm.designer.bpmn2.resource.JBPMBpmn2ResourceFactoryImpl;
 import org.jbpm.designer.bpmn2.util.DIZorderComparator;
 import org.jbpm.designer.util.Utils;
-
 import org.jbpm.workflow.core.node.RuleSetNode;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -3487,6 +3480,9 @@ public class Bpmn2JsonUnmarshaller {
                                                         "customCaseRoles",
                                                         wrapInCDATABlock(properties.get("customcaseroles")));
                     }
+                    // customsladuedate metadata
+                    applySlaDueDateProperties(rootLevelProcess,
+                                              properties);
 
                     rootLevelProcess.setId(properties.get("id"));
                     applyProcessProperties(rootLevelProcess,
@@ -3628,6 +3624,9 @@ public class Bpmn2JsonUnmarshaller {
                                                                 "customCaseRoles",
                                                                 wrapInCDATABlock(properties.get("customcaseroles")));
                             }
+                            // customsladuedate metadata
+                            applySlaDueDateProperties(rootLevelProcess,
+                                                      properties);
                             rootLevelProcess.setId(properties.get("id"));
                             applyProcessProperties(rootLevelProcess,
                                                    properties);
@@ -3928,6 +3927,9 @@ public class Bpmn2JsonUnmarshaller {
                                             "customAsync",
                                             wrapInCDATABlock(properties.get("isasync")));
         }
+        // customsladuedate metadata
+        applySlaDueDateProperties(sp,
+                                  properties);
 
         if (sp.getIoSpecification() == null) {
             InputOutputSpecification iospec = Bpmn2Factory.eINSTANCE.createInputOutputSpecification();
@@ -5640,6 +5642,9 @@ public class Bpmn2JsonUnmarshaller {
                                             "customAbortParent",
                                             wrapInCDATABlock(properties.get("isabortparent")));
         }
+        // customsladuedate metadata
+        applySlaDueDateProperties(callActivity,
+                                  properties);
 
         //callActivity data input set
         applyDataInputProperties(callActivity,
@@ -5983,6 +5988,10 @@ public class Bpmn2JsonUnmarshaller {
                                             "customAutoStart",
                                             wrapInCDATABlock(properties.get("customautostart")));
         }
+        
+        // customsladuedate metadata
+        applySlaDueDateProperties(task,
+                                  properties);
 
         //process data input set
         Map<String, DataInput> alreadyProcessedInputs = new HashMap<String, DataInput>();
@@ -7320,6 +7329,15 @@ public class Bpmn2JsonUnmarshaller {
                 _simulationElementParameters.put(sequenceFlow.getId(),
                                                  values);
             }
+        }
+    }
+
+    private void applySlaDueDateProperties(final BaseElement element,
+                                           final Map<String, String> properties) {
+        if (properties.get("customsladuedate") != null && properties.get("customsladuedate").length() > 0) {
+            Utils.setMetaDataExtensionValue(element,
+                                            "customSLADueDate",
+                                            wrapInCDATABlock(properties.get("customsladuedate")));
         }
     }
 

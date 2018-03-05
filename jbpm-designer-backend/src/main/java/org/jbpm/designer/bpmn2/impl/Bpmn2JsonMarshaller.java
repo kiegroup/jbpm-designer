@@ -429,6 +429,9 @@ public class Bpmn2JsonMarshaller {
                                 } else if (metaType.getName().equals("customCaseRoles")) {
                                     props.put("customcaseroles",
                                               metaType.getMetaValue());
+                                } else if (metaType.getName().equals("customSLADueDate")) {
+                                    props.put("customsladuedate",
+                                              metaType.getMetaValue());
                                 } else {
                                     props.put(metaType.getName(),
                                               metaType.getMetaValue());
@@ -1771,6 +1774,10 @@ public class Bpmn2JsonMarshaller {
         properties.put("isabortparent",
                        customAbortParent);
 
+        // custom SLA due date
+        marshalCustomSLADueDateMetadata(callActivity,
+                                        properties);
+
         // data inputs
         marshallDataInputSet(callActivity,
                              properties);
@@ -1925,6 +1932,10 @@ public class Bpmn2JsonMarshaller {
         String customAutoStart = (customAutoStartMetaData != null && customAutoStartMetaData.length() > 0) ? customAutoStartMetaData : "false";
         properties.put("customautostart",
                        customAutoStart);
+
+        // custom SLA due date
+        marshalCustomSLADueDateMetadata(task,
+                                        properties);
 
         // backwards compatibility with jbds editor
         boolean foundTaskName = false;
@@ -3029,6 +3040,10 @@ public class Bpmn2JsonMarshaller {
         properties.put("isasync",
                        customAsync);
 
+        // custom SLA due date
+        marshalCustomSLADueDateMetadata(subProcess,
+                                        properties);
+
         // data inputs
         marshallDataInputSet(subProcess,
                              properties);
@@ -4114,5 +4129,14 @@ public class Bpmn2JsonMarshaller {
         }
 
         return eventDefinitions;
+    }
+
+    private void marshalCustomSLADueDateMetadata(final BaseElement element,
+                                                 final Map<String, Object> properties) {
+        final String customSLADueDateMetaData = Utils.getMetaDataValue(element.getExtensionValues(),
+                                                                       "customSLADueDate");
+        if (customSLADueDateMetaData != null && customSLADueDateMetaData.length() > 0) {
+            properties.put("customsladuedate", customSLADueDateMetaData);
+        }
     }
 }

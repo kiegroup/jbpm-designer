@@ -23,6 +23,9 @@
         <drools:metaData name="customAutoStart">
           <drools:metaValue><![CDATA[true]]></drools:metaValue>
         </drools:metaData>
+        <drools:metaData name="customSLADueDate">
+          <drools:metaValue><![CDATA[3m]]></drools:metaValue>
+        </drools:metaData>
       </bpmn2:extensionElements>
       <bpmn2:incoming>_BE5690E9-E108-440F-B2DC-EFE6C5469831</bpmn2:incoming>
       <bpmn2:outgoing>_09902EAF-4794-4808-A480-0E9D10ED58E3</bpmn2:outgoing>
