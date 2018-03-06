@@ -110,7 +110,7 @@ public class TaskFormsServlet extends HttpServlet {
             Bpmn2JsonUnmarshaller unmarshaller = new Bpmn2JsonUnmarshaller();
             Definitions def = ((Definitions) unmarshaller.unmarshall(json, preprocessingData).getContents().get(0));
 
-            Path myPath = vfsServices.get( uuid );
+            Path myPath = vfsServices.get( uuid.replaceAll("\\s", "%20"));
 
             TaskFormTemplateManager templateManager = new TaskFormTemplateManager( myPath, formModelerService, profile, processAsset, getServletContext().getRealPath(DESIGNER_PATH + TASKFORMS_PATH), def, taskId );
             templateManager.processTemplates();
@@ -226,5 +226,10 @@ public class TaskFormsServlet extends HttpServlet {
 			_logger.error(e.getMessage());
             return new JSONObject();
 		}
+    }
+
+    // for testing
+    public void setVfsServices(VFSService vfsServices) {
+        this.vfsServices = vfsServices;
     }
 }
