@@ -104,7 +104,7 @@ public class RepositoryDescriptor {
         this.fileSystem = fileSystem;
     }
 
-    private void configure() {
+    void configure() {
         Space space = null;
         String repositoryAlias = "";
         String branchName = "";
@@ -129,7 +129,7 @@ public class RepositoryDescriptor {
                     }
                 } else {
                     // git based pattern
-                    Pattern pattern = Pattern.compile("(://)(.*?)@(.*?)/(.*?)");
+                    Pattern pattern = Pattern.compile("(://)(.*?)@(.*?)/(.*?)/");
                     Matcher matcher = pattern.matcher(uuid);
                     if (matcher.find()) {
                         branchName = matcher.group(2);
