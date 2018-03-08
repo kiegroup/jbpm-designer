@@ -339,28 +339,7 @@ public class JbpmProfileImpl implements IDiagramProfile {
 
     @Override
     public String getRepositoryGlobalDir(String uuid) {
-        if (uuid != null) {
-            Path uuidPath = vfsServices.get(uuid.replaceAll("\\s",
-                                                            "%20"));
-            String pathURI = uuidPath.toURI();
-
-            if (pathURI != "/") {
-                String[] pathParts = pathURI.split("/");
-                try {
-                    String pathProjectName = pathParts[3];
-                    if (pathProjectName.length() < 1) {
-                        return "/global";
-                    } else {
-                        return "/" + pathProjectName + "/global";
-                    }
-                } catch (Exception e) {
-                    return "/global";
-                }
-            }
-
-            return "/global";
-        }
-        return "/global";
+        return getRepositoryGlobalDir();
     }
 
     public Definitions getDefinitions(String xml) throws Exception {

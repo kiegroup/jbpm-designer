@@ -67,10 +67,8 @@ public class RepositoryDescriptorProvider {
             branchName = "master";
         }
 
-        if (knownRepositories.containsKey(branchName + "@" + repositoryAlias)) {
-            return knownRepositories.get(branchName + "@" + repositoryAlias);
-        } else if (knownRepositories.size() == 1) {
-            return knownRepositories.values().iterator().next();
+        if (knownRepositories.containsKey(branchName + "@" + space.getName() + "/" + repositoryAlias)) {
+            return knownRepositories.get(branchName + "@" + space.getName() + "/" + repositoryAlias);
         } else {
             Repository repository = repositoryService.getRepositoryFromSpace(space, repositoryAlias);
             if (repository != null) {
@@ -79,7 +77,7 @@ public class RepositoryDescriptorProvider {
             }
         }
 
-        throw new FileSystemNotFoundException("Repository with alias " + repositoryAlias + " not found");
+        throw new FileSystemNotFoundException("Repository with alias " + repositoryAlias + " not found in space " + space.getName());
     }
 
     private RepositoryDescriptor buildAndRegister(Repository repository,
@@ -99,7 +97,7 @@ public class RepositoryDescriptorProvider {
         RepositoryDescriptor descriptor = new RepositoryDescriptor(root,
                                                                    fs,
                                                                    rootPath);
-        knownRepositories.put(branchName + "@" + repository.getAlias(),
+        knownRepositories.put(branchName + "@" + repository.getSpace().getName() + "/" + repository.getAlias(),
                               descriptor);
 
         return descriptor;
