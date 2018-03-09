@@ -38,11 +38,11 @@ import org.kie.workbench.common.forms.jbpm.server.service.impl.BusinessProcessFo
 import org.kie.workbench.common.forms.jbpm.server.service.impl.TaskFormModelHandler;
 import org.kie.workbench.common.forms.jbpm.service.shared.BPMFinderService;
 import org.kie.workbench.common.forms.model.FormDefinition;
-import org.kie.workbench.common.forms.serialization.FormDefinitionSerializer;
-import org.kie.workbench.common.forms.serialization.impl.FieldSerializer;
-import org.kie.workbench.common.forms.serialization.impl.FormDefinitionSerializerImpl;
-import org.kie.workbench.common.forms.serialization.impl.FormModelSerializer;
 import org.kie.workbench.common.forms.service.shared.FieldManager;
+import org.kie.workbench.common.forms.services.backend.serialization.FormDefinitionSerializer;
+import org.kie.workbench.common.forms.services.backend.serialization.impl.FieldSerializer;
+import org.kie.workbench.common.forms.services.backend.serialization.impl.FormDefinitionSerializerImpl;
+import org.kie.workbench.common.forms.services.backend.serialization.impl.FormModelSerializer;
 import org.kie.workbench.common.services.backend.project.ModuleClassLoaderHelper;
 import org.kie.workbench.common.services.shared.project.KieModule;
 import org.kie.workbench.common.services.shared.project.KieModuleService;
