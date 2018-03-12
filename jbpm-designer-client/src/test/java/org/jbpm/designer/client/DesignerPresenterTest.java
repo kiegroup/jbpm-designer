@@ -24,6 +24,7 @@ import org.guvnor.common.services.project.client.context.WorkspaceProjectContext
 import org.guvnor.common.services.project.client.security.ProjectController;
 import org.guvnor.common.services.project.model.WorkspaceProject;
 import org.guvnor.common.services.shared.metadata.model.Overview;
+import org.guvnor.messageconsole.client.console.widget.button.AlertsButtonMenuItemBuilder;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.parameters.DesignerEditorParametersPublisher;
 import org.junit.Before;
@@ -61,6 +62,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DesignerPresenterTest {
@@ -103,6 +105,12 @@ public class DesignerPresenterTest {
     @Mock
     private BaseEditorView baseView;
 
+    @Mock
+    private AlertsButtonMenuItemBuilder alertsButtonMenuItemBuilder;
+
+    @Mock
+    private MenuItem alertsButtonMenuItem;
+
     @Spy
     private Map<String, String> parameters = new HashMap<>();
 
@@ -110,6 +118,7 @@ public class DesignerPresenterTest {
 
     @Before
     public void setup() {
+        when(alertsButtonMenuItemBuilder.build()).thenReturn(alertsButtonMenuItem);
         renameServiceCaller = new CallerMock<>(renameService);
         presenter = spy(new DesignerPresenter(view) {
 
@@ -122,6 +131,7 @@ public class DesignerPresenterTest {
                 this.renamePopUpPresenter = DesignerPresenterTest.this.renamePopUpPresenter;
                 this.fileNameValidator = DesignerPresenterTest.this.fileNameValidator;
                 this.baseView = DesignerPresenterTest.this.baseView;
+                this.alertsButtonMenuItemBuilder = DesignerPresenterTest.this.alertsButtonMenuItemBuilder;
             }
 
             @Override
@@ -165,6 +175,7 @@ public class DesignerPresenterTest {
         verify(fileMenuBuilder).addRename(any(Command.class));
         verify(fileMenuBuilder).addDelete(any(Path.class),
                                           any(AssetUpdateValidator.class));
+        verify(fileMenuBuilder).addNewTopLevelMenu(alertsButtonMenuItem);
     }
 
     @Test
@@ -184,6 +195,7 @@ public class DesignerPresenterTest {
         verify(fileMenuBuilder,
                never()).addDelete(any(Path.class),
                                   any(AssetUpdateValidator.class));
+        verify(fileMenuBuilder).addNewTopLevelMenu(alertsButtonMenuItem);
     }
 
     @Test
