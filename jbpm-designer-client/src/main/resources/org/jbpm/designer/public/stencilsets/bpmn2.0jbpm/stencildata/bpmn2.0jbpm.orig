@@ -2059,6 +2059,16 @@
 					"optional":true,
 					"hidden":true,
                                         "visible":false
+				},
+				{
+					"id":"adhocactivationcondition",
+					"type":"Expression",
+					"title":"AdHocActivationCondition",
+					"value":"",
+					"description":"",
+					"readonly":false,
+					"optional":true,
+					"refToView":""
 				}
 			]
 		},
