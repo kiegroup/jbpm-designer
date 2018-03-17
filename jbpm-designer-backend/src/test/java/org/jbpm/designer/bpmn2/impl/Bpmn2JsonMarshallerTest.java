@@ -1078,4 +1078,20 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("3m",
                      slaDueDate);
     }
+    
+    @Test
+    public void testAdHocSubprocessActivationCondition() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("adHocSubprocessActivationCondition.bpmn2");
+        JSONObject adHocSubprocess = getChildByName(process,
+                                                    "abcde");
+        JSONObject properties = adHocSubprocess.getJSONObject("properties");
+
+        String completionCondition = properties.getString("adhocactivationcondition");
+        String scriptLanguage = properties.getString("script_language");
+
+        assertEquals("org.kie.api.runtime.process.CaseData(data.get(\"Done\") == true)",
+                     completionCondition);
+        assertEquals("drools",
+                     scriptLanguage);
+    }
 }

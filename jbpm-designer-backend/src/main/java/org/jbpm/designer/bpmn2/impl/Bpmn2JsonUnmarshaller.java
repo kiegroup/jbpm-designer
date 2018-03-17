@@ -4452,6 +4452,12 @@ public class Bpmn2JsonUnmarshaller {
             completionConditionExpression.setLanguage(scriptLanguage);
         }
         ahsp.setCompletionCondition(completionConditionExpression);
+        
+        if (properties.get("adhocactivationcondition") != null && properties.get("adhocactivationcondition").length() > 0) {
+            Utils.setMetaDataExtensionValue(ahsp,
+                                            "customActivationCondition",
+                                            wrapInCDATABlock(properties.get("adhocactivationcondition")));
+        }
     }
 
     protected void applyEndEventProperties(EndEvent ee,

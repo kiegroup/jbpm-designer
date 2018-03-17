@@ -2611,5 +2611,19 @@ public class Bpmn2UnmarshallingTest {
                      getMetaDataValue(task.getExtensionValues(),
                                       "customSLADueDate")); 
     }
+    
+    @Test
+    public void testAdHocSubprocessActivationCondition() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("adHocSubprocessActivationCondition.json");
+        Process process = getRootProcess(definitions);
+
+        AdHocSubProcess adHocSubProcess = (AdHocSubProcess) process.getFlowElements().get(0);
+        assertNotNull(adHocSubProcess);
+        
+        assertEquals("<![CDATA[org.kie.api.runtime.process.CaseData(data.get(\"Done\") == true)]]>",
+                     getMetaDataValue(adHocSubProcess.getExtensionValues(),
+                             "customActivationCondition"));
+        
+    }
 }
 

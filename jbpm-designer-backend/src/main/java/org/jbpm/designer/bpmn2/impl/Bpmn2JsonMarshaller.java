@@ -3031,6 +3031,12 @@ public class Bpmn2JsonMarshaller {
                     _logger.info("Could not find adhoccompletioncondition for: " + ahsp);
                 }
             }
+            
+            final String customActivationCondition = Utils.getMetaDataValue(ahsp.getExtensionValues(),
+                    "customActivationCondition");
+            if (customActivationCondition != null && customActivationCondition.length() > 0) {
+                properties.put("adhocactivationcondition", customActivationCondition);
+            }
         }
 
         // custom async
