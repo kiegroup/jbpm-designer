@@ -143,43 +143,43 @@ ORYX.Plugins.View = {
 
         if(ORYX.READONLY != true) {
         /* Register full screen to model */
-        this.facade.offer({
-            'name':ORYX.I18N.view.showFullScreen,
-            'functionality': function(context) {
-                var docEle = parent.document.getElementById(ORYX.EDITORID);
-                if(docEle.requestFullScreen) {
-                    docEle.requestFullScreen();
-                } else if(docEle.mozRequestFullScreen) {
-                    docEle.mozRequestFullScreen();
-                } else if(docEle.webkitRequestFullScreen) {
-                    docEle.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-                } else {
-                    ORYX.EDITOR._pluginFacade.raiseEvent({
-                        type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                        ntype		: 'error',
-                        msg         : ORYX.I18N.view.failShowFullScreen,
-                        title       : ''
+//         this.facade.offer({
+//             'name':ORYX.I18N.view.showFullScreen,
+//             'functionality': function(context) {
+//                 var docEle = parent.document.getElementById(ORYX.EDITORID);
+//                 if(docEle.requestFullScreen) {
+//                     docEle.requestFullScreen();
+//                 } else if(docEle.mozRequestFullScreen) {
+//                     docEle.mozRequestFullScreen();
+//                 } else if(docEle.webkitRequestFullScreen) {
+//                     docEle.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+//                 } else {
+//                     ORYX.EDITOR._pluginFacade.raiseEvent({
+//                         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+//                         ntype		: 'error',
+//                         msg         : ORYX.I18N.view.failShowFullScreen,
+//                         title       : ''
 
-                    });
-                }
-            }.bind(this),
-            'group': 'fullscreengroup',
-            'icon': ORYX.BASE_FILE_PATH + "images/fullscreen.png",
-            'description': ORYX.I18N.view.showFullScreen_desc,
-            'index': 2,
-            'minShape': 0,
-            'maxShape': 0,
-            'isEnabled': function(){
-                return ORYX.READONLY != true;
-//				profileParamName = "profile";
-//				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-//				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-//		        regexa = new RegExp( regexSa );
-//		        profileParams = regexa.exec( window.location.href );
-//		        profileParamValue = profileParams[1];
-//				return profileParamValue == "jbpm";
-            }.bind(this)
-        });
+//                     });
+//                 }
+//             }.bind(this),
+//             'group': 'fullscreengroup',
+//             'icon': ORYX.BASE_FILE_PATH + "images/fullscreen.png",
+//             'description': ORYX.I18N.view.showFullScreen_desc,
+//             'index': 2,
+//             'minShape': 0,
+//             'maxShape': 0,
+//             'isEnabled': function(){
+//                 return ORYX.READONLY != true;
+// //				profileParamName = "profile";
+// //				profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+// //				regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+// //		        regexa = new RegExp( regexSa );
+// //		        profileParams = regexa.exec( window.location.href );
+// //		        profileParamValue = profileParams[1];
+// //				return profileParamValue == "jbpm";
+//             }.bind(this)
+//         });
 
 
         /* Register sharing to model 1*/
