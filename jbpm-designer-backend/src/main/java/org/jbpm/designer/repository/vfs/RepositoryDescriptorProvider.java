@@ -17,18 +17,22 @@
 package org.jbpm.designer.repository.vfs;
 
 import java.net.URI;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
+
 import javax.enterprise.context.ApplicationScoped;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.guvnor.structure.repositories.Branch;
 import org.guvnor.structure.repositories.Repository;
 import org.guvnor.structure.repositories.RepositoryService;
+
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileSystem;
 import org.uberfire.java.nio.file.FileSystemNotFoundException;
@@ -88,7 +92,8 @@ public class RepositoryDescriptorProvider {
         }
 
         String repoUri = repository.getDefaultBranch().get().getPath().toURI().replaceFirst("://.*?@",
-                                                                                            "://" + branchName + "@");
+                                                                                            "://" + branchName + "@").replaceAll("\\s",
+                                                                                                                                 "");
         URI root = URI.create(repoUri);
 
         FileSystem fs = ioService.getFileSystem(root);
@@ -97,7 +102,8 @@ public class RepositoryDescriptorProvider {
         RepositoryDescriptor descriptor = new RepositoryDescriptor(root,
                                                                    fs,
                                                                    rootPath);
-        knownRepositories.put(branchName + "@" + repository.getSpace().getName() + "/" + repository.getAlias(),
+        knownRepositories.put(branchName + "@" + repository.getSpace().getName() + "/" + repository.getAlias().replaceAll("\\s",
+                                                                                                                          ""),
                               descriptor);
 
         return descriptor;
