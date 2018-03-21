@@ -10,18 +10,18 @@ ORYX.Plugins.FormEditing = Clazz.extend({
         if(ORYX.READONLY != true) {
             // disable for ruleflow perspective preset
             if(ORYX.PRESET_PERSPECTIVE != "ruleflow") {
-                this.facade.offer({
-                    'name': ORYX.I18N.View.editProcessForm,
-                    'functionality': this.editProcessForm.bind(this),
-                    'group': "editprocessforms",
-                    'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    'description': ORYX.I18N.View.editProcessFormDesc ,
-                    'index': 1,
-                    'minShape': 0,
-                    'maxShape': 0,
-                    'isEnabled': function(){
-                        return ORYX.READONLY != true;
+                // this.facade.offer({
+                //     'name': ORYX.I18N.View.editProcessForm,
+                //     'functionality': this.editProcessForm.bind(this),
+                //     'group': "editprocessforms",
+                //     'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
+                //     dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
+                //     'description': ORYX.I18N.View.editProcessFormDesc ,
+                //     'index': 1,
+                //     'minShape': 0,
+                //     'maxShape': 0,
+                //     'isEnabled': function(){
+                //         return ORYX.READONLY != true;
         //                profileParamName = "profile";
         //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
         //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -29,21 +29,21 @@ ORYX.Plugins.FormEditing = Clazz.extend({
         //                profileParams = regexa.exec( window.location.href );
         //                profileParamValue = profileParams[1];
         //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
-                    }.bind(this)
-                });
+                //     }.bind(this)
+                // });
 
-                this.facade.offer({
-                    'name': ORYX.I18N.View.editTaskForm,
-                    'functionality': this.editTaskForm.bind(this),
-                    'group': "editprocessforms",
-                    'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    'description': ORYX.I18N.View.editTaskFormDesc,
-                    'index': 2,
-                    'minShape': 1,
-                    'maxShape': 1,
-                    'isEnabled': function(){
-                        return ORYX.READONLY != true;
+                // this.facade.offer({
+                //     'name': ORYX.I18N.View.editTaskForm,
+                //     'functionality': this.editTaskForm.bind(this),
+                //     'group': "editprocessforms",
+                //     'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
+                //     dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
+                //     'description': ORYX.I18N.View.editTaskFormDesc,
+                //     'index': 2,
+                //     'minShape': 1,
+                //     'maxShape': 1,
+                //     'isEnabled': function(){
+                //         return ORYX.READONLY != true;
         //                profileParamName = "profile";
         //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
         //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -51,21 +51,21 @@ ORYX.Plugins.FormEditing = Clazz.extend({
         //                profileParams = regexa.exec( window.location.href );
         //                profileParamValue = profileParams[1];
         //                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
-                    }.bind(this)
-                });
+                //     }.bind(this)
+                // });
 
-                this.facade.offer({
-                    'name': ORYX.I18N.forms.generateTaskForm,
-                    'functionality': this.generateTaskForm.bind(this),
-                    'group': "editprocessforms",
-                    'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    'description': ORYX.I18N.forms.generateTaskForm_desc,
-                    'index': 3,
-                    'minShape': 1,
-                    'maxShape': 1,
-                    'isEnabled': function(){
-                        return ORYX.READONLY != true;
+                // this.facade.offer({
+                //     'name': ORYX.I18N.forms.generateTaskForm,
+                //     'functionality': this.generateTaskForm.bind(this),
+                //     'group': "editprocessforms",
+                //     'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
+                //     dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
+                //     'description': ORYX.I18N.forms.generateTaskForm_desc,
+                //     'index': 3,
+                //     'minShape': 1,
+                //     'maxShape': 1,
+                //     'isEnabled': function(){
+                //         return ORYX.READONLY != true;
                         //                profileParamName = "profile";
                         //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
                         //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -73,21 +73,21 @@ ORYX.Plugins.FormEditing = Clazz.extend({
                         //                profileParams = regexa.exec( window.location.href );
                         //                profileParamValue = profileParams[1];
                         //                return profileParamValue == "jbpm" && !ORYX.LOCAL_HISTORY_ENABLED;
-                    }.bind(this)
-                });
+                //     }.bind(this)
+                // });
 
-                this.facade.offer({
-                    'name': ORYX.I18N.forms.generateAllForms,
-                    'functionality': this.generateTaskForms.bind(this),
-                    'group': "editprocessforms",
-                    'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
-                    'description': ORYX.I18N.forms.generateAllForms_desc,
-                    'index': 4,
-                    'minShape': 0,
-                    'maxShape': 0,
-                    'isEnabled': function(){
-                        return ORYX.READONLY != true;
+                // this.facade.offer({
+                //     'name': ORYX.I18N.forms.generateAllForms,
+                //     'functionality': this.generateTaskForms.bind(this),
+                //     'group': "editprocessforms",
+                //     'icon': ORYX.BASE_FILE_PATH + "images/processforms.png",
+                //     dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/processforms.png",
+                //     'description': ORYX.I18N.forms.generateAllForms_desc,
+                //     'index': 4,
+                //     'minShape': 0,
+                //     'maxShape': 0,
+                //     'isEnabled': function(){
+                //         return ORYX.READONLY != true;
         //                profileParamName = "profile";
         //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
         //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
@@ -95,8 +95,8 @@ ORYX.Plugins.FormEditing = Clazz.extend({
         //                profileParams = regexa.exec( window.location.href );
         //                profileParamValue = profileParams[1];
         //                return profileParamValue == "jbpm" && ORYX.LOCAL_HISTORY_ENABLED;
-                    }.bind(this)
-                });
+                //     }.bind(this)
+                // });
             }
         }
     },
