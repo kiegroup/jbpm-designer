@@ -17,6 +17,7 @@
 package org.jbpm.designer.repository.vfs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,17 +62,24 @@ public class RepositoryDescriptorProviderTest {
         doReturn(fs).when(ioService).getFileSystem(any());
 
         List<Repository> repositories = new ArrayList<>();
+
         repositories.add(createRepository("repo1",
                                           "space1",
                                           "master",
                                           "master",
                                           "other-branch"));
+
         repositories.add(createRepository("repo2",
                                           "space1",
                                           "master",
                                           "master"));
         repositories.add(createRepository("repo1",
                                           "space2",
+                                          "master",
+                                          "master"));
+
+        repositories.add(createRepository("repo with spaces",
+                                          "space3",
                                           "master",
                                           "master"));
         doReturn(repositories).when(repositoryService).getAllRepositoriesFromAllUserSpaces();
@@ -98,6 +106,12 @@ public class RepositoryDescriptorProviderTest {
                                                                                                                 "master");
         assertEquals("default://master@space2/repo1",
                      repo1space2Descriptor.getRepositoryRoot().toString());
+
+        final RepositoryDescriptor repoWithSpacesspace3Descriptor = repositoryDescriptorProvider.getRepositoryDescriptor(new Space("space3"),
+                                                                                                                "repowithspaces",
+                                                                                                                "master");
+        assertEquals("default://master@space3/repowithspaces",
+                     repoWithSpacesspace3Descriptor.getRepositoryRoot().toString());
     }
 
     @Test
@@ -115,6 +129,20 @@ public class RepositoryDescriptorProviderTest {
                                                                                                                 "master");
         assertEquals("default://master@space2/repo2",
                      repo2space2Descriptor.getRepositoryRoot().toString());
+
+        doReturn(createRepository("repo with spaces",
+                                  "space2",
+                                  "master",
+                                  "master")).when(repositoryService).getRepositoryFromSpace(new Space("space2"),
+                                                                                            "repo with spaces");
+
+        final RepositoryDescriptor repoWithSpacesSpace2Descriptor = repositoryDescriptorProvider.getRepositoryDescriptor(new Space("space2"),
+                                                                                                                "repo with spaces",
+                                                                                                                "master");
+        assertEquals("default://master@space2/repowithspaces",
+                     repoWithSpacesSpace2Descriptor.getRepositoryRoot().toString());
+
+
     }
 
     @Test(expected = FileSystemNotFoundException.class)
