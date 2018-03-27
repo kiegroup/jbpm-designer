@@ -26,7 +26,6 @@ import org.jbpm.designer.client.resources.DesignerEditorResources;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.type.Bpmn2TypeDefinition;
 import org.uberfire.client.workbench.type.ClientResourceType;
-import org.uberfire.workbench.category.Category;
 
 @ApplicationScoped
 public class Bpmn2Type

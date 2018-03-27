@@ -37,11 +37,6 @@ import org.jbpm.ruleflow.core.RuleFlowProcess;
 import org.jbpm.ruleflow.core.validation.RuleFlowProcessValidator;
 
 import org.kie.api.definition.process.Process;
-import org.kie.api.io.Resource;
-import org.kie.api.io.ResourceType;
-import org.kie.internal.builder.KnowledgeBuilder;
-import org.kie.internal.builder.KnowledgeBuilderError;
-import org.kie.internal.builder.KnowledgeBuilderFactory;
 import org.kie.workbench.common.services.backend.project.ModuleClassLoaderHelper;
 import org.kie.workbench.common.services.refactoring.backend.server.indexing.AbstractFileIndexer;
 import org.kie.workbench.common.services.refactoring.backend.server.indexing.DefaultIndexBuilder;

@@ -64,7 +64,6 @@ import org.jbpm.designer.web.plugin.impl.PluginServiceImpl;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.VFSService;
 import org.uberfire.workbench.events.NotificationEvent;
 

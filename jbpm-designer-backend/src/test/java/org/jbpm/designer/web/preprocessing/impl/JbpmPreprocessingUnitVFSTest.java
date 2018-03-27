@@ -24,8 +24,6 @@ import java.util.Map;
 
 import javax.enterprise.event.Event;
 
-import org.guvnor.common.services.project.model.Module;
-import org.guvnor.common.services.project.service.ModuleService;
 import org.guvnor.common.services.project.service.POMService;
 import org.guvnor.common.services.shared.metadata.MetadataService;
 import org.jbpm.designer.helper.TestHttpServletRequest;
@@ -340,7 +338,6 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
 
         assertNotNull(processId);
         assertEquals("Evaluation.1process", processId);
-
     }
 
     private void verifyWidsPngsAndGifs(List<String> wids,
