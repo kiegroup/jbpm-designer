@@ -17,7 +17,6 @@
 package org.jbpm.designer.repository.vfs;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,8 +107,8 @@ public class RepositoryDescriptorProviderTest {
                      repo1space2Descriptor.getRepositoryRoot().toString());
 
         final RepositoryDescriptor repoWithSpacesspace3Descriptor = repositoryDescriptorProvider.getRepositoryDescriptor(new Space("space3"),
-                                                                                                                "repowithspaces",
-                                                                                                                "master");
+                                                                                                                         "repowithspaces",
+                                                                                                                         "master");
         assertEquals("default://master@space3/repowithspaces",
                      repoWithSpacesspace3Descriptor.getRepositoryRoot().toString());
     }
@@ -137,12 +136,10 @@ public class RepositoryDescriptorProviderTest {
                                                                                             "repo with spaces");
 
         final RepositoryDescriptor repoWithSpacesSpace2Descriptor = repositoryDescriptorProvider.getRepositoryDescriptor(new Space("space2"),
-                                                                                                                "repo with spaces",
-                                                                                                                "master");
+                                                                                                                         "repo with spaces",
+                                                                                                                         "master");
         assertEquals("default://master@space2/repowithspaces",
                      repoWithSpacesSpace2Descriptor.getRepositoryRoot().toString());
-
-
     }
 
     @Test(expected = FileSystemNotFoundException.class)
