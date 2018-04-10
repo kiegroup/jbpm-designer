@@ -598,6 +598,24 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                                 "    \"customEditor\" : \"false\",\n" +
                                 "    \"icon\" : \"\",\n" +
                                 "  ],\n" +
+                                "  [\n" +
+                                "    \"name\" : \"This_is_a_sample_name_with_underscores\",\n" +
+                                "    \"description\" : \"Non Unicode Name with spaces\",\n" +
+                                "    \"displayName\" : \"NonUnicode Name with spaces\",\n" +
+                                "    \"defaultHandler\": \"\",\n" +
+                                "    \"category\" : \"NonUnicode Names with spaces Category\",\n" +
+                                "    \"customEditor\" : \"false\",\n" +
+                                "    \"icon\" : \"\",\n" +
+                                "  ],\n" +
+                                "  [\n" +
+                                "    \"name\" : \"_This__is__some_name_with__bunch_of___underscores__\",\n" +
+                                "    \"description\" : \"Non Unicode Name with spaces\",\n" +
+                                "    \"displayName\" : \"NonUnicode Name with spaces\",\n" +
+                                "    \"defaultHandler\": \"\",\n" +
+                                "    \"category\" : \"NonUnicode Names with spaces Category\",\n" +
+                                "    \"customEditor\" : \"false\",\n" +
+                                "    \"icon\" : \"\",\n" +
+                                "  ],\n" +
                                 "\n" +
                                 "]")
                 .type("wid")
@@ -630,14 +648,16 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                                                      mockModule);
 
         assertNotNull(workDefinitions);
-        assertEquals(4,
+        assertEquals(6,
                      workDefinitions.size());
 
         ArrayList<String> validWidNames = new ArrayList<String>(
                 Arrays.asList("金江止ハオユヘ手報でゃゆ掲悩フチ経壁否訃嗅けぽ",
                               "金江止ハオユヘ手報金江止ハオユヘ手報金江止ハオユヘ手報",
                               "ThisIsASampleWidName",
-                              "ThisissomeothersampleName"));
+                              "ThisissomeothersampleName",
+                              "This_is_a_sample_name_with_underscores",
+                              "_This__is__some_name_with__bunch_of___underscores__"));
 
         for (Map.Entry<String, WorkDefinitionImpl> entry : workDefinitions.entrySet()) {
             assertTrue(validWidNames.contains(entry.getKey()));
