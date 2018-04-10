@@ -112,7 +112,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public static final String THEME_COOKIE_NAME = "designercolortheme";
     public static final String DEFAULT_CATEGORY_NAME = "Service Tasks";
     public static final String INCLUDE_DATA_OBJECT = "designerdataobjects";
-    public static final Pattern UNICODE_WORDS_PATTERN = Pattern.compile("\\p{L}+",
+    public static final Pattern UNICODE_WORDS_AND_UNDERSCORES_PATTERN = Pattern.compile("(\\p{L}|_)+",
                                                                         Pattern.UNICODE_CHARACTER_CLASS);
     private static final Logger _logger =
             LoggerFactory.getLogger(JbpmPreprocessingUnit.class);
@@ -650,7 +650,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
                 String origWidName = ((String) workDefinitionMap.get("name")).replaceAll("\\s",
                                                                                          "");
-                Matcher widNameMatcher = UNICODE_WORDS_PATTERN.matcher(origWidName);
+                Matcher widNameMatcher = UNICODE_WORDS_AND_UNDERSCORES_PATTERN.matcher(origWidName);
                 if (widNameMatcher.matches()) {
                     workDefinition.setName(widNameMatcher.group());
 
@@ -818,7 +818,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
                     workDefinitions.put(workDefinition.getName(),
                                         workDefinition);
                 } else {
-                    _logger.error("Workitem has invalid name: " + workDefinitionMap.get("name") + " and will not be added. Name must contain words only");
+                    _logger.error("Workitem has invalid name: " + workDefinitionMap.get("name") + " and will not be added. Name must contain words and/or underscores only");
                 }
             }
         }
