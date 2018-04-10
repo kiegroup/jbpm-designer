@@ -1486,6 +1486,9 @@ ORYX.I18N.inlineTaskFormEditor.editingForm='<i18n:message key="ORYX.I18N.inlineT
 ORYX.I18N.inlineTaskFormEditor.completionInst='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.completionInst">Press [Ctrl-Z] to activate auto-completion</i18n:message>';
 ORYX.I18N.inlineTaskFormEditor.storingForm='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.storingForm">Storing Task Form</i18n:message>';
 ORYX.I18N.inlineTaskFormEditor.errorSavingForm='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.errorSavingForm">Error saving Task Form</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.processMustBeSavedTitle='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.processMustBeSavedTitle">Process must be saved before generating forms</i18n:message>';
+ORYX.I18N.inlineTaskFormEditor.processMustBeSavedDesc='<i18n:message key="ORYX.I18N.inlineTaskFormEditor.processMustBeSavedDesc">Please save the process before genearing forms</i18n:message>';
+
 
 if(!ORYX.I18N.PetriNetSoundness) ORYX.I18N.PetriNetSoundness = {}
 

@@ -31,20 +31,32 @@ ORYX.Plugins.InlineTaskFormEditor = Clazz.extend({
     },
 
     chooseFormEditor: function(options, action) {
-        ORYX.FORMSTYPE = "frm";
-        if(action == "load") {
-            this.showTaskFormEditor(ORYX.FORMSTYPE, options);
-        } else if(action == "store") {
-            this.generateTaskForm(ORYX.FORMSTYPE, options);
-        } else if(action == "storeall") {
-            this.generateAllTaskForms(ORYX.FORMSTYPE, options);
-        } else {
-            this.facade.raiseEvent({
-                type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-                ntype		: 'error',
-                msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor+'.',
-                title       : ''
+        // process must be saved before generating forms (JBPM-7119)
+        // if its not we ask user to save before
+        // generating forms
+        if(!ORYX.PROCESS_SAVED) {
+            Ext.Msg.show({
+                title:ORYX.I18N.inlineTaskFormEditor.processMustBeSavedTitle,
+                msg: ORYX.I18N.inlineTaskFormEditor.processMustBeSavedDesc,
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO
             });
+        } else {
+            ORYX.FORMSTYPE = "frm";
+            if(action == "load") {
+                this.showTaskFormEditor(ORYX.FORMSTYPE, options);
+            } else if(action == "store") {
+                this.generateTaskForm(ORYX.FORMSTYPE, options);
+            } else if(action == "storeall") {
+                this.generateAllTaskForms(ORYX.FORMSTYPE, options);
+            } else {
+                this.facade.raiseEvent({
+                    type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                    ntype		: 'error',
+                    msg         : ORYX.I18N.inlineTaskFormEditor.errorInitiatingEditor+'.',
+                    title       : ''
+                });
+            }
         }
     },
 
