@@ -358,4 +358,13 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         assertEquals("Installed workitem cannot be registered in project configuration.",
                      notificationCaptor.getValue().getNotification());
     }
+
+    @Test
+    public void testGetRepositoryDir() throws Exception {
+        String testProcessPath = "default://master@myteam/myproject" + dirName + "/com/myteam/myproject/" + processFileName + ".bpmn2";
+        ServiceRepoUtils repoUtils = new ServiceRepoUtils();
+        String repoDir = ServiceRepoUtils.getRepositoryDir(testProcessPath);
+        assertNotNull(repoDir);
+        assertEquals(dirName + "/com/myteam/myproject", repoDir);
+    }
 }

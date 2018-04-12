@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.enterprise.event.Event;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.drools.core.util.ConfFileUtils;
 import org.guvnor.common.services.project.model.Dependencies;
 import org.guvnor.common.services.project.model.Dependency;
@@ -101,7 +102,8 @@ public class ServiceRepoUtils {
         }
 
         if (vfsServices != null) {
-            Path assetPath = vfsServices.get(uuid.replaceAll("\\s", "%20"));
+            Path assetPath = vfsServices.get(uuid.replaceAll("\\s",
+                                                             "%20"));
 
             if (canUpdateConfigForWorkitem(workitemsFromRepo.get(key))) {
                 workitemInstalledEventEvent.fire(new DesignerWorkitemInstalledEvent(
@@ -186,13 +188,15 @@ public class ServiceRepoUtils {
         }
     }
 
-    private static String getRepositoryDir(String uuid) {
-        int iStart = uuid.indexOf("//");
-        iStart = uuid.indexOf('/',
-                              iStart + 2);
-        int iEnd = uuid.lastIndexOf('/');
-        return uuid.substring(iStart,
-                              iEnd);
+    public static String getRepositoryDir(String uuid) {
+        int aStart = uuid.indexOf("//");
+        String tmpUUID = uuid.substring(aStart + 2);
+        int bStart = StringUtils.ordinalIndexOf(tmpUUID,
+                                                "/",
+                                                2);
+        int aEnd = tmpUUID.lastIndexOf('/');
+        return tmpUUID.substring(bStart,
+                                 aEnd);
     }
 
     public static boolean canUpdateProjectPomForWorkitem(WorkDefinitionImpl workitem) {
