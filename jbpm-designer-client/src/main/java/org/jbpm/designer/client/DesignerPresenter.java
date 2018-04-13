@@ -193,6 +193,7 @@ public class DesignerPresenter
 
     @OnClose
     public void onClose() {
+        view.onClose();
     }
 
     @WorkbenchPartTitle
