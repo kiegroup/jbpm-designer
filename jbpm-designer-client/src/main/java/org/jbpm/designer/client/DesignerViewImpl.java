@@ -107,19 +107,20 @@ public class DesignerViewImpl
 
     @Override
     public boolean canClose() {
-        if (!canSaveDesignerModel() ||
-                designerWidget.isProcessValidating(designerWidget.getEditorID())) {
-            boolean canClose = designerWidget.confirmClose();
-            if (canClose) {
-                designerWidget.turnOffValidation(designerWidget.getEditorID());
-                designerWidget.setProcessSaved(designerWidget.getEditorID());
-                return canClose;
-            } else {
-                designerWidget.setProcessUnSaved(designerWidget.getEditorID());
-                return canClose;
-            }
-        } else {
-            return true;
+        final boolean canClose = canSaveDesignerModel() && !designerWidget.isProcessValidating(designerWidget.getEditorID());
+
+        if (!canClose) {
+            designerWidget.setProcessUnSaved(designerWidget.getEditorID());
+        }
+
+        return canClose;
+    }
+
+    @Override
+    public void onClose() {
+        if (!canClose()) {
+            designerWidget.turnOffValidation(designerWidget.getEditorID());
+            designerWidget.setProcessSaved(designerWidget.getEditorID());
         }
     }
 
