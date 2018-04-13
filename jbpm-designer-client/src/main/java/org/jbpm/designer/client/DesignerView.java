@@ -59,4 +59,6 @@ public interface DesignerView
                               String message,
                               Command yesCommand,
                               Command noCommand);
+
+    void onClose();
 }
