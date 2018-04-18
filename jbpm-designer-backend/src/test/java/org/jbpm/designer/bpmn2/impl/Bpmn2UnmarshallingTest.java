@@ -2118,10 +2118,14 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("MyTask",
                      task.getName());
         assertEquals("miin",
-                     task.getIoSpecification().getInputSets().get(0).getDataInputRefs().get(0).getName());
+                     task.getIoSpecification().getInputSets().get(0).getDataInputRefs().get(task.getIoSpecification().getInputSets().get(0).getDataInputRefs().size()-1).getName());
         assertEquals("miout",
-                     task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().get(0).getName());
-
+                     task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().get(task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().size()-1).getName());
+        assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_miinInputX",
+                     task.getIoSpecification().getDataInputs().get(task.getIoSpecification().getDataInputs().size()-1).getId());
+        assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_mioutOutputX",
+                     task.getIoSpecification().getDataOutputs().get(task.getIoSpecification().getDataOutputs().size()-1).getId());
+        
         assertTrue(task.getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics);
         MultiInstanceLoopCharacteristics lc = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
         assertNotNull(lc);
@@ -2132,7 +2136,70 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("abcde",
                      ((FormalExpression) lc.getCompletionCondition()).getBody());
         assertNotNull(lc.getInputDataItem());
+        assertEquals("__DD409258-40BE-4C4C-A22B-73314905B467_miinInputXItem",
+                     lc.getInputDataItem().getItemSubjectRef().getId());
         assertNotNull(lc.getOutputDataItem());
+        assertEquals("__DD409258-40BE-4C4C-A22B-73314905B467_mioutOutputXItem",
+                     lc.getOutputDataItem().getItemSubjectRef().getId());
+        
+        assertEquals("miin",
+                     task.getDataInputAssociations().get(task.getDataInputAssociations().size()-1).getSourceRef().get(0).getId());
+        assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_miinInputX",
+                     task.getDataInputAssociations().get(task.getDataInputAssociations().size()-1).getTargetRef().getId());
+        assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_mioutOutputX",
+                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size()-1).getSourceRef().get(0).getId());
+        assertEquals("miout",
+                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size()-1).getTargetRef().getId());
+        
+    }
+    
+    @Test
+    public void testMITaskWithDefinedDataInputOutputProperties() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("mitaskpropertiesWithIO.json");
+        assertTrue(definitions.getRootElements().size() == 6);
+        Process process = getRootProcess(definitions);
+        UserTask task = (UserTask) process.getFlowElements().get(0);
+        assertNotNull(task);
+        assertEquals("MyTask",
+                     task.getName());
+        
+        int numberDataInput = 0;
+        List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+        for (DataInput din : dataInputs) {
+            if (din.getName().equals("miin")) {
+                numberDataInput++;
+            }
+        }
+        assertEquals(1,numberDataInput);
+        
+        int numberDataOutput = 0;
+        List<DataOutput> dataOutputs = task.getIoSpecification().getDataOutputs();
+        for (DataOutput dout : dataOutputs) {
+            if (dout.getName().equals("miout")) {
+                numberDataOutput++;
+            }
+        }
+        assertEquals(1,numberDataOutput);
+                
+        assertTrue(task.getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics);
+        MultiInstanceLoopCharacteristics lc = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
+        assertNotNull(lc);
+        assertNotNull(lc.getInputDataItem());
+        assertEquals("__DD409258-40BE-4C4C-A22B-73314905B467_miinInputXItem",
+                     lc.getInputDataItem().getItemSubjectRef().getId());
+        assertNotNull(lc.getOutputDataItem());
+        assertEquals("__DD409258-40BE-4C4C-A22B-73314905B467_mioutOutputXItem",
+                     lc.getOutputDataItem().getItemSubjectRef().getId());
+        
+        assertEquals("miin",
+                     task.getDataInputAssociations().get(task.getDataInputAssociations().size()-1).getSourceRef().get(0).getId());
+        assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_miinInputX",
+                     task.getDataInputAssociations().get(task.getDataInputAssociations().size()-1).getTargetRef().getId());
+        assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_mioutOutputX",
+                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size()-1).getSourceRef().get(0).getId());
+        assertEquals("miout",
+                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size()-1).getTargetRef().getId());
+        
     }
 
     @Test

@@ -390,6 +390,19 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("uniform",
                      properties.getString(DISTRIBUTION_TYPE));
     }
+    
+    @Test
+    public void testSimulationMIUserTask() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("multipleInstanceTask.bpmn2");
+        JSONObject userTask = getChildByName(process,
+                                             "mitask");
+        JSONObject properties = userTask.getJSONObject("properties");
+        assertNotNull(properties.get("dataoutputset"));
+        assertEquals("salidaSimple:Object",
+                     properties.get("dataoutputset"));
+        assertTrue(properties.getString("datainputset").contains("entradaSimple"));
+        assertTrue(properties.getString("datainputset").contains(properties.getString("multipleinstancedatainput")));
+    }
 
     @Test
     public void testSimulationGatewayProbability() throws Exception {
