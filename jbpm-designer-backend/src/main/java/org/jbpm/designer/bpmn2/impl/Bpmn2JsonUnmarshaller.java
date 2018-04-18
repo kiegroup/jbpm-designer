@@ -897,6 +897,7 @@ public class Bpmn2JsonUnmarshaller {
     public void revisitMultiInstanceTasks(Definitions def) {
         try {
             List<RootElement> rootElements = def.getRootElements();
+            List<RootElement> newRootElements = new ArrayList<RootElement>();
             for (RootElement root : rootElements) {
                 if (root instanceof Process) {
                     Process process = (Process) root;
@@ -916,7 +917,8 @@ public class Bpmn2JsonUnmarshaller {
                                         String miDataInput = (multiValueParts[2].equals(" ") ? "" : multiValueParts[2]);
                                         String miDataOutput = (multiValueParts[3].equals(" ") ? "" : multiValueParts[3]);
                                         String miCompletionCondition = (multiValueParts[4].equals(" ") ? "" : multiValueParts[4]);
-
+                                        
+                                        
                                         MultiInstanceLoopCharacteristics loopCharacteristics = Bpmn2Factory.eINSTANCE.createMultiInstanceLoopCharacteristics();
 
                                         if (miCollectionInput != null && miCollectionInput.length() > 0) {
@@ -981,35 +983,104 @@ public class Bpmn2JsonUnmarshaller {
                                                 }
                                             }
                                         }
-
+                                        
                                         if (miDataInput != null && miDataInput.length() > 0) {
-                                            List<DataInput> dins = task.getIoSpecification().getDataInputs();
-                                            for (DataInput di : dins) {
-                                                if (di.getName().equals(miDataInput)) {
-
-                                                    DataInput inputDataItemObj = Bpmn2Factory.eINSTANCE.createDataInput();
-                                                    inputDataItemObj.setId("miDataInputX");
-                                                    inputDataItemObj.setItemSubjectRef(di.getItemSubjectRef());
-                                                    loopCharacteristics.setInputDataItem(inputDataItemObj);
-
+                                            String itemDefId = task.getId() + "_" + miDataInput + "InputX";
+                                            ItemDefinition itemdef = this.getMessageItemDefinition(def.getRootElements(),
+                                                                                                   itemDefId);
+                                            
+                                            if (itemdef == null) {
+                                                itemdef = Bpmn2Factory.eINSTANCE.createItemDefinition();
+                                                itemdef.setId("_" + itemDefId + "Item");
+                                                itemdef.setStructureRef("Object");
+                                                newRootElements.add(itemdef);
+                                            } 
+                                                
+                                            boolean foundDataInput = false;
+                                            DataInput miDataInputItem = Bpmn2Factory.eINSTANCE.createDataInput();
+                                            List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
+                                            for (DataInput din : dataInputs) {
+                                                if (din.getId() != null && din.getId().equals(task.getId() + "_" + miDataInput + "InputX")) {
+                                                    foundDataInput = true;
+                                                    miDataInputItem = din;
+                                                    
                                                     break;
                                                 }
                                             }
+                                            if (!foundDataInput) {
+                                              //Task dataInput 
+                                                
+                                                miDataInputItem.setId(task.getId() + "_" + miDataInput + "InputX");
+                                                miDataInputItem.setName(miDataInput);
+                                                miDataInputItem.setItemSubjectRef(itemdef);
+                                                task.getIoSpecification().getDataInputs().add(miDataInputItem);
+                                                
+                                                if (task.getIoSpecification().getInputSets() == null || task.getIoSpecification().getInputSets().size() < 1) {
+                                                    InputSet inset = Bpmn2Factory.eINSTANCE.createInputSet();
+                                                    task.getIoSpecification().getInputSets().add(inset);
+                                                }
+                                                task.getIoSpecification().getInputSets().get(0).getDataInputRefs().add(miDataInputItem);
+                                            }    
+                                            
+                                            //Loop inputDataItem
+                                            DataInput miDataInputItemLoop = Bpmn2Factory.eINSTANCE.createDataInput();
+                                            miDataInputItemLoop.setId(miDataInput);
+                                            miDataInputItemLoop.setItemSubjectRef(itemdef);
+                                            loopCharacteristics.setInputDataItem(miDataInputItemLoop);
+                                            //Association between task variable and MI dataInput variable
+                                            DataInputAssociation miInputLoopDataInputAssociation = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
+                                            miInputLoopDataInputAssociation.getSourceRef().add(miDataInputItemLoop);
+                                            miInputLoopDataInputAssociation.setTargetRef(miDataInputItem);
+                                            task.getDataInputAssociations().add(miInputLoopDataInputAssociation);
+                                            
                                         }
-
+                                        
                                         if (miDataOutput != null && miDataOutput.length() > 0) {
-                                            List<DataOutput> douts = task.getIoSpecification().getDataOutputs();
-                                            for (DataOutput dout : douts) {
-                                                if (dout.getName().equals(miDataOutput)) {
-
-                                                    DataOutput outputDataItemObj = Bpmn2Factory.eINSTANCE.createDataOutput();
-                                                    outputDataItemObj.setId("miDataOutputX");
-                                                    outputDataItemObj.setItemSubjectRef(dout.getItemSubjectRef());
-                                                    loopCharacteristics.setOutputDataItem(outputDataItemObj);
-
+                                            String itemDefId = task.getId() + "_" + miDataOutput + "OutputX";
+                                            ItemDefinition itemdef = this.getMessageItemDefinition(def.getRootElements(),
+                                                                                                   itemDefId);
+                                            if (itemdef == null) {
+                                                itemdef = Bpmn2Factory.eINSTANCE.createItemDefinition();
+                                                itemdef.setId("_" + itemDefId + "Item");
+                                                newRootElements.add(itemdef);
+                                            }
+                                                
+                                            boolean foundDataOutput = false;
+                                            DataOutput miDataOutputItem = Bpmn2Factory.eINSTANCE.createDataOutput();
+                                            List<DataOutput> dataOutputs = task.getIoSpecification().getDataOutputs();
+                                            for (DataOutput dout : dataOutputs) {
+                                                if (dout.getId() != null && dout.getId().equals(task.getId() + "_" + miDataOutput + "OutputX")) {
+                                                    foundDataOutput = true;
+                                                    miDataOutputItem = dout;
                                                     break;
                                                 }
                                             }
+                                            if (!foundDataOutput) {
+                                                //Task dataOutput
+                                                miDataOutputItem.setId(task.getId() + "_" + miDataOutput + "OutputX");
+                                                miDataOutputItem.setName(miDataOutput);
+                                                miDataOutputItem.setItemSubjectRef(itemdef);
+                                                task.getIoSpecification().getDataOutputs().add(miDataOutputItem);
+                                                
+                                                if (task.getIoSpecification().getOutputSets() == null || task.getIoSpecification().getOutputSets().size() < 1) {
+                                                    OutputSet outset = Bpmn2Factory.eINSTANCE.createOutputSet();
+                                                    task.getIoSpecification().getOutputSets().add(outset);
+                                                }
+                                                task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().add(miDataOutputItem);
+                                            }    
+                                            //Loop outputDataItem
+                                            DataOutput miDataOutputItemLoop = Bpmn2Factory.eINSTANCE.createDataOutput();
+                                            miDataOutputItemLoop.setId(miDataOutput);
+                                            miDataOutputItemLoop.setItemSubjectRef(itemdef);
+                                            loopCharacteristics.setOutputDataItem(miDataOutputItemLoop);
+                                            
+                                            //Association between task variable and MI dataOutput variable
+                                            DataOutputAssociation miOutputLoopDataOutputAssociation = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
+                                            miOutputLoopDataOutputAssociation.getSourceRef().add(miDataOutputItem);
+                                            miOutputLoopDataOutputAssociation.setTargetRef(miDataOutputItemLoop);
+                                            task.getDataOutputAssociations().add(miOutputLoopDataOutputAssociation);
+                                                
+                                            
                                         }
 
                                         if (miCompletionCondition != null && !miCompletionCondition.isEmpty()) {
@@ -1019,32 +1090,6 @@ public class Bpmn2JsonUnmarshaller {
                                         }
 
                                         task.setLoopCharacteristics(loopCharacteristics);
-
-                                        if (miDataInput != null && miDataInput.length() > 0 && ((MultiInstanceLoopCharacteristics) task.getLoopCharacteristics()).getInputDataItem() != null) {
-                                            DataInputAssociation dias = Bpmn2Factory.eINSTANCE.createDataInputAssociation();
-                                            dias.getSourceRef().add(((MultiInstanceLoopCharacteristics) task.getLoopCharacteristics()).getInputDataItem());
-                                            List<DataInput> dins = task.getIoSpecification().getDataInputs();
-                                            for (DataInput di : dins) {
-                                                if (di.getName().equals(miDataInput)) {
-                                                    dias.setTargetRef(di);
-                                                    task.getDataInputAssociations().add(dias);
-                                                    break;
-                                                }
-                                            }
-                                        }
-
-                                        if (miDataOutput != null && miDataOutput.length() > 0 && ((MultiInstanceLoopCharacteristics) task.getLoopCharacteristics()).getOutputDataItem() != null) {
-                                            DataOutputAssociation dout = Bpmn2Factory.eINSTANCE.createDataOutputAssociation();
-                                            dout.setTargetRef(((MultiInstanceLoopCharacteristics) task.getLoopCharacteristics()).getOutputDataItem());
-                                            List<DataOutput> douts = task.getIoSpecification().getDataOutputs();
-                                            for (DataOutput dou : douts) {
-                                                if (dou.getName().equals(miDataOutput)) {
-                                                    dout.getSourceRef().add(dou);
-                                                    task.getDataOutputAssociations().add(dout);
-                                                    break;
-                                                }
-                                            }
-                                        }
                                     }
                                 }
                             }
@@ -1052,6 +1097,7 @@ public class Bpmn2JsonUnmarshaller {
                     }
                 }
             }
+            def.getRootElements().addAll(newRootElements);
         } catch (Exception e) {
             e.printStackTrace();
         }
