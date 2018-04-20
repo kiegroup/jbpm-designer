@@ -173,7 +173,7 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
 
                     keyList.add(wd.getCategory() == null ? "" : wd.getCategory());
                     keyList.add(wd.getExplanationText() == null ? "" : wd.getExplanationText());
-                    keyList.add(repoURL + "/" + wd.getName() + "/" + wd.getDocumentation());
+                    keyList.add(repoURL + "/" + wd.getDocumentation());
                     StringBuffer bn = new StringBuffer();
                     if (wd.getParameterNames() != null) {
                         String delim = "";
