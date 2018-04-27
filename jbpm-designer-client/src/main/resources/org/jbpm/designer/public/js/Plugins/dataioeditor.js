@@ -376,6 +376,8 @@ ORYX.DataIOEditorUtils = {
         }
         if (processvars && processvars.length > 0) {
             retvars = retvars + vars + processvars;
+        } else if(vars && vars.length > 0) {
+            retvars = retvars + vars;
         }
         return retvars;
     },
