@@ -2692,5 +2692,31 @@ public class Bpmn2UnmarshallingTest {
                              "customActivationCondition"));
         
     }
+
+    @Test
+    public void testSequenceFlowFeelExpression() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("sequenceFlowFeel.json");
+        assertTrue(definitions.getRootElements().size() == 1);
+        Process process = getRootProcess(definitions);
+        assertTrue(process.getFlowElements().get(0) instanceof Task);
+        Task task = (Task) process.getFlowElements().get(0);
+        assertEquals("task1",
+                     task.getName());
+        Task task2 = (Task) process.getFlowElements().get(1);
+        assertEquals("task2",
+                     task2.getName());
+        SequenceFlow flow = (SequenceFlow) process.getFlowElements().get(2);
+        assertEquals("seqFlow",
+                     flow.getName());
+        assertEquals(task,
+                     flow.getSourceRef());
+        assertEquals(task2,
+                     flow.getTargetRef());
+        String conditionExpressionCond = ((FormalExpression) flow.getConditionExpression()).getLanguage();
+        assertEquals("http://www.omg.org/spec/FEEL/20140401", conditionExpressionCond);
+
+        String conditionExpressionBody = ((FormalExpression) flow.getConditionExpression()).getBody();
+        assertEquals("<![CDATA[x = \"Entry\"]]>", conditionExpressionBody);
+    }
 }
 

@@ -4329,18 +4329,23 @@ public class Bpmn2JsonUnmarshaller {
     }
 
     private String getScriptLanguageFormat(Map<String, String> properties) {
-        // default to java
-        String scriptLanguage = "http://www.java.com/java";
+        return getScriptLanguageFormat(properties, "script_language", "http://www.java.com/java");
+    }
+    private String getScriptLanguageFormat(Map<String, String> properties, String propertyName, String defaultLanguage) {
 
-        if (properties.get("script_language") != null && properties.get("script_language").length() > 0) {
-            if (properties.get("script_language").equals("java")) {
+        String scriptLanguage = defaultLanguage;
+
+        if (properties.get(propertyName) != null && properties.get(propertyName).length() > 0) {
+            if (properties.get(propertyName).equals("java")) {
                 scriptLanguage = "http://www.java.com/java";
-            } else if (properties.get("script_language").equals("mvel")) {
+            } else if (properties.get(propertyName).equals("mvel")) {
                 scriptLanguage = "http://www.mvel.org/2.0";
-            } else if (properties.get("script_language").equals("javascript")) {
+            } else if (properties.get(propertyName).equals("javascript")) {
                 scriptLanguage = "http://www.javascript.com/javascript";
-            } else if (properties.get("script_language").equals("drools")) {
+            } else if (properties.get(propertyName).equals("drools")) {
                 scriptLanguage = "http://www.jboss.org/drools/rule";
+            } else if (properties.get(propertyName).equals("FEEL")) {
+                scriptLanguage = "http://www.omg.org/spec/FEEL/20140401";
             }
         }
 
@@ -7326,19 +7331,7 @@ public class Bpmn2JsonUnmarshaller {
             expr.setBody(wrapInCDATABlock(scriptStr));
             // check if language was specified
             if (properties.get("conditionexpressionlanguage") != null && !"".equals(properties.get("conditionexpressionlanguage"))) {
-                String languageStr;
-                if (properties.get("conditionexpressionlanguage").equals("drools")) {
-                    languageStr = "http://www.jboss.org/drools/rule";
-                } else if (properties.get("conditionexpressionlanguage").equals("mvel")) {
-                    languageStr = "http://www.mvel.org/2.0";
-                } else if (properties.get("conditionexpressionlanguage").equals("java")) {
-                    languageStr = "http://www.java.com/java";
-                } else if (properties.get("conditionexpressionlanguage").equals("javascript")) {
-                    languageStr = "http://www.javascript.com/javascript";
-                } else {
-                    // default to mvel
-                    languageStr = "http://www.mvel.org/2.0";
-                }
+                String languageStr = getScriptLanguageFormat(properties, "conditionexpressionlanguage", "http://www.mvel.org/2.0");
                 expr.setLanguage(languageStr);
             }
             sequenceFlow.setConditionExpression(expr);

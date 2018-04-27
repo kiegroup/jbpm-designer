@@ -2491,6 +2491,10 @@ public class Bpmn2JsonMarshaller {
     }
 
     private String getScriptLanguageFormat(String fullQualifiedFormat) {
+        return getScriptLanguageFormat(fullQualifiedFormat, "java");
+    }
+
+    private String getScriptLanguageFormat(String fullQualifiedFormat, String defaultLanguage) {
         if (fullQualifiedFormat == null) {
             return "";
         } else if (fullQualifiedFormat.equals("http://www.java.com/java")) {
@@ -2501,8 +2505,10 @@ public class Bpmn2JsonMarshaller {
             return "javascript";
         } else if (fullQualifiedFormat.equals("http://www.jboss.org/drools/rule")) {
             return "drools";
+        } else if (fullQualifiedFormat.equals("http://www.omg.org/spec/FEEL/20140401")) {
+            return "FEEL";
         } else {
-            return "java";
+            return defaultLanguage;
         }
     }
 
@@ -3432,19 +3438,8 @@ public class Bpmn2JsonMarshaller {
                 }
                 if (((FormalExpression) conditionExpression).getLanguage() != null) {
                     String cd = ((FormalExpression) conditionExpression).getLanguage();
-                    String cdStr = "";
-                    if (cd.equalsIgnoreCase("http://www.java.com/java")) {
-                        cdStr = "java";
-                    } else if (cd.equalsIgnoreCase("http://www.jboss.org/drools/rule")) {
-                        cdStr = "drools";
-                    } else if (cd.equalsIgnoreCase("http://www.mvel.org/2.0")) {
-                        cdStr = "mvel";
-                    } else if (cd.equalsIgnoreCase("http://www.javascript.com/javascript")) {
-                        cdStr = "javascript";
-                    } else {
-                        // default to mvel
-                        cdStr = "mvel";
-                    }
+                    String cdStr = getScriptLanguageFormat(cd, "mvel");
+
                     properties.put("conditionexpressionlanguage",
                                    cdStr);
                 }

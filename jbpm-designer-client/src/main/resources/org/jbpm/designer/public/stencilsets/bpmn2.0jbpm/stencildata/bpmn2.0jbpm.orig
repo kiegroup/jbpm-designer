@@ -10258,20 +10258,25 @@
 							"value": "java"
 						},
 						{
-                                                        "id": "c2",
-                                                        "title":"javascript",
-                                                        "value":"javascript"
-                                                },
-                        			{
-                            				"id": "c3",
-                            				"title": "mvel",
-                            				"value": "mvel"
-                        			},
+                            "id": "c2",
+                            "title":"javascript",
+                            "value":"javascript"
+                        },
+                        {
+                            "id": "c3",
+                            "title": "mvel",
+                            "value": "mvel"
+                        },
 						{
 							"id": "c4",
 							"title": "drools",
 							"value": "drools"
-						}    
+						},
+                        {
+                            "id": "c5",
+                            "title": "FEEL",
+                            "value": "FEEL"
+                        }
 					]  
 				},
 				{
