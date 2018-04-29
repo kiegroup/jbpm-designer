@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/bpmn20" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:drools="http://www.jboss.org/drools" id="_R9IbIEpJEeiWcfWjBo_VJQ" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd" exporter="jBPM Designer" exporterVersion="6.2.0" targetNamespace="http://www.omg.org/bpmn20">
+  <bpmn2:process id="src.vvvvv" drools:packageName="com.myteam.jjjjj" name="vvvvv" isExecutable="true">
+    <bpmn2:task id="_38DAE429-95B5-494B-9301-B24361C9DA2B" drools:selectable="true" color:background-color="#b1c2d6" color:border-color="#000000" color:color="#000000" name="task1">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[task1]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>_4AE5EEA9-B8C5-476B-A424-A277C8489766</bpmn2:outgoing>
+    </bpmn2:task>
+    <bpmn2:task id="_7752F395-90B7-40A6-870A-EDC00003FEA5" drools:selectable="true" color:background-color="#b1c2d6" color:border-color="#000000" color:color="#000000" name="task2">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[task2]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_4AE5EEA9-B8C5-476B-A424-A277C8489766</bpmn2:incoming>
+    </bpmn2:task>
+    <bpmn2:sequenceFlow id="_4AE5EEA9-B8C5-476B-A424-A277C8489766" drools:selectable="true" color:background-color="#000000" color:border-color="#000000" color:color="#000000" name="seqFlow" sourceRef="_38DAE429-95B5-494B-9301-B24361C9DA2B" targetRef="_7752F395-90B7-40A6-870A-EDC00003FEA5">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[seqFlow]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" id="_R9JCMEpJEeiWcfWjBo_VJQ" language="http://www.omg.org/spec/FEEL/20140401"><![CDATA[x = "Entry"]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="_R9JCMUpJEeiWcfWjBo_VJQ">
+    <bpmndi:BPMNPlane id="_R9JCMkpJEeiWcfWjBo_VJQ" bpmnElement="src.vvvvv">
+      <bpmndi:BPMNShape id="_R9JCM0pJEeiWcfWjBo_VJQ" bpmnElement="_38DAE429-95B5-494B-9301-B24361C9DA2B">
+        <dc:Bounds height="80.0" width="100.0" x="173.0" y="79.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_R9JCNEpJEeiWcfWjBo_VJQ" bpmnElement="_7752F395-90B7-40A6-870A-EDC00003FEA5">
+        <dc:Bounds height="80.0" width="100.0" x="457.0" y="112.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="_R9JCNUpJEeiWcfWjBo_VJQ" bpmnElement="_4AE5EEA9-B8C5-476B-A424-A277C8489766" sourceElement="_R9JCM0pJEeiWcfWjBo_VJQ" targetElement="_R9JCNEpJEeiWcfWjBo_VJQ">
+        <di:waypoint xsi:type="dc:Point" x="223.0" y="119.0"/>
+        <di:waypoint xsi:type="dc:Point" x="365.0" y="119.0"/>
+        <di:waypoint xsi:type="dc:Point" x="365.0" y="152.0"/>
+        <di:waypoint xsi:type="dc:Point" x="507.0" y="152.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship id="_R9JCNkpJEeiWcfWjBo_VJQ" type="BPSimData">
+    <bpmn2:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario xsi:type="bpsim:Scenario" id="default" name="Simulationscenario">
+          <bpsim:ScenarioParameters xsi:type="bpsim:ScenarioParameters" baseTimeUnit="min"/>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_38DAE429-95B5-494B-9301-B24361C9DA2B" id="_R9JCN0pJEeiWcfWjBo_VJQ">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+              <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="0.0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_7752F395-90B7-40A6-870A-EDC00003FEA5" id="_R9JCOEpJEeiWcfWjBo_VJQ">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:UniformDistribution max="10.0" min="5.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+              <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="0.0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_4AE5EEA9-B8C5-476B-A424-A277C8489766" id="_R9JCOUpJEeiWcfWjBo_VJQ">
+            <bpsim:ControlParameters xsi:type="bpsim:ControlParameters">
+              <bpsim:Probability xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="100.0"/>
+              </bpsim:Probability>
+            </bpsim:ControlParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn2:extensionElements>
+    <bpmn2:source>_R9IbIEpJEeiWcfWjBo_VJQ</bpmn2:source>
+    <bpmn2:target>_R9IbIEpJEeiWcfWjBo_VJQ</bpmn2:target>
+  </bpmn2:relationship>
+</bpmn2:definitions>

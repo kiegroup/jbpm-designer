@@ -1107,4 +1107,20 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("drools",
                      scriptLanguage);
     }
+
+    @Test
+    public void testSequenceFlowFeel() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("sequenceFlowFeel.bpmn2");
+        JSONObject adHocSubprocess = getChildByName(process,
+                                                    "seqFlow");
+        JSONObject properties = adHocSubprocess.getJSONObject("properties");
+
+        String conditionExpressionLanguage = properties.getString("conditionexpressionlanguage");
+        String conditionExpression = properties.getString("conditionexpression");
+
+        assertEquals("FEEL",
+                     conditionExpressionLanguage);
+        assertEquals("x = \"Entry\"",
+                     conditionExpression);
+    }
 }
