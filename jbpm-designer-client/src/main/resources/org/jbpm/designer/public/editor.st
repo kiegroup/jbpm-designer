@@ -43,6 +43,8 @@
 
         ORYX.SERVICE_REPO = "$servicerepo$";
 
+        ORYX.JSON_UPDATED = false;
+
         ORYX.SERVICE_REPO_TASKS = {
             "repotasks": [
                 $servicerepotasks:{k|

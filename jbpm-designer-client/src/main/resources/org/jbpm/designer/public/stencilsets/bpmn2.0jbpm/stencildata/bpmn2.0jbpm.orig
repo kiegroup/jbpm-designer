@@ -742,6 +742,30 @@
 					"optional":true
 				},
 				{
+                    "id":"exporter",
+                    "type":"String",
+                    "title":"Exporter",
+                    "value":"",
+                    "description":"Exporter",
+                    "description_ja":"",
+                    "readonly":true,
+                    "optional":true,
+                    "hidden":true,
+                    "visible":false
+                },
+                {
+                    "id":"exporterversion",
+                    "type":"String",
+                    "title":"Exporter Version",
+                    "value":"",
+                    "description":"Exporter Version",
+                    "description_ja":"",
+                    "readonly":true,
+                    "optional":true,
+                    "hidden":true,
+                    "visible":false
+                },
+				{
                           "id":"customdescription",
                           "type":"TextExpression",
                           "title":"Process Instance Description",

@@ -184,6 +184,8 @@ public class Bpmn2JsonUnmarshaller {
     public static final String defaultBrColor = "#000000";
     public static final String defaultFontColor = "#000000";
     public static final String defaultSequenceflowColor = "#000000";
+    public static final String exporterName = "jBPM Designer";
+    public static final String exporterVersion = "1.0";
 
     public static final String defaultRelationshipType = "BPSimData";
 
@@ -266,11 +268,10 @@ public class Bpmn2JsonUnmarshaller {
      * @param parser
      * @param preProcessingData
      * @return the root element of a bpmn2 document.
-     * @throws org.codehaus.jackson.JsonParseException
      * @throws java.io.IOException
      */
     private Bpmn2Resource unmarshall(JsonParser parser,
-                                     String preProcessingData) throws JsonParseException, IOException {
+                                     String preProcessingData) throws IOException {
         try {
             parser.nextToken(); // open the object
             ResourceSet rSet = new ResourceSetImpl();
@@ -287,8 +288,8 @@ public class Bpmn2JsonUnmarshaller {
             // do the unmarshalling now:
             Definitions def = (Definitions) unmarshallItem(parser,
                                                            preProcessingData);
-            def.setExporter("jBPM Designer");
-            def.setExporterVersion("6.2.0");
+            def.setExporter(exporterName);
+            def.setExporterVersion(exporterVersion);
             revisitUserTasks(def);
             revisitServiceTasks(def);
             revisitMessages(def);

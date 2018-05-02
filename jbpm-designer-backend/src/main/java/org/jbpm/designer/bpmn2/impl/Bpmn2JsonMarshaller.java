@@ -47,6 +47,7 @@ import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.bpmn2.Activity;
 import org.eclipse.bpmn2.AdHocOrdering;
 import org.eclipse.bpmn2.AdHocSubProcess;
@@ -321,6 +322,11 @@ public class Bpmn2JsonMarshaller {
                       def.getId());
             props.put("expressionlanguage",
                       def.getExpressionLanguage());
+            props.put("exporter",
+                      StringUtils.isNotEmpty(def.getExporter()) ? def.getExporter() : "");
+            props.put("exporterversion",
+                      StringUtils.isNotEmpty(def.getExporterVersion()) ? def.getExporterVersion() : "");
+
             // backwards compat for BZ 1048191
             if (def.getDocumentation() != null && def.getDocumentation().size() > 0) {
                 props.put("documentation",
