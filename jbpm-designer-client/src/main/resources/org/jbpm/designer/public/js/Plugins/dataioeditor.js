@@ -268,7 +268,7 @@ ORYX.Plugins.DataIOEditorPlugin = {
                         // are treated the same here for display purposes. Serialization
                         // and deserialization in the marshallers is done from the
                         // 'assignments' property rather than from custom assignments properties.
-                        if (a.includes('=')) {
+                        if (a.indexOf('=') >= 0) {
                             var aparts = a.split('=');
                             var aValue;
                             var aName;
@@ -280,7 +280,7 @@ ORYX.Plugins.DataIOEditorPlugin = {
                                 asHash[aName] = aValue;
                             }
                         }
-                        else if (a.includes('->')) {
+                        else if (a.indexOf('->') >= 0) {
                             var aparts = a.split('->');
                             var aValue;
                             var aName;
@@ -538,11 +538,11 @@ ORYX.DataIOEditorUtils = {
         var newConstAssignment = '[din]' + propName + '=' + newValue;
         var newAssignments;
         if (oldAssignments !== undefined && oldAssignments.length > 0) {
-            if (oldAssignments.includes(testConstAssignment1)) {
+            if (oldAssignments.indexOf(testConstAssignment1) >= 0) {
                 newAssignments = oldAssignments.replace(testConstAssignment1, newConstAssignment);
-            } else if (oldAssignments.includes(testConstAssignment2 + ',') || oldAssignments.endsWith(testConstAssignment2)) {
+            } else if (oldAssignments.indexOf(testConstAssignment2 + ',') >= 0 || oldAssignments.endsWith(testConstAssignment2)) {
                 newAssignments = oldAssignments.replace(testConstAssignment2, newConstAssignment);
-            } else if (oldAssignments.includes(testVarAssignment)) {
+            } else if (oldAssignments.indexOf(testVarAssignment) >= 0) {
                 newAssignments = oldAssignments.replace(testVarAssignment, newConstAssignment);
             } else {
                 newAssignments = oldAssignments + ',' + newConstAssignment;
