@@ -167,9 +167,11 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_CANCEL_SAVE, this.handleEventCancelSave.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_RELOAD, this.handleEventDoRealod.bind(this));
 
-        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.handleOpenXMLEditor.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_LOADED, this.handlerErrorsAndUnknownExporter.bind(this));
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UPDATE_LOCK, this.handleEventUpdateLock.bind(this));
+
+
 
         window.onunload = this.unloadWindow.bind(this);
 
@@ -234,7 +236,8 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         });
     },
 
-    handleOpenXMLEditor: function() {
+    handlerErrorsAndUnknownExporter: function() {
+        // errors
         if(ORYX.LOADING_ERRORS == true) {
             Ext.MessageBox.confirm(
                 "Unable to open Process",
@@ -248,6 +251,38 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         }
         // reset ORYX.LOADING_ERRORS
         ORYX.LOADING_ERRORS = false;
+
+        // exporter
+        try {
+            var processJSON = ORYX.EDITOR.getSerializedJSON();
+            var processExporter = jsonPath(processJSON.evalJSON(), "$.properties.exporter");
+            if (processExporter && processExporter != "jBPM Designer") {
+                if (!ORYX.JSON_UPDATED) {
+                    this.facade.setSelection(this.facade.getCanvas().getChildShapes(true));
+                    var currentJSON = ORYX.EDITOR.getSerializedJSON();
+                    var selection = this.facade.getSelection();
+                    var clipboard = new ORYX.Plugins.Edit.ClipBoard();
+                    clipboard.refresh(selection, this.getAllShapesToConsider(selection, true));
+                    var command = new ORYX.Plugins.Edit.DeleteCommand(clipboard, this.facade);
+                    this.facade.executeCommands([command]);
+
+                    this.facade.raiseEvent({
+                        type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                        ntype: 'info',
+                        msg: ORYX.I18N.view.exporterUpdate,
+                        title: ''
+
+                    });
+
+                    this.facade.importJSON(currentJSON);
+
+                    ORYX.JSON_UPDATED = true;
+                }
+            }
+        } catch (err) {
+            ORYX.LOG.error(err);
+        }
+
     },
 
     handleEventDoRealod: function() {
@@ -630,5 +665,64 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
                 title       : ''
             });
         }
+    },
+
+    getAllShapesToConsider: function(shapes, considerConnections){
+
+        var shapesToConsider = []; // only top-level shapes
+        var childShapesToConsider = []; // all child shapes of top-level shapes
+
+        shapes.each(function(shape){
+            //Throw away these shapes which have a parent in given shapes
+            isChildShapeOfAnother = shapes.any(function(s2){
+                return s2.hasChildShape(shape);
+            });
+            if(isChildShapeOfAnother) return;
+
+            // This shape should be considered
+            shapesToConsider.push(shape);
+            // Consider attached nodes (e.g. intermediate events)
+            if (shape instanceof ORYX.Core.Node) {
+                var attached = shape.getOutgoingNodes();
+                attached = attached.findAll(function(a){ return !shapes.include(a) });
+                shapesToConsider = shapesToConsider.concat(attached);
+            }
+            childShapesToConsider = childShapesToConsider.concat(shape.getChildShapes(true));
+
+
+            if (considerConnections && !(shape instanceof ORYX.Core.Edge)){
+                //concat all incoming and outgoing shapes
+                var connections = shape.getIncomingShapes().concat(shape.getOutgoingShapes());
+
+                connections.each(function(s) {
+                    //we don't want to delete sequence flows with
+                    //an existing 'conditionexpression'
+                    //console.log(s);
+                    if (s instanceof ORYX.Core.Edge && s.properties["oryx-conditionexpression"] && s.properties["oryx-conditionexpression"] != ""){
+                        return;
+                    }
+                    shapesToConsider.push(s);
+                }.bind(this));
+
+            }
+
+        }.bind(this));
+
+        // All edges between considered child shapes should be considered
+        // Look for these edges having incoming and outgoing in childShapesToConsider
+        var edgesToConsider = this.facade.getCanvas().getChildEdges().select(function(edge){
+            // Ignore if already added
+            if(shapesToConsider.include(edge)) return false;
+            // Ignore if there are no docked shapes
+            if(edge.getAllDockedShapes().size() === 0) return false;
+            // True if all docked shapes are in considered child shapes
+            return edge.getAllDockedShapes().all(function(shape){
+                // Remember: Edges can have other edges on outgoing, that is why edges must not be included in childShapesToConsider
+                return shape instanceof ORYX.Core.Edge || childShapesToConsider.include(shape);
+            });
+        });
+        shapesToConsider = shapesToConsider.concat(edgesToConsider);
+
+        return shapesToConsider;
     }
 });

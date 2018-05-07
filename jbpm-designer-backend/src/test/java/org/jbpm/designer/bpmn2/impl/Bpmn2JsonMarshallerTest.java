@@ -1123,4 +1123,18 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("x = \"Entry\"",
                      conditionExpression);
     }
+
+    @Test
+    public void testDefinitionsExporterAndVersion() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("exporterAndVersion.bpmn2");
+        JSONObject properties = process.getJSONObject("properties");
+
+        String exporter = properties.getString("exporter");
+        String exporterVersion = properties.getString("exporterversion");
+
+        assertEquals("My Custom Exporter",
+                     exporter);
+        assertEquals("My Custom Version",
+                     exporterVersion);
+    }
 }
