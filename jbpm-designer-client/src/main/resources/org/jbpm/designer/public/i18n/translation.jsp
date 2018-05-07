@@ -1383,6 +1383,7 @@ ORYX.I18N.view.compareBPMN2PReviousVersions='<i18n:message key="ORYX.I18N.view.c
 ORYX.I18N.view.replaceExistingModel='<i18n:message key="ORYX.I18N.view.replaceExistingModel">Replace existing model?</i18n:message>';
 ORYX.I18N.view.installSelectedWorkitem='<i18n:message key="ORYX.I18N.view.installSelectedWorkitem">Install selected item?</i18n:message>';
 ORYX.I18N.view.importSuccess='<i18n:message key="ORYX.I18N.view.importSuccess">Successfully imported</i18n:message>';
+ORYX.I18N.view.exporterUpdate='<i18n:message key="ORYX.I18N.view.exporterUpdate">Detected external exporter, process will be refreshed</i18n:message>';
 ORYX.I18N.view.unableImportProvided='<i18n:message key="ORYX.I18N.view.unableImportProvided">Unable to import provided</i18n:message>';
 ORYX.I18N.view.processSVGSource='<i18n:message key="ORYX.I18N.view.processSVGSource">Process SVG Source</i18n:message>';
 ORYX.I18N.view.erdfSource='<i18n:message key="ORYX.I18N.view.erdfSource">ERDF Source</i18n:message>';
