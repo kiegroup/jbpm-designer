@@ -2133,7 +2133,7 @@ public class Bpmn2UnmarshallingTest {
                      lc.getLoopDataInputRef().getItemSubjectRef().getId());
         assertEquals("_bbItem",
                      lc.getLoopDataOutputRef().getItemSubjectRef().getId());
-        assertEquals("abcde",
+        assertEquals("processVariable.size == 0 && localVariable.size > 0",
                      ((FormalExpression) lc.getCompletionCondition()).getBody());
         assertNotNull(lc.getInputDataItem());
         assertEquals("__DD409258-40BE-4C4C-A22B-73314905B467_miinInputXItem",
