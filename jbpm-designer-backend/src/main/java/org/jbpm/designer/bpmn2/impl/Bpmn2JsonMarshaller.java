@@ -1301,25 +1301,14 @@ public class Bpmn2JsonMarshaller {
                                  yOffset,
                                  flowElementProperties);
         } else if (flowElement instanceof SubProcess) {
-            if (flowElement instanceof AdHocSubProcess) {
-                marshallSubProcess((AdHocSubProcess) flowElement,
-                                   plane,
-                                   generator,
-                                   xOffset,
-                                   yOffset,
-                                   preProcessingData,
-                                   def,
-                                   flowElementProperties);
-            } else {
-                marshallSubProcess((SubProcess) flowElement,
-                                   plane,
-                                   generator,
-                                   xOffset,
-                                   yOffset,
-                                   preProcessingData,
-                                   def,
-                                   flowElementProperties);
-            }
+            marshallSubProcess((SubProcess) flowElement,
+                               plane,
+                               generator,
+                               xOffset,
+                               yOffset,
+                               preProcessingData,
+                               def,
+                               flowElementProperties);
         } else if (flowElement instanceof DataObject) {
             // only marshall if we can find DI info for it - BZ 800346
             if (findDiagramElement(plane,
@@ -3011,6 +3000,11 @@ public class Bpmn2JsonMarshaller {
         if (elementName != null) {
             properties.put("name",
                            elementName);
+        }
+
+        if (subProcess.getDocumentation() != null && subProcess.getDocumentation().size() > 0) {
+            properties.put("documentation",
+                           subProcess.getDocumentation().get(0).getText());
         }
 
         if (subProcess instanceof AdHocSubProcess) {

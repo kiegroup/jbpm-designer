@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.omg.org/bpmn20" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:drools="http://www.jboss.org/drools" id="_Qt808FQ-Eei24IAxA5edAQ" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd" exporter="jBPM Designer" exporterVersion="6.2.0" targetNamespace="http://www.omg.org/bpmn20">
+  <bpmn2:process id="bapl-868.reproducer" drools:packageName="bpms.bapl_868" drools:version="1.0" name="reproducer" isExecutable="true">
+    <bpmn2:startEvent id="_D247F444-CBFE-4E44-A366-BA2049A1F843" name="">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>_EC12B89C-A9B8-4812-930E-0C598B5719D7</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:adHocSubProcess id="_EE600639-C44A-4859-82D4-51C5FED6760C" name="Sub-process" ordering="Sequential">
+      <bpmn2:documentation id="_Qt808VQ-Eei24IAxA5edAQ"><![CDATA[my subprocess documentation]]></bpmn2:documentation>
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Sub-process]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_EC12B89C-A9B8-4812-930E-0C598B5719D7</bpmn2:incoming>
+      <bpmn2:outgoing>_A2F56536-5411-469A-868E-D28261FB2101</bpmn2:outgoing>
+      <bpmn2:ioSpecification id="_Qt808lQ-Eei24IAxA5edAQ">
+        <bpmn2:inputSet id="_Qt8081Q-Eei24IAxA5edAQ"/>
+        <bpmn2:outputSet id="_Qt809FQ-Eei24IAxA5edAQ"/>
+      </bpmn2:ioSpecification>
+      <bpmn2:completionCondition xsi:type="bpmn2:tFormalExpression" id="_Qt809VQ-Eei24IAxA5edAQ" language="http://www.mvel.org/2.0"><![CDATA[autocomplete]]></bpmn2:completionCondition>
+    </bpmn2:adHocSubProcess>
+    <bpmn2:endEvent id="_C238C610-143C-43C0-8596-17D093FEE203" name="">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_A2F56536-5411-469A-868E-D28261FB2101</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="_EC12B89C-A9B8-4812-930E-0C598B5719D7" sourceRef="_D247F444-CBFE-4E44-A366-BA2049A1F843" targetRef="_EE600639-C44A-4859-82D4-51C5FED6760C"/>
+    <bpmn2:sequenceFlow id="_A2F56536-5411-469A-868E-D28261FB2101" sourceRef="_EE600639-C44A-4859-82D4-51C5FED6760C" targetRef="_C238C610-143C-43C0-8596-17D093FEE203"/>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="_Qt809lQ-Eei24IAxA5edAQ">
+    <bpmndi:BPMNPlane id="_Qt8091Q-Eei24IAxA5edAQ" bpmnElement="bapl-868.reproducer">
+      <bpmndi:BPMNShape id="_Qt80-FQ-Eei24IAxA5edAQ" bpmnElement="_D247F444-CBFE-4E44-A366-BA2049A1F843">
+        <dc:Bounds height="56.0" width="56.0" x="100.0" y="100.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_Qt80-VQ-Eei24IAxA5edAQ" bpmnElement="_EE600639-C44A-4859-82D4-51C5FED6760C">
+        <dc:Bounds height="253.0" width="653.0" x="425.0" y="116.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_Qt80-lQ-Eei24IAxA5edAQ" bpmnElement="_C238C610-143C-43C0-8596-17D093FEE203">
+        <dc:Bounds height="56.0" width="56.0" x="1158.0" y="214.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="_Qt80-1Q-Eei24IAxA5edAQ" bpmnElement="_EC12B89C-A9B8-4812-930E-0C598B5719D7" sourceElement="_Qt80-FQ-Eei24IAxA5edAQ" targetElement="_Qt80-VQ-Eei24IAxA5edAQ">
+        <di:waypoint xsi:type="dc:Point" x="128.0" y="128.0"/>
+        <di:waypoint xsi:type="dc:Point" x="751.0" y="242.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="_Qt80_FQ-Eei24IAxA5edAQ" bpmnElement="_A2F56536-5411-469A-868E-D28261FB2101" sourceElement="_Qt80-VQ-Eei24IAxA5edAQ" targetElement="_Qt80-lQ-Eei24IAxA5edAQ">
+        <di:waypoint xsi:type="dc:Point" x="751.0" y="242.0"/>
+        <di:waypoint xsi:type="dc:Point" x="1186.0" y="242.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship id="_Qt80_VQ-Eei24IAxA5edAQ" type="BPSimData">
+    <bpmn2:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario xsi:type="bpsim:Scenario" id="default" name="Simulationscenario">
+          <bpsim:ScenarioParameters xsi:type="bpsim:ScenarioParameters"/>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_D247F444-CBFE-4E44-A366-BA2049A1F843" id="_Qt80_lQ-Eei24IAxA5edAQ">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:NormalDistribution mean="0.0" standardDeviation="0.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters xsi:type="bpsim:ElementParameters" elementRef="_EE600639-C44A-4859-82D4-51C5FED6760C" id="_Qt80_1Q-Eei24IAxA5edAQ">
+            <bpsim:TimeParameters xsi:type="bpsim:TimeParameters">
+              <bpsim:ProcessingTime xsi:type="bpsim:Parameter">
+                <bpsim:NormalDistribution mean="0.0" standardDeviation="0.0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:CostParameters xsi:type="bpsim:CostParameters">
+              <bpsim:UnitCost xsi:type="bpsim:Parameter">
+                <bpsim:FloatingParameter value="0.0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn2:extensionElements>
+    <bpmn2:source>_Qt808FQ-Eei24IAxA5edAQ</bpmn2:source>
+    <bpmn2:target>_Qt808FQ-Eei24IAxA5edAQ</bpmn2:target>
+  </bpmn2:relationship>
+</bpmn2:definitions>

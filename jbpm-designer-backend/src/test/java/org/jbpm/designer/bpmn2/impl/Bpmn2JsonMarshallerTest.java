@@ -24,10 +24,8 @@ import org.jbpm.designer.bpmn2.BpmnMarshallerHelper;
 import org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.jbpm.designer.bpmn2.validation.BPMN2SyntaxCheckerTest;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import org.junit.Test;
 
 import static org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge.createEdge;
@@ -1111,9 +1109,9 @@ public class Bpmn2JsonMarshallerTest {
     @Test
     public void testSequenceFlowFeel() throws Exception {
         JSONObject process = loader.loadProcessFromXml("sequenceFlowFeel.bpmn2");
-        JSONObject adHocSubprocess = getChildByName(process,
-                                                    "seqFlow");
-        JSONObject properties = adHocSubprocess.getJSONObject("properties");
+        JSONObject sequenceFlow = getChildByName(process,
+                                                 "seqFlow");
+        JSONObject properties = sequenceFlow.getJSONObject("properties");
 
         String conditionExpressionLanguage = properties.getString("conditionexpressionlanguage");
         String conditionExpression = properties.getString("conditionexpression");
@@ -1142,11 +1140,24 @@ public class Bpmn2JsonMarshallerTest {
     public void testMilestoneCustomSlaDueDate() throws Exception {
         JSONObject process = loader.loadProcessFromXml("milestoneCustomSla.bpmn2");
         JSONObject milestone = getChildByName(process,
-                                         "Milestone");
+                                              "Milestone");
         JSONObject properties = milestone.getJSONObject("properties");
         String slaDueDate = properties.getString("customsladuedate");
 
         assertEquals("3m",
                      slaDueDate);
+    }
+
+    @Test
+    public void testSubprocessDocumentation() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("subprocessWithDocumentation.bpmn2");
+        JSONObject subprocess = getChildByName(process,
+                                               "Sub-process");
+        JSONObject properties = subprocess.getJSONObject("properties");
+
+        String subprocessDocumentation = properties.getString("documentation");
+
+        assertEquals("my subprocess documentation",
+                     subprocessDocumentation);
     }
 }
