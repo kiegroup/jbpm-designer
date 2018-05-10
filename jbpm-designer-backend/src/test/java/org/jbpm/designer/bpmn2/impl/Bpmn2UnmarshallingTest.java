@@ -2718,5 +2718,25 @@ public class Bpmn2UnmarshallingTest {
         String conditionExpressionBody = ((FormalExpression) flow.getConditionExpression()).getBody();
         assertEquals("<![CDATA[x = \"Entry\"]]>", conditionExpressionBody);
     }
+
+    @Test
+    public void testMilestoneCustomSlaDueDate() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("milestoneCustomSla.json");
+        Process process = getRootProcess(definitions);
+
+        Task milestone = (Task) process.getFlowElements().get(1);
+        assertNotNull(milestone);
+        assertEquals("Milestone",
+                     milestone.getName());
+
+        List<ExtensionAttributeValue> extensionAttributeValues = milestone.getExtensionValues();
+        assertNotNull(extensionAttributeValues);
+        assertEquals(1,
+                     extensionAttributeValues.size());
+
+        assertEquals("<![CDATA[3m]]>",
+                     getMetaDataValue(milestone.getExtensionValues(),
+                                      "customSLADueDate"));
+    }
 }
 
