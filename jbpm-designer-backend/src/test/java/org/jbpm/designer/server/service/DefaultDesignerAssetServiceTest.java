@@ -230,6 +230,18 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assertNotNull(packageName);
         assertEquals("org.jbpm.test.process",
                      packageName);
+
+        Element definitionsElement = getDefinitionsElementFromXml(asset.getAssetContent());
+        assertNotNull(definitionsElement);
+        String exporter = definitionsElement.getAttributeNode("exporter").getValue();
+        assertNotNull(exporter);
+        assertEquals("jBPM Designer",
+                     exporter);
+
+        String exporterVersion = definitionsElement.getAttributeNode("exporterVersion").getValue();
+        assertNotNull(exporterVersion);
+        assertEquals("1.0",
+                     exporterVersion);
     }
 
     @Test
@@ -282,6 +294,18 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assertNotNull(caseIdPrefixValue);
         assertEquals("HR",
                      caseIdPrefixValue);
+
+        Element definitionsElement = getDefinitionsElementFromXml(asset.getAssetContent());
+        assertNotNull(definitionsElement);
+        String exporter = definitionsElement.getAttributeNode("exporter").getValue();
+        assertNotNull(exporter);
+        assertEquals("jBPM Designer",
+                     exporter);
+
+        String exporterVersion = definitionsElement.getAttributeNode("exporterVersion").getValue();
+        assertNotNull(exporterVersion);
+        assertEquals("1.0",
+                     exporterVersion);
     }
 
     @Test
@@ -379,6 +403,19 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
 
         Document xml = builder.parse(input);
         XPathExpression expr = xpath.compile("/definitions/process/extensionElements/metaData");
+        Element element = (Element) expr.evaluate(xml,
+                                                  XPathConstants.NODE);
+
+        return element;
+    }
+
+    private Element getDefinitionsElementFromXml(String content) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        ByteArrayInputStream input = new ByteArrayInputStream(content.getBytes("UTF-8"));
+
+        Document xml = builder.parse(input);
+        XPathExpression expr = xpath.compile("/definitions");
         Element element = (Element) expr.evaluate(xml,
                                                   XPathConstants.NODE);
 
