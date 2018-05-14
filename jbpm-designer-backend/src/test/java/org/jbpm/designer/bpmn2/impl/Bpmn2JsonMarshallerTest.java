@@ -1137,4 +1137,16 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("My Custom Version",
                      exporterVersion);
     }
+
+    @Test
+    public void testMilestoneCustomSlaDueDate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("milestoneCustomSla.bpmn2");
+        JSONObject milestone = getChildByName(process,
+                                         "Milestone");
+        JSONObject properties = milestone.getJSONObject("properties");
+        String slaDueDate = properties.getString("customsladuedate");
+
+        assertEquals("3m",
+                     slaDueDate);
+    }
 }

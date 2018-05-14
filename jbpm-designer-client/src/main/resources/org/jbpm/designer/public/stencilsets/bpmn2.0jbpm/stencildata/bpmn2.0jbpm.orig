@@ -3322,6 +3322,18 @@
 				"fromtoall"
 			],
 			"properties": [
+			    $bopen$
+                  "id":"customsladuedate",
+                  "type":"TextExpression",
+                  "title":"SLA Due Date",
+                  "value":"",
+                  "description":"SLA Due Date",
+                  "description_ja":"",
+                  "readonly":false,
+                  "optional":true,
+                  "fortasktypes":"Milestone",
+                  "extra":true,
+                $bclose$,
 				$bopen$
 					"id":"bgcolor",
 					"type":"Color",

@@ -43,10 +43,11 @@ public class Bpmn2Loader {
 
     // list of base workitem names
     private static final List<String> baseWorkItemNames = new ArrayList<String>(Arrays.asList("Email",
-                                                                         "HelloWorkItemHandler",
-                                                                         "Log",
-                                                                         "Rest",
-                                                                         "WebService"));
+                                                                                              "HelloWorkItemHandler",
+                                                                                              "Log",
+                                                                                              "Rest",
+                                                                                              "WebService",
+                                                                                              "Milestone"));
 
     public Bpmn2Loader(Class testClass) {
         this.testClass = testClass;
