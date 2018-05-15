@@ -4196,7 +4196,7 @@ public class Bpmn2JsonUnmarshaller {
             // loop characteristics completion condition
             if (properties.get("multipleinstancecompletioncondition") != null && !properties.get("multipleinstancecompletioncondition").isEmpty()) {
                 FormalExpression expr = Bpmn2Factory.eINSTANCE.createFormalExpression();
-                expr.setBody(properties.get("multipleinstancecompletioncondition"));
+                expr.setBody(wrapInCDATABlock(properties.get("multipleinstancecompletioncondition")));
                 loopCharacteristics.setCompletionCondition(expr);
             }
 

@@ -71,7 +71,7 @@
         "multipleinstancecollectionoutput":"bb",
         "multipleinstancedatainput":"miin",
         "multipleinstancedataoutput":"miout",
-        "multipleinstancecompletioncondition":"abcde",
+        "multipleinstancecompletioncondition":"processVariable.size == 0 && localVariable.size > 0",
         "min":"5.0",
         "max":"10.0",
         "standarddeviation":"1",
