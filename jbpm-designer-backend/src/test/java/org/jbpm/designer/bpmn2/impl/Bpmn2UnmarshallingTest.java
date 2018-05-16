@@ -90,22 +90,28 @@ import org.eclipse.bpmn2.di.BPMNShape;
 import org.eclipse.bpmn2.di.impl.BPMNEdgeImpl;
 import org.eclipse.bpmn2.impl.DataInputImpl;
 import org.eclipse.bpmn2.impl.DataOutputImpl;
+
 import org.eclipse.dd.dc.Bounds;
 import org.eclipse.dd.dc.Point;
 import org.eclipse.dd.dc.impl.BoundsImpl;
 import org.eclipse.dd.di.DiagramElement;
 import org.eclipse.dd.di.Edge;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.FeatureMap;
+
 import org.jboss.drools.DroolsPackage;
 import org.jboss.drools.MetaDataType;
 import org.jboss.drools.OnEntryScriptType;
 import org.jboss.drools.OnExitScriptType;
 import org.jboss.drools.impl.MetaDataTypeImpl;
+
 import org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge;
 import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.jbpm.designer.server.EditorHandler;
+
 import org.jbpm.workflow.core.node.RuleSetNode;
+
 import org.junit.Test;
 
 import static org.jbpm.designer.bpmn2.impl.helpers.SimpleEdge.createEdge;
@@ -1833,22 +1839,16 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(ioSpec.getOutputSets());
 
         List<DataInput> dataInputs = ioSpec.getDataInputs();
-        assertEquals(3,
-                     dataInputs.size());
-        assertEquals("_first in",
-                     dataInputs.get(0).getName());
-        assertEquals("_second in",
-                     dataInputs.get(1).getName());
-        assertEquals("_third in",
-                     dataInputs.get(2).getName());
+        assertEquals(3, dataInputs.size());
+        assertEquals("_first in", dataInputs.get(0).getName());
+        assertEquals("_second in", dataInputs.get(1).getName());
+        assertEquals("_third in", dataInputs.get(2).getName());
 
         List<DataOutput> dataOutputs = ioSpec.getDataOutputs();
-        assertEquals(2,
-                     dataOutputs.size());
-        assertEquals("_first out",
-                     dataOutputs.get(0).getName());
-        assertEquals("_second out",
-                     dataOutputs.get(1).getName());
+        assertEquals(2, dataOutputs.size());
+        assertEquals("_first out", dataOutputs.get(0).getName());
+        assertEquals("_second out", dataOutputs.get(1).getName());
+
     }
 
     @Test
@@ -1862,10 +1862,9 @@ public class Bpmn2UnmarshallingTest {
         DataOutput dataOut = startEvent.getDataOutputs().get(0);
         DataOutputAssociation dataOutAssociation = startEvent.getDataOutputAssociation().get(0);
 
-        assertEquals("_first in",
-                     dataOut.getName());
-        assertEquals("_first in",
-                     ((DataOutput) dataOutAssociation.getSourceRef().get(0)).getName());
+        assertEquals("_first in", dataOut.getName());
+        assertEquals("_first in", ((DataOutput) dataOutAssociation.getSourceRef().get(0)).getName());
+
     }
 
     @Test
@@ -1879,10 +1878,9 @@ public class Bpmn2UnmarshallingTest {
         DataInput dataIn = endEvent.getDataInputs().get(0);
         DataInputAssociation dataInputAssociation = endEvent.getDataInputAssociation().get(0);
 
-        assertEquals("_first in",
-                     dataIn.getName());
-        assertEquals("_first in",
-                     ((DataInput) dataInputAssociation.getTargetRef()).getName());
+        assertEquals("_first in", dataIn.getName());
+        assertEquals("_first in", ((DataInput) dataInputAssociation.getTargetRef()).getName());
+
     }
 
     @Test
@@ -1894,12 +1892,11 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(callActivity.getDataOutputAssociations());
 
         DataInput dataIn = (DataInput) callActivity.getDataInputAssociations().get(0).getTargetRef();
-        assertEquals("_first in",
-                     dataIn.getName());
+        assertEquals("_first in", dataIn.getName());
 
         DataOutput dataOut = (DataOutput) callActivity.getDataOutputAssociations().get(0).getSourceRef().get(0);
-        assertEquals("_first out",
-                     dataOut.getName());
+        assertEquals("_first out", dataOut.getName());
+
     }
 
     @Test
@@ -1911,12 +1908,11 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(userTask.getDataOutputAssociations());
 
         DataInput dataIn = (DataInput) userTask.getDataInputAssociations().get(0).getTargetRef();
-        assertEquals("_first in",
-                     dataIn.getName());
+        assertEquals("_first in", dataIn.getName());
 
         DataOutput dataOut = (DataOutput) userTask.getDataOutputAssociations().get(0).getSourceRef().get(0);
-        assertEquals("_first out",
-                     dataOut.getName());
+        assertEquals("_first out", dataOut.getName());
+
     }
 
     private FlowElement getFlowElement(List<FlowElement> elements,
@@ -2122,14 +2118,14 @@ public class Bpmn2UnmarshallingTest {
         assertEquals("MyTask",
                      task.getName());
         assertEquals("miin",
-                     task.getIoSpecification().getInputSets().get(0).getDataInputRefs().get(task.getIoSpecification().getInputSets().get(0).getDataInputRefs().size() - 1).getName());
+                     task.getIoSpecification().getInputSets().get(0).getDataInputRefs().get(task.getIoSpecification().getInputSets().get(0).getDataInputRefs().size()-1).getName());
         assertEquals("miout",
-                     task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().get(task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().size() - 1).getName());
+                     task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().get(task.getIoSpecification().getOutputSets().get(0).getDataOutputRefs().size()-1).getName());
         assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_miinInputX",
-                     task.getIoSpecification().getDataInputs().get(task.getIoSpecification().getDataInputs().size() - 1).getId());
+                     task.getIoSpecification().getDataInputs().get(task.getIoSpecification().getDataInputs().size()-1).getId());
         assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_mioutOutputX",
-                     task.getIoSpecification().getDataOutputs().get(task.getIoSpecification().getDataOutputs().size() - 1).getId());
-
+                     task.getIoSpecification().getDataOutputs().get(task.getIoSpecification().getDataOutputs().size()-1).getId());
+        
         assertTrue(task.getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics);
         MultiInstanceLoopCharacteristics lc = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
         assertNotNull(lc);
@@ -2145,17 +2141,18 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(lc.getOutputDataItem());
         assertEquals("__DD409258-40BE-4C4C-A22B-73314905B467_mioutOutputXItem",
                      lc.getOutputDataItem().getItemSubjectRef().getId());
-
+        
         assertEquals("miin",
-                     task.getDataInputAssociations().get(task.getDataInputAssociations().size() - 1).getSourceRef().get(0).getId());
+                     task.getDataInputAssociations().get(task.getDataInputAssociations().size()-1).getSourceRef().get(0).getId());
         assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_miinInputX",
-                     task.getDataInputAssociations().get(task.getDataInputAssociations().size() - 1).getTargetRef().getId());
+                     task.getDataInputAssociations().get(task.getDataInputAssociations().size()-1).getTargetRef().getId());
         assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_mioutOutputX",
-                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size() - 1).getSourceRef().get(0).getId());
+                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size()-1).getSourceRef().get(0).getId());
         assertEquals("miout",
-                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size() - 1).getTargetRef().getId());
+                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size()-1).getTargetRef().getId());
+        
     }
-
+    
     @Test
     public void testMITaskWithDefinedDataInputOutputProperties() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("mitaskpropertiesWithIO.json");
@@ -2165,7 +2162,7 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(task);
         assertEquals("MyTask",
                      task.getName());
-
+        
         int numberDataInput = 0;
         List<DataInput> dataInputs = task.getIoSpecification().getDataInputs();
         for (DataInput din : dataInputs) {
@@ -2173,9 +2170,8 @@ public class Bpmn2UnmarshallingTest {
                 numberDataInput++;
             }
         }
-        assertEquals(1,
-                     numberDataInput);
-
+        assertEquals(1,numberDataInput);
+        
         int numberDataOutput = 0;
         List<DataOutput> dataOutputs = task.getIoSpecification().getDataOutputs();
         for (DataOutput dout : dataOutputs) {
@@ -2183,9 +2179,8 @@ public class Bpmn2UnmarshallingTest {
                 numberDataOutput++;
             }
         }
-        assertEquals(1,
-                     numberDataOutput);
-
+        assertEquals(1,numberDataOutput);
+                
         assertTrue(task.getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics);
         MultiInstanceLoopCharacteristics lc = (MultiInstanceLoopCharacteristics) task.getLoopCharacteristics();
         assertNotNull(lc);
@@ -2195,15 +2190,16 @@ public class Bpmn2UnmarshallingTest {
         assertNotNull(lc.getOutputDataItem());
         assertEquals("__DD409258-40BE-4C4C-A22B-73314905B467_mioutOutputXItem",
                      lc.getOutputDataItem().getItemSubjectRef().getId());
-
+        
         assertEquals("miin",
-                     task.getDataInputAssociations().get(task.getDataInputAssociations().size() - 1).getSourceRef().get(0).getId());
+                     task.getDataInputAssociations().get(task.getDataInputAssociations().size()-1).getSourceRef().get(0).getId());
         assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_miinInputX",
-                     task.getDataInputAssociations().get(task.getDataInputAssociations().size() - 1).getTargetRef().getId());
+                     task.getDataInputAssociations().get(task.getDataInputAssociations().size()-1).getTargetRef().getId());
         assertEquals("_DD409258-40BE-4C4C-A22B-73314905B467_mioutOutputX",
-                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size() - 1).getSourceRef().get(0).getId());
+                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size()-1).getSourceRef().get(0).getId());
         assertEquals("miout",
-                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size() - 1).getTargetRef().getId());
+                     task.getDataOutputAssociations().get(task.getDataOutputAssociations().size()-1).getTargetRef().getId());
+        
     }
 
     @Test
@@ -2522,13 +2518,12 @@ public class Bpmn2UnmarshallingTest {
         Definitions definitions = loader.loadProcessFromJson("usertaskWithXMLEscapeChars.json");
         Process process = getRootProcess(definitions);
         assertNotNull(process);
-        assertEquals("&quot;&apos;&lt;&gt;&amp;Process",
-                     process.getName());
+        assertEquals("&quot;&apos;&lt;&gt;&amp;Process", process.getName());
 
         UserTask task = (UserTask) process.getFlowElements().get(1);
         assertNotNull(task);
-        assertEquals("&quot;&apos;&lt;&gt;&amp;Task",
-                     task.getName());
+        assertEquals("&quot;&apos;&lt;&gt;&amp;Task", task.getName());
+
     }
 
     @Test
@@ -2590,32 +2585,26 @@ public class Bpmn2UnmarshallingTest {
         List<OutputSet> outSet = iospec.getOutputSets();
         assertNotNull(inSet);
         assertNotNull(outSet);
-        assertEquals(1,
-                     inSet.size());
-        assertEquals(1,
-                     outSet.size());
+        assertEquals(1, inSet.size());
+        assertEquals(1, outSet.size());
 
         InputSet firstInSet = inSet.get(0);
         assertNotNull(firstInSet);
         assertNotNull(firstInSet.getDataInputRefs());
-        assertEquals(3,
-                     firstInSet.getDataInputRefs().size());
+        assertEquals(3, firstInSet.getDataInputRefs().size());
 
         OutputSet firstOutSet = outSet.get(0);
         assertNotNull(firstOutSet);
         assertNotNull(firstOutSet.getDataOutputRefs());
-        assertEquals(2,
-                     firstOutSet.getDataOutputRefs().size());
+        assertEquals(2, firstOutSet.getDataOutputRefs().size());
 
         List<DataInputAssociation> workItemDataInputAssociations = workitemTask.getDataInputAssociations();
         List<DataOutputAssociation> workItemDataOutputAssociations = workitemTask.getDataOutputAssociations();
 
         assertNotNull(workItemDataInputAssociations);
         assertNotNull(workItemDataOutputAssociations);
-        assertEquals(3,
-                     workItemDataInputAssociations.size());
-        assertEquals(2,
-                     workItemDataOutputAssociations.size());
+        assertEquals(3, workItemDataInputAssociations.size());
+        assertEquals(2, workItemDataOutputAssociations.size());
     }
 
     @Test
@@ -2624,8 +2613,7 @@ public class Bpmn2UnmarshallingTest {
 
         List<BPMNDiagram> processDiagrams = definitions.getDiagrams();
         assertNotNull(processDiagrams);
-        assertEquals(1,
-                     processDiagrams.size());
+        assertEquals(1, processDiagrams.size());
 
         BPMNDiagram diagram = processDiagrams.get(0);
         assertNotNull(diagram);
@@ -2635,8 +2623,7 @@ public class Bpmn2UnmarshallingTest {
 
         List<DiagramElement> diagramElements = plane.getPlaneElement();
         assertNotNull(diagramElements);
-        assertEquals(3,
-                     diagramElements.size());
+        assertEquals(3, diagramElements.size());
 
         for (DiagramElement dia : diagramElements) {
             if (dia instanceof BPMNShape) {
@@ -2653,8 +2640,9 @@ public class Bpmn2UnmarshallingTest {
                 assertTrue(boundsImpl.eIsSet(3)); // 3 is y
             }
         }
-    }
 
+    }
+    
     @Test
     public void testProcessCustomSlaDueDate() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("customProperties.json");
@@ -2668,9 +2656,9 @@ public class Bpmn2UnmarshallingTest {
 
         assertEquals("<![CDATA[3m]]>",
                      getMetaDataValue(process.getExtensionValues(),
-                                      "customSLADueDate"));
+                                      "customSLADueDate"));        
     }
-
+    
     @Test
     public void testTaskCustomSlaDueDate() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("customPropertiesTask.json");
@@ -2688,9 +2676,9 @@ public class Bpmn2UnmarshallingTest {
 
         assertEquals("<![CDATA[3m]]>",
                      getMetaDataValue(task.getExtensionValues(),
-                                      "customSLADueDate"));
+                                      "customSLADueDate")); 
     }
-
+    
     @Test
     public void testAdHocSubprocessActivationCondition() throws Exception {
         Definitions definitions = loader.loadProcessFromJson("adHocSubprocessActivationCondition.json");
@@ -2698,235 +2686,11 @@ public class Bpmn2UnmarshallingTest {
 
         AdHocSubProcess adHocSubProcess = (AdHocSubProcess) process.getFlowElements().get(0);
         assertNotNull(adHocSubProcess);
-
+        
         assertEquals("<![CDATA[org.kie.api.runtime.process.CaseData(data.get(\"Done\") == true)]]>",
                      getMetaDataValue(adHocSubProcess.getExtensionValues(),
-                                      "customActivationCondition"));
-    }
-
-    @Test
-    public void testStartEventCustomSlaDueDate() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("customSlaNodesTest.json");
-        Process process = getRootProcess(definitions);
-
-        StartEvent startEvent = (StartEvent) getFlowElement(process.getFlowElements(),
-                                                            "startTimer");
-
-        assertNotNull(startEvent);
-        assertEquals("startTimer",
-                     startEvent.getName());
-
-        List<ExtensionAttributeValue> extensionAttributeValues = startEvent.getExtensionValues();
-        assertNotNull(extensionAttributeValues);
-        assertEquals(1,
-                     extensionAttributeValues.size());
-
-        assertEquals("<![CDATA[3s]]>",
-                     getMetaDataValue(startEvent.getExtensionValues(),
-                                      "customSLADueDate"));
-    }
-
-    @Test
-    public void testBusinessRuleTaskCustomSlaDueDate() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("customSlaNodesTest.json");
-        Process process = getRootProcess(definitions);
-
-        BusinessRuleTask businessRuleTask = (BusinessRuleTask) getFlowElement(process.getFlowElements(),
-                                                                              "businessRuleTask");
-
-        assertNotNull(businessRuleTask);
-        assertEquals("businessRuleTask",
-                     businessRuleTask.getName());
-
-        List<ExtensionAttributeValue> extensionAttributeValues = businessRuleTask.getExtensionValues();
-        assertNotNull(extensionAttributeValues);
-        assertEquals(1,
-                     extensionAttributeValues.size());
-
-        assertEquals("<![CDATA[3s]]>",
-                     getMetaDataValue(businessRuleTask.getExtensionValues(),
-                                      "customSLADueDate"));
-    }
-
-    @Test
-    public void testUserTaskWithBoundaryEventCustomSlaDueDate() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("customSlaNodesTest.json");
-        Process process = getRootProcess(definitions);
-
-        UserTask userTask = (UserTask) getFlowElement(process.getFlowElements(),
-                                                      "userTask");
-
-        assertNotNull(userTask);
-        assertEquals("userTask",
-                     userTask.getName());
-
-        List<ExtensionAttributeValue> extensionAttributeValues = userTask.getExtensionValues();
-        assertNotNull(extensionAttributeValues);
-        assertEquals(1,
-                     extensionAttributeValues.size());
-
-        assertEquals("<![CDATA[3s]]>",
-                     getMetaDataValue(userTask.getExtensionValues(),
-                                      "customSLADueDate"));
-
-        BoundaryEvent boundaryEvent = (BoundaryEvent) getFlowElement(process.getFlowElements(),
-                                                                     "timerBoundary");
-
-        assertNotNull(boundaryEvent);
-        assertEquals("timerBoundary",
-                     boundaryEvent.getName());
-
-        List<ExtensionAttributeValue> extensionAttributeValuesBoundary = boundaryEvent.getExtensionValues();
-        assertNotNull(extensionAttributeValuesBoundary);
-        assertEquals(1,
-                     extensionAttributeValuesBoundary.size());
-
-        assertEquals("<![CDATA[3s]]>",
-                     getMetaDataValue(boundaryEvent.getExtensionValues(),
-                                      "customSLADueDate"));
-    }
-
-    @Test
-    public void testCallActivityWithBoundaryEventCustomSlaDueDate() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("customSlaNodesTest.json");
-        Process process = getRootProcess(definitions);
-
-        CallActivity callActivity = (CallActivity) getFlowElement(process.getFlowElements(),
-                                                                  "reusableSubProcess");
-
-        assertNotNull(callActivity);
-        assertEquals("reusableSubProcess",
-                     callActivity.getName());
-
-        List<ExtensionAttributeValue> extensionAttributeValues = callActivity.getExtensionValues();
-        assertNotNull(extensionAttributeValues);
-        assertEquals(1,
-                     extensionAttributeValues.size());
-
-        assertEquals("<![CDATA[3s]]>",
-                     getMetaDataValue(callActivity.getExtensionValues(),
-                                      "customSLADueDate"));
-
-        BoundaryEvent boundaryEvent = (BoundaryEvent) getFlowElement(process.getFlowElements(),
-                                                                     "timerBoundary2");
-
-        assertNotNull(boundaryEvent);
-        assertEquals("timerBoundary2",
-                     boundaryEvent.getName());
-
-        List<ExtensionAttributeValue> extensionAttributeValuesBoundary = boundaryEvent.getExtensionValues();
-        assertNotNull(extensionAttributeValuesBoundary);
-        assertEquals(1,
-                     extensionAttributeValuesBoundary.size());
-
-        assertEquals("<![CDATA[3s]]>",
-                     getMetaDataValue(boundaryEvent.getExtensionValues(),
-                                      "customSLADueDate"));
-    }
-
-    @Test
-    public void testCatchingEventCustomSlaDueDate() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("customSlaNodesTest.json");
-        Process process = getRootProcess(definitions);
-
-        CatchEvent catchEvent = (CatchEvent) getFlowElement(process.getFlowElements(),
-                                                            "timer");
-
-        assertNotNull(catchEvent);
-        assertEquals("timer",
-                     catchEvent.getName());
-
-        List<ExtensionAttributeValue> extensionAttributeValues = catchEvent.getExtensionValues();
-        assertNotNull(extensionAttributeValues);
-        assertEquals(1,
-                     extensionAttributeValues.size());
-
-        assertEquals("<![CDATA[3s]]>",
-                     getMetaDataValue(catchEvent.getExtensionValues(),
-                                      "customSLADueDate"));
-    }
-
-    @Test
-    public void testSubprocessWithMessageBoundaryEventSlaDueDate() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("customSlaSubprocessTest.json");
-        Process process = getRootProcess(definitions);
-
-        SubProcess subProcess = (SubProcess) getFlowElement(process.getFlowElements(),
-                                                            "mySubProcess");
-
-        assertNotNull(subProcess);
-        assertEquals("mySubProcess",
-                     subProcess.getName());
-
-        List<ExtensionAttributeValue> extensionAttributeValues = subProcess.getExtensionValues();
-        assertNotNull(extensionAttributeValues);
-        assertEquals(1,
-                     extensionAttributeValues.size());
-
-        assertEquals("<![CDATA[3s]]>",
-                     getMetaDataValue(subProcess.getExtensionValues(),
-                                      "customSLADueDate"));
-
-        BoundaryEvent boundaryEvent = (BoundaryEvent) getFlowElement(process.getFlowElements(),
-                                                                     "messageBoundary");
-
-        assertNotNull(boundaryEvent);
-        assertEquals("messageBoundary",
-                     boundaryEvent.getName());
-
-        List<ExtensionAttributeValue> extensionAttributeValuesBoundary = boundaryEvent.getExtensionValues();
-        assertNotNull(extensionAttributeValuesBoundary);
-        assertEquals(1,
-                     extensionAttributeValuesBoundary.size());
-
-        assertEquals("<![CDATA[3s]]>",
-                     getMetaDataValue(boundaryEvent.getExtensionValues(),
-                                      "customSLADueDate"));
-    }
-
-    @Test
-    public void testInnerSubprocessWithMessageEventSlaDueDate() throws Exception {
-        Definitions definitions = loader.loadProcessFromJson("customSlaSubprocessTest.json");
-        Process process = getRootProcess(definitions);
-
-        SubProcess subProcess = (SubProcess) getFlowElement(process.getFlowElements(),
-                                                            "mySubProcess");
-
-        assertNotNull(subProcess);
-        assertEquals("mySubProcess",
-                     subProcess.getName());
-
-        SubProcess innerSubprocess = (SubProcess) getFlowElement(subProcess.getFlowElements(),
-                                                                 "myEventSubProcess");
-
-        assertNotNull(innerSubprocess);
-        assertEquals("myEventSubProcess",
-                     innerSubprocess.getName());
-
-        List<ExtensionAttributeValue> extensionAttributeValues = innerSubprocess.getExtensionValues();
-        assertNotNull(extensionAttributeValues);
-        assertEquals(1,
-                     extensionAttributeValues.size());
-
-        assertEquals("<![CDATA[3s]]>",
-                     getMetaDataValue(innerSubprocess.getExtensionValues(),
-                                      "customSLADueDate"));
-
-        CatchEvent catchEvent = (CatchEvent) getFlowElement(innerSubprocess.getFlowElements(),
-                                                            "message");
-
-        assertNotNull(catchEvent);
-        assertEquals("message",
-                     catchEvent.getName());
-
-        List<ExtensionAttributeValue> extensionAttributeValuesCatchEvent = catchEvent.getExtensionValues();
-        assertNotNull(extensionAttributeValuesCatchEvent);
-        assertEquals(1,
-                     extensionAttributeValuesCatchEvent.size());
-
-        assertEquals("<![CDATA[3s]]>",
-                     getMetaDataValue(catchEvent.getExtensionValues(),
-                                      "customSLADueDate"));
+                             "customActivationCondition"));
+        
     }
 }
 

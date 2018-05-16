@@ -442,16 +442,6 @@
                             "value": "poisson"
                         }
                     ]
-                },
-                {
-                          "id":"customsladuedate",
-                          "type":"TextExpression",
-                          "title":"SLA Due Date",
-                          "value":"",
-                          "description":"SLA Due Date",
-                          "description_ja":"",
-                          "readonly":false,
-                          "optional":true
                 }
  			]
  		},
@@ -2867,7 +2857,7 @@
                           "description_ja":"",
                           "readonly":false,
                           "optional":true,
-                          "fortasktypes":"None|Send|Receive|User|Manual|Service|Business Rule",
+                          "fortasktypes":"None|Send|Receive|User|Manual|Service",
 						  "extra":true,
                 },
 				{
@@ -4439,16 +4429,6 @@
 					]
  				},
  				{
-                      "id":"customsladuedate",
-                      "type":"TextExpression",
-                      "title":"SLA Due Date",
-                      "value":"",
-                      "description":"SLA Due Date",
-                      "description_ja":"",
-                      "readonly":false,
-                      "optional":true
-                },
- 				{
 					"id":"script_language",
 					"type":"Choice",
 					"title":"Script Language",
@@ -4931,16 +4911,6 @@
 					]
 				},
 				{
-                      "id":"customsladuedate",
-                      "type":"TextExpression",
-                      "title":"SLA Due Date",
-                      "value":"",
-                      "description":"SLA Due Date",
-                      "description_ja":"",
-                      "readonly":false,
-                      "optional":true
-                },
-				{
         "id":"unitcost",
         "type":"Float",
         "title":"Cost per time unit",
@@ -5331,16 +5301,6 @@
 					"optional":true
 				},
 				{
-                      "id":"customsladuedate",
-                      "type":"TextExpression",
-                      "title":"SLA Due Date",
-                      "value":"",
-                      "description":"SLA Due Date",
-                      "description_ja":"",
-                      "readonly":false,
-                      "optional":true
-                },
-				{
         "id":"unitcost",
         "type":"Float",
         "title":"Cost per time unit",
@@ -5727,16 +5687,6 @@
 					"optional":true
 				},
 				{
-                      "id":"customsladuedate",
-                      "type":"TextExpression",
-                      "title":"SLA Due Date",
-                      "value":"",
-                      "description":"SLA Due Date",
-                      "description_ja":"",
-                      "readonly":false,
-                      "optional":true
-                },
-				{
         "id":"unitcost",
         "type":"Float",
         "title":"Cost per time unit",
@@ -6066,16 +6016,6 @@
 						}
 					]
 				},
-				{
-                      "id":"customsladuedate",
-                      "type":"TextExpression",
-                      "title":"SLA Due Date",
-                      "value":"",
-                      "description":"SLA Due Date",
-                      "description_ja":"",
-                      "readonly":false,
-                      "optional":true
-                },
 				{
         "id":"unitcost",
         "type":"Float",
@@ -7655,17 +7595,7 @@
 							"value":"cron"
 						}
 					]
-				},
-				{
-                          "id":"customsladuedate",
-                          "type":"TextExpression",
-                          "title":"SLA Due Date",
-                          "value":"",
-                          "description":"SLA Due Date",
-                          "description_ja":"",
-                          "readonly":false,
-                          "optional":true
-                }
+				}
 			]
 		},
 		{
@@ -8316,17 +8246,7 @@
 					"description_ja":"メッセージ参照",
 					"readonly":false,
 					"optional":true
-				},
-				{
-                          "id":"customsladuedate",
-                          "type":"TextExpression",
-                          "title":"SLA Due Date",
-                          "value":"",
-                          "description":"SLA Due Date",
-                          "description_ja":"",
-                          "readonly":false,
-                          "optional":true
-                }
+				}
 			]
 		},
 		{
@@ -8511,16 +8431,6 @@
                     "optional":true,
                     "simulation" : true,
                     "min" : "0"
-                },
-                {
-                          "id":"customsladuedate",
-                          "type":"TextExpression",
-                          "title":"SLA Due Date",
-                          "value":"",
-                          "description":"SLA Due Date",
-                          "description_ja":"",
-                          "readonly":false,
-                          "optional":true
                 }
 			]
 		},
