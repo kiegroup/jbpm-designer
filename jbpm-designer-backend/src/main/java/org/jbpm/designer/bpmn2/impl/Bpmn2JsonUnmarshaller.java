@@ -2077,6 +2077,22 @@ public class Bpmn2JsonUnmarshaller {
 
         be.setAttachedToRef(beEntry.getAttachedToRef());
 
+        String ceElementName = Utils.getMetaDataValue(beEntry.getExtensionValues(),
+                                                      "elementname");
+        if (ceElementName != null) {
+            Utils.setMetaDataExtensionValue(be,
+                                            "elementname",
+                                            ceElementName);
+        }
+
+        String customSLADueDateExtensionValue = Utils.getMetaDataValue(beEntry.getExtensionValues(),
+                                                                       "customSLADueDate");
+        if (customSLADueDateExtensionValue != null) {
+            Utils.setMetaDataExtensionValue(be,
+                                            "customSLADueDate",
+                                            customSLADueDateExtensionValue);
+        }
+
         return be;
     }
 
@@ -2168,6 +2184,14 @@ public class Bpmn2JsonUnmarshaller {
                                 Utils.setMetaDataExtensionValue(be,
                                                                 "elementname",
                                                                 ceElementName);
+                            }
+
+                            String customSLADueDateExtensionValue = Utils.getMetaDataValue(ce.getExtensionValues(),
+                                                                          "customSLADueDate");
+                            if (customSLADueDateExtensionValue != null) {
+                                Utils.setMetaDataExtensionValue(be,
+                                                                "customSLADueDate",
+                                                                customSLADueDateExtensionValue);
                             }
 
                             be.setId(ce.getId());
@@ -4556,6 +4580,10 @@ public class Bpmn2JsonUnmarshaller {
     protected void applyStartEventProperties(StartEvent se,
                                              Map<String, String> properties) {
         se.setIsInterrupting(Boolean.parseBoolean(properties.get("isinterrupting")));
+
+        // customsladuedate metadata
+        applySlaDueDateProperties(se,
+                                  properties);
     }
 
     protected void applyMessageProperties(Message msg,
@@ -4921,6 +4949,11 @@ public class Bpmn2JsonUnmarshaller {
         } catch (Exception e) {
             _logger.warn(e.getMessage());
         }
+
+        // customsladuedate metadata
+        applySlaDueDateProperties(event,
+                                  properties);
+
         // simulation
         if (properties.get("distributiontype") != null && properties.get("distributiontype").length() > 0) {
             TimeParameters timeParams = BpsimFactory.eINSTANCE.createTimeParameters();
