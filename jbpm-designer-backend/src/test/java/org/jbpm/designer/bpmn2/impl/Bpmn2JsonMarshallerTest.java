@@ -390,7 +390,7 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("uniform",
                      properties.getString(DISTRIBUTION_TYPE));
     }
-    
+
     @Test
     public void testSimulationMIUserTask() throws Exception {
         JSONObject process = loader.loadProcessFromXml("multipleInstanceTask.bpmn2");
@@ -1069,7 +1069,7 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("messagefour",
                      endMessageEventProperties.getString("messageref"));
     }
-    
+
     @Test
     public void testProcessCustomSlaDueDate() throws Exception {
         JSONObject process = loader.loadProcessFromXml("customProperties.bpmn2");
@@ -1079,7 +1079,7 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("3m",
                      slaDueDate);
     }
-    
+
     @Test
     public void testTaskCustomSlaDueDate() throws Exception {
         JSONObject process = loader.loadProcessFromXml("customPropertiesTask.bpmn2");
@@ -1091,7 +1091,7 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("3m",
                      slaDueDate);
     }
-    
+
     @Test
     public void testAdHocSubprocessActivationCondition() throws Exception {
         JSONObject process = loader.loadProcessFromXml("adHocSubprocessActivationCondition.bpmn2");
@@ -1132,5 +1132,128 @@ public class Bpmn2JsonMarshallerTest {
 
         assertEquals("3m",
                      slaDueDate);
+    }
+
+    @Test
+    public void testStartEventCustomSlaDueDate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("customSlaNodesTest.bpmn2");
+        JSONObject startTimer = getChildByName(process,
+                                               "startTimer");
+        JSONObject properties = startTimer.getJSONObject("properties");
+        String slaDueDate = properties.getString("customsladuedate");
+
+        assertEquals("3s",
+                     slaDueDate);
+    }
+
+    @Test
+    public void testBusinessRuleTaskCustomSlaDueDate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("customSlaNodesTest.bpmn2");
+        JSONObject businessRuleTask = getChildByName(process,
+                                                     "businessRuleTask");
+        JSONObject properties = businessRuleTask.getJSONObject("properties");
+        String slaDueDate = properties.getString("customsladuedate");
+
+        assertEquals("3s",
+                     slaDueDate);
+    }
+
+    @Test
+    public void testUserTaskWithBoundaryEventCustomSlaDueDate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("customSlaNodesTest.bpmn2");
+        JSONObject userTask = getChildByName(process,
+                                             "userTask");
+        JSONObject properties = userTask.getJSONObject("properties");
+        String slaDueDate = properties.getString("customsladuedate");
+
+        assertEquals("3s",
+                     slaDueDate);
+
+        JSONObject boundaryEvent = getChildByName(process,
+                                                  "timerBoundary");
+        JSONObject boundaryProperties = boundaryEvent.getJSONObject("properties");
+        String boundarySlaDueDate = boundaryProperties.getString("customsladuedate");
+
+        assertEquals("3s",
+                     boundarySlaDueDate);
+    }
+
+    @Test
+    public void testCallActivityWithBoundaryEventCustomSlaDueDate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("customSlaNodesTest.bpmn2");
+        JSONObject callActivity = getChildByName(process,
+                                                 "reusableSubProcess");
+        JSONObject properties = callActivity.getJSONObject("properties");
+        String slaDueDate = properties.getString("customsladuedate");
+
+        assertEquals("3s",
+                     slaDueDate);
+
+        JSONObject boundaryEvent = getChildByName(process,
+                                                  "timerBoundary2");
+        JSONObject boundaryProperties = boundaryEvent.getJSONObject("properties");
+        String boundarySlaDueDate = boundaryProperties.getString("customsladuedate");
+
+        assertEquals("3s",
+                     boundarySlaDueDate);
+    }
+
+    @Test
+    public void testCatchingEventCustomSlaDueDate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("customSlaNodesTest.bpmn2");
+        JSONObject catchingEvent = getChildByName(process,
+                                                  "timer");
+        JSONObject properties = catchingEvent.getJSONObject("properties");
+        String slaDueDate = properties.getString("customsladuedate");
+
+        assertEquals("3s",
+                     slaDueDate);
+    }
+
+    @Test
+    public void testSubprocessWithMessageBoundaryEventSlaDueDate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("customSlaSubprocessTest.bpmn2");
+
+        JSONObject subprocess = getChildByName(process,
+                                               "mySubProcess");
+        JSONObject propertiesSubProcess = subprocess.getJSONObject("properties");
+        String slaDueDateSubProcess = propertiesSubProcess.getString("customsladuedate");
+
+        assertEquals("3s",
+                     slaDueDateSubProcess);
+
+        JSONObject messageBoundaryEvent = getChildByName(process,
+                                                         "messageBoundary");
+        JSONObject propertiesBoundary = messageBoundaryEvent.getJSONObject("properties");
+        String slaDueDateBoundary = propertiesBoundary.getString("customsladuedate");
+
+        assertEquals("3s",
+                     slaDueDateBoundary);
+    }
+
+    @Test
+    public void testInnerSubprocessWithMessageEventSlaDueDate() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("customSlaSubprocessTest.bpmn2");
+
+        JSONObject subprocess = getChildByName(process,
+                                               "mySubProcess");
+
+        JSONObject innerSubprocess = getChildByName(subprocess,
+                                                    "myEventSubProcess");
+
+        JSONObject propertiesInnerSubProcess = innerSubprocess.getJSONObject("properties");
+        String slaDueDateInnerSubProcess = propertiesInnerSubProcess.getString("customsladuedate");
+
+        assertEquals("3s",
+                     slaDueDateInnerSubProcess);
+
+        JSONObject messageEvent = getChildByName(innerSubprocess,
+                                                 "message");
+
+        JSONObject propertiesMessageEvent = messageEvent.getJSONObject("properties");
+        String slaDueDateMessageEvent = propertiesMessageEvent.getString("customsladuedate");
+
+        assertEquals("3s",
+                     slaDueDateMessageEvent);
     }
 }
