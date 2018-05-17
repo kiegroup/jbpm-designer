@@ -760,6 +760,10 @@ public class Bpmn2JsonMarshaller {
                 }
             }
         }
+
+        // custom SLA due date
+        marshalCustomSLADueDateMetadata(event,
+                                        properties);
     }
 
     private void setMessageRefProperties(final Map<String, Object> properties,
@@ -1334,6 +1338,10 @@ public class Bpmn2JsonMarshaller {
                                       float xOffset,
                                       float yOffset,
                                       Map<String, Object> properties) throws JsonGenerationException, IOException {
+        // custom SLA due date
+        marshalCustomSLADueDateMetadata(startEvent,
+                                        properties);
+
         setSimulationProperties(startEvent.getId(),
                                 properties);
 
@@ -1596,6 +1604,11 @@ public class Bpmn2JsonMarshaller {
             catchEventProperties.put("boundarycancelactivity",
                                      "false");
         }
+
+        // custom SLA due date
+        marshalCustomSLADueDateMetadata(boundaryEvent,
+                                        catchEventProperties);
+
         // simulation properties
         setSimulationProperties(boundaryEvent.getId(),
                                 catchEventProperties);
