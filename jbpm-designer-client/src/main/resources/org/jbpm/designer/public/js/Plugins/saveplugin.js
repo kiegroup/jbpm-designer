@@ -274,9 +274,18 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
                     });
 
+                    // import updated json
                     this.facade.importJSON(currentJSON);
 
+                    // set as updated
                     ORYX.JSON_UPDATED = true;
+
+                    // deselect nodes on canvas
+                    this.facade.setSelection([]);
+
+                    // do not set the process as unsaved
+                    ORYX.PROCESS_SAVED = true;
+
                 }
             }
         } catch (err) {
