@@ -645,7 +645,7 @@ ORYX.Plugins.View = {
                                         dialog.hide();
                                     } else {
                                         try {
-                                            this._loadJSON( request.responseText, "BPMN2" );
+                                            this._loadJSON( request.responseText, "BPMN2", true );
                                         } catch(e) {
                                             this.facade.raiseEvent({
                                                 type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -780,7 +780,7 @@ ORYX.Plugins.View = {
                         if(canimport) {
                             var jsonString =  form.items.items[2].getValue();
                             try {
-                                this._loadJSON( jsonString, "JSON" );
+                                this._loadJSON( jsonString, "JSON", false );
                             } catch(e) {
                                 this.facade.raiseEvent({
                                     type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
@@ -1282,7 +1282,7 @@ ORYX.Plugins.View = {
      * Loads JSON into the editor
      *
      */
-    _loadJSON: function( jsonString, mtype ){
+    _loadJSON: function( jsonString, mtype, checkExporter ){
         if (jsonString) {
             Ext.MessageBox.confirm(
                 'Import',
@@ -1307,6 +1307,38 @@ ORYX.Plugins.View = {
                                 title       : ''
 
                             });
+
+                            if(typeof checkExporter !== 'undefined' && checkExporter === true) {
+                                var processJSON = ORYX.EDITOR.getSerializedJSON();
+                                var processExporter = jsonPath(processJSON.evalJSON(), "$.properties.exporter");
+                                if (processExporter && processExporter != "jBPM Designer") {
+                                    this.facade.setSelection(this.facade.getCanvas().getChildShapes(true));
+                                    var exporterCurrentJSON = ORYX.EDITOR.getSerializedJSON();
+                                    var exporterSelection = this.facade.getSelection();
+                                    var exporterClipboard = new ORYX.Plugins.Edit.ClipBoard();
+                                    exporterClipboard.refresh(exporterSelection, this.getAllShapesToConsider(exporterSelection, true));
+                                    var exporterCommand = new ORYX.Plugins.Edit.DeleteCommand(exporterClipboard, this.facade);
+                                    this.facade.executeCommands([exporterCommand]);
+
+                                    this.facade.raiseEvent({
+                                        type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+                                        ntype: 'info',
+                                        msg: ORYX.I18N.view.exporterUpdate,
+                                        title: ''
+
+                                    });
+
+                                    // import updated json
+                                    this.facade.importJSON(exporterCurrentJSON);
+
+                                    // set as updated
+                                    ORYX.JSON_UPDATED = true;
+
+                                    // deselect nodes on canvas
+                                    this.facade.setSelection([]);
+                                }
+                            }
+
                         } catch(err) {
                             this.facade.importJSON(currentJSON);
                             this.facade.raiseEvent({
