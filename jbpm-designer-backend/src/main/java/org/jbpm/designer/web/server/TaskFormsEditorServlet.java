@@ -1,11 +1,14 @@
 package org.jbpm.designer.web.server;
+
+import javax.servlet.http.HttpServlet;
+
 /**
  * 
  * Interaction with task forms for inline editor.
  * 
  * @author Tihomir Surdilovic
  */
-public class TaskFormsEditorServlet /*extends HttpServlet*/ {
+public class TaskFormsEditorServlet extends HttpServlet {
 //	private static final long serialVersionUID = 1L;
 //	private static final Logger _logger = LoggerFactory.getLogger(TaskFormsEditorServlet.class);
 //	private static final String TASKFORM_FILE_EXTENSION = "ftl";
