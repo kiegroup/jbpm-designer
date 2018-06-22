@@ -63,11 +63,100 @@ public class TransformerServletTest extends RepositoryBaseTest {
     private static final String JBPM_PROFILE_NAME = "jbpm";
     private static final String SVG_WIDTH = "197.28";
     private static final String SVG_HEIGHT = "235.92";
+    private static final String TEST_HTML =
+            "<html>\n" +
+                    "   <head />\n" +
+                    "   <body>\n" +
+                    "      <div id=\"pagecontainercore\">\n" +
+                    "         <p>Test String</p>\n" +
+                    "      </div>\n" +
+                    "   </body>\n" +
+                    "</html>";
 
-    private static final String FORMATTED_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:oryx=\"http://oryx-editor.org\" id=\"_A3F7A04F-E2E8-43FD-964F-F700B3D42348\" width=\"197.28125\" height=\"235.921875\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:svg=\"http://www.w3.org/2000/svg\"><defs/><g stroke=\"none\" font-family=\"Verdana, sans-serif\" font-size-adjust=\"none\" font-style=\"normal\" font-variant=\"normal\" font-weight=\"normal\" line-heigth=\"normal\" font-size=\"12\"><g class=\"stencils\" transform=\"translate(15, 15.921875)\"><g class=\"me\"/><g class=\"children\"><g id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8\" bpmn2nodeid=\"processStartEvent\"><g class=\"stencils\" transform=\"translate(120, 165)\"><g class=\"me\"><g pointer-events=\"fill\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8\">        <defs id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8__D1450722-93B9-4CD1-9CFB-0FC82DE31DF8_5\">         <radialGradient id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8background\" cx=\"10%\" cy=\"10%\" r=\"100%\" fx=\"10%\" fy=\"10%\">             <stop offset=\"0%\" stop-color=\"#ffffff\" stop-opacity=\"1\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8__D1450722-93B9-4CD1-9CFB-0FC82DE31DF8_6\"/>             <stop id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8fill_el\" offset=\"100%\" stop-color=\"#9acd32\" stop-opacity=\"1\"/>         </radialGradient>     </defs>          <circle id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8bg_frame\" cx=\"15\" cy=\"15\" r=\"15\" stroke=\"#000000\" fill=\"url(#_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8background) white\" stroke-width=\"1\" style=\"stroke-dasharray: 5.5, 3\"/>      <circle id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8frame\" cx=\"15\" cy=\"15\" r=\"15\" stroke=\"#000000\" fill=\"none\" stroke-width=\"1\" display=\"inherit\"/>      <text font-size=\"8\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8text_name\" x=\"15\" y=\"32\" oryx:align=\"top center\" stroke=\"black\" stroke-width=\"0pt\" letter-spacing=\"-0.01px\" fill=\"#000000\" text-anchor=\"middle\" transform=\"rotate(0 15 32)\" visibility=\"inherit\" oryx:fontSize=\"11\"/>   </g></g><g class=\"children\" style=\"overflow:hidden\"/><g class=\"edge\"/></g><g class=\"controls\"><g class=\"dockers\"/><g class=\"magnets\" transform=\"translate(120, 165)\"><g pointer-events=\"all\" display=\"none\" transform=\"translate(7, 7)\"><circle cx=\"8\" cy=\"8\" r=\"4\" stroke=\"none\" fill=\"red\" fill-opacity=\"0.3\"/></g></g></g></g></g><g class=\"edge\"/><text id=\"_3260CEE5-4A05-4F4B-91A1-A3CE143D86E0\" style=\"stroke-width:1;fill:rgb(177,194,214);font-family:arial;font-weight:bold\" font-size=\"8\" onclick=\"ORYX.Plugins.CanvasTitle.openTextualAnalysis()\" onmouseover=\"ORYX.Plugins.CanvasTitle.addToolTip('_3260CEE5-4A05-4F4B-91A1-A3CE143D86E0')\" transform=\"translate(10, 20)\">bp1 v.1.0 (Evaluation.bp1)</text></g></g></svg>";
-    private static final String TEST_HTML = "<html><head></head><body><div id=\"pagecontainercore\"><p>Test String</p></div></body>";
     private static String FORMATTED_SVG_ENCODED;
     private static String TEST_HTML_ENCODED;
+
+    private static final String FORMATTED_SVG =
+            "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:oryx=\"http://oryx-editor.org\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"_A3F7A04F-E2E8-43FD-964F-F700B3D42348\" width=\"197.28125\" height=\"235.921875\">\n" +
+                    "   <defs />\n" +
+                    "   <g stroke=\"none\" font-family=\"Verdana, sans-serif\" font-size-adjust=\"none\" font-style=\"normal\" font-variant=\"normal\" font-weight=\"normal\" line-heigth=\"normal\" font-size=\"12\">\n" +
+                    "      <g class=\"stencils\" transform=\"translate(15, 15.921875)\">\n" +
+                    "         <g class=\"me\" />\n" +
+                    "         <g class=\"children\">\n" +
+                    "            <g id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8\" bpmn2nodeid=\"processStartEvent\">\n" +
+                    "               <g class=\"stencils\" transform=\"translate(120, 165)\">\n" +
+                    "                  <g class=\"me\">\n" +
+                    "                     <g pointer-events=\"fill\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8\">\n" +
+                    "                        <defs id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8__D1450722-93B9-4CD1-9CFB-0FC82DE31DF8_5\">\n" +
+                    "                           <radialGradient id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8background\" cx=\"10%\" cy=\"10%\" r=\"100%\" fx=\"10%\" fy=\"10%\">\n" +
+                    "                              <stop offset=\"0%\" stop-color=\"#ffffff\" stop-opacity=\"1\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8__D1450722-93B9-4CD1-9CFB-0FC82DE31DF8_6\" />\n" +
+                    "                              <stop id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8fill_el\" offset=\"100%\" stop-color=\"#9acd32\" stop-opacity=\"1\" />\n" +
+                    "                           </radialGradient>\n" +
+                    "                        </defs>\n" +
+                    "                        <circle id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8bg_frame\" cx=\"15\" cy=\"15\" r=\"15\" stroke=\"#000000\" fill=\"url(#_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8background) white\" stroke-width=\"1\" style=\"stroke-dasharray: 5.5, 3\" />\n" +
+                    "                        <circle id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8frame\" cx=\"15\" cy=\"15\" r=\"15\" stroke=\"#000000\" fill=\"none\" stroke-width=\"1\" display=\"inherit\" />\n" +
+                    "                        <text font-size=\"8\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8text_name\" x=\"15\" y=\"32\" oryx:align=\"top center\" stroke=\"black\" stroke-width=\"0pt\" letter-spacing=\"-0.01px\" fill=\"#000000\" text-anchor=\"middle\" transform=\"rotate(0 15 32)\" visibility=\"inherit\" oryx:fontSize=\"11\" />\n" +
+                    "                     </g>\n" +
+                    "                  </g>\n" +
+                    "                  <g class=\"children\" style=\"overflow:hidden\" />\n" +
+                    "                  <g class=\"edge\" />\n" +
+                    "               </g>\n" +
+                    "               <g class=\"controls\">\n" +
+                    "                  <g class=\"dockers\" />\n" +
+                    "                  <g class=\"magnets\" transform=\"translate(120, 165)\">\n" +
+                    "                     <g pointer-events=\"all\" display=\"none\" transform=\"translate(7, 7)\">\n" +
+                    "                        <circle cx=\"8\" cy=\"8\" r=\"4\" stroke=\"none\" fill=\"red\" fill-opacity=\"0.3\" />\n" +
+                    "                     </g>\n" +
+                    "                  </g>\n" +
+                    "               </g>\n" +
+                    "            </g>\n" +
+                    "         </g>\n" +
+                    "         <g class=\"edge\" />\n" +
+                    "         <text id=\"_3260CEE5-4A05-4F4B-91A1-A3CE143D86E0\" style=\"stroke-width:1;fill:rgb(177,194,214);font-family:arial;font-weight:bold\" font-size=\"8\" onclick=\"ORYX.Plugins.CanvasTitle.openTextualAnalysis()\" onmouseover=\"ORYX.Plugins.CanvasTitle.addToolTip('_3260CEE5-4A05-4F4B-91A1-A3CE143D86E0')\" transform=\"translate(10, 20)\">bp1 v.1.0 (Evaluation.bp1)</text>\n" +
+                    "      </g>\n" +
+                    "   </g>\n" +
+                    "</svg>";
+
+    private static final String MODIFIED_FORMATTED_SVG =
+            "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:oryx=\"http://oryx-editor.org\" xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"_modifiedFormattedSVG\" width=\"197.28125\" height=\"235.921875\">\n" +
+                    "   <defs />\n" +
+                    "   <g stroke=\"none\" font-family=\"Verdana, sans-serif\" font-size-adjust=\"none\" font-style=\"normal\" font-variant=\"normal\" font-weight=\"normal\" line-heigth=\"normal\" font-size=\"12\">\n" +
+                    "      <g class=\"stencils\" transform=\"translate(15, 15.921875)\">\n" +
+                    "         <g class=\"me\" />\n" +
+                    "         <g class=\"children\">\n" +
+                    "            <g id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8\" bpmn2nodeid=\"processStartEvent\">\n" +
+                    "               <g class=\"stencils\" transform=\"translate(120, 165)\">\n" +
+                    "                  <g class=\"me\">\n" +
+                    "                     <g pointer-events=\"fill\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8\">\n" +
+                    "                        <defs id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8__D1450722-93B9-4CD1-9CFB-0FC82DE31DF8_5\">\n" +
+                    "                           <radialGradient id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8background\" cx=\"10%\" cy=\"10%\" r=\"100%\" fx=\"10%\" fy=\"10%\">\n" +
+                    "                              <stop offset=\"0%\" stop-color=\"#ffffff\" stop-opacity=\"1\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8__D1450722-93B9-4CD1-9CFB-0FC82DE31DF8_6\" />\n" +
+                    "                              <stop id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8fill_el\" offset=\"100%\" stop-color=\"#9acd32\" stop-opacity=\"1\" />\n" +
+                    "                           </radialGradient>\n" +
+                    "                        </defs>\n" +
+                    "                        <circle id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8bg_frame\" cx=\"15\" cy=\"15\" r=\"15\" stroke=\"#000000\" fill=\"url(#_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8background) white\" stroke-width=\"1\" style=\"stroke-dasharray: 5.5, 3\" />\n" +
+                    "                        <circle id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8frame\" cx=\"15\" cy=\"15\" r=\"15\" stroke=\"#000000\" fill=\"none\" stroke-width=\"1\" display=\"inherit\" />\n" +
+                    "                        <text font-size=\"8\" id=\"_D1450722-93B9-4CD1-9CFB-0FC82DE31DF8text_name\" x=\"15\" y=\"32\" oryx:align=\"top center\" stroke=\"black\" stroke-width=\"0pt\" letter-spacing=\"-0.01px\" fill=\"#000000\" text-anchor=\"middle\" transform=\"rotate(0 15 32)\" visibility=\"inherit\" oryx:fontSize=\"11\" />\n" +
+                    "                     </g>\n" +
+                    "                  </g>\n" +
+                    "                  <g class=\"children\" style=\"overflow:hidden\" />\n" +
+                    "                  <g class=\"edge\" />\n" +
+                    "               </g>\n" +
+                    "               <g class=\"controls\">\n" +
+                    "                  <g class=\"dockers\" />\n" +
+                    "                  <g class=\"magnets\" transform=\"translate(120, 165)\">\n" +
+                    "                     <g pointer-events=\"all\" display=\"none\" transform=\"translate(7, 7)\">\n" +
+                    "                        <circle cx=\"8\" cy=\"8\" r=\"4\" stroke=\"none\" fill=\"red\" fill-opacity=\"0.3\" />\n" +
+                    "                     </g>\n" +
+                    "                  </g>\n" +
+                    "               </g>\n" +
+                    "            </g>\n" +
+                    "         </g>\n" +
+                    "         <g class=\"edge\" />\n" +
+                    "         <text id=\"_3260CEE5-4A05-4F4B-91A1-A3CE143D86E0\" style=\"stroke-width:1;fill:rgb(177,194,214);font-family:arial;font-weight:bold\" font-size=\"8\" onclick=\"ORYX.Plugins.CanvasTitle.openTextualAnalysis()\" onmouseover=\"ORYX.Plugins.CanvasTitle.addToolTip('_3260CEE5-4A05-4F4B-91A1-A3CE143D86E0')\" transform=\"translate(10, 20)\">bp1 v.1.0 (Evaluation.bp1)</text>\n" +
+                    "      </g>\n" +
+                    "   </g>\n" +
+                    "</svg>";
 
     private String location;
 
@@ -332,7 +421,7 @@ public class TransformerServletTest extends RepositoryBaseTest {
         TransformerServlet transformerServlet = new TransformerServlet();
         transformerServlet.setProfile(profile);
 
-        String targetType = "png";
+        String targetType = "svg";
         transformerServlet.storeInRepository(id,
                                              FORMATTED_SVG,
                                              targetType,
@@ -348,12 +437,13 @@ public class TransformerServletTest extends RepositoryBaseTest {
         assertNotNull(asset.getAssetContent());
 
         transformerServlet.storeInRepository(id,
-                                             FORMATTED_SVG,
+                                             MODIFIED_FORMATTED_SVG,
                                              targetType,
                                              bpName,
                                              repository);
 
-        // Test no FileAlreadyExistsException errors were logged after the 2nd call to storeInRepository
+        // make sure FileAlreadyExistsException errors was never logged. Asset should be deleted and then written again
+        // in both linux and windows environments
         List logList = listAppender.list;
         assertNotNull(logList);
         Iterator itLogList = logList.iterator();
@@ -372,9 +462,12 @@ public class TransformerServletTest extends RepositoryBaseTest {
                                        new FilterByExtension(targetType));
         assertEquals(1,
                      assets.size());
-        asset = repository.loadAsset(assets.iterator().next().getUniqueId());
-        assertNotNull(asset);
-        assertNotNull(asset.getAssetContent());
+        Asset<String> updatedAsset = repository.loadAsset(assets.iterator().next().getUniqueId());
+        assertNotNull(updatedAsset);
+        assertNotNull(updatedAsset.getAssetContent());
+        // make sure the asset has the new content
+        assertTrue("Asset should contain the new content",
+                   updatedAsset.getAssetContent().contains("id=\"_modifiedFormattedSVG\""));
     }
 
     @Test
