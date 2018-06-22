@@ -16,7 +16,6 @@
 package org.jbpm.designer.web.server;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
@@ -681,7 +680,7 @@ public class TransformerServlet extends HttpServlet {
                 }
                 assetFullName = processid + assetExt + assetFileExt;
 
-                repository.deleteAssetFromPath(processAsset.getAssetLocation() + File.separator + assetFullName);
+                repository.deleteAssetFromPath(processAsset.getAssetLocation() + "/" + assetFullName);
 
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
