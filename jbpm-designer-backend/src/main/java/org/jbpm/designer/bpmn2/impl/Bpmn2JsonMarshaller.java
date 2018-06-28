@@ -195,6 +195,10 @@ public class Bpmn2JsonMarshaller {
     private IDiagramProfile profile;
     private boolean coordianteManipulation = true;
 
+    private static final float DEFAULT_ECLIPSE_RESOLUTION = 0;
+    private static final float DEFAULT_RESOLUTION = 100;
+    private float resolution = DEFAULT_RESOLUTION;
+
     public void setProfile(IDiagramProfile profile) {
         this.profile = profile;
     }
@@ -475,6 +479,26 @@ public class Bpmn2JsonMarshaller {
                         props.put("timeunit",
                                   _simulationScenario.getScenarioParameters().getBaseTimeUnit().getName());
                     }
+
+                    // try to find diagram resolution property
+                    // and add it as part of process props
+                    for (BPMNDiagram diagram : def.getDiagrams()) {
+                        if (diagram != null) {
+                            BPMNPlane plane = diagram.getPlane();
+                            if (plane != null) {
+                                if (plane.getBpmnElement() == rootElement) {
+                                    this.resolution = diagram.getResolution();
+                                    // set the diagram resolution to default
+                                    // we need to only apply the updates based
+                                    // on the resolution once!
+                                    props.put("diagramresolution", String.valueOf(DEFAULT_ECLIPSE_RESOLUTION));
+                                    applyDiagramResolution(plane);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
                     marshallProperties(props,
                                        generator);
                     marshallStencil("BPMNDiagram",
@@ -517,6 +541,29 @@ public class Bpmn2JsonMarshaller {
             generator.writeEndObject();
         } finally {
             _diagramElements.clear();
+        }
+    }
+
+    public void applyDiagramResolution(BPMNPlane plane) {
+        if(this.resolution != DEFAULT_ECLIPSE_RESOLUTION) {
+            List<DiagramElement> planeElements = plane.getPlaneElement();
+            for(DiagramElement element : planeElements) {
+                if(element instanceof BPMNShape) {
+                    BPMNShape shape = (BPMNShape) element;
+                    Bounds bounds = shape.getBounds();
+                    bounds.setX( (DEFAULT_RESOLUTION * bounds.getX()) / this.resolution );
+                    bounds.setY( (DEFAULT_RESOLUTION * bounds.getY()) / this.resolution );
+                    bounds.setWidth( (DEFAULT_RESOLUTION * bounds.getWidth()) / this.resolution );
+                    bounds.setHeight( (DEFAULT_RESOLUTION * bounds.getHeight()) / this.resolution );
+                } else if(element instanceof BPMNEdge) {
+                    BPMNEdge edge = (BPMNEdge) element;
+                    List<Point> waypoints = edge.getWaypoint();
+                    for(Point point : waypoints) {
+                        point.setX( (DEFAULT_RESOLUTION * point.getX()) / this.resolution );
+                        point.setY( (DEFAULT_RESOLUTION * point.getY()) / this.resolution );
+                    }
+                }
+            }
         }
     }
 
@@ -942,6 +989,7 @@ public class Bpmn2JsonMarshaller {
                                        Definitions def) throws JsonGenerationException, IOException {
         Bounds bounds = ((BPMNShape) findDiagramElement(plane,
                                                         lane)).getBounds();
+
         List<String> nodeRefIds = new ArrayList<String>();
         if (bounds != null) {
             generator.writeStartObject();
@@ -1059,15 +1107,15 @@ public class Bpmn2JsonMarshaller {
             generator.writeObjectFieldStart("bounds");
             generator.writeObjectFieldStart("lowerRight");
             generator.writeObjectField("x",
-                                       bounds.getX() + bounds.getWidth() - xOffset);
+                                           bounds.getX() + bounds.getWidth() - xOffset );
             generator.writeObjectField("y",
-                                       bounds.getY() + bounds.getHeight() - yOffset);
+                                           bounds.getY() + bounds.getHeight() - yOffset);
             generator.writeEndObject();
             generator.writeObjectFieldStart("upperLeft");
             generator.writeObjectField("x",
-                                       bounds.getX() - xOffset);
+                                           bounds.getX() - xOffset);
             generator.writeObjectField("y",
-                                       bounds.getY() - yOffset);
+                                           bounds.getY() - yOffset);
             generator.writeEndObject();
             generator.writeEndObject();
             generator.writeEndObject();
@@ -2854,6 +2902,7 @@ public class Bpmn2JsonMarshaller {
         generator.writeEndObject();
     }
 
+
     private void correctEventNodeSize(BPMNShape shape) {
         BaseElement element = shape.getBpmnElement();
         if (element instanceof Event) {
@@ -3303,7 +3352,6 @@ public class Bpmn2JsonMarshaller {
         }
 
         generator.writeEndArray();
-
         generator.writeObjectFieldStart("bounds");
         generator.writeObjectFieldStart("lowerRight");
         generator.writeObjectField("x",
@@ -3574,6 +3622,7 @@ public class Bpmn2JsonMarshaller {
                                        waypoint.getY());
             generator.writeEndObject();
         }
+
         generator.writeStartObject();
         generator.writeObjectField("x",
                                    targetBounds.getWidth() / 2);

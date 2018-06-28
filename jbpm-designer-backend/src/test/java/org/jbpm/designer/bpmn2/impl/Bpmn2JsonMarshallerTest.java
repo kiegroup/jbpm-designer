@@ -1302,4 +1302,30 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("[din]ReadTimeout=application%2Fjson%3Bcharset%3DUTF-8,[din]ContentData=application%2Fjson%3Bcharset%3DUTF-8,[din]Password=application%2Fjson%3Bcharset%3DUTF-8,[din]Url=application%2Fjson%3Bcharset%3DUTF-8,[din]Method=application%2Fjson%3Bcharset%3DUTF-8,[din]Username=application%2Fjson%3Bcharset%3DUTF-8,[din]ConnectTimeout=application%2Fjson%3Bcharset%3DUTF-8",
                      workItemPropertiesProperties.getString("assignments"));
     }
+
+    @Test
+    public void testDiagramResolution() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("diagramresolution.bpmn2");
+        JSONObject processProperties = process.getJSONObject("properties");
+
+        String diagramResolution = processProperties.getString("diagramresolution");
+
+        assertNotNull(diagramResolution);
+
+        // after resolution has been processed it is default to 0.0
+        assertEquals(diagramResolution, "0.0");
+    }
+
+    @Test
+    public void testDiagramResolutionDefault() throws Exception {
+        JSONObject process = loader.loadProcessFromXml("diagramresolutiondefault.bpmn2");
+        JSONObject processProperties = process.getJSONObject("properties");
+
+        String diagramResolution = processProperties.getString("diagramresolution");
+
+        assertNotNull(diagramResolution);
+
+        // after resolution has been processed it is default to 0.0
+        assertEquals(diagramResolution, "0.0");
+    }
 }

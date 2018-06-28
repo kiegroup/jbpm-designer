@@ -775,6 +775,18 @@
                     "hidden":true,
                     "visible":false
                 },
+                {
+                    "id":"diagramresolution",
+                    "type":"String",
+                    "title":"Diagram Resolution",
+                    "value":"1.0",
+                    "description":"Diagram Resolution",
+                    "description_ja":"",
+                    "readonly":true,
+                    "optional":true,
+                    "hidden":true,
+                    "visible":false
+                },
 				{
                           "id":"customdescription",
                           "type":"TextExpression",
