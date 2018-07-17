@@ -347,18 +347,23 @@ public class DefaultDesignerAssetService
             location = location.replaceFirst("/",
                                              "");
         }
+
+        location = location.replaceAll("src/main/resources/", "");
+        location = location.replaceAll("/src/main/resources", "");
+
         location = location.replaceAll("/",
                                        ".");
-
-        if (location.length() > 0) {
-            String[] locationParts = location.split("\\.");
-            location = locationParts[0];
-        }
 
         name = name.substring(0,
                               name.lastIndexOf("."));
         name = Utils.toBPMNIdentifier(name);
-        return location + "." + name;
+
+        // in case of "<default>" package selection
+        if(!location.equals("src.main")) {
+            return location + "." + name;
+        } else {
+            return name;
+        }
     }
 
     private String buildPackageName(String location,
@@ -368,6 +373,8 @@ public class DefaultDesignerAssetService
                                                    "")
                 // replace project and resources structure
                 .replaceFirst(".*/src/main/resources",
+                              "")
+                .replaceFirst(".*/src/main",
                               "")
                 // replace  with . to form package name
                 .replaceAll("/",

@@ -130,7 +130,7 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     @Test
     public void testCreateProcessWithDefaultPackage() throws Exception {
         final Path pathSource = mock(Path.class);
-        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources");
         when(pathSource.getFileName()).thenReturn("MyProcess.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
@@ -163,9 +163,9 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     }
 
     @Test
-    public void testCreateProcessWithSingleLevelPackage() throws Exception {
+    public void testCreateProcessWithDefaultPackageNoProject() throws Exception {
         final Path pathSource = mock(Path.class);
-        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/org/MyProcess.bpmn2");
+        when(pathSource.toURI()).thenReturn("default://p0/src/main");
         when(pathSource.getFileName()).thenReturn("MyProcess.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
@@ -188,7 +188,42 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assertNotNull(element);
         String processId = element.getAttribute("id");
         assertNotNull(processId);
-        assertEquals("Evaluation.MyProcess",
+        assertEquals("MyProcess",
+                     processId);
+
+        String packageName = element.getAttribute("drools:packageName");
+        assertNotNull(packageName);
+        assertEquals("",
+                     packageName);
+    }
+
+    @Test
+    public void testCreateProcessWithSingleLevelPackage() throws Exception {
+        final Path pathSource = mock(Path.class);
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/org");
+        when(pathSource.getFileName()).thenReturn("MyProcess.bpmn2");
+
+        DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
+        assetService.setRepository(repository);
+
+        final ArgumentCaptor<Asset> assetArgumentCaptor = ArgumentCaptor.forClass(Asset.class);
+
+        assetService.createProcess(pathSource,
+                                   "MyProcess.bpmn2");
+
+        verify(repository,
+               times(1)).createAsset(assetArgumentCaptor.capture());
+
+        Asset<String> asset = assetArgumentCaptor.getValue();
+        assertNotNull(asset);
+        assertNotNull(asset.getAssetContent());
+
+        Element element = getProcessElementFromXml(asset.getAssetContent());
+
+        assertNotNull(element);
+        String processId = element.getAttribute("id");
+        assertNotNull(processId);
+        assertEquals("Evaluation.org.MyProcess",
                      processId);
 
         String packageName = element.getAttribute("drools:packageName");
@@ -200,7 +235,7 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     @Test
     public void testCreateProcessWithMultiLevelPackage() throws Exception {
         final Path pathSource = mock(Path.class);
-        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/org/jbpm/test/process/MyProcess.bpmn2");
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/org/jbpm/test/process");
         when(pathSource.getFileName()).thenReturn("MyProcess.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
@@ -223,7 +258,7 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assertNotNull(element);
         String processId = element.getAttribute("id");
         assertNotNull(processId);
-        assertEquals("Evaluation.MyProcess",
+        assertEquals("Evaluation.org.jbpm.test.process.MyProcess",
                      processId);
 
         String packageName = element.getAttribute("drools:packageName");
@@ -247,7 +282,7 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     @Test
     public void testCreateCaseDefinitionWithDefaultPackage() throws Exception {
         final Path pathSource = mock(Path.class);
-        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyCase.bpmn2");
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/org/jbpm/test/cases");
         when(pathSource.getFileName()).thenReturn("MyCase.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
@@ -271,12 +306,12 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assertNotNull(element);
         String processId = element.getAttribute("id");
         assertNotNull(processId);
-        assertEquals("Evaluation.MyCase",
+        assertEquals("Evaluation.org.jbpm.test.cases.MyCase",
                      processId);
 
         String packageName = element.getAttribute("drools:packageName");
         assertNotNull(packageName);
-        assertEquals("",
+        assertEquals("org.jbpm.test.cases",
                      packageName);
 
         String adHoc = element.getAttribute("drools:adHoc");
@@ -311,7 +346,7 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     @Test
     public void testCreateCaseDefinitionWithPackageNoPrefix() throws Exception {
         final Path pathSource = mock(Path.class);
-        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/org/jbpm/test/cases/MyCase.bpmn2");
+        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/org/jbpm/test/cases");
         when(pathSource.getFileName()).thenReturn("MyCase.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
@@ -335,7 +370,7 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
         assertNotNull(element);
         String processId = element.getAttribute("id");
         assertNotNull(processId);
-        assertEquals("Evaluation.MyCase",
+        assertEquals("Evaluation.org.jbpm.test.cases.MyCase",
                      processId);
 
         String packageName = element.getAttribute("drools:packageName");
