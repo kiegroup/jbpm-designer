@@ -57,7 +57,7 @@ import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.workbench.events.NotificationEvent;
 
 @WebServlet(displayName = "JbpmServiceRepository", name = "JbpmServiceRepositoryServlet",
-        urlPatterns = "/jbpmservicerepo")
+        urlPatterns = {"/jbpmservicerepo", "/repo/jbpmservicerepo"})
 public class JbpmServiceRepositoryServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -97,6 +97,13 @@ public class JbpmServiceRepositoryServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req,
+                         HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req,
+               resp);
     }
 
     @Override
