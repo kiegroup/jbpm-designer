@@ -1283,4 +1283,23 @@ public class Bpmn2JsonMarshallerTest {
         assertEquals("3s",
                      slaDueDateMessageEvent);
     }
+
+    @Test
+    public void testRestWorkitemAssignmentsValueWithDashes() throws Exception {
+        List<String> testWorkItemNames = Arrays.asList("REST");
+        JSONObject process = loader.loadProcessFromXml("restWorkitemWithDashes.bpmn2",
+                                                       testWorkItemNames);
+
+        JSONObject workitem = getChildByName(process,
+                                             "REST");
+        assertNotNull(workitem);
+
+        JSONObject workItemPropertiesProperties = workitem.getJSONObject("properties");
+        assertEquals("ReadTimeout:String,ContentData:String,Password:String,Url:String,Method:String,Username:String,ConnectTimeout:String",
+                     workItemPropertiesProperties.getString("datainputset"));
+        assertEquals("Result:java.lang.Object",
+                     workItemPropertiesProperties.getString("dataoutputset"));
+        assertEquals("[din]ReadTimeout=application%2Fjson%3Bcharset%3DUTF-8,[din]ContentData=application%2Fjson%3Bcharset%3DUTF-8,[din]Password=application%2Fjson%3Bcharset%3DUTF-8,[din]Url=application%2Fjson%3Bcharset%3DUTF-8,[din]Method=application%2Fjson%3Bcharset%3DUTF-8,[din]Username=application%2Fjson%3Bcharset%3DUTF-8,[din]ConnectTimeout=application%2Fjson%3Bcharset%3DUTF-8",
+                     workItemPropertiesProperties.getString("assignments"));
+    }
 }

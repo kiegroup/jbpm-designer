@@ -2198,7 +2198,9 @@ public class Bpmn2JsonMarshaller {
                         if (isCustomElement((String) properties.get("taskname"),
                                             preProcessingData)) {
                             if (!(rhsAssociation.equals("TaskName"))) {
-                                String replacer = encodeAssociationValue(updateDataInputOutputDashes(associationValue));
+                                // for custom tasks (workitems) we do not want to modify assiciation value, just encode it
+                                // JBPM-7462
+                                String replacer = encodeAssociationValue(associationValue);
                                 associationBuff.append("[din]" + rhsAssociation).append("=").append(replacer);
                                 associationBuff.append(",");
 
