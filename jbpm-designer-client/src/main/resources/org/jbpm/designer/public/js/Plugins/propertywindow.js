@@ -5321,6 +5321,8 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField, {
 
                         var gridPanel = new Ext.Panel({
                             layout: 'fit',
+                            autoScroll: true,
+                            overflowY: 'scroll',
                             viewConfig : {
                                 forceFit:true
                             },
