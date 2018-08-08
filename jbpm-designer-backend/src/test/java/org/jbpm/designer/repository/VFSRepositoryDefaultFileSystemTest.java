@@ -25,6 +25,7 @@ import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.java.nio.file.NoSuchFileException;
 
 import static org.junit.Assert.assertEquals;
@@ -458,6 +459,21 @@ public class VFSRepositoryDefaultFileSystemTest extends RepositoryBaseTest {
 
         boolean assetExists = repository.assetExists(id);
         assertTrue(assetExists);
+    }
+
+    @Test(expected = FileAlreadyExistsException.class)
+    public void testCreateAssetAlreadyExists() {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository) repository).setDescriptor(descriptor);
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("simple content")
+                .type("txt")
+                .name("test")
+                .location("/");
+
+        repository.createAsset(builder.getAsset());
+        repository.createAsset(builder.getAsset());
     }
 
     @Test

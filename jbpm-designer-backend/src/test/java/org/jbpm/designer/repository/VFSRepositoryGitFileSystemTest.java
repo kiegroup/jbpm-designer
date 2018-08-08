@@ -43,6 +43,7 @@ import org.kie.workbench.common.services.shared.project.KieModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.backend.server.util.Paths;
+import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.java.nio.file.NoSuchFileException;
 
 import static org.junit.Assert.assertEquals;
@@ -52,7 +53,6 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 
 public class VFSRepositoryGitFileSystemTest {
 
@@ -506,6 +506,21 @@ public class VFSRepositoryGitFileSystemTest {
 
         boolean assetExists = repository.assetExists(id);
         assertTrue(assetExists);
+    }
+
+    @Test(expected = FileAlreadyExistsException.class)
+    public void testCreateAssetAlreadyExists() {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository) repository).setDescriptor(descriptor);
+
+        AssetBuilder builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("simple content")
+                .type("txt")
+                .name("test")
+                .location("/");
+
+        repository.createAsset(builder.getAsset());
+        repository.createAsset(builder.getAsset());
     }
 
     @Test
@@ -967,10 +982,10 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testCreateGlobalDirOnNewProject() throws Exception {
         ServletContext servletContext = mock(ServletContext.class);
-        when (servletContext.getRealPath(anyString())).thenReturn(getClass().getResource("default.json").getFile());
+        when(servletContext.getRealPath(anyString())).thenReturn(getClass().getResource("default.json").getFile());
 
         HttpServletRequest servletRequest = mock(HttpServletRequest.class);
-        when (servletRequest.getServletContext()).thenReturn(servletContext);
+        when(servletRequest.getServletContext()).thenReturn(servletContext);
 
         VFSRepository repository = new VFSRepository(producer.getIoService());
         repository.setDescriptor(descriptor);
@@ -1036,10 +1051,10 @@ public class VFSRepositoryGitFileSystemTest {
     @Test
     public void testCreateGlobalDirOnNewProjectWithSpaces() throws Exception {
         ServletContext servletContext = mock(ServletContext.class);
-        when (servletContext.getRealPath(anyString())).thenReturn(getClass().getResource("default.json").getFile());
+        when(servletContext.getRealPath(anyString())).thenReturn(getClass().getResource("default.json").getFile());
 
         HttpServletRequest servletRequest = mock(HttpServletRequest.class);
-        when (servletRequest.getServletContext()).thenReturn(servletContext);
+        when(servletRequest.getServletContext()).thenReturn(servletContext);
 
         VFSRepository repository = new VFSRepository(producer.getIoService());
         repository.setDescriptor(descriptor);
