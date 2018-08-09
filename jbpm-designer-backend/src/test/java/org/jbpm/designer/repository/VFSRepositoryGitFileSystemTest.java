@@ -46,6 +46,7 @@ import org.uberfire.backend.server.util.Paths;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.java.nio.file.NoSuchFileException;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -508,7 +509,7 @@ public class VFSRepositoryGitFileSystemTest {
         assertTrue(assetExists);
     }
 
-    @Test(expected = FileAlreadyExistsException.class)
+    @Test
     public void testCreateAssetAlreadyExists() {
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
@@ -520,7 +521,8 @@ public class VFSRepositoryGitFileSystemTest {
                 .location("/");
 
         repository.createAsset(builder.getAsset());
-        repository.createAsset(builder.getAsset());
+        assertThatThrownBy(() -> repository.createAsset(builder.getAsset()))
+                .isInstanceOf(FileAlreadyExistsException.class);
     }
 
     @Test
