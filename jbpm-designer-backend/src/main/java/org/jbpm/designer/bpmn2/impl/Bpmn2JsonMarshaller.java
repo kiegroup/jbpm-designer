@@ -197,6 +197,8 @@ public class Bpmn2JsonMarshaller {
 
     private static final float DEFAULT_ECLIPSE_RESOLUTION = 0;
     private static final float DEFAULT_RESOLUTION = 100;
+    private static final float DEFAULT_RESOLUTION_X = 102.4F;
+    private static final float DEFAULT_RESOLUTION_Y = 112.06F;
     private float resolution = DEFAULT_RESOLUTION;
 
     public void setProfile(IDiagramProfile profile) {
@@ -551,19 +553,26 @@ public class Bpmn2JsonMarshaller {
                 if(element instanceof BPMNShape) {
                     BPMNShape shape = (BPMNShape) element;
                     Bounds bounds = shape.getBounds();
-                    bounds.setX( (DEFAULT_RESOLUTION * bounds.getX()) / this.resolution );
-                    bounds.setY( (DEFAULT_RESOLUTION * bounds.getY()) / this.resolution );
+                    bounds.setX( (DEFAULT_RESOLUTION_X * bounds.getX()) / this.resolution );
+                    bounds.setY( (DEFAULT_RESOLUTION_Y * bounds.getY()) / this.resolution );
                     bounds.setWidth( (DEFAULT_RESOLUTION * bounds.getWidth()) / this.resolution );
                     bounds.setHeight( (DEFAULT_RESOLUTION * bounds.getHeight()) / this.resolution );
                 } else if(element instanceof BPMNEdge) {
                     BPMNEdge edge = (BPMNEdge) element;
                     List<Point> waypoints = edge.getWaypoint();
                     for(Point point : waypoints) {
-                        point.setX( (DEFAULT_RESOLUTION * point.getX()) / this.resolution );
-                        point.setY( (DEFAULT_RESOLUTION * point.getY()) / this.resolution );
+                        point.setX( (DEFAULT_RESOLUTION_X * point.getX()) / this.resolution );
+                        point.setY( (DEFAULT_RESOLUTION_Y * point.getY()) / this.resolution );
                     }
                 }
             }
+        }
+    }
+
+    public void applyResolutionForDockers(Point p) {
+        if(this.resolution != DEFAULT_ECLIPSE_RESOLUTION) {
+            p.setX( (DEFAULT_RESOLUTION_X * p.getX()) / this.resolution );
+            p.setY( (DEFAULT_RESOLUTION_Y * p.getY()) / this.resolution );
         }
     }
 
@@ -2867,6 +2876,7 @@ public class Bpmn2JsonMarshaller {
                             // one per boundary event
                             Point p = waypoints.get(0);
                             if (p != null) {
+                                applyResolutionForDockers(p);
                                 generator.writeArrayFieldStart("dockers");
                                 generator.writeStartObject();
                                 generator.writeObjectField("x",
@@ -2877,6 +2887,17 @@ public class Bpmn2JsonMarshaller {
                                 generator.writeEndArray();
                             }
                         }
+                    } else if(element instanceof BPMNShape && ((BPMNShape) element).getBpmnElement() instanceof BoundaryEvent) {
+                        Bounds boundaryEventBounds = ((BPMNShape) findDiagramElement(plane,
+                                                                                     ((BPMNShape) element).getBpmnElement())).getBounds();
+                        generator.writeArrayFieldStart("dockers");
+                        generator.writeStartObject();
+                        generator.writeObjectField("x",
+                                                   boundaryEventBounds.getWidth() / 2);
+                        generator.writeObjectField("y",
+                                                   boundaryEventBounds.getHeight() / 2);
+                        generator.writeEndObject();
+                        generator.writeEndArray();
                     }
                 }
             }
