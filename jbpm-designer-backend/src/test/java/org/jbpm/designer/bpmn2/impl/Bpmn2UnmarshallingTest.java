@@ -2976,5 +2976,33 @@ public class Bpmn2UnmarshallingTest {
                      getMetaDataValue(catchEvent.getExtensionValues(),
                                       "customSLADueDate"));
     }
+
+    @Test
+    public void testDiagramResolution() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("diagramresolution.json");
+
+        List<BPMNDiagram> processDiagrams = definitions.getDiagrams();
+        assertNotNull(processDiagrams);
+        assertEquals(1,
+                     processDiagrams.size());
+
+        BPMNDiagram diagram = processDiagrams.get(0);
+        assertNotNull(diagram);
+        assertTrue(diagram.getResolution() == 2.0F);
+    }
+
+    @Test
+    public void testDiagramResolutionDefault() throws Exception {
+        Definitions definitions = loader.loadProcessFromJson("diagramresolutiondefault.json");
+
+        List<BPMNDiagram> processDiagrams = definitions.getDiagrams();
+        assertNotNull(processDiagrams);
+        assertEquals(1,
+                     processDiagrams.size());
+
+        BPMNDiagram diagram = processDiagrams.get(0);
+        assertNotNull(diagram);
+        assertTrue(diagram.getResolution() == 0.0F);
+    }
 }
 

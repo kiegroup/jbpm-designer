@@ -1336,6 +1336,7 @@ ORYX.Plugins.View = {
 
                                     // deselect nodes on canvas
                                     this.facade.setSelection([]);
+
                                 }
                             }
 
@@ -2137,7 +2138,6 @@ ORYX.Plugins.View = {
         /* Update the zoom-level*/
         canvas.zoomLevel = this.zoomLevel;
     },
-
 
     /**
      * It calculates the zoom level to fit whole model into the visible area

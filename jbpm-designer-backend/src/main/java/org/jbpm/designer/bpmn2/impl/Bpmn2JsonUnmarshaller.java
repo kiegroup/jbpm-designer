@@ -220,6 +220,7 @@ public class Bpmn2JsonUnmarshaller {
     private ScenarioParameters _simulationScenarioParameters = BpsimFactory.eINSTANCE.createScenarioParameters();
     private boolean zOrderEnabled;
     private boolean bpsimDisplay;
+    private float diagramResolution = 0;
 
     public Bpmn2JsonUnmarshaller() {
         _helpers = new ArrayList<BpmnMarshallerHelper>();
@@ -3155,6 +3156,7 @@ public class Bpmn2JsonUnmarshaller {
                 Process process = (Process) rootElement;
                 BpmnDiFactory factory = BpmnDiFactory.eINSTANCE;
                 BPMNDiagram diagram = factory.createBPMNDiagram();
+                diagram.setResolution(diagramResolution);
                 BPMNPlane plane = factory.createBPMNPlane();
                 plane.setBpmnElement(process);
                 diagram.setPlane(plane);
@@ -3622,7 +3624,13 @@ public class Bpmn2JsonUnmarshaller {
                             || child instanceof Lane || child instanceof CallActivity || child instanceof TextAnnotation) {
                         if (rootLevelProcess == null) {
                             rootLevelProcess = Bpmn2Factory.eINSTANCE.createProcess();
-                            // set the properties and item definitions first
+
+                            // store resolution property for BPMNDiagram creation
+                            if (properties.get("diagramresolution") != null && properties.get("diagramresolution").length() > 0) {
+                                diagramResolution = Float.parseFloat(properties.get("diagramresolution"));
+                            }
+
+                            // set the properties and item definitions
                             if (properties.get("vardefs") != null && properties.get("vardefs").length() > 0) {
                                 String[] vardefs = properties.get("vardefs").split(",\\s*");
                                 for (String vardef : vardefs) {
