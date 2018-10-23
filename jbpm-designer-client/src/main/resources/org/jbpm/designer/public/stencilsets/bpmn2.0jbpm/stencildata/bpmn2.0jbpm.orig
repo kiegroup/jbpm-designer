@@ -2806,7 +2806,7 @@
 					"description_ja":"アクション開始時",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule",
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Business Rule",
 					"extra":true
 				},
 				{
@@ -2818,7 +2818,7 @@
 					"description_ja":"アクション終了時",
 					"readonly":false,
 					"optional":true,
-					"fortasktypes":"None|Send|Receive|User|Manual|Service|Script|Business Rule",
+					"fortasktypes":"None|Send|Receive|User|Manual|Service|Business Rule",
 					"extra":true
 				},
 				{
