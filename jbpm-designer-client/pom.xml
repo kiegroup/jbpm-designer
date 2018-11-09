@@ -178,7 +178,12 @@
       <groupId>org.jboss.errai</groupId>
       <artifactId>errai-ui</artifactId>
     </dependency>
-
+    
+    <dependency>
+      <groupId>org.kie.workbench.profile</groupId>
+      <artifactId>kie-wb-common-profile-api</artifactId>
+    </dependency>
+    
     <dependency>
       <groupId>com.google.gwt.gwtmockito</groupId>
       <artifactId>gwtmockito</artifactId>
