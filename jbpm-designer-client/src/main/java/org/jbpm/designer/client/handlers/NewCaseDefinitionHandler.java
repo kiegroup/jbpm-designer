@@ -16,6 +16,9 @@
 
 package org.jbpm.designer.client.handlers;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -29,6 +32,7 @@ import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.service.DesignerAssetService;
+import org.kie.workbench.common.profile.api.preferences.Profile;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.kie.workbench.common.widgets.client.handlers.NewResourceSuccessEvent;
@@ -122,5 +126,10 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
                 callback.onSuccess(false);
             }
         }
+    }
+    
+    @Override
+    public List<Profile> getProfiles() {
+        return Arrays.asList(Profile.FULL);
     }
 }
