@@ -658,7 +658,9 @@ ORYX.Core.Canvas = ORYX.Core.AbstractShape.extend({
 		
 		// escape all links
 		$A(svgClone.getElementsByTagNameNS(ORYX.CONFIG.NAMESPACE_SVG, 'a')).each(function(elem) {
-			elem.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", (elem.getAttributeNS("http://www.w3.org/1999/xlink","href")||"").escapeHTML());
+			if(elem.getAttributeNS("http://www.w3.org/1999/xlink","href") && elem.getAttributeNS("http://www.w3.org/1999/xlink","href") !== null) {
+                elem.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", elem.getAttributeNS("http://www.w3.org/1999/xlink", "href").escapeHTML());
+            }
 		});
 		
         return svgClone;
