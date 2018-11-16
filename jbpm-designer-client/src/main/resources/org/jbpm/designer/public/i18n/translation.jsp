@@ -520,7 +520,9 @@ ORYX.I18N.PropertyWindow.loadingProcessInf='<i18n:message key="ORYX.I18N.Propert
 ORYX.I18N.PropertyWindow.processAsset='<i18n:message key="ORYX.I18N.PropertyWindow.processAsset">Asset Name</i18n:message>';
 ORYX.I18N.PropertyWindow.processId='<i18n:message key="ORYX.I18N.PropertyWindow.processId">Process Id</i18n:message>';
 ORYX.I18N.PropertyWindow.packageName='<i18n:message key="ORYX.I18N.PropertyWindow.packageName">Package Name</i18n:message>';
-ORYX.I18N.PropertyWindow.selectProcessId='<i18n:message key="ORYX.I18N.PropertyWindow.selectProcessId">Select Process Id and click \"Save\" to select</i18n:message>';
+ORYX.I18N.PropertyWindow.selectProcessId='<i18n:message key="ORYX.I18N.PropertyWindow.selectProcessId">Enter process id or select it from the list, then press \"Save\"</i18n:message>';
+ORYX.I18N.PropertyWindow.enterProcessId='<i18n:message key="ORYX.I18N.PropertyWindow.enterProcessId">Enter process Id</i18n:message>';
+ORYX.I18N.PropertyWindow.selectOrenterProcessIdError='<i18n:message key="ORYX.I18N.PropertyWindow.selectOrenterProcessIdError">Select or enter process Id</i18n:message>';
 ORYX.I18N.PropertyWindow.editorForCalledEvents='<i18n:message key="ORYX.I18N.PropertyWindow.editorForCalledEvents">Editor for Called Elements</i18n:message>';
 ORYX.I18N.PropertyWindow.unableToFindOtherProcess='<i18n:message key="ORYX.I18N.PropertyWindow.unableToFindOtherProcess">Unable to find other processes in package.</i18n:message>';
 ORYX.I18N.PropertyWindow.errorResolvingOtherProcessInfo='<i18n:message key="ORYX.I18N.PropertyWindow.errorResolvingOtherProcessInfo">Error resolving other process info</i18n:message>';
