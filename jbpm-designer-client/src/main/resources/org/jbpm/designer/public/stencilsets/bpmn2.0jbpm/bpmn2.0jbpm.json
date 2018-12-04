@@ -5092,7 +5092,6 @@
 					"description":"",
 					"readonly":false,
 					"optional":false,
-					"refToView":"pimg",
 					"length":""
 				},	
 				{
