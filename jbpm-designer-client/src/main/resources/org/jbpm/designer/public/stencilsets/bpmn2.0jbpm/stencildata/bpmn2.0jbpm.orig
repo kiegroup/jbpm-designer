@@ -3750,7 +3750,7 @@
 						"extra" : true
 					$bclose$,
 				$endif$
-				$if(workitemDefs.(k).mavendependencies)$
+				$if(workitemDefs.(k).mavenDependencies)$
 					$bopen$
 						"id":"mavendependencies",
 						"type":"TextExpression",
@@ -3765,19 +3765,6 @@
 						"extra" : true
 					$bclose$,
 				$endif$
-                $bopen$
-					"id":"defaulthandler",
-					"type":"TextExpression",
-					"title":"Default Handler",
-					"value":"$workitemDefs.(k).defaultHandler$",
-					"description":"Default Handler.",
-					"description_ja":"Default Handler",
-					"readonly":true,
-					"optional":true,
-					"length":"",
-					"wrapLines":true,
-					"extra" : true
-                $bclose$,
                 $bopen$
 					"id":"description",
 					"type":"TextExpression",
