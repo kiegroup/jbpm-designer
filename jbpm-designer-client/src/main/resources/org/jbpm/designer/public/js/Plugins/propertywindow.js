@@ -6814,20 +6814,42 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField, {
                                 var index = 0;
                                 var val = this.value;
                                 var mygrid = grid;
+                                var foundgrid = false;
                                 calldefs.data.each(function () {
                                     if (this.data['name'] == val) {
+                                        foundgrid = true;
                                         mygrid.getSelectionModel().select(index, 1);
                                     }
                                     index++;
                                 });
+                                if(!foundgrid) {
+                                    Ext.getCmp('pidinputfield').setValue(val);
+                                }
                             }
                         }.bind(this));
+
+                        var pinputfield = new Ext.form.TextField({
+                                    id : 'pidinputfield',
+                                    value : ORYX.I18N.PropertyWindow.enterProcessId,
+                                    fieldLabel : ORYX.I18N.PropertyWindow.enterProcessId,
+                                    width : 200,
+                                    listeners: {
+                                        render: function() {
+                                            this.getEl().on('mousedown', function(e, t, eOpts) {
+                                                Ext.getCmp('pidinputfield').setValue("");
+                                                Ext.getCmp(gridId).getSelectionModel().clearSelections();
+                                            });
+                                        }
+                                    }
+                                }
+                        );
 
                         var calledElementsPanel = new Ext.Panel({
                             id: 'calledElementsPanel',
                             title: '<center>' + ORYX.I18N.PropertyWindow.selectProcessId + '</center>',
                             layout: 'column',
                             items: [
+                                pinputfield,
                                 grid
                             ],
                             layoutConfig: {
@@ -6875,12 +6897,20 @@ Ext.form.ComplexCalledElementField = Ext.extend(Ext.form.TriggerField, {
                                         this.setValue(outValue);
                                         this.dataSource.getAt(this.row).set('value', outValue)
                                         this.dataSource.commitChanges()
-                                        dialog.hide()
+                                        dialog.hide();
+                                    } else if(pinputfield.getRawValue() != null && pinputfield.getRawValue() != ORYX.I18N.PropertyWindow.enterProcessId) {
+                                        var outValue = pinputfield.getRawValue();
+                                        grid.stopEditing();
+                                        grid.getView().refresh();
+                                        this.setValue(outValue);
+                                        this.dataSource.getAt(this.row).set('value', outValue)
+                                        this.dataSource.commitChanges()
+                                        dialog.hide();
                                     } else {
                                         this.facade.raiseEvent({
                                             type: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
                                             ntype: 'error',
-                                            msg: ORYX.I18N.LocalHistory.LocalHistoryView.msg,
+                                            msg: ORYX.I18N.PropertyWindow.selectOrenterProcessIdError,
                                             title: ''
 
                                         });
