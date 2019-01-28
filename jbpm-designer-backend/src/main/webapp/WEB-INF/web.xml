@@ -31,7 +31,7 @@
     </init-param>
     <init-param>
       <param-name>designer.locale</param-name>
-      <param-value>en</param-value>
+      <param-value>ru</param-value>
     </init-param>
     <init-param>
       <param-name>designer.skin</param-name>
