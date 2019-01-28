@@ -10,71 +10,70 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.vt;
         this.savedProcessJson = ORYX.EDITOR.getSerializedJSON();
 
-        if (ORYX.READONLY != true) {
-            this.enableautosave();
-    //         this.facade.offer({
-    //             'name': ORYX.I18N.Save.save,
-    //             'functionality': this.saveWithMessage.bind(this),
-    //             'group': ORYX.I18N.Save.group,
-    //             'icon': ORYX.BASE_FILE_PATH + "images/disk.png",
-    //             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-    //             'description': ORYX.I18N.Save.saveDesc,
-    //             'index': 1,
-    //             'minShape': 0,
-    //             'maxShape': 0,
-    //             'isEnabled': function(){
-    //                 return ORYX.REPOSITORY_ID != "guvnor" && ORYX.READONLY != true;
-    // //                profileParamName = "profile";
-    // //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    // //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    // //                regexa = new RegExp( regexSa );
-    // //                profileParams = regexa.exec( window.location.href );
-    // //                profileParamValue = profileParams[1];
-    // //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-    //             }.bind(this)
-    //         });
+        if(ORYX.READONLY != true) {
+            this.facade.offer({
+                'name': ORYX.I18N.Save.save,
+                'functionality': this.saveWithMessage.bind(this),
+                'group': ORYX.I18N.Save.group,
+                'icon': ORYX.BASE_FILE_PATH + "images/disk.png",
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+                'description': ORYX.I18N.Save.saveDesc,
+                'index': 1,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.REPOSITORY_ID != "guvnor" && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+                }.bind(this)
+            });
 
-    //         this.facade.offer({
-    //             'name': ORYX.I18N.Save.enableAutosave,
-    //             'functionality': this.enableautosave.bind(this),
-    //             'group': ORYX.I18N.Save.group,
-    //             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-    //             'description': ORYX.I18N.Save.enableAutosave_desc,
-    //             'index': 2,
-    //             'minShape': 0,
-    //             'maxShape': 0,
-    //             'isEnabled': function(){
-    //                 return !ORYX.AUTOSAVE_ENABLED && ORYX.READONLY != true;
-    // //                profileParamName = "profile";
-    // //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    // //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    // //                regexa = new RegExp( regexSa );
-    // //                profileParams = regexa.exec( window.location.href );
-    // //                profileParamValue = profileParams[1];
-    // //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-    //             }.bind(this)
-    //         });
+            this.facade.offer({
+                'name': ORYX.I18N.Save.enableAutosave,
+                'functionality': this.enableautosave.bind(this),
+                'group': ORYX.I18N.Save.group,
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+                'description': ORYX.I18N.Save.enableAutosave_desc,
+                'index': 2,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return !ORYX.AUTOSAVE_ENABLED && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+                }.bind(this)
+            });
 
-    //         this.facade.offer({
-    //             'name': ORYX.I18N.Save.disableAutosave,
-    //             'functionality': this.disableautosave.bind(this),
-    //             'group': ORYX.I18N.Save.group,
-    //             dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
-    //             'description': ORYX.I18N.Save.disableAutosave_desc,
-    //             'index': 3,
-    //             'minShape': 0,
-    //             'maxShape': 0,
-    //             'isEnabled': function(){
-    //                 return ORYX.AUTOSAVE_ENABLED && ORYX.READONLY != true;
-    // //                profileParamName = "profile";
-    // //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-    // //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
-    // //                regexa = new RegExp( regexSa );
-    // //                profileParams = regexa.exec( window.location.href );
-    // //                profileParamValue = profileParams[1];
-    // //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
-    //             }.bind(this)
-    //         });
+            this.facade.offer({
+                'name': ORYX.I18N.Save.disableAutosave,
+                'functionality': this.disableautosave.bind(this),
+                'group': ORYX.I18N.Save.group,
+                dropDownGroupIcon : ORYX.BASE_FILE_PATH + "images/disk.png",
+                'description': ORYX.I18N.Save.disableAutosave_desc,
+                'index': 3,
+                'minShape': 0,
+                'maxShape': 0,
+                'isEnabled': function(){
+                    return ORYX.AUTOSAVE_ENABLED && ORYX.READONLY != true;
+    //                profileParamName = "profile";
+    //                profileParamName = profileParamName.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    //                regexSa = "[\\?&]"+profileParamName+"=([^&#]*)";
+    //                regexa = new RegExp( regexSa );
+    //                profileParams = regexa.exec( window.location.href );
+    //                profileParamValue = profileParams[1];
+    //                return profileParamValue == "jbpm" && ORYX.REPOSITORY_ID != "guvnor";
+                }.bind(this)
+            });
 
             // this.facade.offer({
             //     'name': ORYX.I18N.Save.copy,
@@ -154,7 +153,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_SAVE, this.handleEventDoSave.bind(this));
         this.facade.registerOnEvent(ORYX.CONFIG.EVENT_CANCEL_SAVE, this.handleEventCancelSave.bind(this));
-        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_RELOAD, this.handleEventDoReload.bind(this));
+        this.facade.registerOnEvent(ORYX.CONFIG.EVENT_DO_RELOAD, this.handleEventDoRealod.bind(this));
 
         window.onunload = this.unloadWindow.bind(this);
 
@@ -181,16 +180,16 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         });
     },
 
-//     saveWithMessage: function() {
-//         // check with presenter if we can save
-// //        var hasConcurrentUpdate = parent.designersignalassetupdate(ORYX.UUID);
-// //        if(hasConcurrentUpdate && hasConcurrentUpdate == true) {
-//             // let the gwt code handle this from here on....
-// //        } else {
-// //            this.save(true);
-//             this.saveToWorkspace();
-// //        }
-//     },
+    saveWithMessage: function() {
+        // check with presenter if we can save
+//        var hasConcurrentUpdate = parent.designersignalassetupdate(ORYX.UUID);
+//        if(hasConcurrentUpdate && hasConcurrentUpdate == true) {
+            // let the gwt code handle this from here on....
+//        } else {
+//            this.save(true);
+            this.saveToWorkspace();
+//        }
+    },
 
     handleEventDoSave: function() {
         this.setUnsaved();
@@ -207,7 +206,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         });
     },
 
-    handleEventDoReload: function() {
+    handleEventDoRealod: function() {
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
@@ -259,27 +258,26 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
 
     saveToWorkspace: function () {
       var processJSON = ORYX.EDITOR.getSerializedJSON();
-        if (!ORYX.PROCESS_SAVED) {
-          Ext.Ajax.request({
-            url: ORYX.PATH + "savebpmn",
-            method: 'POST',
-            success: function () {
-              // Ext.Msg.minWidth = 400;
-              // Ext.Msg.alert("Процесс успешно сохранен");
-              this.setSaved();
-            }.bind(this),
-            failure: function (response) {
-              Ext.Msg.minWidth = 400;
-              Ext.Msg.alert("Ошибка при сохранении процесса", response.responseText);
-            },
-            params: {
-              pp: ORYX.PREPROCESSING,
-              profile: ORYX.PROFILE,
-              data: processJSON,
-              uuid: ORYX.UUID
-            }
-          });
-        }
+
+            Ext.Ajax.request({
+              url: ORYX.PATH + "savebpmn",
+              method: 'POST',
+              success: function() {
+                Ext.Msg.minWidth = 400;
+                Ext.Msg.alert("Процесс успешно сохранен");
+                this.setSaved();
+              }.bind(this),
+              failure: function(response) {
+                Ext.Msg.minWidth = 400;
+                Ext.Msg.alert("Ошибка при сохранении процесса", response.responseText);
+              },
+              params: {
+                pp: ORYX.PREPROCESSING,
+                profile: ORYX.PROFILE,
+                data: processJSON,
+                uuid: ORYX.UUID
+              }
+            });
     },
 
     save : function(showCommit) {
@@ -473,7 +471,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         this.vt = window.setInterval((function(){
 //            this.save(false);
             this.saveToWorkspace();
-        }).bind(this), 5000);
+        }).bind(this), 30000);
         this.facade.raiseEvent({
             type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
             ntype		: 'info',
@@ -482,17 +480,17 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
         });
     },
 
-    // disableautosave: function() {
-    //     ORYX.AUTOSAVE_ENABLED = false;
-    //     this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
-    //     window.clearInterval(this.vt);
-    //     this.facade.raiseEvent({
-    //         type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
-    //         ntype		: 'info',
-    //         msg         : ORYX.I18N.Save.autosaveDisabled,
-    //         title       : ''
-    //     });
-    // },
+    disableautosave: function() {
+        ORYX.AUTOSAVE_ENABLED = false;
+        this.facade.raiseEvent({type: ORYX.CONFIG.EVENT_STENCIL_SET_LOADED});
+        window.clearInterval(this.vt);
+        this.facade.raiseEvent({
+            type 		: ORYX.CONFIG.EVENT_NOTIFICATION_SHOW,
+            ntype		: 'info',
+            msg         : ORYX.I18N.Save.autosaveDisabled,
+            title       : ''
+        });
+    },
 
     deleteassetnotify: function() {
         Ext.MessageBox.confirm(
