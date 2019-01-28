@@ -29,10 +29,10 @@
       <param-name>designer.preprocess</param-name>
       <param-value>true</param-value>
     </init-param>
-    <init-param>
+    <!--<init-param>
       <param-name>designer.locale</param-name>
-      <param-value>ru</param-value>
-    </init-param>
+      <param-value>en</param-value>
+    </init-param>-->
     <init-param>
       <param-name>designer.skin</param-name>
       <param-value>default</param-value>
