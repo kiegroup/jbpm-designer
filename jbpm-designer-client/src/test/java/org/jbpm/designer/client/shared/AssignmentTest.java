@@ -16,19 +16,16 @@
 
 package org.jbpm.designer.client.shared;
 
-import org.jbpm.designer.client.shared.util.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(StringUtils.class)
+@RunWith(MockitoJUnitRunner.class)
 public class AssignmentTest extends AssignmentBaseTest {
 
     AssignmentData ad = Mockito.mock(AssignmentData.class);
@@ -97,7 +94,7 @@ public class AssignmentTest extends AssignmentBaseTest {
         assignment.setConstant(constant);
 
         String s = assignment.toString();
-        Assignment newA = Assignment.deserialize(ad,
+        Assignment newA = assignment.deserialize(ad,
                                                  s);
         String deserializedConstant = newA.getConstant();
 
@@ -178,7 +175,7 @@ public class AssignmentTest extends AssignmentBaseTest {
         // replace the mocked encoded constant with the one that would occur at runtime
         s = s.replace(bpmn2EncodedConstant,
                       jsonEncodedConstant);
-        Assignment newA = Assignment.deserialize(ad,
+        Assignment newA = assignment.deserialize(ad,
                                                  s);
         String deserializedConstant = newA.getConstant();
 

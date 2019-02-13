@@ -76,7 +76,7 @@ public class StringUtils {
      * @param s
      * @return
      */
-    public static String urlEncode(String s) {
+    public String urlEncode(String s) {
         if (s == null || s.isEmpty()) {
             return s;
         }
@@ -89,7 +89,7 @@ public class StringUtils {
      * @param s
      * @return
      */
-    public static String urlDecode(String s) {
+    public String urlDecode(String s) {
         if (s == null || s.isEmpty()) {
             return s;
         }

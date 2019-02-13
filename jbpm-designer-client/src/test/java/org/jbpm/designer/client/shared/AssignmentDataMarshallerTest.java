@@ -19,6 +19,7 @@ package org.jbpm.designer.client.shared;
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,19 +27,16 @@ import java.util.Map;
 import org.jboss.errai.marshalling.client.api.MarshallingSession;
 import org.jboss.errai.marshalling.client.api.json.EJValue;
 import org.jboss.errai.marshalling.server.JSONStreamDecoder;
-import org.jbpm.designer.client.shared.util.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({StringUtils.class})
+@RunWith(MockitoJUnitRunner.class)
 public class AssignmentDataMarshallerTest extends AssignmentBaseTest {
 
     private AssignmentDataMarshaller marshaller;
@@ -57,11 +55,11 @@ public class AssignmentDataMarshallerTest extends AssignmentBaseTest {
         super.setUp();
 
         marshaller = new AssignmentDataMarshaller();
-        inputs = new ArrayList<AssignmentRow>();
-        outputs = new ArrayList<AssignmentRow>();
-        dataTypes = new ArrayList<String>();
-        dataTypesDisplayNames = new ArrayList<String>();
-        mapCustomAssignmentProperties = new HashMap<String, List<String>>();
+        inputs = new ArrayList<>();
+        outputs = new ArrayList<>();
+        dataTypes = new ArrayList<>();
+        dataTypesDisplayNames = new ArrayList<>();
+        mapCustomAssignmentProperties = new HashMap<>();
 
         dataTypes.add("String");
         dataTypesDisplayNames.add("String");
@@ -318,13 +316,13 @@ public class AssignmentDataMarshallerTest extends AssignmentBaseTest {
     public void testCustomAssignmentProperties() {
         // "FaultToUri:Henry;Rod;Tony;,TruckType:Mazda;Tonka;Mercedes;,FromUri:,ReplyToUri:Jane;,"
         mapCustomAssignmentProperties.put("FaultToUri",
-                                          Arrays.asList(new String[]{"Henry", "Rod", "Tony"}));
+                                          Arrays.asList("Henry", "Rod", "Tony"));
         mapCustomAssignmentProperties.put("TruckType",
-                                          Arrays.asList(new String[]{"Mazda", "Tonka", "Mercedes"}));
+                                          Arrays.asList("Mazda", "Tonka", "Mercedes"));
         mapCustomAssignmentProperties.put("FromUri",
-                                          Arrays.asList(new String[]{}));
+                                          Collections.emptyList());
         mapCustomAssignmentProperties.put("ReplyToUri",
-                                          Arrays.asList(new String[]{"Jane"}));
+                                          Collections.singletonList("Jane"));
 
         AssignmentData original = new AssignmentData();
         original.setCustomAssignmentProperties(mapCustomAssignmentProperties);
@@ -337,7 +335,7 @@ public class AssignmentDataMarshallerTest extends AssignmentBaseTest {
                      demarshalled);
     }
 
-    private void marshallAndDemarshall(Map<String, List<String>> mapCustomAssignmentProperties) {
+    private void marshallAndDemarshall() {
         AssignmentData original = new AssignmentData(inputs,
                                                      outputs,
                                                      dataTypes,
@@ -352,9 +350,5 @@ public class AssignmentDataMarshallerTest extends AssignmentBaseTest {
                                                             session);
         assertEquals(original,
                      demarshalled);
-    }
-
-    private void marshallAndDemarshall() {
-        marshallAndDemarshall(null);
     }
 }

@@ -19,20 +19,17 @@ package org.jbpm.designer.client.shared;
 import java.util.List;
 import java.util.Map;
 
-import org.jbpm.designer.client.shared.util.StringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({StringUtils.class})
+@RunWith(MockitoJUnitRunner.class)
 public class AssignmentDataTest extends AssignmentBaseTest {
 
     @Before

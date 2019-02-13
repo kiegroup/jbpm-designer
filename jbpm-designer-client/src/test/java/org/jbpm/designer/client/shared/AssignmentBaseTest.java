@@ -26,46 +26,35 @@ import com.google.gwt.junit.GWTMockUtilities;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.shared.util.StringUtils;
 import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.powermock.api.mockito.PowerMockito;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 
 public class AssignmentBaseTest {
+
+    protected StringUtils utils = spy(StringUtils.class);
 
     public void setUp() throws Exception {
         // Prevent runtime GWT.create() error at DesignerEditorConstants.INSTANCE
         GWTMockUtilities.disarm();
         // MockDesignerEditorConstants replaces DesignerEditorConstants.INSTANCE
-        final Answer answer = new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                return invocation.getMethod().getName();
-            }
-        };
-        final DesignerEditorConstants designerEditorConstants = PowerMockito.mock(DesignerEditorConstants.class,
-                                                                                  answer);
+        final Answer answer = invocation -> invocation.getMethod().getName();
+        final DesignerEditorConstants designerEditorConstants = mock(DesignerEditorConstants.class,
+                                                                     answer);
         setFinalStaticField(DesignerEditorConstants.class.getDeclaredField("INSTANCE"),
                             designerEditorConstants);
 
         // Mock StringUtils URL Encoding methods
-        PowerMockito.mockStatic(StringUtils.class);
-        PowerMockito.when(StringUtils.urlEncode(Mockito.anyString())).thenAnswer(new Answer<Object>() {
-            @Override
-            public String answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                return urlEncode((String) args[0]);
-            }
+        Mockito.when(utils.urlEncode(Mockito.anyString())).thenAnswer(invocation -> {
+            Object[] args = invocation.getArguments();
+            return urlEncode((String) args[0]);
         });
-        PowerMockito.when(StringUtils.urlDecode(Mockito.anyString())).thenAnswer(new Answer<Object>() {
-            @Override
-            public String answer(InvocationOnMock invocation) throws Throwable {
-                Object[] args = invocation.getArguments();
-                return urlDecode((String) args[0]);
-            }
+        Mockito.when(utils.urlDecode(Mockito.anyString())).thenAnswer(invocation -> {
+            Object[] args = invocation.getArguments();
+            return urlDecode((String) args[0]);
         });
-
-        PowerMockito.when(StringUtils.createQuotedConstant(Mockito.anyString())).thenCallRealMethod();
-        PowerMockito.when(StringUtils.createUnquotedConstant(Mockito.anyString())).thenCallRealMethod();
+        Assignment.setStringUtils(utils);
     }
 
     public void tearDown() {
