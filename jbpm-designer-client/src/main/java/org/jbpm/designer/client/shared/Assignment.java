@@ -25,6 +25,8 @@ public class Assignment {
 
     AssignmentData assignmentData;
 
+    private static StringUtils stringUtils = new StringUtils();
+
     /*
         Assignments have either a processVar or a constant
      */
@@ -170,7 +172,7 @@ public class Assignment {
         if (getVariableType() == VariableType.INPUT) {
             if (getConstant() != null && !getConstant().isEmpty()) {
                 sb.append(INPUT_ASSIGNMENT_PREFIX).append(getName()).append(ASSIGNMENT_OPERATOR_TOCONSTANT).append(
-                        StringUtils.urlEncode(getConstant()));
+                        stringUtils.urlEncode(getConstant()));
             } else if (getProcessVarName() != null && !getProcessVarName().isEmpty()) {
                 sb.append(INPUT_ASSIGNMENT_PREFIX).append(getProcessVarName()).append(ASSIGNMENT_OPERATOR_TOVARIABLE).append(getName());
             } else {
@@ -225,7 +227,7 @@ public class Assignment {
             int i = sAssignment.indexOf(ASSIGNMENT_OPERATOR_TOCONSTANT);
             variableName = sAssignment.substring(0,
                                                  i);
-            constant = StringUtils.urlDecode(sAssignment.substring(i + ASSIGNMENT_OPERATOR_TOCONSTANT.length()));
+            constant = stringUtils.urlDecode(sAssignment.substring(i + ASSIGNMENT_OPERATOR_TOCONSTANT.length()));
         }
 
         // Create the new assignment
@@ -234,5 +236,10 @@ public class Assignment {
                               assignmentType,
                               processVariableName,
                               constant);
+    }
+
+    // for test purposes
+    static void setStringUtils(StringUtils utils) {
+        stringUtils = utils;
     }
 }
