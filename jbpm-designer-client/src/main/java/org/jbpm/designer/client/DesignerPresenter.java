@@ -76,9 +76,11 @@ import org.uberfire.workbench.model.menu.Menus;
 import static org.uberfire.ext.widgets.common.client.common.ConcurrentChangePopup.newConcurrentUpdate;
 
 @Dependent
-@WorkbenchEditor(identifier = "jbpm.designer", supportedTypes = {Bpmn2Type.class})
+@WorkbenchEditor(identifier = DesignerPresenter.EDITOR_ID, supportedTypes = {Bpmn2Type.class})
 public class DesignerPresenter
         extends KieEditor<Path> {
+
+    public static final String EDITOR_ID = "jbpm.designer";
 
     @Inject
     DesignerEditorParametersPublisher designerEditorParametersPublisher;
@@ -191,9 +193,16 @@ public class DesignerPresenter
         return () -> openRenamePopUp(versionRecordManager.getPathToLatest());
     }
 
+    @Override
+    protected String getEditorIdentifier() {
+        return EDITOR_ID;
+    }
+
     @OnClose
+    @Override
     public void onClose() {
         view.onClose();
+        super.onClose();
     }
 
     @WorkbenchPartTitle
