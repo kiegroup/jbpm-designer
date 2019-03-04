@@ -327,7 +327,7 @@
               <removeIncluded>false</removeIncluded>
               <insertNewLine>true</insertNewLine>
               <includes>
-                <include>${project.build.directory}/classes/org/jbpm/designer/public/lib/prototype-1.5.1.js</include>
+                <include>${project.build.directory}/classes/org/jbpm/designer/public/lib/prototype-1.7.2.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/lib/path_parser.js</include>
                 <include>${project.build.directory}/classes/org/jbpm/designer/public/lib/handlebars-1.0.0.beta.6.js</include>
               </includes>
