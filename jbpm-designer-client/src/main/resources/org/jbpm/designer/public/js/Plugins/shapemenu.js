@@ -190,25 +190,29 @@ ORYX.Plugins.ShapeMenuPlugin = {
 			
 			var nodes = stencilSet.nodes();
 			nodes.each((function(stencil) {
-				if (stencil.hidden()) {
-					return;
+				try {
+                    if (stencil.hidden()) {
+                        return;
+                    }
+                    // Create a button for each node
+                    var option = {type: stencil.id(), namespace: stencil.namespace(), connectingType: true};
+                    var button = new ORYX.Plugins.ShapeMenuButton({
+                        callback: this.newShape.bind(this, option),
+                        icon: stencil.icon(),
+                        align: ORYX.CONFIG.SHAPEMENU_RIGHT,
+                        group: 0,
+                        //dragcallback: this.hideShapeMenu.bind(this),
+                        msg: stencil.title() + " - " + ORYX.I18N.ShapeMenuPlugin.clickDrag
+                    });
+                    // Add button to shape menu
+                    this.shapeMenu.addButton(button);
+                    // Add to the created Button Array
+                    this.createdButtons[stencil.namespace() + stencil.type() + stencil.id()] = button;
+                    // Drag'n'Drop will enable
+                    Ext.dd.Registry.register(button.node.lastChild, option);
+                } catch(e) {
+                    ORYX.Log.warn("Error: " + e + " -- for stencil: " + stencil + " with id: " + stencil.id());
 				}
-				// Create a button for each node
-				var option = {type: stencil.id(), namespace: stencil.namespace(), connectingType: true};
-				var button = new ORYX.Plugins.ShapeMenuButton({
-					callback: 	this.newShape.bind(this, option),
-					icon: 		stencil.icon(),
-					align: 		ORYX.CONFIG.SHAPEMENU_RIGHT,
-					group:		0,
-					//dragcallback: this.hideShapeMenu.bind(this),
-					msg:		stencil.title() + " - " + ORYX.I18N.ShapeMenuPlugin.clickDrag
-					});
-				// Add button to shape menu
-				this.shapeMenu.addButton(button); 
-				// Add to the created Button Array
-				this.createdButtons[stencil.namespace() + stencil.type() + stencil.id()] = button;
-				// Drag'n'Drop will enable
-				Ext.dd.Registry.register(button.node.lastChild, option);			
 			}).bind(this));
 		
 			var edges = stencilSet.edges();

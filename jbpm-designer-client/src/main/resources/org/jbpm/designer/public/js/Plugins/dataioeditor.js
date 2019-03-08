@@ -152,67 +152,73 @@ ORYX.Plugins.DataIOEditorPlugin = {
 
         var disallowedPropertyNames = ORYX.DataIOEditorUtils.getDisallowedPropertyNames(element);
 
-        parent.designersignalshowdataioeditor(taskname, datainput, datainputset, dataoutput, dataoutputset, processvars,
-                assignments, datatypes, disallowedPropertyNames, customassignmentproperties,
-                function (data) {
-                    //window.alert("passed back to dataioeditor: " + data);
-                    var obj = JSON.parse(data);
+        if ( typeof parent.designersignalshowdataioeditor === "function" ) {
+            try {
+                parent.designersignalshowdataioeditor(taskname, datainput, datainputset, dataoutput, dataoutputset, processvars,
+                        assignments, datatypes, disallowedPropertyNames, customassignmentproperties,
+                        function (data) {
+                            //window.alert("passed back to dataioeditor: " + data);
+                            var obj = JSON.parse(data);
 
-                    var element = this.currentElement;
-                    var stencil = element.getStencil();
+                            var element = this.currentElement;
+                            var stencil = element.getStencil();
 
-                    var newProperties = new Hash();
-                    var oldProperties = new Hash();
-                    if (stencil.property('oryx-datainput') !== undefined) {
-                        newProperties['oryx-datainput'] = obj['inputVariables'];
-                        oldProperties['oryx-datainput'] = element.properties['oryx-datainput'];
-                    }
-                    if (stencil.property('oryx-datainputset') !== undefined) {
-                        newProperties['oryx-datainputset'] = obj['inputVariables'];
-                        oldProperties['oryx-datainputset'] = element.properties['oryx-datainputset'];
-                    }
+                            var newProperties = new Hash();
+                            var oldProperties = new Hash();
+                            if (stencil.property('oryx-datainput') !== undefined) {
+                                newProperties['oryx-datainput'] = obj['inputVariables'];
+                                oldProperties['oryx-datainput'] = element.properties['oryx-datainput'];
+                            }
+                            if (stencil.property('oryx-datainputset') !== undefined) {
+                                newProperties['oryx-datainputset'] = obj['inputVariables'];
+                                oldProperties['oryx-datainputset'] = element.properties['oryx-datainputset'];
+                            }
 
-                    if (stencil.property('oryx-dataoutput') !== undefined) {
-                        newProperties['oryx-dataoutput'] = obj['outputVariables'];
-                        oldProperties['oryx-dataoutput'] = element.properties['oryx-dataoutput'];
-                    }
-                    if (stencil.property('oryx-dataoutputset') !== undefined) {
-                        newProperties['oryx-dataoutputset'] = obj['outputVariables'];
-                        oldProperties['oryx-dataoutputset'] = element.properties['oryx-dataoutputset'];
-                    }
+                            if (stencil.property('oryx-dataoutput') !== undefined) {
+                                newProperties['oryx-dataoutput'] = obj['outputVariables'];
+                                oldProperties['oryx-dataoutput'] = element.properties['oryx-dataoutput'];
+                            }
+                            if (stencil.property('oryx-dataoutputset') !== undefined) {
+                                newProperties['oryx-dataoutputset'] = obj['outputVariables'];
+                                oldProperties['oryx-dataoutputset'] = element.properties['oryx-dataoutputset'];
+                            }
 
-                    if (stencil.property('oryx-assignments') !== undefined) {
-                        newProperties['oryx-assignments'] = obj['assignments'];
-                        oldProperties['oryx-assignments'] = element.properties['oryx-assignments'];
-                    }
-                    else if (stencil.property('oryx-datainputassociations') !== undefined) {
-                        newProperties['oryx-datainputassociations'] = obj['assignments'];
-                        oldProperties['oryx-datainputassociations'] = element.properties['oryx-datainputassociations'];
-                    }
-                    else if (stencil.property('oryx-dataoutputassociations') !== undefined) {
-                        newProperties['oryx-dataoutputassociations'] = obj['assignments'];
-                        oldProperties['oryx-dataoutputassociations'] = element.properties['oryx-dataoutputassociations'];
-                    }
+                            if (stencil.property('oryx-assignments') !== undefined) {
+                                newProperties['oryx-assignments'] = obj['assignments'];
+                                oldProperties['oryx-assignments'] = element.properties['oryx-assignments'];
+                            }
+                            else if (stencil.property('oryx-datainputassociations') !== undefined) {
+                                newProperties['oryx-datainputassociations'] = obj['assignments'];
+                                oldProperties['oryx-datainputassociations'] = element.properties['oryx-datainputassociations'];
+                            }
+                            else if (stencil.property('oryx-dataoutputassociations') !== undefined) {
+                                newProperties['oryx-dataoutputassociations'] = obj['assignments'];
+                                oldProperties['oryx-dataoutputassociations'] = element.properties['oryx-dataoutputassociations'];
+                            }
 
-                    if (stencil.property('oryx-assignments') !== undefined) {
-                        newProperties['oryx-assignmentsview'] = obj['variablecountsstring'];
-                        oldProperties['oryx-assignmentsview'] = element.properties['oryx-assignmentsview'];
-                    }
-                    else if (stencil.property('oryx-datainputassociations') !== undefined) {
-                        newProperties['oryx-datainputassociationsview'] = obj['variablecountsstring'];
-                        oldProperties['oryx-datainputassociationsview'] = element.properties['oryx-datainputassociationsview'];
-                    }
-                    else if (stencil.property('oryx-dataoutputassociations') !== undefined) {
-                        newProperties['oryx-dataoutputassociationsview'] = obj['variablecountsstring'];
-                        oldProperties['oryx-dataoutputassociationsview'] = element.properties['oryx-dataoutputassociationsview'];
-                    }
-                    // Add custom assignment properties to the properties which will be set
-                    this.addCustomAssignmentProperties(element, newProperties, oldProperties);
-                    // Set the properties which have been edited
-                    ORYX.DataIOEditorUtils.setElementProperties(this.facade, element, newProperties, oldProperties);
+                            if (stencil.property('oryx-assignments') !== undefined) {
+                                newProperties['oryx-assignmentsview'] = obj['variablecountsstring'];
+                                oldProperties['oryx-assignmentsview'] = element.properties['oryx-assignmentsview'];
+                            }
+                            else if (stencil.property('oryx-datainputassociations') !== undefined) {
+                                newProperties['oryx-datainputassociationsview'] = obj['variablecountsstring'];
+                                oldProperties['oryx-datainputassociationsview'] = element.properties['oryx-datainputassociationsview'];
+                            }
+                            else if (stencil.property('oryx-dataoutputassociations') !== undefined) {
+                                newProperties['oryx-dataoutputassociationsview'] = obj['variablecountsstring'];
+                                oldProperties['oryx-dataoutputassociationsview'] = element.properties['oryx-dataoutputassociationsview'];
+                            }
+                            // Add custom assignment properties to the properties which will be set
+                            this.addCustomAssignmentProperties(element, newProperties, oldProperties);
+                            // Set the properties which have been edited
+                            ORYX.DataIOEditorUtils.setElementProperties(this.facade, element, newProperties, oldProperties);
 
-                }.bind(this)
-        );
+                        }.bind(this)
+                );
+            } catch(e) {
+                ORYX.Log.warn("Error calling parent function designersignalshowdataioeditor: " + e.message);
+            }
+        }
     },
 
     getCustomAssignmentProperties: function(properties) {
