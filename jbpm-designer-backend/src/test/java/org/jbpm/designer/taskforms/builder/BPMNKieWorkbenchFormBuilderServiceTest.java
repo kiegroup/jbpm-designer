@@ -24,9 +24,12 @@ import org.jbpm.designer.bpmn2.utils.Bpmn2Loader;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kie.soup.project.datamodel.commons.util.RawMVELEvaluator;
 import org.kie.workbench.common.forms.commons.shared.layout.impl.StaticFormLayoutTemplateGenerator;
+import org.kie.workbench.common.forms.data.modeller.service.ext.ModelReaderService;
+import org.kie.workbench.common.forms.data.modeller.service.impl.ext.dmo.runtime.RuntimeDMOModelReader;
 import org.kie.workbench.common.forms.editor.service.backend.FormModelHandlerManager;
-import org.kie.workbench.common.forms.editor.service.shared.VFSFormFinderService;
+import org.kie.workbench.common.forms.editor.service.shared.ModuleFormFinderService;
 import org.kie.workbench.common.forms.editor.service.shared.model.impl.FormModelSynchronizationUtilImpl;
 import org.kie.workbench.common.forms.fields.test.TestFieldManager;
 import org.kie.workbench.common.forms.fields.test.TestMetaDataEntryManager;
@@ -73,7 +76,10 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
     private FormModelHandlerManager formModelHandlerManager;
 
     @Mock
-    private VFSFormFinderService vfsFormFinderService;
+    private ModelReaderService<Path> modelReaderService;
+
+    @Mock
+    private ModuleFormFinderService moduleFormFinderService;
 
     @Mock
     private CommentedOptionFactory commentedOptionFactory;
@@ -135,6 +141,8 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
             }
         });
 
+        when(modelReaderService.getModelReader(any())).thenReturn(new RuntimeDMOModelReader(getClass().getClassLoader(), new RawMVELEvaluator()));
+
         builderService = new BPMNKieWorkbenchFormBuilderService(ioService,
                                                                 formModelHandlerManager,
                                                                 new BPMNFormModelGeneratorImpl(moduleService,
@@ -142,8 +150,9 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
                                                                 formSerializer,
                                                                 new StaticFormLayoutTemplateGenerator(),
                                                                 new BPMNVFSFormDefinitionGeneratorService(fieldManager,
+                                                                                                          modelReaderService,
                                                                                                           formModelHandlerManager,
-                                                                                                          vfsFormFinderService,
+                                                                                                          moduleFormFinderService,
                                                                                                           formSerializer,
                                                                                                           ioService,
                                                                                                           commentedOptionFactory,
