@@ -417,7 +417,11 @@ public class DesignerPresenter
 
     private native void getDataIOEditorData(String assignmentData,
                                             final JavaScriptObject jscallback)/*-{
-        jscallback(assignmentData);
+        try {
+            jscallback(assignmentData);
+        } catch(e) {
+            // continue
+        }
         //$wnd.alert("DesignerPresenter.getDataIOEditorData assignmentdata = " + assignmentData);
     }-*/;
 

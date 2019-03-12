@@ -2217,8 +2217,8 @@ ORYX.Plugins.View = {
     },
 
     refreshCanvasForIE : function( options ) {
-       if ( (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) ||
-            (navigator.appVersion.indexOf("MSIE 10") !== -1) ) {
+        if ( (Object.hasOwnProperty.call(window, "ActiveXObject") && !window.ActiveXObject) ||
+                (navigator.appVersion.indexOf("MSIE 10") !== -1) ) {
 
             // If there's no options.shape, set it with an invisid
             if(!options.shape) {
