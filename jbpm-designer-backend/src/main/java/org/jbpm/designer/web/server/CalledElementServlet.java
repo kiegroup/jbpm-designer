@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.binary.Base64;
 import org.jbpm.designer.query.DesignerFindRuleFlowNamesQuery;
 import org.jbpm.designer.repository.Asset;
+import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.util.Utils;
 import org.jbpm.designer.web.profile.IDiagramProfile;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
@@ -130,8 +131,8 @@ public class CalledElementServlet extends HttpServlet {
                                     if (Base64.isBase64(uniqueId)) {
                                         byte[] decoded = Base64.decodeBase64(uniqueId);
                                         try {
-                                            uniqueId = new String(decoded,
-                                                                  "UTF-8");
+                                            uniqueId = UriUtils.encode(new String(decoded,
+                                                                           "UTF-8"));
                                         } catch (UnsupportedEncodingException e) {
                                             e.printStackTrace();
                                         }
