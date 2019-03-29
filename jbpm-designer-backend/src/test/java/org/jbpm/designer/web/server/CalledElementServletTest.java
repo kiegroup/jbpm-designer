@@ -32,6 +32,7 @@ import org.jbpm.designer.repository.Asset;
 import org.jbpm.designer.repository.AssetBuilderFactory;
 import org.jbpm.designer.repository.Repository;
 import org.jbpm.designer.repository.RepositoryBaseTest;
+import org.jbpm.designer.repository.UriUtils;
 import org.jbpm.designer.repository.impl.AssetBuilder;
 import org.jbpm.designer.repository.vfs.VFSRepository;
 import org.jbpm.designer.web.profile.IDiagramProfileService;
@@ -199,5 +200,39 @@ public class CalledElementServletTest extends RepositoryBaseTest {
         assertNotNull(returnData);
         assertTrue(returnData.contains("com.sample.testprocess1|/defaultPackage|testprocess1.bpmn2"));
         assertTrue(returnData.contains("com.sample.testprocess2|/defaultPackage|testprocess2.bpmn2"));
+    }
+
+    @Test
+    public void testOpenProcessInTabExtendedChars() throws Exception {
+        Repository repository = new VFSRepository(producer.getIoService());
+        ((VFSRepository) repository).setDescriptor(descriptor);
+        profile.setRepository(repository);
+        AssetBuilder builder;
+
+        builder = AssetBuilderFactory.getAssetBuilder(Asset.AssetType.Text);
+        builder.content("<bpmn2:process id=\"com.myteam.тестПроцесс\" drools:packageName=\"com.myteam\" drools:version=\"1.0\" name=\"Test Process 1\" isExecutable=\"true\"></bpmn2:process>")
+                .type("bpmn2")
+                .name("тестПроцесс")
+                .location("/defaultPackage");
+        repository.createAsset(builder.getAsset());
+
+        CalledElementServlet servlet = new CalledElementServlet();
+        servlet.profile = profile;
+
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("action",
+                   "openprocessintab");
+        params.put("pid", "com.myteam.тестПроцесс");
+
+        servlet.init(new TestServletConfig(new TestServletContext(repository)));
+        TestHttpServletResponse response = new TestHttpServletResponse();
+        servlet.doPost(new TestHttpServletRequest(params),
+                       response);
+
+        String returnData = new String(response.getContent());
+        assertNotNull(returnData);
+        // make sure returnData includes both process name and the uriutils encoded process name
+        assertTrue(returnData.contains("тестПроцесс.bpmn2"));
+        assertTrue(returnData.contains(UriUtils.encode("тестПроцесс.bpmn2")));
     }
 }
