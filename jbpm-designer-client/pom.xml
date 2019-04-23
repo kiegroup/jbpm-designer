@@ -190,6 +190,11 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>com.google.elemental2</groupId>
+      <artifactId>elemental2-promise</artifactId>
+    </dependency>
+
     <!-- mocks -->
     <dependency>
       <groupId>org.mockito</groupId>

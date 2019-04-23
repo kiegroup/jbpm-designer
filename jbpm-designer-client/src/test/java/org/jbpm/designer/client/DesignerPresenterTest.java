@@ -38,6 +38,7 @@ import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
+import org.uberfire.client.promise.Promises;
 import org.uberfire.ext.editor.commons.client.BaseEditorView;
 import org.uberfire.ext.editor.commons.client.file.CommandWithFileNameAndCommitMessage;
 import org.uberfire.ext.editor.commons.client.file.FileNameAndCommitMessage;
@@ -49,6 +50,7 @@ import org.uberfire.ext.editor.commons.service.RenameService;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
 import org.uberfire.mocks.CallerMock;
 import org.uberfire.mvp.Command;
+import org.uberfire.promise.SyncPromises;
 import org.uberfire.workbench.model.menu.MenuItem;
 
 import static org.junit.Assert.assertEquals;
@@ -108,6 +110,8 @@ public class DesignerPresenterTest {
     @Mock
     private AlertsButtonMenuItemBuilder alertsButtonMenuItemBuilder;
 
+    private Promises promises;
+
     @Mock
     private MenuItem alertsButtonMenuItem;
 
@@ -118,6 +122,7 @@ public class DesignerPresenterTest {
 
     @Before
     public void setup() {
+        promises = new SyncPromises();
         when(alertsButtonMenuItemBuilder.build()).thenReturn(alertsButtonMenuItem);
         renameServiceCaller = new CallerMock<>(renameService);
         presenter = spy(new DesignerPresenter(view) {
@@ -132,12 +137,15 @@ public class DesignerPresenterTest {
                 this.fileNameValidator = DesignerPresenterTest.this.fileNameValidator;
                 this.baseView = DesignerPresenterTest.this.baseView;
                 this.alertsButtonMenuItemBuilder = DesignerPresenterTest.this.alertsButtonMenuItemBuilder;
+                this.promises = DesignerPresenterTest.this.promises;
             }
 
             @Override
             protected void resetEditorPages(final Overview overview) {
             }
         });
+
+        doReturn(Optional.of(mock(WorkspaceProject.class))).when(workbenchContext).getActiveWorkspaceProject();
     }
 
     @Test
@@ -165,7 +173,7 @@ public class DesignerPresenterTest {
     @Test
     public void testMakeMenuBar() {
         doReturn(Optional.of(mock(WorkspaceProject.class))).when(workbenchContext).getActiveWorkspaceProject();
-        doReturn(true).when(projectController).canUpdateProject(any());
+        doReturn(promises.resolve(true)).when(projectController).canUpdateProject(any());
 
         presenter.makeMenuBar();
 
@@ -181,7 +189,7 @@ public class DesignerPresenterTest {
     @Test
     public void testMakeMenuBarWithoutUpdateProjectPermission() {
         doReturn(Optional.of(mock(WorkspaceProject.class))).when(workbenchContext).getActiveWorkspaceProject();
-        doReturn(false).when(projectController).canUpdateProject(any());
+        doReturn(promises.resolve(false)).when(projectController).canUpdateProject(any());
 
         presenter.makeMenuBar();
 

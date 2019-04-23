@@ -17,6 +17,7 @@
 package org.jbpm.designer.client;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
@@ -25,6 +26,8 @@ import javax.inject.Inject;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.ui.IsWidget;
+import elemental2.promise.Promise;
+import org.guvnor.common.services.project.model.WorkspaceProject;
 import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.jboss.errai.bus.client.api.messaging.Message;
 import org.jboss.errai.common.client.api.Caller;
@@ -136,30 +139,39 @@ public class DesignerPresenter
     }
 
     @WorkbenchMenu
-    public Menus getMenus() {
-        return menus;
+    public void getMenus(final Consumer<Menus> menusConsumer) {
+        super.getMenus(menusConsumer);
     }
 
     @Override
-    protected void makeMenuBar() {
-        if (canUpdateProject()) {
-            fileMenuBuilder
-                    .addSave(versionRecordManager.newSaveMenuItem(new Command() {
-                        @Override
-                        public void execute() {
-                            saveAction();
-                        }
-                    }))
-                    .addCopy(versionRecordManager.getCurrentPath(),
-                             assetUpdateValidator)
-                    .addRename(getSaveAndRename())
-                    .addDelete(versionRecordManager.getPathToLatest(),
-                               assetUpdateValidator);
+    protected Promise<Void> makeMenuBar() {
+        if (workbenchContext.getActiveWorkspaceProject().isPresent()) {
+            final WorkspaceProject activeProject = workbenchContext.getActiveWorkspaceProject().get();
+            return projectController.canUpdateProject(activeProject).then(canUpdateProject -> {
+                if (canUpdateProject) {
+                    fileMenuBuilder
+                            .addSave(versionRecordManager.newSaveMenuItem(new Command() {
+                                @Override
+                                public void execute() {
+                                    saveAction();
+                                }
+                            }))
+                            .addCopy(versionRecordManager.getCurrentPath(),
+                                     assetUpdateValidator)
+                            .addRename(getSaveAndRename())
+                            .addDelete(versionRecordManager.getPathToLatest(),
+                                       assetUpdateValidator);
+                }
+
+                fileMenuBuilder
+                        .addNewTopLevelMenu(versionRecordManager.buildMenu())
+                        .addNewTopLevelMenu(alertsButtonMenuItemBuilder.build());
+
+                return promises.resolve();
+            });
         }
 
-        fileMenuBuilder
-                .addNewTopLevelMenu(versionRecordManager.buildMenu())
-                .addNewTopLevelMenu(alertsButtonMenuItemBuilder.build());
+        return promises.resolve();
     }
 
     @Override
