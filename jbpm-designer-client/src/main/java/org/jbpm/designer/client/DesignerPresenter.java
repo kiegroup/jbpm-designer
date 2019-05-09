@@ -26,9 +26,12 @@ import javax.inject.Inject;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 import elemental2.promise.Promise;
 import org.guvnor.common.services.project.model.WorkspaceProject;
 import org.guvnor.common.services.shared.metadata.model.Overview;
+import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.constants.ButtonSize;
 import org.jboss.errai.bus.client.api.messaging.Message;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
@@ -42,6 +45,8 @@ import org.jbpm.designer.client.type.Bpmn2Type;
 import org.jbpm.designer.notification.DesignerNotificationEvent;
 import org.jbpm.designer.service.DesignerAssetService;
 import org.jbpm.designer.service.DesignerContent;
+import org.kie.workbench.common.stunner.bpmn.integration.client.IntegrationHandler;
+import org.kie.workbench.common.stunner.bpmn.integration.client.IntegrationHandlerProvider;
 import org.kie.workbench.common.widgets.client.callbacks.CommandBuilder;
 import org.kie.workbench.common.widgets.client.callbacks.CommandDrivenErrorCallback;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
@@ -74,7 +79,10 @@ import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.util.URIUtil;
 import org.uberfire.workbench.events.NotificationEvent;
+import org.uberfire.workbench.model.menu.MenuFactory;
+import org.uberfire.workbench.model.menu.MenuItem;
 import org.uberfire.workbench.model.menu.Menus;
+import org.uberfire.workbench.model.menu.impl.BaseMenuCustom;
 
 import static org.uberfire.ext.widgets.common.client.common.ConcurrentChangePopup.newConcurrentUpdate;
 
@@ -114,6 +122,9 @@ public class DesignerPresenter
 
     @Inject
     private ActivityDataIOEditor activityDataIOEditor;
+
+    @Inject
+    IntegrationHandlerProvider integrationHandlerProvider;
 
     private DesignerView view;
 
@@ -161,6 +172,7 @@ public class DesignerPresenter
                             .addRename(getSaveAndRename())
                             .addDelete(versionRecordManager.getPathToLatest(),
                                        assetUpdateValidator);
+                    integrationHandlerProvider.getIntegrationHandler().ifPresent(integrationHandler -> fileMenuBuilder.addNewTopLevelMenu(buildMigrateMenuItem(integrationHandler)));
                 }
 
                 fileMenuBuilder
@@ -245,6 +257,48 @@ public class DesignerPresenter
                 updateLockEvent.getFile().equals(versionRecordManager.getCurrentPath())) {
             view.raiseEventUpdateLock();
         }
+    }
+
+    private MenuItem buildMigrateMenuItem(IntegrationHandler integrationHandler) {
+        final Button widget = newButton();
+        widget.setSize(ButtonSize.SMALL);
+        widget.setText(DesignerEditorConstants.INSTANCE.Migrate());
+        widget.addClickHandler(clickEvent -> integrationHandler.migrateFromJBPMDesignerToStunner(versionRecordManager.getCurrentPath(),
+                                                                                                 place,
+                                                                                                 isDirty(),
+                                                                                                 saveCallback -> save(() -> saveCallback.accept(true))));
+        return new MenuFactory.CustomMenuBuilder() {
+            @Override
+            public void push(MenuFactory.CustomMenuBuilder element) {
+            }
+
+            @Override
+            public MenuItem build() {
+                return new BaseMenuCustom<Widget>() {
+                    @Override
+                    public Widget build() {
+                        return widget.asWidget();
+                    }
+
+                    @Override
+                    public boolean isEnabled() {
+                        return widget.isEnabled();
+                    }
+
+                    @Override
+                    public void setEnabled(boolean enabled) {
+                        widget.setEnabled(enabled);
+                    }
+                };
+            }
+        }.build();
+    }
+
+    /**
+     * keep this method for testing purposes.
+     */
+    protected Button newButton() {
+        return new Button();
     }
 
     private native void publishOpenInXMLEditorTab(DesignerPresenter dp)/*-{
