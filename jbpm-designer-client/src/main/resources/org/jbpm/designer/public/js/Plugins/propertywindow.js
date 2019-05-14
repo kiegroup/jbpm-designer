@@ -5141,10 +5141,9 @@ Ext.form.NameTypeEditor = Ext.extend(Ext.form.TriggerField, {
                                     uniqueNameVal = false;
                                 }
                             });
-                            // check the same against existing process vars in case of
-                            // subprocess variables
+                            // check against any already existing vars with same name
                             var processJSON = ORYX.EDITOR.getSerializedJSON();
-                            var processVars = jsonPath(processJSON.evalJSON(), "$.properties.vardefs");
+                            var processVars = jsonPath(processJSON.evalJSON(), "$..vardefs");
 
                             if (processVars && uniqueNameVal) {
                                 processVars.forEach(function (item) {
