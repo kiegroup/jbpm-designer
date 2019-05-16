@@ -201,7 +201,7 @@
       <url>https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads/</url>
     </repository>
     <repository>
-      <id>central</id>
+      <id>mikord</id>
       <name>CG Repo</name>
       <releases>
         <enabled>true</enabled>
@@ -209,7 +209,7 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
-      <url>http://artifactory.center.cg/artifactory/all</url>
+      <url>http://repo.cg.ru/repository/all</url>
     </repository>
   </repositories>
 
@@ -217,12 +217,12 @@
     <snapshotRepository>
       <id>snapshots</id>
       <name>Repository for storing projects created with Web-BPM 2.x</name>
-      <url>http://artifactory.center.cg/artifactory/libs-snapshots-local</url>
+      <url>http://repo.cg.ru/repository/libs-snapshots-local</url>
     </snapshotRepository>
     <repository>
-      <id>central</id>
+      <id>mikord</id>
       <name>Repository for storing projects created with Web-BPM 2.x</name>
-      <url>http://artifactory.center.cg/artifactory/libs-releases-local</url>
+      <url>http://repo.cg.ru/repository/libs-releases-local</url>
     </repository>
   </distributionManagement>
 
