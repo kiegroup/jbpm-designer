@@ -95,4 +95,6 @@ public interface DesignerEditorConstants extends
     String Information();
 
     String ModelEditorConfirmSaveBeforeRename();
+
+    String Migrate();
 }

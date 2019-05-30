@@ -20,22 +20,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwtmockito.GwtMockitoTestRunner;
 import org.guvnor.common.services.project.client.context.WorkspaceProjectContext;
 import org.guvnor.common.services.project.client.security.ProjectController;
 import org.guvnor.common.services.project.model.WorkspaceProject;
 import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.guvnor.messageconsole.client.console.widget.button.AlertsButtonMenuItemBuilder;
+import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.constants.ButtonSize;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.designer.client.parameters.DesignerEditorParametersPublisher;
+import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.kie.workbench.common.stunner.bpmn.integration.client.IntegrationHandler;
+import org.kie.workbench.common.stunner.bpmn.integration.client.IntegrationHandlerProvider;
 import org.kie.workbench.common.widgets.client.menu.FileMenuBuilderImpl;
 import org.kie.workbench.common.widgets.metadata.client.validation.AssetUpdateValidator;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.promise.Promises;
@@ -50,12 +59,16 @@ import org.uberfire.ext.editor.commons.service.RenameService;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
 import org.uberfire.mocks.CallerMock;
 import org.uberfire.mvp.Command;
+import org.uberfire.mvp.ParameterizedCommand;
+import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.promise.SyncPromises;
 import org.uberfire.workbench.model.menu.MenuItem;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -66,7 +79,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(GwtMockitoTestRunner.class)
 public class DesignerPresenterTest {
 
     @Mock
@@ -115,6 +128,20 @@ public class DesignerPresenterTest {
     @Mock
     private MenuItem alertsButtonMenuItem;
 
+    @Mock
+    private IntegrationHandlerProvider integrationHandlerProvider;
+
+    @Mock
+    private IntegrationHandler integrationHandler;
+
+    @Captor
+    private ArgumentCaptor<ClickHandler> clickHandlerCaptor;
+
+    private Button migrateButton;
+
+    @Mock
+    private PlaceRequest place;
+
     @Spy
     private Map<String, String> parameters = new HashMap<>();
 
@@ -122,6 +149,8 @@ public class DesignerPresenterTest {
 
     @Before
     public void setup() {
+        migrateButton = mock(Button.class);
+        when(integrationHandlerProvider.getIntegrationHandler()).thenReturn(Optional.empty());
         promises = new SyncPromises();
         when(alertsButtonMenuItemBuilder.build()).thenReturn(alertsButtonMenuItem);
         renameServiceCaller = new CallerMock<>(renameService);
@@ -138,10 +167,17 @@ public class DesignerPresenterTest {
                 this.baseView = DesignerPresenterTest.this.baseView;
                 this.alertsButtonMenuItemBuilder = DesignerPresenterTest.this.alertsButtonMenuItemBuilder;
                 this.promises = DesignerPresenterTest.this.promises;
+                this.integrationHandlerProvider = DesignerPresenterTest.this.integrationHandlerProvider;
+                this.place = DesignerPresenterTest.this.place;
             }
 
             @Override
             protected void resetEditorPages(final Overview overview) {
+            }
+
+            @Override
+            protected Button newButton() {
+                return migrateButton;
             }
         });
 
@@ -204,6 +240,78 @@ public class DesignerPresenterTest {
                never()).addDelete(any(Path.class),
                                   any(AssetUpdateValidator.class));
         verify(fileMenuBuilder).addNewTopLevelMenu(alertsButtonMenuItem);
+    }
+
+    @Test
+    public void testMigrateActionIsAddedToMenuBarWhenIntegrationIsPresent() {
+        doReturn(Optional.of(mock(WorkspaceProject.class))).when(workbenchContext).getActiveWorkspaceProject();
+        doReturn(promises.resolve(true)).when(projectController).canUpdateProject(any());
+
+        Optional<IntegrationHandler> optional = Optional.of(integrationHandler);
+        when(integrationHandlerProvider.getIntegrationHandler()).thenReturn(optional);
+
+        presenter.makeMenuBar();
+
+        verify(presenter).newButton();
+        verify(migrateButton).setSize(ButtonSize.SMALL);
+        verify(migrateButton).setText(DesignerEditorConstants.INSTANCE.Migrate());
+        verify(migrateButton).addClickHandler(any(ClickHandler.class));
+    }
+
+    @Test
+    public void testMigrateActionIsNotAddedToMenuBarWhenIntegrationNotPresent() {
+        doReturn(Optional.of(mock(WorkspaceProject.class))).when(workbenchContext).getActiveWorkspaceProject();
+        doReturn(promises.resolve(true)).when(projectController).canUpdateProject(any());
+
+        when(integrationHandlerProvider.getIntegrationHandler()).thenReturn(Optional.empty());
+
+        presenter.makeMenuBar();
+
+        verifyMigrateActionWasNotAdded();
+    }
+
+    @Test
+    public void testMigrateActionIsNotAddedToMenuBarWhenIntegrationIsPresentButProjectUpdateIsNotPermitted() {
+        doReturn(Optional.of(mock(WorkspaceProject.class))).when(workbenchContext).getActiveWorkspaceProject();
+        doReturn(promises.resolve(false)).when(projectController).canUpdateProject(any());
+
+        Optional<IntegrationHandler> optional = Optional.of(integrationHandler);
+        when(integrationHandlerProvider.getIntegrationHandler()).thenReturn(optional);
+        presenter.makeMenuBar();
+
+        verifyMigrateActionWasNotAdded();
+    }
+
+    private void verifyMigrateActionWasNotAdded() {
+        verify(presenter, never()).newButton();
+        verify(migrateButton, never()).setSize(any(ButtonSize.class));
+        verify(migrateButton, never()).setText(anyString());
+        verify(migrateButton, never()).addClickHandler(any(ClickHandler.class));
+    }
+
+    @Test
+    public void testMigrateWhenDirty() {
+        testMigrate(true);
+    }
+
+    @Test
+    public void testMigrateWhenNotDirty() {
+        testMigrate(false);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void testMigrate(boolean isDirty) {
+        doReturn(Optional.of(mock(WorkspaceProject.class))).when(workbenchContext).getActiveWorkspaceProject();
+        doReturn(promises.resolve(true)).when(projectController).canUpdateProject(any());
+        ObservablePath currentPath = mock(ObservablePath.class);
+        when(versionRecordManager.getCurrentPath()).thenReturn(currentPath);
+        when(view.canSaveDesignerModel()).thenReturn(!isDirty);
+        Optional<IntegrationHandler> optional = Optional.of(integrationHandler);
+        when(integrationHandlerProvider.getIntegrationHandler()).thenReturn(optional);
+        presenter.makeMenuBar();
+        verify(migrateButton).addClickHandler(clickHandlerCaptor.capture());
+        clickHandlerCaptor.getValue().onClick(mock(ClickEvent.class));
+        verify(integrationHandler).migrateFromJBPMDesignerToStunner(eq(currentPath), eq(place), eq(isDirty), any(ParameterizedCommand.class));
     }
 
     @Test

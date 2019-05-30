@@ -163,6 +163,11 @@
       <artifactId>kie-wb-common-ui</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.kie.workbench.stunner</groupId>
+      <artifactId>kie-wb-common-stunner-jbpm-designer-integration-shared</artifactId>
+    </dependency>
+
     <!-- Errai  -->
     <dependency>
       <groupId>org.jboss.errai</groupId>
