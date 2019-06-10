@@ -287,7 +287,7 @@ public class AssetServiceServlet extends HttpServlet {
                             assetObj.put("id",
                                          asset.getUniqueId());
                             assetObj.put("location",
-                                         asset.getAssetLocation());
+                                         UriUtils.locationToUriPath(asset.getAssetLocation()));
                             assetObj.put("type",
                                          asset.getAssetType());
                             assetObj.put("created",

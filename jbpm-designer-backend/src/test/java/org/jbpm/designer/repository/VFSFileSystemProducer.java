@@ -32,7 +32,8 @@ public class VFSFileSystemProducer {
     private IOService ioService = new IOServiceDotFileImpl();
 
     public RepositoryDescriptor produceFileSystem(final Map<String, String> env) {
-        URI repositoryRoot = URI.create(env.get("repository.root"));
+        String root = env.get("repository.root").replaceAll("\\\\", "/");
+        URI repositoryRoot = URI.create(root);
 
         FileSystem fileSystem;
         // this is a hack to avoid ERROR messages coming from UF when trying to get non-existing file system

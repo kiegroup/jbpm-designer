@@ -87,6 +87,7 @@ public class BusinessProcessCopyHelper implements CopyHelper {
         //Load existing file
         final org.uberfire.java.nio.file.Path _destination = Paths.convert(destination);
         final String processSource = ioService.readAllString(_destination);
+        String separator = ioService.getFileSystem(_destination.toUri()).getSeparator();
 
         DroolsFactoryImpl.init();
         BpsimFactoryImpl.init();
@@ -107,8 +108,9 @@ public class BusinessProcessCopyHelper implements CopyHelper {
             Process process = getRootProcess(def);
 
             String destinationPkg = "";
-            if (!"/".equals(_destination.getParent().toString())) {
-                String[] pathParts = _destination.getParent().toString().split("/");
+            
+            if (!separator.equals(_destination.getParent().toString())) {
+                String[] pathParts = _destination.getParent().toString().split("\\" + separator);
                 destinationPkg = pathParts[1];
             }
 

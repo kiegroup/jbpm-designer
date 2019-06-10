@@ -187,7 +187,8 @@ public class CalledElementServlet extends HttpServlet {
                                                                                        pid,
                                                                                        profile);
                                 if (pid != null && !(packageName.equals(processPackage) && pid.equals(processId))) {
-                                    processInfo.put(pid + "|" + processContent.getAssetLocation() + "|" + processContent.getFullName(),
+                                    String uriPath = UriUtils.locationToUriPath(processContent.getAssetLocation());
+                                    processInfo.put(pid + "|" + uriPath + "|" + processContent.getFullName(),
                                                     pidcontent != null ? pidcontent : "");
                                 }
                             }

@@ -15,6 +15,8 @@
  */
 package org.jbpm.designer.server;
 
+import java.io.File;
+
 import bpsim.impl.BpsimFactoryImpl;
 import org.eclipse.bpmn2.Definitions;
 import org.guvnor.common.services.backend.util.CommentedOptionFactory;
@@ -30,6 +32,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.io.IOService;
 import org.uberfire.java.nio.base.options.CommentedOption;
+import org.uberfire.java.nio.file.FileSystem;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertNotNull;
@@ -47,6 +50,9 @@ public class BusinessProcessCopyHelperTest {
 
     @Mock
     private IOService ioService;
+
+    @Mock
+    private FileSystem fileSystem;
 
     @Mock
     private CommentedOptionFactory commentedOptionFactory;
@@ -86,6 +92,8 @@ public class BusinessProcessCopyHelperTest {
         when(pathDestination.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
         when(pathDestination.getFileName()).thenReturn("MyNewProcess.bpmn2");
         when(ioService.readAllString(any(org.uberfire.java.nio.file.Path.class))).thenReturn(DEFAULT_PROCESS);
+        when(ioService.getFileSystem(any())).thenReturn(fileSystem);
+        when(fileSystem.getSeparator()).thenReturn(File.separator);
 
         helper.postProcess(pathSource,
                            pathDestination);
@@ -122,6 +130,8 @@ public class BusinessProcessCopyHelperTest {
         when(pathDestination.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
         when(pathDestination.getFileName()).thenReturn("Эож ты дольорэ     My New Process  어디야.bpmn2");
         when(ioService.readAllString(any(org.uberfire.java.nio.file.Path.class))).thenReturn(DEFAULT_PROCESS);
+        when(ioService.getFileSystem(any())).thenReturn(fileSystem);
+        when(fileSystem.getSeparator()).thenReturn(File.separator);
 
         helper.postProcess(pathSource,
                            pathDestination);
@@ -158,6 +168,8 @@ public class BusinessProcessCopyHelperTest {
         when(pathDestination.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
         when(pathDestination.getFileName()).thenReturn("  << my process    >>");
         when(ioService.readAllString(any(org.uberfire.java.nio.file.Path.class))).thenReturn(DEFAULT_PROCESS);
+        when(ioService.getFileSystem(any())).thenReturn(fileSystem);
+        when(fileSystem.getSeparator()).thenReturn(File.separator);
 
         helper.postProcess(pathSource,
                            pathDestination);

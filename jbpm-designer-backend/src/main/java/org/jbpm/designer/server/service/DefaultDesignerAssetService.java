@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -343,23 +344,17 @@ public class DefaultDesignerAssetService
 
     private String buildProcessId(String location,
                                   String name) {
-        if (location.startsWith("/")) {
-            location = location.replaceFirst("/",
-                                             "");
-        }
 
-        location = location.replaceAll("src/main/resources/", "");
-        location = location.replaceAll("/src/main/resources", "");
 
-        location = location.replaceAll("/",
-                                       ".");
-
+        location = normalizeLocation(location);
+        String packageLocation = buildPackageFromLocation(location);
+        location = buildProjectFromLocation(location) + (packageLocation.isEmpty() ? "" : "." + packageLocation); 
         name = name.substring(0,
-                              name.lastIndexOf("."));
+                name.lastIndexOf("."));
         name = Utils.toBPMNIdentifier(name);
 
         // in case of "<default>" package selection
-        if(!location.equals("src.main")) {
+        if(!location.isEmpty()) {
             return location + "." + name;
         } else {
             return name;
@@ -368,23 +363,79 @@ public class DefaultDesignerAssetService
 
     private String buildPackageName(String location,
                                     String name) {
-        // replace file name in case it exists
-        String packageName = location.replaceFirst("/" + name,
-                                                   "")
-                // replace project and resources structure
-                .replaceFirst(".*/src/main/resources",
-                              "")
-                .replaceFirst(".*/src/main",
-                              "")
-                // replace  with . to form package name
-                .replaceAll("/",
-                            ".");
-        // lastly if there is . at the beginning just remove it
-        if (packageName.startsWith(".")) {
-            packageName = packageName.substring(1);
+        location = normalizeLocation(location);
+        return buildPackageFromLocation(location);
+    }
+
+    private String normalizeLocation(String location) {
+        if (location.startsWith("/")) {
+            location = location.replaceFirst("/", "");
+        }
+        // matches windows path
+        if(location.startsWith("\\")) {
+            location = location.replaceFirst("\\\\", "");
+        }
+        if(Pattern.compile("(?:[a-zA-Z]\\:)\\\\").matcher(location).find()) {
+            location = location.substring(3); // drive unit + semicolon + backslash
+            location = location.replaceAll("\\\\", "/");
+        }
+        return location;
+    }
+
+    private String buildProjectFromLocation(String location) {
+
+        String[] segments = location.split("/");
+        String [] source = new String [] {"src", "main", "resources"};
+        int current = 0;
+        int first = -1;
+        int last = 0;
+        for(int idx = 0; idx < segments.length; idx++) {
+            if(segments[idx].equals(source[current])) {
+                if(current == 0) {
+                    first = idx;
+                } 
+                current++;
+            } else {
+                current = 0;
+                first = -1;
+            }
+            if (current == source.length) {
+                last = idx;
+                break;
+            }
         }
 
-        return packageName;
+        return (current == source.length) ? segments[first - 1] : "";
+    }
+
+
+    private String buildPackageFromLocation(String location) {
+
+        String[] segments = location.split("/");
+        String [] source = new String [] {"src", "main", "resources"};
+        int current = 0;
+        int first = -1;
+        int last = 0;
+        for(int idx = 0; idx < segments.length; idx++) {
+            if(segments[idx].equals(source[current])) {
+                if(current == 0) {
+                    first = idx;
+                } 
+                current++;
+                last = idx + 1;
+            } else {
+                current = 0;
+            }
+            if (current == source.length) {
+                break;
+            }
+        }
+        if(current == source.length) {
+            String[] others = Arrays.copyOfRange(segments, last, segments.length);
+            return (others.length > 0 ? String.join(".", others) : "");
+        } else {
+            return "";
+        }
     }
 
     @Override

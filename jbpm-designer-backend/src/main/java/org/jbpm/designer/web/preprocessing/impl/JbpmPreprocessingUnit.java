@@ -215,6 +215,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
 
     public static String createAbsoluteIconPath(String assetPath,
                                                 String iconPath) {
+        assetPath = assetPath.replace("\\", "/");
         if (assetPath == null || assetPath.length() < 1) {
             return iconPath;
         }

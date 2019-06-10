@@ -22,10 +22,11 @@ public class UriUtils {
 
     private static final String URL_ENCODED_REGEX = ".*%\\w{1,}.*";
 
-    public static String encode(String value) {
-        if (value == null) {
-            return value;
+    public static String encode(String uri) {
+        if (uri == null) {
+            return null;
         }
+        String value = uri.replace("\\", "/");
         if (value.matches(URL_ENCODED_REGEX)) {
             return value;
         }
@@ -37,5 +38,9 @@ public class UriUtils {
             return value;
         }
         return EncodingUtil.decode(value);
+    }
+
+    public static String locationToUriPath(String location) {
+        return location.replace("\\", "/");
     }
 }

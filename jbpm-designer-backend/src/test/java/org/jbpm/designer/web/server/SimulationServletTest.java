@@ -52,7 +52,7 @@ public class SimulationServletTest {
 
         // Request json is encoded
         String rawJson = readFile("BPSim_i18nNames.json");
-        String encodedJson = Base64.encodeBase64String(UriUtils.encode(rawJson.toString()).getBytes("UTF-8"));
+        String encodedJson = Base64.encodeBase64String(rawJson.toString().getBytes("UTF-8"));
 
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -94,7 +94,7 @@ public class SimulationServletTest {
 
         // Request json is encoded
         String rawJson = readFile("BPSim_i18nNames.json");
-        String encodedJson = Base64.encodeBase64String(UriUtils.encode(rawJson.toString()).getBytes("UTF-8"));
+        String encodedJson = Base64.encodeBase64String(rawJson.toString().getBytes("UTF-8"));
 
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -134,7 +134,7 @@ public class SimulationServletTest {
 
         // Request json is encoded
         String rawJson = readFile("BPSim_i18nNames.json");
-        String encodedJson = Base64.encodeBase64String(UriUtils.encode(rawJson.toString()).getBytes("UTF-8"));
+        String encodedJson = Base64.encodeBase64String(rawJson.toString().getBytes("UTF-8"));
 
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -182,7 +182,7 @@ public class SimulationServletTest {
 
         // Request json is encoded
         String rawJson = readFile("BPSim_pathfindererror.json");
-        String encodedJson = Base64.encodeBase64String(UriUtils.encode(rawJson.toString()).getBytes("UTF-8"));
+        String encodedJson = Base64.encodeBase64String(rawJson.toString().getBytes("UTF-8"));
 
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();
@@ -215,7 +215,7 @@ public class SimulationServletTest {
 
         // Request json is encoded
         String rawJson = readFile("BPSim_sendtask.json");
-        String encodedJson = Base64.encodeBase64String(UriUtils.encode(rawJson.toString()).getBytes("UTF-8"));
+        String encodedJson = Base64.encodeBase64String(rawJson.toString().getBytes("UTF-8"));
 
         // setup parameters
         Map<String, String> params = new HashMap<String, String>();

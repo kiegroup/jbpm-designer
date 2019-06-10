@@ -156,7 +156,8 @@ public class VFSRepository implements Repository {
 
     public Directory createDirectory(String location) {
         location = UriUtils.encode(location);
-        Path path = descriptor.getFileSystem().provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + location));
+        URI uri = URI.create(descriptor.getStringRepositoryRoot() + location);
+        Path path = descriptor.getFileSystem().provider().getPath(uri);
 
         path = ioService.createDirectories(path);
         String uniqueId = encodeUniqueId(path.toUri().toString());
@@ -223,14 +224,14 @@ public class VFSRepository implements Repository {
             if (!Files.isDirectory(sourcePath)) {
                 return false;
             }
-            final String destinationPathRoot = descriptor.getStringRepositoryRoot() + location + fileSystem.getSeparator() + sourcePath.getFileName().toString();
+            final String destinationPathRoot = UriUtils.locationToUriPath(descriptor.getStringRepositoryRoot() + location + fileSystem.getSeparator() + sourcePath.getFileName().toString());
             Files.walkFileTree(sourcePath,
                                new SimpleFileVisitor<Path>() {
                                    @Override
                                    public FileVisitResult preVisitDirectory(Path dir,
                                                                             BasicFileAttributes attrs) throws IOException {
                                        Path destinationPath = fileSystem.provider().getPath(URI.create(destinationPathRoot +
-                                                                                                               fileSystem.getSeparator() + sourcePath.relativize(dir)));
+                                                                                                               "/" + sourcePath.relativize(dir).toString().replace("\\","/")));
                                        fileSystem.provider().createDirectory(destinationPath);
 
                                        return FileVisitResult.CONTINUE;
@@ -243,7 +244,7 @@ public class VFSRepository implements Repository {
                                        // .gitkeep for empty directories (UF-456)
                                        if (!currentFile.endsWith(".gitignore") && !currentFile.endsWith(".gitkeep")) {
                                            Path destinationPath = fileSystem.provider().getPath(URI.create(destinationPathRoot +
-                                                                                                                   fileSystem.getSeparator() + sourcePath.relativize(currentFile)));
+                                                                                                                   "/" + sourcePath.relativize(currentFile)));
                                            createIfNotExists(destinationPath);
 
                                            fileSystem.provider().copy(currentFile,
@@ -283,15 +284,15 @@ public class VFSRepository implements Repository {
             if (!destinationFolder.endsWith(fileSystem.getSeparator())) {
                 destinationFolder = destinationFolder + fileSystem.getSeparator();
             }
-            final String destinationPathRoot = destinationFolder + name;
+            final String destinationPathRoot = UriUtils.locationToUriPath(destinationFolder + name);
 
             Files.walkFileTree(sourcePath,
                                new SimpleFileVisitor<Path>() {
                                    @Override
                                    public FileVisitResult visitFile(Path currentFile,
                                                                     BasicFileAttributes basicFileAttributes) throws IOException {
-                                       Path destinationPath = fileSystem.provider().getPath(URI.create(destinationPathRoot
-                                                                                                               + fileSystem.getSeparator() + sourcePath.relativize(currentFile)));
+                                       URI uri = URI.create(destinationPathRoot + "/" + sourcePath.relativize(currentFile).toString().replace("\\", "/"));
+                                       Path destinationPath = fileSystem.provider().getPath(uri);
                                        createIfNotExists(destinationPath);
                                        fileSystem.provider().move(currentFile,
                                                                   destinationPath,
@@ -305,8 +306,8 @@ public class VFSRepository implements Repository {
                                                                              IOException e) throws IOException {
                                        if (e == null) {
                                            try {
-                                               Path destinationPath = fileSystem.provider().getPath(URI.create(destinationPathRoot
-                                                                                                                       + fileSystem.getSeparator() + sourcePath.relativize(dir)));
+                                               URI uri = URI.create(destinationPathRoot + "/" + sourcePath.relativize(dir).toString().replace(fileSystem.getSeparator(), "/"));
+                                               Path destinationPath = fileSystem.provider().getPath(uri);
                                                createIfNotExists(destinationPath);
                                                fileSystem.provider().move(dir,
                                                                           destinationPath,
@@ -512,7 +513,7 @@ public class VFSRepository implements Repository {
             FileSystem fileSystem = descriptor.getFileSystem();
             Path sourcePath = fileSystem.provider().getPath(URI.create(decodedUniqueId));
             Path destinationPath = fileSystem.provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + location
-                                                                                    + fileSystem.getSeparator() + sourcePath.getFileName().toString()));
+                                                                                    + "/" + sourcePath.getFileName().toString()));
             createIfNotExists(destinationPath);
 
             CommentedOption commentedOption = new CommentedOption(getIdentity(),
@@ -547,7 +548,7 @@ public class VFSRepository implements Repository {
                 name = sourcePath.getFileName().toString();
             }
 
-            Path destinationPath = fileSystem.provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + location + fileSystem.getSeparator() + name));
+            Path destinationPath = fileSystem.provider().getPath(URI.create(descriptor.getStringRepositoryRoot() + location + "/" + name));
             createIfNotExists(destinationPath);
             CommentedOption commentedOption = new CommentedOption(getIdentity(),
                                                                   "Moved asset " + sourcePath.getFileName()
@@ -623,15 +624,18 @@ public class VFSRepository implements Repository {
             location = pathAsString.replaceFirst(descriptor.getStringRepositoryRoot(),
                                                  "");
         } else {
-            location = pathAsString.replaceFirst(descriptor.getRepositoryRootPath().toString(),
-                                                 "");
+            String uri = descriptor.getRepositoryRootPath().toString();
+            if(pathAsString.startsWith(uri)) {
+                pathAsString = pathAsString.substring(uri.length());
+            }
+            location = pathAsString.replace("/", descriptor.getFileSystem().getSeparator());
         }
 
         if (!location.startsWith(descriptor.getFileSystem().getSeparator())) {
             location = descriptor.getFileSystem().getSeparator() + location;
         }
 
-        return location;
+        return location.replace("\\", "/");
     }
 
     private void createIfNotExists(Path filePath) {

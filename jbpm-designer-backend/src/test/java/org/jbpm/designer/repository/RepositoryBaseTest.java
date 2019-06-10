@@ -26,13 +26,22 @@ import org.jbpm.designer.web.profile.impl.JbpmProfileImpl;
 
 public class RepositoryBaseTest {
 
-    protected static final String REPOSITORY_ROOT = (System.getProperty("java.io.tmpdir").endsWith(File.separator)
-            ? System.getProperty("java.io.tmpdir") : (System.getProperty("java.io.tmpdir") + File.separator)) + "designer-repo";
-    protected static final String VFS_REPOSITORY_ROOT = "default://" + REPOSITORY_ROOT;
+    protected static final String REPOSITORY_ROOT;
+    protected static final String VFS_REPOSITORY_ROOT;
 
     protected JbpmProfileImpl profile;
     protected RepositoryDescriptor descriptor;
     protected VFSFileSystemProducer producer;
+
+    static {
+        if(System.getProperty("java.io.tmpdir").endsWith(File.separator)) {
+            REPOSITORY_ROOT = System.getProperty("java.io.tmpdir");
+        } else {
+            REPOSITORY_ROOT = System.getProperty("java.io.tmpdir") + File.separator + "designer-repo";
+        }
+
+        VFS_REPOSITORY_ROOT = "default://" + REPOSITORY_ROOT.replace("\\", "/").replace(":", "%3A");
+    }
 
     protected void deleteFiles(File directory) {
         for (File file : directory.listFiles()) {
