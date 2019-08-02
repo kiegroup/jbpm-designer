@@ -52,8 +52,8 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
     private Bpmn2Type resourceType;
 
     private final AuthorizationManager authorizationManager;
-    private final SessionInfo sessionInfo;
 
+    private final SessionInfo sessionInfo;
 
     public NewProcessHandler() {
         this(null,
