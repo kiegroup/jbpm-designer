@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.project.model.Package;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jbpm.designer.client.DesignerPresenter;
 import org.jbpm.designer.client.resources.DesignerEditorResources;
 import org.jbpm.designer.client.resources.i18n.DesignerEditorConstants;
 import org.jbpm.designer.client.type.Bpmn2Type;
@@ -34,6 +35,11 @@ import org.kie.workbench.common.widgets.client.handlers.NewResourceSuccessEvent;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.ext.widgets.common.client.callbacks.DefaultErrorCallback;
+import org.uberfire.rpc.SessionInfo;
+import org.uberfire.security.ResourceAction;
+import org.uberfire.security.ResourceRef;
+import org.uberfire.security.authz.AuthorizationManager;
+import org.uberfire.workbench.model.ActivityResourceType;
 import org.uberfire.workbench.type.ResourceTypeDefinition;
 
 @ApplicationScoped
@@ -45,16 +51,29 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
 
     private Bpmn2Type resourceType;
 
+    private final AuthorizationManager authorizationManager;
+    private final SessionInfo sessionInfo;
+
+
     public NewProcessHandler() {
+        this(null,
+             null,
+             null,
+             null,
+             null);
     }
 
     @Inject
     public NewProcessHandler(final Caller<DesignerAssetService> designerAssetService,
                              final PlaceManager placeManager,
-                             final Bpmn2Type resourceType) {
+                             final Bpmn2Type resourceType,
+                             final AuthorizationManager authorizationManager,
+                             final SessionInfo sessionInfo) {
         this.designerAssetService = designerAssetService;
         this.placeManager = placeManager;
         this.resourceType = resourceType;
+        this.authorizationManager = authorizationManager;
+        this.sessionInfo = sessionInfo;
     }
 
     @Override
@@ -93,5 +112,13 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
     @Override
     public int order() {
         return -30;
+    }
+
+    @Override
+    public boolean canCreate() {
+        return authorizationManager.authorize(new ResourceRef(DesignerPresenter.EDITOR_ID,
+                                                              ActivityResourceType.EDITOR),
+                                              ResourceAction.READ,
+                                              sessionInfo.getIdentity());
     }
 }
