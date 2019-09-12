@@ -72,8 +72,10 @@ public class DesignerViewImpl
     }
 
     @Override
-    public void raiseEventCheckSave(String pathURI) {
-        designerWidget.raiseEventCheckSave(designerWidget.getEditorID(),
+    public void raiseEventCheckSave(boolean saveWithComments,
+                                    String pathURI) {
+        designerWidget.raiseEventCheckSave(saveWithComments,
+                                           designerWidget.getEditorID(),
                                            pathURI);
     }
 

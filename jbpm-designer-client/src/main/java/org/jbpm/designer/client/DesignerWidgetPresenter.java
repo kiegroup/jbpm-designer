@@ -81,9 +81,11 @@ public class DesignerWidgetPresenter {
         view.raiseEventUpdate(editorID);
     }
 
-    public void raiseEventCheckSave(final String editorID,
+    public void raiseEventCheckSave(boolean saveWithComments,
+                                    final String editorID,
                                     String pathURI) {
-        view.raiseEventCheckSave(editorID,
+        view.raiseEventCheckSave(saveWithComments,
+                                 editorID,
                                  pathURI);
     }
 
