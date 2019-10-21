@@ -212,12 +212,14 @@ public class DesignerWidgetView
         }
     }-*/;
 
-    public native void raiseEventCheckSave(String editorID,
+    public native void raiseEventCheckSave(boolean saveWithComments,
+                                           String editorID,
                                            String pathURI) /*-{
         try {
             if ($wnd.document.getElementById(editorID) && $wnd.document.getElementById(editorID).contentWindow.ORYX && $wnd.document.getElementById(editorID).contentWindow.ORYX.Editor && (typeof($wnd.document.getElementById(editorID).contentWindow.ORYX.Editor.checkIfSaved) == "function")) {
                 $wnd.document.getElementById(editorID).contentWindow.ORYX.EDITOR._pluginFacade.raiseEvent({
                     type: "designereventdochecksave",
+                    saveWithComments: saveWithComments,
                     pathuri: pathURI
                 });
             }

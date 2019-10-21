@@ -224,7 +224,7 @@ ORYX.Plugins.SavePlugin = Clazz.extend({
     },
 
     handleEventDoCheckSave : function(options) {
-        this.save(true, options.pathuri);
+        this.save(options.saveWithComments, options.pathuri);
     },
 
     handleEventCancelSave: function() {

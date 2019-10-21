@@ -36,7 +36,8 @@ public interface DesignerView
 
     void raiseEventSave();
 
-    void raiseEventCheckSave(String pathURI);
+    void raiseEventCheckSave(boolean saveWithComments,
+                             String pathURI);
 
     void raiseEventSaveCancel();
 

@@ -75,6 +75,7 @@ import org.uberfire.lifecycle.OnClose;
 import org.uberfire.lifecycle.OnMayClose;
 import org.uberfire.lifecycle.OnStartup;
 import org.uberfire.mvp.Command;
+import org.uberfire.mvp.ParameterizedCommand;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.PathPlaceRequest;
 import org.uberfire.util.URIUtil;
@@ -160,13 +161,12 @@ public class DesignerPresenter
             final WorkspaceProject activeProject = workbenchContext.getActiveWorkspaceProject().get();
             return projectController.canUpdateProject(activeProject).then(canUpdateProject -> {
                 if (canUpdateProject) {
+                    final ParameterizedCommand<Boolean> onSave = withComments -> {
+                        saveWithComments = withComments;
+                        saveAction();
+                    };
                     fileMenuBuilder
-                            .addSave(versionRecordManager.newSaveMenuItem(new Command() {
-                                @Override
-                                public void execute() {
-                                    saveAction();
-                                }
-                            }))
+                            .addSave(versionRecordManager.newSaveMenuItem(onSave))
                             .addCopy(versionRecordManager.getCurrentPath(),
                                      assetUpdateValidator)
                             .addRename(getSaveAndRename())
@@ -793,7 +793,7 @@ public class DesignerPresenter
         final ObservablePath latestPath = versionRecordManager.getPathToLatest();
 
         assetService.call(aVoid -> {
-            view.raiseEventCheckSave(latestPath.toURI());
+            view.raiseEventCheckSave(saveWithComments, latestPath.toURI());
         }).updateMetadata(latestPath,
                           overview.getMetadata());
     }
