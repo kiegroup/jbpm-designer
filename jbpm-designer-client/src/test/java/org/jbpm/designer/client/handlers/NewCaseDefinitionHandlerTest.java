@@ -32,6 +32,7 @@ import org.uberfire.mocks.CallerMock;
 import org.uberfire.mocks.EventSourceMock;
 import org.uberfire.workbench.type.ResourceTypeDefinition;
 
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.doReturn;
@@ -44,7 +45,6 @@ public class NewCaseDefinitionHandlerTest {
 
     @Mock
     private DesignerAssetService designerAssetService;
-    private Caller<DesignerAssetService> designerAssetServiceCaller;
 
     @Mock
     private PlaceManager placeManager;
@@ -56,13 +56,11 @@ public class NewCaseDefinitionHandlerTest {
 
     @Before
     public void setup() {
-        designerAssetServiceCaller = new CallerMock<>(designerAssetService);
+        Caller<DesignerAssetService> designerAssetServiceCaller = new CallerMock<>(designerAssetService);
         newCaseDefinitionHandler = new NewCaseDefinitionHandler(designerAssetServiceCaller,
                                                                 placeManager,
-                                                                null) {
-            {
-                newResourceSuccessEvent = newResourceSuccessEventMock;
-            }
+                                                                null,
+                                                                newResourceSuccessEventMock) {
 
             @Override
             protected String buildFileName(final String baseFileName,
@@ -72,6 +70,7 @@ public class NewCaseDefinitionHandlerTest {
 
             @Override
             protected void notifySuccess() {
+                /* Since notificationEvent field is null we override this method to avoid any calls to it. */
             }
         };
     }
@@ -93,5 +92,7 @@ public class NewCaseDefinitionHandlerTest {
                times(1)).fire(any(NewResourceSuccessEvent.class));
         verify(placeManager,
                times(1)).goTo(path);
+
+        assertFalse(newCaseDefinitionHandler.isProjectAsset());
     }
 }

@@ -17,6 +17,7 @@
 package org.jbpm.designer.client.handlers;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.user.client.ui.Image;
@@ -41,8 +42,6 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
 
     private Caller<DesignerAssetService> designerAssetService;
 
-    private PlaceManager placeManager;
-
     private Bpmn2Type resourceType;
 
     public NewProcessHandler() {
@@ -55,6 +54,16 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
         this.designerAssetService = designerAssetService;
         this.placeManager = placeManager;
         this.resourceType = resourceType;
+    }
+
+    protected NewProcessHandler(final Caller<DesignerAssetService> designerAssetService,
+                                final PlaceManager placeManager,
+                                final Bpmn2Type resourceType,
+                                final Event<NewResourceSuccessEvent> newResourceSuccessEvent) {
+        this(designerAssetService,
+             placeManager,
+             resourceType);
+        this.newResourceSuccessEvent = newResourceSuccessEvent;
     }
 
     @Override
@@ -76,14 +85,11 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
     public void create(final Package pkg,
                        final String baseFileName,
                        final NewResourcePresenter presenter) {
-        designerAssetService.call(new RemoteCallback<Path>() {
-                                      @Override
-                                      public void callback(final Path path) {
-                                          presenter.complete();
-                                          notifySuccess();
-                                          newResourceSuccessEvent.fire(new NewResourceSuccessEvent(path));
-                                          placeManager.goTo(path);
-                                      }
+        designerAssetService.call((RemoteCallback<Path>) path -> {
+                                      presenter.complete();
+                                      notifySuccess();
+                                      newResourceSuccessEvent.fire(new NewResourceSuccessEvent(path));
+                                      placeManager.goTo(path);
                                   },
                                   new DefaultErrorCallback()).createProcess(pkg.getPackageMainResourcesPath(),
                                                                             buildFileName(baseFileName,
@@ -93,5 +99,10 @@ public class NewProcessHandler extends DefaultNewResourceHandler {
     @Override
     public int order() {
         return -30;
+    }
+
+    @Override
+    public boolean isProjectAsset() {
+        return false;
     }
 }
