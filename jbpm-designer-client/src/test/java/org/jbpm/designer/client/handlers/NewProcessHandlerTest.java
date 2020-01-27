@@ -32,6 +32,7 @@ import org.uberfire.mocks.CallerMock;
 import org.uberfire.mocks.EventSourceMock;
 import org.uberfire.workbench.type.ResourceTypeDefinition;
 
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doReturn;
@@ -44,7 +45,6 @@ public class NewProcessHandlerTest {
 
     @Mock
     private DesignerAssetService designerAssetService;
-    private Caller<DesignerAssetService> designerAssetServiceCaller;
 
     @Mock
     private PlaceManager placeManager;
@@ -56,14 +56,11 @@ public class NewProcessHandlerTest {
 
     @Before
     public void setup() {
-        designerAssetServiceCaller = new CallerMock<>(designerAssetService);
+        Caller<DesignerAssetService> designerAssetServiceCaller = new CallerMock<>(designerAssetService);
         newProcessHandler = new NewProcessHandler(designerAssetServiceCaller,
                                                   placeManager,
-                                                  null) {
-            {
-                newResourceSuccessEvent = newResourceSuccessEventMock;
-            }
-
+                                                  null,
+                                                  newResourceSuccessEventMock) {
             @Override
             protected String buildFileName(final String baseFileName,
                                            final ResourceTypeDefinition resourceType) {
@@ -72,6 +69,7 @@ public class NewProcessHandlerTest {
 
             @Override
             protected void notifySuccess() {
+                /* Since notificationEvent field is null we override this method to avoid any calls to it. */
             }
         };
     }
@@ -92,5 +90,7 @@ public class NewProcessHandlerTest {
                times(1)).fire(any(NewResourceSuccessEvent.class));
         verify(placeManager,
                times(1)).goTo(path);
+
+        assertFalse(newProcessHandler.isProjectAsset());
     }
 }

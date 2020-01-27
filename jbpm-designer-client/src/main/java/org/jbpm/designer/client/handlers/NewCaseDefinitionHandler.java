@@ -18,14 +18,17 @@ package org.jbpm.designer.client.handlers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.guvnor.common.services.project.model.Package;
+import org.guvnor.common.services.project.model.WorkspaceProject;
 import org.gwtbootstrap3.client.ui.TextBox;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
@@ -47,8 +50,6 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
 
     private Caller<DesignerAssetService> designerAssetService;
 
-    private PlaceManager placeManager;
-
     private Bpmn2Type resourceType;
 
     private TextBox caseIdPrefixTextBox = new TextBox();
@@ -63,6 +64,16 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
         this.designerAssetService = designerAssetService;
         this.placeManager = placeManager;
         this.resourceType = resourceType;
+    }
+
+    protected NewCaseDefinitionHandler(final Caller<DesignerAssetService> designerAssetService,
+                                       final PlaceManager placeManager,
+                                       final Bpmn2Type resourceType,
+                                       final Event<NewResourceSuccessEvent> newResourceSuccessEvent) {
+        this(designerAssetService,
+             placeManager,
+             resourceType);
+        this.newResourceSuccessEvent = newResourceSuccessEvent;
     }
 
     @Override
@@ -93,15 +104,12 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
         String caseIdPrefix = caseIdPrefixTextBox.getValue();
         caseIdPrefixTextBox.clear();
 
-        designerAssetService.call(new RemoteCallback<Path>() {
-                                      @Override
-                                      public void callback(final Path path) {
-                                          presenter.complete();
+        designerAssetService.call((RemoteCallback<Path>) path -> {
+                                      presenter.complete();
 
-                                          notifySuccess();
-                                          newResourceSuccessEvent.fire(new NewResourceSuccessEvent(path));
-                                          placeManager.goTo(path);
-                                      }
+                                      notifySuccess();
+                                      newResourceSuccessEvent.fire(new NewResourceSuccessEvent(path));
+                                      placeManager.goTo(path);
                                   },
                                   new DefaultErrorCallback()).createCaseDefinition(pkg.getPackageMainResourcesPath(),
                                                                                    buildFileName(baseFileName,
@@ -114,22 +122,23 @@ public class NewCaseDefinitionHandler extends DefaultNewResourceHandler {
         if (context == null) {
             callback.onSuccess(false);
         } else {
-            if (context.getActiveWorkspaceProject().isPresent()) {
-                designerAssetService.call(new RemoteCallback<Boolean>() {
-                                              @Override
-                                              public void callback(final Boolean isCaseProject) {
-                                                  callback.onSuccess(isCaseProject);
-                                              }
-                                          },
-                                          new DefaultErrorCallback()).isCaseProject(context.getActiveWorkspaceProject().get().getRootPath());
+            Optional<WorkspaceProject> workspaceProject = context.getActiveWorkspaceProject();
+            if (workspaceProject.isPresent()) {
+                designerAssetService.call((RemoteCallback<Boolean>) callback::onSuccess,
+                                          new DefaultErrorCallback()).isCaseProject(workspaceProject.get().getRootPath());
             } else {
                 callback.onSuccess(false);
             }
         }
     }
-    
+
     @Override
     public List<Profile> getProfiles() {
         return Arrays.asList(Profile.FULL);
+    }
+
+    @Override
+    public boolean isProjectAsset() {
+        return false;
     }
 }
