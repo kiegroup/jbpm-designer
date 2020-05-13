@@ -82,8 +82,8 @@ public class BusinessProcessCopyHelperTest {
 
     @Test
     public void testCopy() {
-        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
-        when(pathDestination.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
+        when(pathSource.toURI()).thenReturn("file://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
+        when(pathDestination.toURI()).thenReturn("file://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
         when(pathDestination.getFileName()).thenReturn("MyNewProcess.bpmn2");
         when(ioService.readAllString(any(org.uberfire.java.nio.file.Path.class))).thenReturn(DEFAULT_PROCESS);
 
@@ -118,8 +118,8 @@ public class BusinessProcessCopyHelperTest {
 
     @Test
     public void testCopyIDWithMultibyteCharsAndSpaces() {
-        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
-        when(pathDestination.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
+        when(pathSource.toURI()).thenReturn("file://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
+        when(pathDestination.toURI()).thenReturn("file://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
         when(pathDestination.getFileName()).thenReturn("Эож ты дольорэ     My New Process  어디야.bpmn2");
         when(ioService.readAllString(any(org.uberfire.java.nio.file.Path.class))).thenReturn(DEFAULT_PROCESS);
 
@@ -154,8 +154,8 @@ public class BusinessProcessCopyHelperTest {
 
     @Test
     public void testCopyIDWithInvalidID() {
-        when(pathSource.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
-        when(pathDestination.toURI()).thenReturn("default://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
+        when(pathSource.toURI()).thenReturn("file://p0/Evaluation/src/main/resources/MyProcess.bpmn2");
+        when(pathDestination.toURI()).thenReturn("file://p0/Evaluation/src/main/resources/MyNewProcess.bpmn2");
         when(pathDestination.getFileName()).thenReturn("  << my process    >>");
         when(ioService.readAllString(any(org.uberfire.java.nio.file.Path.class))).thenReturn(DEFAULT_PROCESS);
 
