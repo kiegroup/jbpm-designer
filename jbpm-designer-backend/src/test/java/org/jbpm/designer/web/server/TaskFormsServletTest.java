@@ -100,7 +100,6 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
             }
         });
 
-        when(builderManager.getFormBuilders()).thenReturn(Arrays.asList(formBuilderService));
         when(builderManager.getBuilderByFormType(anyString())).thenReturn(formBuilderService);
     }
 
@@ -111,11 +110,6 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
 
     @Test
     public void testTaskFormServletForFormType() throws Exception {
-        when(formBuilderService.getFormExtension()).thenReturn("form");
-        when(formBuilderService.buildFormContent(any(),
-                                                 any(),
-                                                 any())).thenReturn("dummyform");
-
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
@@ -197,11 +191,6 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
 
     @Test
     public void testTaskFormServletWithUserTaskForFormType() throws Exception {
-        when(formBuilderService.buildFormContent(any(),
-                                                 any(),
-                                                 any())).thenReturn("dummyform");
-
-        when(formBuilderService.getFormExtension()).thenReturn("form");
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
@@ -343,11 +332,6 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
 
     @Test
     public void testInvalidFormType() throws Exception {
-        when(formBuilderService.getFormExtension()).thenReturn("form");
-        when(formBuilderService.buildFormContent(any(),
-                                                 any(),
-                                                 any())).thenReturn("dummyform");
-
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);
@@ -385,13 +369,6 @@ public class TaskFormsServletTest extends RepositoryBaseTest {
 
     @Test
     public void testFailResponseOnException() throws Exception {
-        when(formBuilderService.getFormExtension()).thenReturn("form");
-        when(formBuilderService.buildFormContent(any(),
-                                                 any(),
-                                                 any())).thenReturn("dummyform");
-
-        doThrow(new NullPointerException()).when(templateManager).processTemplates();
-
         Repository repository = new VFSRepository(producer.getIoService());
         ((VFSRepository) repository).setDescriptor(descriptor);
         profile.setRepository(repository);

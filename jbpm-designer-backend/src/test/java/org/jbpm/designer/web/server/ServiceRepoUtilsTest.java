@@ -153,17 +153,14 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
         String pomuuid = rootPath.toURI() + "/pom.xml";
 
         KieModule module = Mockito.mock(KieModule.class);
-        when(module.getRootPath()).thenReturn(rootPath);
         final org.uberfire.backend.vfs.Path pomXmlPath = mock(org.uberfire.backend.vfs.Path.class);
 
         when(module.getPomXMLPath()).thenReturn(pomXmlPath);
-        when(pomXmlPath.toURI()).thenReturn(pomuuid);
         when(module.getPomXMLPath()).thenReturn(pomXmlPath);
 
         projectPOM = new POM();
         when(pomService.load(pomXmlPath)).thenReturn(projectPOM);
 
-        when(ioService.exists(any(org.uberfire.java.nio.file.Path.class))).thenReturn(true);
         when(moduleService.resolveModule(any(Path.class))).thenReturn(module);
     }
 

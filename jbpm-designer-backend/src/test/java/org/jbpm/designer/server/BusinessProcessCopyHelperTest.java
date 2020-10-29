@@ -94,7 +94,7 @@ public class BusinessProcessCopyHelperTest {
         verify(ioService,
                times(1)).write(any(org.uberfire.java.nio.file.Path.class),
                                bpmn2ArgumentCaptor.capture(),
-                               any(CommentedOption.class));
+                               any());
 
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 
@@ -130,7 +130,7 @@ public class BusinessProcessCopyHelperTest {
         verify(ioService,
                times(1)).write(any(org.uberfire.java.nio.file.Path.class),
                                bpmn2ArgumentCaptor.capture(),
-                               any(CommentedOption.class));
+                               any());
 
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 
@@ -166,7 +166,7 @@ public class BusinessProcessCopyHelperTest {
         verify(ioService,
                times(1)).write(any(org.uberfire.java.nio.file.Path.class),
                                bpmn2ArgumentCaptor.capture(),
-                               any(CommentedOption.class));
+                               any());
 
         final String newBPMN2 = bpmn2ArgumentCaptor.getValue();
 

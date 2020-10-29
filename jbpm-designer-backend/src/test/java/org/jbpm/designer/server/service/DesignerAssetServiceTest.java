@@ -33,6 +33,7 @@ import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -85,10 +86,10 @@ public class DesignerAssetServiceTest extends RepositoryBaseTest {
             }
         });
 
-        when(assetService.getEditorParameters(anyObject(),
-                                              anyString(),
-                                              anyString(),
-                                              anyObject())).thenAnswer(new Answer<String>() {
+        when(assetService.getEditorParameters(any(),
+                                              any(),
+                                              any(),
+                                              any())).thenAnswer(new Answer<String>() {
             @Override
             public String answer(InvocationOnMock invocation) throws Throwable {
                 Object[] args = invocation.getArguments();

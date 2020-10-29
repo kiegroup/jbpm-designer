@@ -44,6 +44,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
@@ -213,12 +214,12 @@ public class DesignerPresenterTest {
 
         presenter.makeMenuBar();
 
-        verify(fileMenuBuilder).addSave(any(MenuItem.class));
-        verify(fileMenuBuilder).addCopy(any(Path.class),
-                                        any(AssetUpdateValidator.class));
+        verify(fileMenuBuilder).addSave(Mockito.<MenuItem>any());
+        verify(fileMenuBuilder).addCopy(Mockito.<Path>any(),
+                                        any());
         verify(fileMenuBuilder).addRename(any(Command.class));
-        verify(fileMenuBuilder).addDelete(any(Path.class),
-                                          any(AssetUpdateValidator.class));
+        verify(fileMenuBuilder).addDelete(Mockito.<Path>any(),
+                                          any());
         verify(fileMenuBuilder).addNewTopLevelMenu(alertsButtonMenuItem);
     }
 

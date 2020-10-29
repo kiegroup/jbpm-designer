@@ -46,10 +46,6 @@ public class AssignmentBaseTest {
                             designerEditorConstants);
 
         // Mock StringUtils URL Encoding methods
-        Mockito.when(utils.urlEncode(Mockito.anyString())).thenAnswer(invocation -> {
-            Object[] args = invocation.getArguments();
-            return urlEncode((String) args[0]);
-        });
         Mockito.when(utils.urlDecode(Mockito.anyString())).thenAnswer(invocation -> {
             Object[] args = invocation.getArguments();
             return urlDecode((String) args[0]);

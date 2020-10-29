@@ -41,6 +41,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -51,16 +52,15 @@ public class AbstractConnectorServletTest extends RepositoryBaseTest {
     @Mock
     IDiagramProfileService profileService;
 
-    @Spy
     @InjectMocks
-    private AbstractConnectorServlet servlet = new AbstractConnectorServlet() {
+    private AbstractConnectorServlet servlet = spy(new AbstractConnectorServlet() {
         @Override
         protected void initializeDefaultRepo(IDiagramProfile profile,
                                              Repository repository,
                                              HttpServletRequest request) throws Exception {
             // do nothing
         }
-    };
+    });
 
     private static final String FILE_NAME = "src/test/resources/designer.configuration";
     private static final String FILE_CONTENT = "application.context=/";

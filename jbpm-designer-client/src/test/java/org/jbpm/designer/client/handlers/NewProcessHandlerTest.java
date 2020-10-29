@@ -26,6 +26,7 @@ import org.junit.runner.RunWith;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.kie.workbench.common.widgets.client.handlers.NewResourceSuccessEvent;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.mocks.CallerMock;
@@ -78,7 +79,7 @@ public class NewProcessHandlerTest {
     public void createTest() {
         final NewResourcePresenter presenter = mock(NewResourcePresenter.class);
         final Path path = mock(Path.class);
-        doReturn(path).when(designerAssetService).createProcess(any(Path.class),
+        doReturn(path).when(designerAssetService).createProcess(Mockito.any(),
                                                                 anyString());
 
         newProcessHandler.create(mock(Package.class),

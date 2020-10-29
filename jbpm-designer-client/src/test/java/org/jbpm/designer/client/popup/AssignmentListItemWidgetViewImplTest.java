@@ -147,7 +147,7 @@ public class AssignmentListItemWidgetViewImplTest {
         doCallRealMethod().when(view).setShowConstants(anyBoolean());
         doCallRealMethod().when(view).setDisallowedNames(anySet(),
                                                          anyString());
-        doCallRealMethod().when(view).handleDeleteButton(any(ClickEvent.class));
+        doCallRealMethod().when(view).handleDeleteButton(any());
 
         AssignmentRow row = new AssignmentRow();
         doReturn(row).when(assignment).getModel();

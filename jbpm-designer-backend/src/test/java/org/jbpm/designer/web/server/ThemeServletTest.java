@@ -34,6 +34,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,9 +45,8 @@ public class ThemeServletTest extends RepositoryBaseTest {
     @Mock
     IDiagramProfileService profileService;
 
-    @Spy
     @InjectMocks
-    private ThemeServlet servlet = new ThemeServlet();
+    private ThemeServlet servlet = spy(new ThemeServlet());
 
     @Before
     public void setup() {
