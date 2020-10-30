@@ -21,7 +21,6 @@ import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.Documentation;
 import org.eclipse.bpmn2.ScriptTask;
 import org.eclipse.bpmn2.impl.BaseElementImpl;
-
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

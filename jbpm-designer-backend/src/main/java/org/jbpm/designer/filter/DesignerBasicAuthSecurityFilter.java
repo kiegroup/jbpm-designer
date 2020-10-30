@@ -28,13 +28,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.common.base.Charsets;
-
 import org.apache.commons.codec.binary.Base64;
-
 import org.jboss.errai.security.shared.api.identity.User;
 import org.jboss.errai.security.shared.exception.FailedAuthenticationException;
 import org.jboss.errai.security.shared.service.AuthenticationService;
-
 import org.uberfire.ext.security.server.BasicAuthSecurityFilter;
 
 public class DesignerBasicAuthSecurityFilter extends BasicAuthSecurityFilter implements Filter {
