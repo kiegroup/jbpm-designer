@@ -23,7 +23,6 @@ import javax.enterprise.event.Event;
 
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwtmockito.GwtMock;
@@ -147,7 +146,7 @@ public class AssignmentListItemWidgetViewImplTest {
         doCallRealMethod().when(view).setShowConstants(anyBoolean());
         doCallRealMethod().when(view).setDisallowedNames(anySet(),
                                                          anyString());
-        doCallRealMethod().when(view).handleDeleteButton(any(ClickEvent.class));
+        doCallRealMethod().when(view).handleDeleteButton(any());
 
         AssignmentRow row = new AssignmentRow();
         doReturn(row).when(assignment).getModel();

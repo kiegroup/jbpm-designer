@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.xml.utils.XMLChar;
-
 import org.junit.Assert;
 import org.junit.Test;
 

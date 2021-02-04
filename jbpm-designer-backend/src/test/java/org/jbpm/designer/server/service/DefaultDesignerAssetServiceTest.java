@@ -131,7 +131,6 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     public void testCreateProcessWithDefaultPackage() throws Exception {
         final Path pathSource = mock(Path.class);
         when(pathSource.toURI()).thenReturn("file://p0/Evaluation/src/main/resources");
-        when(pathSource.getFileName()).thenReturn("MyProcess.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
         assetService.setRepository(repository);
@@ -166,7 +165,6 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     public void testCreateProcessWithDefaultPackageNoProject() throws Exception {
         final Path pathSource = mock(Path.class);
         when(pathSource.toURI()).thenReturn("file://p0/src/main");
-        when(pathSource.getFileName()).thenReturn("MyProcess.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
         assetService.setRepository(repository);
@@ -201,7 +199,6 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     public void testCreateProcessWithSingleLevelPackage() throws Exception {
         final Path pathSource = mock(Path.class);
         when(pathSource.toURI()).thenReturn("file://p0/Evaluation/src/main/resources/org");
-        when(pathSource.getFileName()).thenReturn("MyProcess.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
         assetService.setRepository(repository);
@@ -236,7 +233,6 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     public void testCreateProcessWithMultiLevelPackage() throws Exception {
         final Path pathSource = mock(Path.class);
         when(pathSource.toURI()).thenReturn("file://p0/Evaluation/src/main/resources/org/jbpm/test/process");
-        when(pathSource.getFileName()).thenReturn("MyProcess.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
         assetService.setRepository(repository);
@@ -283,7 +279,6 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     public void testCreateCaseDefinitionWithDefaultPackage() throws Exception {
         final Path pathSource = mock(Path.class);
         when(pathSource.toURI()).thenReturn("file://p0/Evaluation/src/main/resources/org/jbpm/test/cases");
-        when(pathSource.getFileName()).thenReturn("MyCase.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
         assetService.setRepository(repository);
@@ -347,7 +342,6 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
     public void testCreateCaseDefinitionWithPackageNoPrefix() throws Exception {
         final Path pathSource = mock(Path.class);
         when(pathSource.toURI()).thenReturn("file://p0/Evaluation/src/main/resources/org/jbpm/test/cases");
-        when(pathSource.getFileName()).thenReturn("MyCase.bpmn2");
 
         DefaultDesignerAssetService assetService = new DefaultDesignerAssetService();
         assetService.setRepository(repository);
@@ -406,7 +400,6 @@ public class DefaultDesignerAssetServiceTest extends RepositoryBaseTest {
 
         final Path pathSource = mock(Path.class);
         when(pathSource.toURI()).thenReturn("file://p0/Evaluation/.caseproject");
-        when(pathSource.getFileName()).thenReturn(".caseproject");
         assetService.createProcess(pathSource,
                                    ".caseproject");
 

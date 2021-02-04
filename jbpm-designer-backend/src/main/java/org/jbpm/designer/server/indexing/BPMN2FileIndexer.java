@@ -16,7 +16,6 @@
 package org.jbpm.designer.server.indexing;
 
 import java.io.StringReader;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +34,6 @@ import org.jbpm.designer.type.Bpmn2TypeDefinition;
 import org.jbpm.process.core.validation.ProcessValidationError;
 import org.jbpm.ruleflow.core.RuleFlowProcess;
 import org.jbpm.ruleflow.core.validation.RuleFlowProcessValidator;
-
 import org.kie.api.definition.process.Process;
 import org.kie.workbench.common.services.backend.project.ModuleClassLoaderHelper;
 import org.kie.workbench.common.services.refactoring.backend.server.indexing.AbstractFileIndexer;
@@ -43,7 +41,6 @@ import org.kie.workbench.common.services.refactoring.backend.server.indexing.Def
 import org.kie.workbench.common.services.shared.project.KieModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.java.nio.file.Path;
 

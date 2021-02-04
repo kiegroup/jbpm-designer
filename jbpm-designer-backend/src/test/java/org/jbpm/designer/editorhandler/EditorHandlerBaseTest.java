@@ -42,7 +42,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static junit.framework.Assert.assertEquals;
@@ -53,6 +52,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -71,9 +71,8 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
 
     private Repository repository;
 
-    @Spy
     @InjectMocks
-    private EditorHandler editorHandler = new EditorHandler();
+    private EditorHandler editorHandler = spy(new EditorHandler());
 
     @Captor
     private ArgumentCaptor<String> stringCaptor;
@@ -254,8 +253,6 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
 
     @Test
     public void testStoreSVGOnSave() throws Exception {
-        when(editorHandler.getProfile()).thenReturn(mockProfile);
-
         // default the profile svg on save to true
         when(mockProfile.getStoreSVGonSaveOption()).thenReturn("true");
 
@@ -300,8 +297,6 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
         assertEquals("true",
                      editorHandler.getEditorTemplate().getAttribute("storesvgonsave"));
 
-        when(editorHandler.getProfile()).thenReturn(profile);
-
         //overwrite with incorrect system prop  -- should be false (default to the profile value)
         when(mockProfile.getStoreSVGonSaveOption()).thenReturn("false");
         System.setProperty(EditorHandler.STORE_SVG_ON_SAVE,
@@ -311,9 +306,6 @@ public class EditorHandlerBaseTest extends RepositoryBaseTest {
                             response);
         assertEquals("false",
                      editorHandler.getEditorTemplate().getAttribute("storesvgonsave"));
-
-        when(editorHandler.getProfile()).thenReturn(profile);
-
     }
 
     private void verifyServiceRepoAndTasks(ServletConfig config,

@@ -79,7 +79,7 @@ public class NewCaseDefinitionHandlerTest {
     public void createTest() {
         final NewResourcePresenter presenter = mock(NewResourcePresenter.class);
         final Path path = mock(Path.class);
-        doReturn(path).when(designerAssetService).createCaseDefinition(any(Path.class),
+        doReturn(path).when(designerAssetService).createCaseDefinition(any(),
                                                                        anyString(),
                                                                        anyString());
 

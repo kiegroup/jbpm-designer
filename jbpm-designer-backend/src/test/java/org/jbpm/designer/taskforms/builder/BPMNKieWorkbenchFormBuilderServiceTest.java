@@ -53,14 +53,12 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.io.IOService;
-import org.uberfire.java.nio.base.options.CommentedOption;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -111,15 +109,11 @@ public class BPMNKieWorkbenchFormBuilderServiceTest {
     @Before
     public void initTest() throws Exception {
         when(moduleService.resolveModule(any())).thenReturn(module);
-        when(module.getRootPath()).thenReturn(formPath);
 
         when(moduleClassLoaderHelper.getModuleClassLoader(any())).thenReturn(getClass().getClassLoader());
 
         when(formPath.toURI()).thenReturn("file://fakepath.frm");
         when(ioService.exists(any())).thenReturn(false);
-
-        when(commentedOptionFactory.makeCommentedOption(anyString())).then(invocationOnMock -> new CommentedOption("1",
-                                                                                                                   invocationOnMock.getArguments()[0].toString()));
 
         definitions = loader.loadProcessFromJson("userTask.json");
 

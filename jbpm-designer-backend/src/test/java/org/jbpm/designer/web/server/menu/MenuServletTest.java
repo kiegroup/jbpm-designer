@@ -27,13 +27,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,9 +44,8 @@ public class MenuServletTest extends RepositoryBaseTest {
     @Mock
     IDiagramProfileService profileService;
 
-    @Spy
     @InjectMocks
-    private MenuServlet servlet = new MenuServlet();
+    private MenuServlet servlet = spy(new MenuServlet());
 
     @Before
     public void setup() {
