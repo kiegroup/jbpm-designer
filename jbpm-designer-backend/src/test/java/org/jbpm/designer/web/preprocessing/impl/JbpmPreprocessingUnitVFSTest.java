@@ -148,12 +148,12 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
         repository.assetExists("/global/themes.json");
         repository.assetExists("/global/defaultmilestoneicon.png");
         repository.assetExists("/global/defaultsubcaseicon.png");
-        repository.assetExists("/global/defaultemailicon.gif");
-        repository.assetExists("/global/defaultlogicon.gif");
+        repository.assetExists("/global/defaultemailicon.png");
+        repository.assetExists("/global/defaultlogicon.png");
         repository.assetExists("/global/patterns.json");
         repository.assetExists("/global/defaultservicenodeicon.png");
-        repository.assetExists("/global/defaultbusinessrulesicon.png");
-        repository.assetExists("/global/defaultdecisionicon.png");
+        repository.assetExists("/global/defaultbusinessruletaskicon.png");
+        repository.assetExists("/global/defaultdecisiontaskicon.png");
 
         Collection<Asset> defaultStuff = repository.listAssets("/" + dirName);
         assertNotNull(defaultStuff);
@@ -190,11 +190,11 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                               Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
                                             "/" + dirName + "/defaultmilestoneicon.png",
                                             "/" + dirName + "/defaultsubcaseicon.png",
-                                            "/" + dirName + "/defaultbusinessrulesicon.png",
-                                            "/" + dirName + "/defaultdecisionicon.png"),
+                                            "/" + dirName + "/defaultbusinessruletaskicon.png",
+                                            "/" + dirName + "/defaultdecisiontaskicon.png"),
                               Arrays.asList("/" + dirName + "/switchyard.gif",
-                                            "/" + dirName + "/defaultemailicon.gif",
-                                            "/" + dirName + "/defaultlogicon.gif"));
+                                            "/" + dirName + "/defaultemailicon.png",
+                                            "/" + dirName + "/defaultlogicon.png"));
 
         Mockito.verify(workitemInstalledEvent,
                        Mockito.times(2)).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -219,10 +219,10 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                               Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
                                             "/" + dirName + "/defaultmilestoneicon.png",
                                             "/" + dirName + "/defaultsubcaseicon.png",
-                                            "/" + dirName + "/defaultbusinessrulesicon.png",
-                                            "/" + dirName + "/defaultdecisionicon.png"),
-                              Arrays.asList("/" + dirName + "/defaultemailicon.gif",
-                                            "/" + dirName + "/defaultlogicon.gif"));
+                                            "/" + dirName + "/defaultbusinessruletaskicon.png",
+                                            "/" + dirName + "/defaultdecisiontaskicon.png"),
+                              Arrays.asList("/" + dirName + "/defaultemailicon.png",
+                                            "/" + dirName + "/defaultlogicon.png"));
 
         Mockito.verify(workitemInstalledEvent,
                        Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -247,10 +247,10 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                               Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
                                             "/" + dirName + "/defaultmilestoneicon.png",
                                             "/" + dirName + "/defaultsubcaseicon.png",
-                                            "/" + dirName + "/defaultbusinessrulesicon.png",
-                                            "/" + dirName + "/defaultdecisionicon.png"),
-                              Arrays.asList("/" + dirName + "/defaultemailicon.gif",
-                                            "/" + dirName + "/defaultlogicon.gif"));
+                                            "/" + dirName + "/defaultbusinessruletaskicon.png",
+                                            "/" + dirName + "/defaultdecisiontaskicon.png"),
+                              Arrays.asList("/" + dirName + "/defaultemailicon.png",
+                                            "/" + dirName + "/defaultlogicon.png"));
 
         Mockito.verify(workitemInstalledEvent,
                        Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -277,10 +277,10 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                               Arrays.asList("/" + dirName + "/defaultservicenodeicon.png",
                                             "/" + dirName + "/defaultmilestoneicon.png",
                                             "/" + dirName + "/defaultsubcaseicon.png",
-                                            "/" + dirName + "/defaultbusinessrulesicon.png",
-                                            "/" + dirName + "/defaultdecisionicon.png"),
-                              Arrays.asList("/" + dirName + "/defaultemailicon.gif",
-                                            "/" + dirName + "/defaultlogicon.gif"));
+                                            "/" + dirName + "/defaultbusinessruletaskicon.png",
+                                            "/" + dirName + "/defaultdecisiontaskicon.png"),
+                              Arrays.asList("/" + dirName + "/defaultemailicon.png",
+                                            "/" + dirName + "/defaultlogicon.png"));
 
         Mockito.verify(workitemInstalledEvent,
                        Mockito.never()).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));
@@ -317,10 +317,10 @@ public class JbpmPreprocessingUnitVFSTest extends RepositoryBaseTest {
                                             "/" + dirName + "/defaultservicenodeicon.png",
                                             "/" + dirName + "/defaultmilestoneicon.png",
                                             "/" + dirName + "/defaultsubcaseicon.png",
-                                            "/" + dirName + "/defaultbusinessrulesicon.png",
-                                            "/" + dirName + "/defaultdecisionicon.png"),
-                              Arrays.asList("/" + dirName + "/defaultemailicon.gif",
-                                            "/" + dirName + "/defaultlogicon.gif"));
+                                            "/" + dirName + "/defaultbusinessruletaskicon.png",
+                                            "/" + dirName + "/defaultdecisiontaskicon.png"),
+                              Arrays.asList("/" + dirName + "/defaultemailicon.png",
+                                            "/" + dirName + "/defaultlogicon.png"));
 
         Mockito.verify(workitemInstalledEvent,
                        Mockito.times(2)).fire(Matchers.any(DesignerWorkitemInstalledEvent.class));

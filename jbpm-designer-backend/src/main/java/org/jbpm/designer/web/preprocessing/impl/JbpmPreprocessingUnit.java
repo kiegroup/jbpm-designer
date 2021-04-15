@@ -94,6 +94,7 @@ import org.uberfire.workbench.events.NotificationEvent;
 
 /**
  * JbpmPreprocessingUnit - preprocessing unit for the jbpm profile
+ *
  * @author Tihomir Surdilovic
  */
 @Named("jbpmPreprocessingUnit")
@@ -113,7 +114,7 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
     public static final String DEFAULT_CATEGORY_NAME = "Service Tasks";
     public static final String INCLUDE_DATA_OBJECT = "designerdataobjects";
     public static final Pattern UNICODE_WORDS_AND_UNDERSCORES_PATTERN = Pattern.compile("(\\p{L}|_)+",
-                                                                        Pattern.UNICODE_CHARACTER_CLASS);
+                                                                                        Pattern.UNICODE_CHARACTER_CLASS);
     private static final Logger _logger =
             LoggerFactory.getLogger(JbpmPreprocessingUnit.class);
     @Inject
@@ -277,13 +278,13 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         stencilFilePath = stencilPath + "/bpmn2.0jbpm/" + "bpmn2.0jbpm.json";
         workitemSVGFilePath = stencilPath + "/bpmn2.0jbpm/view/activity/workitems/";
         origWorkitemSVGFile = workitemSVGFilePath + "workitem.orig";
-        defaultEmailIcon = servletContext.getRealPath(designer_path + "/defaults/defaultemailicon.gif");
+        defaultEmailIcon = servletContext.getRealPath(designer_path + "/defaults/defaultemailicon.png");
         defaultMilestoneIcon = servletContext.getRealPath(designer_path + "/defaults/defaultmilestoneicon.png");
         defaultSubCaseIcon = servletContext.getRealPath(designer_path + "/defaults/defaultsubcaseicon.png");
-        defaultLogIcon = servletContext.getRealPath(designer_path + "/defaults/defaultlogicon.gif");
+        defaultLogIcon = servletContext.getRealPath(designer_path + "/defaults/defaultlogicon.png");
         defaultServiceNodeIcon = servletContext.getRealPath(designer_path + "/defaults/defaultservicenodeicon.png");
-        defaultBusinessRulesIcon = servletContext.getRealPath(designer_path + "/defaults/defaultbusinessrulesicon.png");
-        defaultDecisionIcon = servletContext.getRealPath(designer_path + "/defaults/defaultdecisionicon.png");
+        defaultBusinessRulesIcon = servletContext.getRealPath(designer_path + "/defaults/defaultbusinessruletaskicon.png");
+        defaultDecisionIcon = servletContext.getRealPath(designer_path + "/defaults/defaultdecisiontaskicon.png");
         defaultWidConfigTemplate = servletContext.getRealPath(designer_path + "/defaults/WorkDefinitions.wid.st");
         themeInfo = servletContext.getRealPath(designer_path + "/defaults/themes.json");
         formWidgetsDir = servletContext.getRealPath(designer_path + "/defaults/formwidgets");
@@ -569,7 +570,6 @@ public class JbpmPreprocessingUnit implements IDiagramPreprocessingUnit {
         }
 
         return processIdString;
-
     }
 
     @SuppressWarnings("unchecked")

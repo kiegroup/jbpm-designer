@@ -718,8 +718,8 @@ public class VFSRepository implements Repository {
             }
 
             // default icons
-            List<String> defaultIconFiles = Arrays.asList("defaultemailicon.gif",
-                                                          "defaultlogicon.gif",
+            List<String> defaultIconFiles = Arrays.asList("defaultemailicon.png",
+                                                          "defaultlogicon.png",
                                                           "defaultservicenodeicon.png",
                                                           "defaultmilestoneicon.png",
                                                           "defaultsubcaseicon.png");

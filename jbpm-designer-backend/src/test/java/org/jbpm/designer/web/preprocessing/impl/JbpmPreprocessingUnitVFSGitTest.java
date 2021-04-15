@@ -157,13 +157,13 @@ public class JbpmPreprocessingUnitVFSGitTest extends RepositoryBaseTest {
                      globalAssets.size());
         repository.assetExists("/global/customeditors.json");
         repository.assetExists("/global/themes.json");
-        repository.assetExists("/global/defaultemailicon.gif");
+        repository.assetExists("/global/defaultemailicon.png");
         repository.assetExists("/global/defaultmilestoneicon.png");
         repository.assetExists("/global/defaultsubcaseicon.png");
-        repository.assetExists("/global/defaultlogicon.gif");
+        repository.assetExists("/global/defaultlogicon.png");
         repository.assetExists("/global/defaultservicenodeicon.png");
-        repository.assetExists("/global/defaultbusinessrulesicon.png");
-        repository.assetExists("/global/defaultdecisionicon.png");
+        repository.assetExists("/global/defaultbusinessruletaskicon.png");
+        repository.assetExists("/global/defaultdecisiontaskicon.png");
         repository.assetExists("/global/patterns.json");
         repository.assetExists("/global/.gitignore");
 
