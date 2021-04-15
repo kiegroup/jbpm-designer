@@ -8,7 +8,7 @@
       "Body" : new StringDataType()
     ],
     "displayName" : "Email",
-    "icon" : "defaultemailicon.gif"
+    "icon" : "defaultemailicon.png"
   ],
 
   [
@@ -17,7 +17,7 @@
       "Message" : new StringDataType()
     ],
     "displayName" : "Log",
-    "icon" : "defaultlogicon.gif"
+    "icon" : "defaultlogicon.png"
   ],
 
   [
@@ -35,7 +35,7 @@
         "Result" : new ObjectDataType(),
     ],
     "displayName" : "WS",
-    "icon" : "defaultservicenodeicon.png"
+    "icon" : "defaultwebserviceicon.png"
   ],
 
   [
@@ -53,7 +53,7 @@
         "Result" : new ObjectDataType(),
     ],
     "displayName" : "REST",
-    "icon" : "defaultservicenodeicon.png"
+    "icon" : "defaultresticon.png"
   ],
 
   [
@@ -64,7 +64,7 @@
        "KieSessionType" : new StringDataType()
      ],
      "displayName" : "Business Rule Task",
-     "icon" : "defaultbusinessrulesicon.png",
+     "icon" : "defaultbusinessruletaskicon.png",
      "category" : "Decision tasks"
    ],
 
@@ -77,7 +77,7 @@
        "Decision" : new StringDataType()
      ],
      "displayName" : "Decision Task",
-     "icon" : "defaultdecisionicon.png",
+     "icon" : "defaultdecisiontaskicon.png",
      "category" : "Decision tasks"
    ]
 
