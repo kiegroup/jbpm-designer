@@ -64,23 +64,23 @@ public class RepositoryDescriptorProviderTest {
 
         repositories.add(createRepository("repo1",
                                           "space1",
-                                          "master",
-                                          "master",
+                                          "main",
+                                          "main",
                                           "other-branch"));
 
         repositories.add(createRepository("repo2",
                                           "space1",
-                                          "master",
-                                          "master"));
+                                          "main",
+                                          "main"));
         repositories.add(createRepository("repo1",
                                           "space2",
-                                          "master",
-                                          "master"));
+                                          "main",
+                                          "main"));
 
         repositories.add(createRepository("repo with spaces",
                                           "space3",
-                                          "master",
-                                          "master"));
+                                          "main",
+                                          "main"));
         doReturn(repositories).when(repositoryService).getAllRepositoriesFromAllUserSpaces();
     }
 
@@ -90,26 +90,26 @@ public class RepositoryDescriptorProviderTest {
 
         final RepositoryDescriptor repo1space1Descriptor = repositoryDescriptorProvider.getRepositoryDescriptor(new Space("space1"),
                                                                                                                 "repo1",
-                                                                                                                "master");
-        assertEquals("default://master@space1/repo1",
+                                                                                                                "main");
+        assertEquals("default://main@space1/repo1",
                      repo1space1Descriptor.getRepositoryRoot().toString());
 
         final RepositoryDescriptor repo2space1Descriptor = repositoryDescriptorProvider.getRepositoryDescriptor(new Space("space1"),
                                                                                                                 "repo2",
-                                                                                                                "master");
-        assertEquals("default://master@space1/repo2",
+                                                                                                                "main");
+        assertEquals("default://main@space1/repo2",
                      repo2space1Descriptor.getRepositoryRoot().toString());
 
         final RepositoryDescriptor repo1space2Descriptor = repositoryDescriptorProvider.getRepositoryDescriptor(new Space("space2"),
                                                                                                                 "repo1",
-                                                                                                                "master");
-        assertEquals("default://master@space2/repo1",
+                                                                                                                "main");
+        assertEquals("default://main@space2/repo1",
                      repo1space2Descriptor.getRepositoryRoot().toString());
 
         final RepositoryDescriptor repoWithSpacesspace3Descriptor = repositoryDescriptorProvider.getRepositoryDescriptor(new Space("space3"),
                                                                                                                          "repowithspaces",
-                                                                                                                         "master");
-        assertEquals("default://master@space3/repowithspaces",
+                                                                                                                         "main");
+        assertEquals("default://main@space3/repowithspaces",
                      repoWithSpacesspace3Descriptor.getRepositoryRoot().toString());
     }
 
@@ -119,26 +119,26 @@ public class RepositoryDescriptorProviderTest {
 
         doReturn(createRepository("repo2",
                                   "space2",
-                                  "master",
-                                  "master")).when(repositoryService).getRepositoryFromSpace(new Space("space2"),
+                                  "main",
+                                  "main")).when(repositoryService).getRepositoryFromSpace(new Space("space2"),
                                                                                             "repo2");
 
         final RepositoryDescriptor repo2space2Descriptor = repositoryDescriptorProvider.getRepositoryDescriptor(new Space("space2"),
                                                                                                                 "repo2",
-                                                                                                                "master");
-        assertEquals("default://master@space2/repo2",
+                                                                                                                "main");
+        assertEquals("default://main@space2/repo2",
                      repo2space2Descriptor.getRepositoryRoot().toString());
 
         doReturn(createRepository("repo with spaces",
                                   "space2",
-                                  "master",
-                                  "master")).when(repositoryService).getRepositoryFromSpace(new Space("space2"),
+                                  "main",
+                                  "main")).when(repositoryService).getRepositoryFromSpace(new Space("space2"),
                                                                                             "repo with spaces");
 
         final RepositoryDescriptor repoWithSpacesSpace2Descriptor = repositoryDescriptorProvider.getRepositoryDescriptor(new Space("space2"),
                                                                                                                          "repo with spaces",
-                                                                                                                         "master");
-        assertEquals("default://master@space2/repowithspaces",
+                                                                                                                         "main");
+        assertEquals("default://main@space2/repowithspaces",
                      repoWithSpacesSpace2Descriptor.getRepositoryRoot().toString());
     }
 
@@ -148,7 +148,7 @@ public class RepositoryDescriptorProviderTest {
 
         repositoryDescriptorProvider.getRepositoryDescriptor(new Space("space2"),
                                                              "repo2",
-                                                             "master");
+                                                             "main");
     }
 
     private Repository createRepository(final String alias,

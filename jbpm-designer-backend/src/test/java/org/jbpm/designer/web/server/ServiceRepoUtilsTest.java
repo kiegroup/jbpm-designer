@@ -358,7 +358,7 @@ public class ServiceRepoUtilsTest extends RepositoryBaseTest {
 
     @Test
     public void testGetRepositoryDir() throws Exception {
-        String testProcessPath = "default://master@myteam/myproject" + dirName + "/com/myteam/myproject/" + processFileName + ".bpmn2";
+        String testProcessPath = "default://main@myteam/myproject" + dirName + "/com/myteam/myproject/" + processFileName + ".bpmn2";
         ServiceRepoUtils repoUtils = new ServiceRepoUtils();
         String repoDir = ServiceRepoUtils.getRepositoryDir(testProcessPath);
         assertNotNull(repoDir);
