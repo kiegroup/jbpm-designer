@@ -59,12 +59,12 @@ public class RepositoryDescriptorTest {
 
     @Test
     public void configureGitDirTest() {
-        doReturn("default://master@space/project/src/main/resources/com/space/project/asset.bpmn2").when(httpRequest).getParameter("assetId");
+        doReturn("default://main@space/project/src/main/resources/com/space/project/asset.bpmn2").when(httpRequest).getParameter("assetId");
 
         repositoryDescriptor.configure();
 
         verify(provider).getRepositoryDescriptor(new Space("space"),
                                                  "project",
-                                                 "master");
+                                                 "main");
     }
 }
