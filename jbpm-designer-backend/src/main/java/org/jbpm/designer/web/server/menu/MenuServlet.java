@@ -127,6 +127,7 @@ public class MenuServlet extends HttpServlet {
 
     private static Document readDocument(String path) throws JDOMException, IOException {
         SAXBuilder builder = new SAXBuilder(false);
+        builder.setExpandEntities(false);
         builder.setValidation(false);
         builder.setFeature("http://xml.org/sax/features/validation",
                            false);
