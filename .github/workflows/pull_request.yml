@@ -16,11 +16,12 @@ jobs:
       cancel-in-progress: true
     strategy:
       matrix:
+        os: [ubuntu-latest]
         java-version: [8, 11]
         maven-version: ['3.8.1']
       fail-fast: false
-    runs-on: ubuntu-latest
-    name: Maven Build
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }} - Java ${{ matrix.java-version }} - Maven
     steps:
       - name: Clean Disk Space
         uses: kiegroup/droolsjbpm-build-bootstrap/.ci/actions/ubuntu-disk-space@main
